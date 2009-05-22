@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<game>
+	<menu>
+		<item position="0" label="Singleplayer" />
+		<item position="1" label="Host game" />
+		<item position="2" label="Join game" />
+		<item position="3" label="Settings" />
+		<item position="4" label="Exit" />
+	</menu>
+</game>
