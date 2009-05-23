@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <tileset basesize="32">
 	<tile name="grass" size="32/32" accessible="yes">
-		<sprite layer="0" offset="0/0" texture="64/32/32/32" />
+		<quad layer="0" offset="0/0" texture="64/32/32/32" />
 	</tile>
 	<tile name="container" size="32/64" accessible="no">
 		<!-- container -->
-		<sprite layer="2" offset="0/0" texture="0/64/32/64" />
+		<quad layer="2" offset="0/0" texture="0/64/32/64" />
 		<!-- shadow -->
-		<sprite layer="1" offset="-32/-32" texture="32/128/32/32" rotated="2" />
-		<sprite layer="1" offset="0/-32" texture="0/128/32/32" rotated="2" />
-		<sprite layer="1" offset="32/-32" texture="0/128/32/32" rotated="3" />
-		<sprite layer="1" offset="-32/0" texture="0/128/32/32" rotated="1" />
-		<sprite layer="1" offset="-32/32" texture="0/128/32/32" rotated="1" />
-		<sprite layer="1" offset="32/0" texture="0/128/32/32" rotated="3" />
-		<sprite layer="1" offset="32/32" texture="0/128/32/32" rotated="3" />
-		<sprite layer="1" offset="-32/64" texture="32/128/32/32" rotated="1" />
-		<sprite layer="1" offset="0/64" texture="0/128/32/32" />
-		<sprite layer="1" offset="32/64" texture="0/128/32/32" />
+		<quad layer="1" offset="-32/-32" texture="32/128/32/32" rotated="2" />
+		<quad layer="1" offset="0/-32" texture="0/128/32/32" rotated="2" />
+		<quad layer="1" offset="32/-32" texture="0/128/32/32" rotated="3" />
+		<quad layer="1" offset="-32/0" texture="0/128/32/32" rotated="1" />
+		<quad layer="1" offset="-32/32" texture="0/128/32/32" rotated="1" />
+		<quad layer="1" offset="32/0" texture="0/128/32/32" rotated="3" />
+		<quad layer="1" offset="32/32" texture="0/128/32/32" rotated="3" />
+		<quad layer="1" offset="-32/64" texture="32/128/32/32" rotated="1" />
+		<quad layer="1" offset="0/64" texture="0/128/32/32" />
+		<quad layer="1" offset="32/64" texture="0/128/32/32" />
 	</tile>
 </tileset>

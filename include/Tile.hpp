@@ -19,35 +19,59 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _TILESET_HPP_
-#define _TILESET_HPP_
+#ifndef _TILE_HPP_
+#define _TILE_HPP_
 
+#include "Vector2.hpp"
+#include "Rectangle.hpp"
 #include "Texture.hpp"
-#include "Tile.hpp"
 
-#include <map>
-
-class TiXmlElement;
+#include <vector>
 
 namespace backlot
 {
-	class TileSet : public ReferenceCounted
+	struct QuadInfo
+	{
+		int layer;
+		Vector2I offset;
+		RectangleI texturerect;
+	};
+	class Tile
 	{
 		public:
-			TileSet();
-			~TileSet();
-
-			bool load(std::string name);
-
-			Tile *getTile(std::string name);
+			Tile(TexturePointer texture) : texture(texture)
+			{
+			}
+			void addQuad(const QuadInfo &quad)
+			{
+				quads.push_back(quad);
+			}
+			std::vector<QuadInfo> getQuads()
+			{
+				return quads;
+			}
+			void setSize(Vector2I size)
+			{
+				this->size = size;
+			}
+			Vector2I getSize()
+			{
+				return size;
+			}
+			void setAccessible(bool accessible)
+			{
+				this->accessible = accessible;
+			}
+			bool isAccessible()
+			{
+				return accessible;
+			}
 		private:
-			bool loadTile(TiXmlElement *xml);
-
 			TexturePointer texture;
-			std::map<std::string, Tile> tiles;
+			std::vector<QuadInfo> quads;
+			Vector2I size;
+			bool accessible;
 	};
-
-	typedef SharedPointer<TileSet> TileSetPointer;
 }
 
 #endif

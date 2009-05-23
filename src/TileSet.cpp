@@ -20,6 +20,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "TileSet.hpp"
+#include "Engine.hpp"
+#include "Vector2.hpp"
+#include "Rectangle.hpp"
+
+#include "tinyxml.h"
+
+#include <iostream>
 
 namespace backlot
 {
@@ -32,6 +39,95 @@ namespace backlot
 
 	bool TileSet::load(std::string name)
 	{
-		return false;
+		// Open texture
+		TexturePointer texture = new Texture();
+		if (!texture->load("tilesets/" + name + ".png"))
+		{
+			std::cerr << "Could not load tilesets/" << name << ".png" << std::endl;
+			return false;
+		}
+		this->texture = texture;
+		// Open XML file
+		std::string filename = Engine::get().getGameDirectory() + "/tilesets/" + name + ".xml";
+		TiXmlDocument xml(filename.c_str());
+		if (!xml.LoadFile() || xml.Error())
+		{
+			std::cerr << "Could not load XML file " << name << ".xml: " << xml.ErrorDesc() << std::endl;
+			return false;
+		}
+		TiXmlNode *node = xml.FirstChild("tileset");
+		if (!node)
+		{
+			std::cerr << "Parser error: <tileset> not found." << std::endl;
+			return false;
+		}
+		TiXmlElement *root = node->ToElement();
+		// Load tiles
+		TiXmlNode *tilenode = root->FirstChild("tile");
+		while (tilenode)
+		{
+			TiXmlElement *tile = tilenode->ToElement();
+			if (!tile)
+				continue;
+			if (!loadTile(tile))
+			{
+				return false;
+			}
+			tilenode = node->IterateChildren("tile", tilenode);
+		}
+		return true;
+	}
+
+	bool TileSet::loadTile(TiXmlElement *xml)
+	{
+		Tile tile(texture);
+		// Tile attributes
+		if (!xml->Attribute("name") || !xml->Attribute("size"))
+		{
+			std::cerr << "Missing tile name or size." << std::endl;
+			return false;
+		}
+		tile.setSize(xml->Attribute("size"));
+		if (xml->Attribute("accessible"))
+		{
+			tile.setAccessible(std::string("yes") == xml->Attribute("accessible"));
+		}
+		std::string tilename = xml->Attribute("name");
+		// Load quads
+		TiXmlNode *quadnode = xml->FirstChild("quad");
+		while (quadnode)
+		{
+			TiXmlElement *quad = quadnode->ToElement();
+			if (!quad)
+				continue;
+			// Quad attributes
+			if (!quad->Attribute("layer") || !quad->Attribute("texture"))
+			{
+				std::cerr << "Missing quad layer or texture." << std::endl;
+				return false;
+			}
+			int layer = atoi(quad->Attribute("layer"));
+			RectangleI texturerect = quad->Attribute("texture");
+			
+			Vector2I offset;
+			if (quad->Attribute("offset"))
+			{
+				offset = quad->Attribute("offset");
+			}
+			int rotated = 0;
+			if (quad->Attribute("rotated"))
+			{
+				rotated = atoi(quad->Attribute("rotated"));
+			}
+			// Add quad to tile
+			QuadInfo quadinfo;
+			quadinfo.layer = layer;
+			quadinfo.texturerect = texturerect;
+			quadinfo.offset = offset;
+			tile.addQuad(quadinfo);
+			quadnode = xml->IterateChildren("quad", quadnode);
+		}
+		tiles.insert(std::pair<std::string, Tile>(tilename, tile));
+		return true;
 	}
 }
