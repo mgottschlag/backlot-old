@@ -32,6 +32,9 @@ namespace backlot
 {
 	TileSet::TileSet()
 	{
+		groundlayers = 0;
+		shadowlayers = 0;
+		highlayers = 0;
 	}
 	TileSet::~TileSet()
 	{
@@ -62,6 +65,28 @@ namespace backlot
 			return false;
 		}
 		TiXmlElement *root = node->ToElement();
+		// Load layer info
+		TiXmlNode *layernode = root->FirstChild("layers");
+		if (!layernode)
+		{
+			std::cerr << "No layer info given." << std::endl;
+			return false;
+		}
+		TiXmlElement *layers = layernode->ToElement();
+		if (!layers)
+		{
+			std::cerr << "No layer info given." << std::endl;
+			return false;
+		}
+		groundlayers = 0;
+		shadowlayers = 0;
+		highlayers = 0;
+		if (layers->Attribute("ground"))
+			groundlayers = atoi(layers->Attribute("ground"));
+		if (layers->Attribute("shadow"))
+			shadowlayers = atoi(layers->Attribute("shadow"));
+		if (layers->Attribute("high"))
+			highlayers = atoi(layers->Attribute("high"));
 		// Load tiles
 		TiXmlNode *tilenode = root->FirstChild("tile");
 		while (tilenode)
@@ -76,6 +101,20 @@ namespace backlot
 			tilenode = node->IterateChildren("tile", tilenode);
 		}
 		return true;
+	}
+
+	void TileSet::getLayerCount(int &ground, int &shadow, int &high)
+	{
+		ground = groundlayers;
+		shadow = shadowlayers;
+		high = highlayers;
+	}
+	Tile *TileSet::getTile(std::string name)
+	{
+		std::map<std::string, Tile>::iterator it = tiles.find(name);
+		if (it == tiles.end())
+			return 0;
+		return &it->second;
 	}
 
 	bool TileSet::loadTile(TiXmlElement *xml)

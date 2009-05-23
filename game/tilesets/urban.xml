@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <tileset basesize="32">
+	<layers ground="1" shadow="1" high="1" />
 	<tile name="grass" size="32/32" accessible="yes">
 		<quad layer="0" offset="0/0" texture="64/32/32/32" />
 	</tile>

@@ -39,12 +39,16 @@ namespace backlot
 
 			bool load(std::string name);
 
+			void getLayerCount(int &ground, int &shadow, int &high);
 			Tile *getTile(std::string name);
 		private:
 			bool loadTile(TiXmlElement *xml);
 
 			TexturePointer texture;
 			std::map<std::string, Tile> tiles;
+			int groundlayers;
+			int shadowlayers;
+			int highlayers;
 	};
 
 	typedef SharedPointer<TileSet> TileSetPointer;
