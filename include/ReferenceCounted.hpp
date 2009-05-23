@@ -21,6 +21,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	/**
+	 * Base class for all classes which use reference counting. Reference
+	 * counting makes sure that objects aren't deallocated as long as there are
+	 * references to them (see: SharedPointer) by just counting the references.
+	 * This is done via grab() (increments the reference count) and drop()
+	 * (decrements the reference count). When the reference count reaches 0, the
+	 * object is destroyed.
+	 */
 	class ReferenceCounted
 	{
 		public:
@@ -30,10 +38,16 @@ namespace backlot
 			}
 			virtual ~ReferenceCounted() {}
 
+			/**
+			 * Increments the reference count.
+			 */
 			void grab()
 			{
 				refcount++;
 			}
+			/**
+			 * Decrements the reference count.
+			 */
 			void drop()
 			{
 				refcount--;
@@ -41,26 +55,53 @@ namespace backlot
 					delete this;
 			}
 		private:
+			/**
+			 * Number of references to the object.
+			 */
 			int refcount;
 	};
 
+	/**
+	 * Pointer class for simple access to ReferenceCounted. Does the grab()
+	 * and drop() itself. The pointer still has to be initialized before any
+	 * use, null pointer access is not caught properly and has to be checked
+	 * via casting the pointer to bool or isNull().
+	 */
 	template<class T> class SharedPointer
 	{
 		public:
+			/**
+			 * Constructor.
+			 * @param target Pointer to a reference counted object
+			 */
 			SharedPointer(T *target = 0) : target(target)
 			{
 				if (target)
 					target->grab();
 			}
+			/**
+			 * Copy constructor.
+			 */
 			SharedPointer(const SharedPointer &ptr) : target(ptr.target)
 			{
 				if (target)
 					target->grab();
 			}
+			/**
+			 * Destructor.
+			 */
 			~SharedPointer()
 			{
 				if (target)
 					target->drop();
+			}
+
+			/**
+			 * Checks whether the pointer is invalid.
+			 */
+			bool isNull()
+			{
+				return target == 0;
 			}
 
 			SharedPointer &operator=(const SharedPointer &ptr)
@@ -79,6 +120,10 @@ namespace backlot
 			bool operator==(const SharedPointer &ptr)
 			{
 				return &target == &ptr.target;
+			}
+			operator bool()
+			{
+				return target != 0;
 			}
 		private:
 			T *target;
