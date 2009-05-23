@@ -19,63 +19,37 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Sound.hpp"
-#include "Engine.hpp"
+#ifndef _MUSIC_HPP_
+#define _MUSIC_HPP_
 
-#include <iostream>
+#include "ReferenceCounted.hpp"
+
+#include <SDL/SDL_mixer.h>
+#include <string>
 
 namespace backlot
 {
-	Sound::Sound() : ReferenceCounted()
+	class Music : public ReferenceCounted
 	{
-		sound = NULL;
-	}
-	Sound::~Sound()
-	{
-		Mix_FreeChunk(sound);
-	}
-	
-	bool Sound::load(std::string path)
-	{
-		path = Engine::get().getGameDirectory() + "/sounds/" + path;
-		sound = Mix_LoadWAV(path.c_str());
-		if (sound == NULL)
-		{
-			std::cerr << "Failed to load soundfile \"" << path << "\"\n";
-			return false;
-		}
-		return true;
-	}
-	
-	bool Sound::play()
-	{
-		// If a sound file was loaded
-		if (sound != NULL)
-		{
-			if (Mix_PlayChannel(-1, sound, 0) != 0)
-			{
-				std::cerr << "Failed to start sound playback\n";
-				return false;
-			}
-		}
-		else
-		{
-			std::cerr << "No soudfile was loaded\n";
-			return false;
-		}
-		return true;
-	}
-	bool Sound::stop()
-	{
-		return true;
-	}
-	bool Sound::pause()
-	{
-		return true;
-	}
-	bool Sound::resume()
-	{
-		return true;
-	}
+		public:
+			Music();
+			~Music();
 
+			/**
+			 * Loads the music.
+			 * @param path The path of the music file.
+			 * @return returns true if the music was loaded correctly.
+			 */
+			bool load(std::string path);
+			
+			bool play();
+			bool stop();
+			bool pause();
+			bool resume();
+		private:
+			Mix_Music *music;
+	};
+
+	typedef SharedPointer<Music> MusicPointer;
 }
+#endif

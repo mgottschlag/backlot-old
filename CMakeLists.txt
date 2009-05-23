@@ -13,6 +13,7 @@ src/Texture.cpp
 src/TileSet.cpp
 src/Audio.cpp
 src/Sound.cpp
+src/Music.cpp
 src/Server.cpp
 src/Client.cpp
 src/QuadBatch.cpp
