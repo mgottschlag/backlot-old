@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
+Copyright (C) 2009  Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -19,37 +19,62 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Audio.hpp"
-#include <SDL/SDL_mixer.h>
+#include "Sound.hpp"
+#include "Engine.hpp"
+
+#include <iostream>
 
 namespace backlot
 {
-	Audio &Audio::get()
+	Sound::Sound() : ReferenceCounted()
 	{
-		static Audio audio;
-		return audio;
+		sound = NULL;
 	}
-	Audio::~Audio()
+	Sound::~Sound()
 	{
 	}
-
-	bool Audio::init()
+	
+	bool Sound::load(std::string path)
 	{
-		// Initialize SDL_Mixer
-		if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4069) != 0)
+		path = Engine::get().getGameDirectory() + "/sounds/" + path;
+		sound = Mix_LoadWAV(path.c_str());
+		if (sound == NULL)
+		{
+			std::cerr << "Failed to load soundfile \"" << path << "\"\n";
 			return false;
-
+		}
 		return true;
 	}
-	bool Audio::destroy()
+	
+	bool Sound::play()
 	{
-		// Shutting down audio
-		Mix_CloseAudio();
-
+		// If a sound file was loaded
+		if (sound != NULL)
+		{
+			if (Mix_PlayChannel(-1, sound, 0) != 0)
+			{
+				std::cerr << "Failed to start sound playback\n";
+				return false;
+			}
+		}
+		else
+		{
+			std::cerr << "No soudfile was loaded\n";
+			return false;
+		}
+		return true;
+	}
+	bool Sound::stop()
+	{
+		return true;
+	}
+	bool Sound::pause()
+	{
+		return true;
+	}
+	bool Sound::resume()
+	{
 		return true;
 	}
 
-	Audio::Audio()
-	{
-	}
 }

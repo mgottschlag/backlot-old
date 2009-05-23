@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
+Copyright (C) 2009  Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -19,37 +19,38 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Audio.hpp"
+#ifndef _SOUND_HPP_
+#define _SOUND_HPP_
+
+#include "ReferenceCounted.hpp"
+
 #include <SDL/SDL_mixer.h>
+#include <string>
 
 namespace backlot
 {
-	Audio &Audio::get()
+	class Sound : public ReferenceCounted
 	{
-		static Audio audio;
-		return audio;
-	}
-	Audio::~Audio()
-	{
-	}
+		public:
+			Sound();
+			~Sound();
 
-	bool Audio::init()
-	{
-		// Initialize SDL_Mixer
-		if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4069) != 0)
-			return false;
+			/**
+			 * Loads the sound.
+			 * @param path The path to the soundfile.
+			 * @return Returns true if the sound was loaded correctly.
+			 **/
+			bool load(std::string path);
 
-		return true;
-	}
-	bool Audio::destroy()
-	{
-		// Shutting down audio
-		Mix_CloseAudio();
-
-		return true;
-	}
-
-	Audio::Audio()
-	{
-	}
+			bool play();
+			bool stop();
+			bool pause();
+			bool resume();
+		private:
+			Mix_Chunk *sound;
+	};
+	
+	typedef SharedPointer<Sound> SoundPointer;
 }
+
+#endif

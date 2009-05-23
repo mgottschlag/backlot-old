@@ -12,6 +12,7 @@ src/Map.cpp
 src/Texture.cpp
 src/TileSet.cpp
 src/Audio.cpp
+src/Sound.cpp
 src/Server.cpp
 src/Client.cpp
 src/support/tinystr.cpp
@@ -24,4 +25,4 @@ set(CMAKE_CXX_FLAGS "-Wall")
 
 include_directories(include include/support)
 add_executable(backlot ${SRC})
-target_link_libraries(backlot SDL SDL_image GL glut)
+target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut)
