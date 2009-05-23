@@ -20,6 +20,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Map.hpp"
+#include "Engine.hpp"
+
+#include "tinyxml.h"
+
+#include <iostream>
 
 namespace backlot
 {
@@ -62,12 +67,85 @@ namespace backlot
 		{
 			maps.erase(it);
 		}
-		// Load map
+		// Unload data
+		this->name = name;
+		tilesets.clear();
+		tiledefs.clear();
+		// Open XML file
+		std::string filename = Engine::get().getGameDirectory() + "/maps/" + name + ".xml";
+		TiXmlDocument xml(filename.c_str());
+		if (!xml.LoadFile() || xml.Error())
+		{
+			std::cerr << "Could not load XML file " << name << ".xml: " << xml.ErrorDesc() << std::endl;
+			return false;
+		}
+		TiXmlNode *node = xml.FirstChild("map");
+		if (!node)
+		{
+			std::cerr << "Parser error: <map> not found." << std::endl;
+			return false;
+		}
+		TiXmlElement *root = node->ToElement();
+		// Load map information
 		// TODO
+		// Load tilesets
+		TiXmlNode *tilesetnode = root->FirstChild("tileset");
+		while (tilesetnode)
+		{
+			TiXmlElement *tileset = tilesetnode->ToElement();
+			if (!tileset)
+				continue;
+			if (!tileset->Attribute("name"))
+			{
+				std::cerr << "Missing tileset name." << std::endl;
+				return false;
+			}
+			std::string name = tileset->Attribute("name");
+			TileSetPointer set = new TileSet();
+			if (!set->load(name))
+			{
+				std::cerr << "Could not load tileset \"" << name << "\"." << std::endl;
+				return false;
+			}
+			tilesets.insert(std::pair<std::string, TileSetPointer>(name, set));
+			tilesetnode = node->IterateChildren("tileset", tilesetnode);
+		}
+		// Load tile definitions
+		TiXmlNode *tiledefnode = root->FirstChild("tiledef");
+		while (tiledefnode)
+		{
+			TiXmlElement *tiledef = tiledefnode->ToElement();
+			if (!tiledef)
+				continue;
+			if (!tiledef->Attribute("id") || !tiledef->Attribute("source"))
+			{
+				std::cerr << "Missing tiledef id or source." << std::endl;
+				return false;
+			}
+			int id = atoi(tiledef->Attribute("id"));
+			std::string source = tiledef->Attribute("source");
+			tiledefs.insert(std::pair<int, std::string>(id, source));
+			tiledefnode = node->IterateChildren("tiledef", tiledefnode);
+		}
+		// Load tiles
+		TiXmlNode *tilenode = root->FirstChild("tile");
+		while (tilenode)
+		{
+			TiXmlElement *tile = tilenode->ToElement();
+			if (!tile)
+				continue;
+			std::cout << "Tile." << std::endl;
+			if (!tile->Attribute("id") || !tile->Attribute("position"))
+			{
+				std::cerr << "Missing tile id or position." << std::endl;
+				return false;
+			}
+			tilenode = node->IterateChildren("tile", tilenode);
+		}
 		// Add to loaded maps
 		this->name = name;
 		maps.insert(std::pair<std::string, Map*>(name, this));
-		return false;
+		return true;
 	}
 
 	bool Map::compile()

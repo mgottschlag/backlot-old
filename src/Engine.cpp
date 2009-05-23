@@ -58,8 +58,14 @@ namespace backlot
 		// Show main menu
 		// TODO
 		// Test: Create local server
-		Server::get().init(27272, "test");
-		Client::get().init();
+		if (!Server::get().init(27272, "test"))
+		{
+			return false;
+		}
+		if (!Client::get().init())
+		{
+			return false;
+		}
 		// Main loop
 		bool running = true;
 		while (running)

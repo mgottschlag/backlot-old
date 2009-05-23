@@ -32,7 +32,7 @@ namespace backlot
 			static Server &get();
 			~Server();
 
-			bool init(int port, std::string map, int maxclients = 8);
+			bool init(int port, std::string mapname, int maxclients = 8);
 			bool destroy();
 
 			bool update();

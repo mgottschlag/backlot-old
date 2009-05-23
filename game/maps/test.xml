@@ -9,7 +9,7 @@
 
 	<tileset name="urban" />
 	<tiledef id="0" source="urban.grass" />
-	<tiledef id="0" source="urban.container" />
+	<tiledef id="1" source="urban.container" />
 
 	<spawnpoint position="0/0" team="0" />
 	<spawnpoint position="3/1" team="1" />

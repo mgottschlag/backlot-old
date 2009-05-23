@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _MAP_HPP_
 
 #include "ReferenceCounted.hpp"
+#include "TileSet.hpp"
 
 #include <string>
 #include <map>
@@ -44,6 +45,9 @@ namespace backlot
 			bool saveCompiled();
 		private:
 			std::string name;
+			std::map<std::string, TileSetPointer> tilesets;
+			std::map<int, std::string> tiledefs;
+
 			static std::map<std::string, Map*> maps;
 	};
 

@@ -14,10 +14,14 @@ src/TileSet.cpp
 src/Audio.cpp
 src/Server.cpp
 src/Client.cpp
+src/support/tinystr.cpp
+src/support/tinyxml.cpp
+src/support/tinyxmlerror.cpp
+src/support/tinyxmlparser.cpp
 )
 
 set(CMAKE_CXX_FLAGS "-Wall")
 
-include_directories(include)
+include_directories(include include/support)
 add_executable(backlot ${SRC})
 target_link_libraries(backlot SDL SDL_image GL glut)

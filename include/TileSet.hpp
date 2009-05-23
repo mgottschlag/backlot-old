@@ -26,7 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
-	class TileSet : ReferenceCounted
+	class TileSet : public ReferenceCounted
 	{
 		public:
 			TileSet();
