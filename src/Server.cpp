@@ -19,19 +19,36 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include "Server.hpp"
+
 namespace backlot
 {
-	class Client
+	Server &Server::get()
 	{
-		public:
-			static Client &get();
-			~Client();
+		static Server server;
+		return server;
+	}
+	Server::~Server()
+	{
+	}
 
-			bool init();
-			bool destroy();
+	bool Server::init(int port, std::string map, int maxclients)
+	{
+		// Load map
+		// Create network socket
+		return true;
+	}
+	bool Server::destroy()
+	{
+		return false;
+	}
 
-			bool update();
-		private:
-			Client();
-	};
+	bool Server::update()
+	{
+		return true;
+	}
+
+	Server::Server()
+	{
+	}
 }

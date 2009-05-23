@@ -19,13 +19,21 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <string>
+
 namespace backlot
 {
 	class Server
 	{
 		public:
-			Server();
+			static Server &get();
 			~Server();
+
+			bool init(int port, std::string map, int maxclients = 8);
+			bool destroy();
+
+			bool update();
 		private:
+			Server();
 	};
 }

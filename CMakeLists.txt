@@ -12,6 +12,8 @@ src/Map.cpp
 src/Texture.cpp
 src/TileSet.cpp
 src/Audio.cpp
+src/Server.cpp
+src/Client.cpp
 )
 
 set(CMAKE_CXX_FLAGS "-Wall")

@@ -83,7 +83,8 @@ namespace backlot
 			snprintf(caption, 100, "Backlot Engine - %d fps", fps);
 			SDL_WM_SetCaption(caption, caption);
 		}
-
+		// Render everything
+		// Swap buffers
 		SDL_GL_SwapBuffers();
 		return true;
 	}

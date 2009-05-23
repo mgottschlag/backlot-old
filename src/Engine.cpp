@@ -23,6 +23,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Graphics.hpp"
 #include "Input.hpp"
 #include "Audio.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
 
 #include <iostream>
 
@@ -54,6 +56,10 @@ namespace backlot
 			return false;
 		}
 		// Show main menu
+		// TODO
+		// Test: Create local server
+		Server::get().init(27272, "test");
+		Client::get().init();
 		// Main loop
 		bool running = true;
 		while (running)
@@ -62,6 +68,8 @@ namespace backlot
 			if (!Input::get().update())
 				running = false;
 			// Game logic
+			Server::get().update();
+			Client::get().update();
 			// Render everything
 			if (!Graphics::get().render())
 				running = false;
