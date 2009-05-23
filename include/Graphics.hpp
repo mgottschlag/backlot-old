@@ -19,6 +19,9 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef _GRAPHICS_HPP_
+#define _GRAPHICS_HPP_
+
 namespace backlot
 {
 	class Graphics
@@ -39,3 +42,5 @@ namespace backlot
 			unsigned int last_ticks;
 	};
 }
+
+#endif

@@ -19,6 +19,9 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef _TEXTURE_HPP_
+#define _TEXTURE_HPP_
+
 #include "ReferenceCounted.hpp"
 
 #include <string>
@@ -38,3 +41,5 @@ namespace backlot
 
 	typedef SharedPointer<Texture> TexturePointer;
 }
+
+#endif

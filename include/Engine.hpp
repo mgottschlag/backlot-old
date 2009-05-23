@@ -19,6 +19,9 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef _ENGINE_HPP_
+#define _ENGINE_HPP_
+
 #include <string>
 #include <vector>
 
@@ -73,3 +76,5 @@ namespace backlot
 			std::string directory;
 	};
 }
+
+#endif
