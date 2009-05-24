@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Graphics.hpp"
 
+#include <GL/glew.h>
 #include <SDL/SDL.h>
 #include <iostream>
 
@@ -59,6 +60,20 @@ namespace backlot
 			return false;
 		}
 		SDL_WM_SetCaption("Backlot Engine", "Backlot Engine");
+		// Initialize extensions
+		GLenum status = glewInit();
+		if (status != GLEW_OK)
+		{
+			std::cerr << "Could not get OpenGL extensions: "
+				<< glewGetErrorString(status) << std::endl;
+			return false;
+		}
+		if (!GLEW_ARB_vertex_buffer_object)
+		{
+			std::cerr << "No VBO support available." << std::endl;
+			return false;
+		}
+		// Reset fps counter
 		frames_rendered = 0;
 		last_ticks = SDL_GetTicks();
 		return true;

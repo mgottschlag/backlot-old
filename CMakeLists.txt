@@ -15,6 +15,7 @@ src/Audio.cpp
 src/Sound.cpp
 src/Server.cpp
 src/Client.cpp
+src/QuadBatch.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -25,4 +26,4 @@ set(CMAKE_CXX_FLAGS "-Wall")
 
 include_directories(include include/support)
 add_executable(backlot ${SRC})
-target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut)
+target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW)
