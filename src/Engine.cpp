@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -20,12 +20,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Engine.hpp"
+#include "Preferences.hpp"
 #include "Graphics.hpp"
 #include "Input.hpp"
 #include "Audio.hpp"
+#include "Sound.hpp"
+#include "Music.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 
+#include <SDL/SDL.h>
 #include <iostream>
 
 namespace backlot
@@ -55,17 +59,22 @@ namespace backlot
 			std::cerr << "Could not initialize sound." << std::endl;
 			return false;
 		}
+		if (!Preferences::get().load())
+		{
+			std::cerr << "Could not load preferences." << std::endl;
+			return false;
+		}
 		// Show main menu
 		// TODO
 		// Test: Create local server
-		if (!Server::get().init(27272, "test"))
+/*		if (!Server::get().init(27272, "test"))
 		{
 			return false;
 		}
 		if (!Client::get().init())
 		{
 			return false;
-		}
+		}*/
 		// Main loop
 		bool running = true;
 		while (running)

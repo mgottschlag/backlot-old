@@ -6,6 +6,7 @@ project(backlot)
 set(SRC
 src/main.cpp
 src/Engine.cpp
+src/Preferences.cpp
 src/Graphics.cpp
 src/Input.cpp
 src/Map.cpp
@@ -29,3 +30,4 @@ set(CMAKE_CXX_FLAGS "-Wall")
 include_directories(include include/support)
 add_executable(backlot ${SRC})
 target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW)
+
