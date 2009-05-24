@@ -61,8 +61,7 @@ namespace backlot
 			return false;
 		}
 		SDL_WM_SetCaption("Backlot Engine", "Backlot Engine");
-		windowsize.x = width;
-		windowsize.y = height;
+
 		// Initialize extensions
 		GLenum status = glewInit();
 		if (status != GLEW_OK)
@@ -88,11 +87,6 @@ namespace backlot
 		camera = 0;
 		SDL_Quit();
 		return true;
-	}
-
-	Vector2I Graphics::getWindowSize()
-	{
-		return windowsize;
 	}
 
 	bool Graphics::render()

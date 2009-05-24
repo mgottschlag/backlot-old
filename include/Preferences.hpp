@@ -40,13 +40,10 @@ namespace backlot
 			
 			/*
 			 * Loads the preferences from game/config.xml.
-			 * @param path The path to the config file.
 			 */
 			bool load();
 			/*
 			 * Save the preferences to game/config.xml.
-			 * @param path The directory and filename in which the config file
-			 * is saved.
 			 */
 			bool save();
 			

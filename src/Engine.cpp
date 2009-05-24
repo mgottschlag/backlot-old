@@ -47,9 +47,15 @@ namespace backlot
 	{
 		directory = path;
 		// Load main configuration file
+		Preferences::get().setPath(getGameDirectory() + "/config.xml");
+		if (!Preferences::get().load())
+		{
+			std::cerr << "Could not load preferences." << std::endl;
+			return false;
+		}
 		// Show configuration dialog
 		// Start engine
-		if (!Graphics::get().init(800, 600, 32, false))
+		if (!Graphics::get().init(Preferences::get().getResolution().x, Preferences::get().getResolution().y, Preferences::get().getColorDepth(), Preferences::get().getFullscreen()))
 		{
 			std::cerr << "Could not open render window." << std::endl;
 			return false;
@@ -59,22 +65,17 @@ namespace backlot
 			std::cerr << "Could not initialize sound." << std::endl;
 			return false;
 		}
-		if (!Preferences::get().load())
-		{
-			std::cerr << "Could not load preferences." << std::endl;
-			return false;
-		}
 		// Show main menu
 		// TODO
 		// Test: Create local server
-/*		if (!Server::get().init(27272, "test"))
+		if (!Server::get().init(27272, "test"))
 		{
 			return false;
 		}
 		if (!Client::get().init())
 		{
 			return false;
-		}*/
+		}
 		// Main loop
 		bool running = true;
 		while (running)

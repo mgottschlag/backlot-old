@@ -35,13 +35,9 @@ namespace backlot
 			bool init(int width, int height, int bpp, bool fullscreen);
 			bool destroy();
 
-			Vector2I getWindowSize();
-
 			bool render();
 		private:
 			Graphics();
-
-			Vector2I windowsize;
 
 			CameraPointer camera;
 

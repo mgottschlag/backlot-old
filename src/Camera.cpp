@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Camera.hpp"
 #include "Graphics.hpp"
+#include "Preferences.hpp"
 
 #include <GL/gl.h>
 
@@ -47,7 +48,7 @@ namespace backlot
 		// Set orthogonal projection
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		Vector2I windowsize = Graphics::get().getWindowSize();
+		Vector2I windowsize = Preferences::get().getResolution();
 		glOrtho(-(float)windowsize.x / 32 / 2, (float)windowsize.x / 32 / 2,
 			-(float)windowsize.y / 32 / 2, (float)windowsize.y / 32 / 2,
 			256, -256);

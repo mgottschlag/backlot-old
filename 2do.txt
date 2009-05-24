@@ -4,6 +4,7 @@
 - Menu
 - Players
 - Weapons
+- Graphics
 - Sounds / Music
 
 Private Lists:
@@ -14,4 +15,4 @@ popup
 
 
 pommes
-- NULL-Pointer check for reading preferences
+
