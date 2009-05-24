@@ -22,7 +22,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _TILESET_HPP_
 #define _TILESET_HPP_
 
+#include "ReferenceCounted.hpp"
+#ifdef CLIENT
 #include "Texture.hpp"
+#endif
 #include "Tile.hpp"
 
 #include <map>
@@ -39,17 +42,23 @@ namespace backlot
 
 			bool load(std::string name);
 
+			#ifdef CLIENT
 			void getLayerCount(int &ground, int &shadow, int &high);
+			#endif
 			Tile *getTile(std::string name);
+			#ifdef CLIENT
 			TexturePointer getTexture();
+			#endif
 		private:
 			bool loadTile(TiXmlElement *xml);
 
+			#ifdef CLIENT
 			TexturePointer texture;
-			std::map<std::string, Tile> tiles;
 			int groundlayers;
 			int shadowlayers;
 			int highlayers;
+			#endif
+			std::map<std::string, Tile> tiles;
 	};
 
 	typedef SharedPointer<TileSet> TileSetPointer;

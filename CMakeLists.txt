@@ -5,7 +5,7 @@ project(backlot)
 
 set(CLIENT_SRC
 src/client/main.cpp
-src/Engine.cpp
+src/client/Engine.cpp
 src/Preferences.cpp
 src/client/Graphics.cpp
 src/client/Input.cpp
@@ -35,20 +35,20 @@ target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet)
 
 set(SERVER_SRC
 src/server/main.cpp
-src/Engine.cpp
+src/server/Engine.cpp
 src/Preferences.cpp
 src/Map.cpp
 src/TileSet.cpp
-src/Server.cpp
+src/server/Server.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
 src/support/tinyxmlparser.cpp
 )
 
-#add_executable(server ${CLIENT_SRC})
-#set_target_properties(server PROPERTIES COMPILE_DEFINITIONS SERVER)
-#set_target_properties(server PROPERTIES COMPILE_FLAGS -Iinclude/server)
-#target_link_libraries(server enet)
+add_executable(server ${SERVER_SRC})
+set_target_properties(server PROPERTIES COMPILE_DEFINITIONS SERVER)
+set_target_properties(server PROPERTIES COMPILE_FLAGS -Iinclude/server)
+target_link_libraries(server enet)
 
 

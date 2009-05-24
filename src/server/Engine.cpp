@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -19,37 +19,67 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include "Engine.hpp"
+#include "Preferences.hpp"
 #include "Server.hpp"
 
 #include <iostream>
+#include <enet/enet.h>
 
 namespace backlot
 {
-	Server &Server::get()
+	Engine &Engine::get()
 	{
-		static Server server;
-		return server;
+		static Engine engine;
+		return engine;
 	}
-	Server::~Server()
+	Engine::~Engine()
 	{
 	}
 
-	bool Server::init(int port, std::string mapname, int maxclients)
+	bool Engine::run(std::string path, std::vector<std::string> args)
 	{
+		directory = path;
+		// Load main configuration file
+		Preferences::get().setPath(getGameDirectory() + "/config.xml");
+		if (!Preferences::get().load())
+		{
+			std::cerr << "Could not load preferences." << std::endl;
+			return false;
+		}
+		// Show configuration dialog
+		// Start engine
+		if (enet_initialize() != 0)
+		{
+			std::cerr << "Could not initialize networking." << std::endl;
+			return false;
+		}
 		// Start server
+		if (!Server::get().init(27272, "test"))
+		{
+			return false;
+		}
+		// Main loop
+		bool running = true;
+		while (running)
+		{
+			// Game logic
+			if (!Server::get().update())
+				running = false;
+			// Input handling
+			// TODO
+		}
+		// Shut down engine
+		enet_deinitialize();
 		return true;
 	}
-	bool Server::destroy()
+
+	std::string Engine::getGameDirectory()
 	{
-		return false;
+		return directory;
 	}
 
-	bool Server::update()
-	{
-		return true;
-	}
-
-	Server::Server()
+	Engine::Engine()
 	{
 	}
 }

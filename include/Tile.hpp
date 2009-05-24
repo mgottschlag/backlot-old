@@ -24,7 +24,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Vector2.hpp"
 #include "Rectangle.hpp"
+#ifdef CLIENT
 #include "Texture.hpp"
+#endif
 
 #include <vector>
 
@@ -32,6 +34,7 @@ namespace backlot
 {
 	class TileSet;
 
+	#ifdef CLIENT
 	struct QuadInfo
 	{
 		int layer;
@@ -39,9 +42,16 @@ namespace backlot
 		RectangleI texturerect;
 		int rotated;
 	};
+	#endif
 	class Tile
 	{
 		public:
+			#ifdef SERVER
+			Tile(TileSet *tileset) : tileset(tileset)
+			{
+			}
+			#endif
+			#ifdef CLIENT
 			Tile(TexturePointer texture, TileSet *tileset) : texture(texture),
 				tileset(tileset)
 			{
@@ -54,6 +64,7 @@ namespace backlot
 			{
 				return quads;
 			}
+			#endif
 			void setSize(Vector2I size)
 			{
 				this->size = size;
@@ -74,13 +85,17 @@ namespace backlot
 			{
 				return tileset;
 			}
+			#ifdef CLIENT
 			TexturePointer getTexture()
 			{
 				return texture;
 			}
+			#endif
 		private:
+			#ifdef CLIENT
 			TexturePointer texture;
 			std::vector<QuadInfo> quads;
+			#endif
 			Vector2I size;
 			bool accessible;
 			TileSet *tileset;

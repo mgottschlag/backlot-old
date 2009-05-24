@@ -32,9 +32,11 @@ namespace backlot
 {
 	TileSet::TileSet()
 	{
+		#ifdef CLIENT
 		groundlayers = 0;
 		shadowlayers = 0;
 		highlayers = 0;
+		#endif
 	}
 	TileSet::~TileSet()
 	{
@@ -42,6 +44,7 @@ namespace backlot
 
 	bool TileSet::load(std::string name)
 	{
+		#ifdef CLIENT
 		// Open texture
 		TexturePointer texture = new Texture();
 		if (!texture->load("tilesets/" + name + ".png"))
@@ -50,6 +53,7 @@ namespace backlot
 			return false;
 		}
 		this->texture = texture;
+		#endif
 		// Open XML file
 		std::string filename = Engine::get().getGameDirectory() + "/tilesets/" + name + ".xml";
 		TiXmlDocument xml(filename.c_str());
@@ -65,6 +69,7 @@ namespace backlot
 			return false;
 		}
 		TiXmlElement *root = node->ToElement();
+		#ifdef CLIENT
 		// Load layer info
 		TiXmlNode *layernode = root->FirstChild("layers");
 		if (!layernode)
@@ -87,6 +92,7 @@ namespace backlot
 			shadowlayers = atoi(layers->Attribute("shadow"));
 		if (layers->Attribute("high"))
 			highlayers = atoi(layers->Attribute("high"));
+		#endif
 		// Load tiles
 		TiXmlNode *tilenode = root->FirstChild("tile");
 		while (tilenode)
@@ -103,12 +109,14 @@ namespace backlot
 		return true;
 	}
 
+	#ifdef CLIENT
 	void TileSet::getLayerCount(int &ground, int &shadow, int &high)
 	{
 		ground = groundlayers;
 		shadow = shadowlayers;
 		high = highlayers;
 	}
+	#endif
 	Tile *TileSet::getTile(std::string name)
 	{
 		std::map<std::string, Tile>::iterator it = tiles.find(name);
@@ -116,14 +124,21 @@ namespace backlot
 			return 0;
 		return &it->second;
 	}
+	#ifdef CLIENT
 	TexturePointer TileSet::getTexture()
 	{
 		return texture;
 	}
+	#endif
 
 	bool TileSet::loadTile(TiXmlElement *xml)
 	{
+		#ifdef CLIENT
 		Tile tile(texture, this);
+		#endif
+		#ifdef SERVER
+		Tile tile(this);
+		#endif
 		// Tile attributes
 		if (!xml->Attribute("name") || !xml->Attribute("size"))
 		{
@@ -136,6 +151,7 @@ namespace backlot
 			tile.setAccessible(std::string("yes") == xml->Attribute("accessible"));
 		}
 		std::string tilename = xml->Attribute("name");
+		#ifdef CLIENT
 		// Load quads
 		TiXmlNode *quadnode = xml->FirstChild("quad");
 		while (quadnode)
@@ -171,6 +187,7 @@ namespace backlot
 			tile.addQuad(quadinfo);
 			quadnode = xml->IterateChildren("quad", quadnode);
 		}
+		#endif
 		tiles.insert(std::pair<std::string, Tile>(tilename, tile));
 		return true;
 	}

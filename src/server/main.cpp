@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 	for (int i = 2; i < argc; i++)
 		args.push_back(argv[i]);
 	// Run game
-	if (!backlot::Engine::get().runServer(argv[1], args))
+	if (!backlot::Engine::get().run(argv[1], args))
 	{
 		return -1;
 	}

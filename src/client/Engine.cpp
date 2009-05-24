@@ -105,18 +105,6 @@ namespace backlot
 		return true;
 	}
 
-	bool Engine::runServer(std::string path, std::vector<std::string> args)
-	{
-		directory = path;
-		// Start engine
-		if (enet_initialize() != 0)
-		{
-			std::cerr << "Could not initialize networking." << std::endl;
-			return false;
-		}
-		return true;
-	}
-
 	std::string Engine::getGameDirectory()
 	{
 		return directory;

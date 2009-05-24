@@ -41,6 +41,10 @@ namespace backlot
 			bool update();
 		private:
 			Server();
+
+			MapPointer map;
+
+			ENetHost *host;
 	};
 }
 

@@ -19,29 +19,64 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _SERVER_HPP_
-#define _SERVER_HPP_
+#include "Server.hpp"
 
-#include "Map.hpp"
-
-#include <string>
-#include <enet/enet.h>
+#include <iostream>
 
 namespace backlot
 {
-	class Server
+	Server &Server::get()
 	{
-		public:
-			static Server &get();
-			~Server();
+		static Server server;
+		return server;
+	}
+	Server::~Server()
+	{
+	}
 
-			bool init(int port, std::string mapname, int maxclients = 8);
-			bool destroy();
+	bool Server::init(int port, std::string mapname, int maxclients)
+	{
+		// Load map
+		map = Map::get(mapname);
+		if (map.isNull())
+		{
+			std::cerr << "Could not load map." << std::endl;
+			return false;
+		}
+		if (!map->isCompiled())
+		{
+			if (!map->compile())
+			{
+				std::cerr << "Could not compile map." << std::endl;
+				return false;
+			}
+		}
+		std::cout << "Map is ready." << std::endl;
+		// Create network socket
+		ENetAddress address;
+		address.host = ENET_HOST_ANY;
+		address.port = port;
+		host = enet_host_create(&address, 32, 0, 0);
+		if (host == 0)
+		{
+			std::cerr << "Could not create server socket." << std::endl;
+			return false;
+		}
+		return true;
+	}
+	bool Server::destroy()
+	{
+		enet_host_destroy(host);
+		map = 0;
+		return false;
+	}
 
-			bool update();
-		private:
-			Server();
-	};
+	bool Server::update()
+	{
+		return true;
+	}
+
+	Server::Server()
+	{
+	}
 }
-
-#endif

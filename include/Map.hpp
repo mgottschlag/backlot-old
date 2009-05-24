@@ -25,7 +25,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ReferenceCounted.hpp"
 #include "TileSet.hpp"
 #include "Vector2.hpp"
+#ifdef CLIENT
 #include "QuadBatch.hpp"
+#endif
 
 #include <string>
 #include <map>
@@ -50,17 +52,20 @@ namespace backlot
 
 			bool compile();
 			bool isCompiled();
-			bool saveCompiled();
 
+			#ifdef CLIENT
 			void setVisible(bool visible);
 			bool isVisible();
 			static SharedPointer<Map> getVisibleMap();
 
 			void render();
+			#endif
 		private:
 			void createAccessibilityMap();
+			#ifdef CLIENT
 			void getLayerCount();
 			void collectTextures();
+			#endif
 
 			std::string name;
 			std::map<std::string, TileSetPointer> tilesets;
@@ -70,6 +75,7 @@ namespace backlot
 
 			bool compiled;
 			char *accessible;
+			#ifdef CLIENT
 			int groundlayers;
 			int shadowlayers;
 			int highlayers;
@@ -79,6 +85,7 @@ namespace backlot
 			int batchcounty;
 
 			static Map *visible;
+			#endif
 
 			static std::map<std::string, Map*> maps;
 	};

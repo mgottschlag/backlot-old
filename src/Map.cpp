@@ -32,14 +32,18 @@ namespace backlot
 	Map::Map() : ReferenceCounted()
 	{
 		compiled = false;
+		#ifdef CLIENT
 		batches = 0;
+		#endif
 		accessible = 0;
 	}
 	Map::~Map()
 	{
+		#ifdef CLIENT
 		// Hide
 		if (isVisible())
 			setVisible(false);
+		#endif
 		// Remove from loaded maps
 		std::map<std::string, Map*>::iterator it = maps.find(name);
 		if (it != maps.end())
@@ -47,8 +51,10 @@ namespace backlot
 			maps.erase(it);
 		}
 		// Destroy map
+		#ifdef CLIENT
 		if (batches)
 			delete[] batches;
+		#endif
 		if(accessible)
 			delete[] accessible;
 	}
@@ -194,6 +200,7 @@ namespace backlot
 			return true;
 		// Create accessibility map
 		createAccessibilityMap();
+		#ifdef CLIENT
 		// Get maximum layer count and collect textures
 		getLayerCount();
 		collectTextures();
@@ -284,6 +291,7 @@ namespace backlot
 		{
 			batches[i]->rebuild();
 		}
+		#endif
 		compiled = true;
 		return true;
 	}
@@ -291,11 +299,8 @@ namespace backlot
 	{
 		return compiled;
 	}
-	bool Map::saveCompiled()
-	{
-		return false;
-	}
 
+	#ifdef CLIENT
 	void Map::setVisible(bool visible)
 	{
 		if (visible)
@@ -348,6 +353,7 @@ namespace backlot
 		glDisable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+	#endif
 
 	void Map::createAccessibilityMap()
 	{
@@ -371,6 +377,7 @@ namespace backlot
 			it++;
 		}
 	}
+	#ifdef CLIENT
 	void Map::getLayerCount()
 	{
 		groundlayers = 0;
@@ -404,5 +411,6 @@ namespace backlot
 	}
 
 	Map *Map::visible = 0;
+	#endif
 	std::map<std::string, Map*> Map::maps;
 }
