@@ -20,6 +20,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Client.hpp"
+#include "Map.hpp"
+
+#include <iostream>
 
 namespace backlot
 {
@@ -36,10 +39,27 @@ namespace backlot
 	{
 		// Connect to server
 		// Load map
+		map = Map::get("test");
+		if (map.isNull())
+		{
+			std::cerr << "Could not load map." << std::endl;
+			return false;
+		}
+		if (!map->isCompiled())
+		{
+			if (!map->compile())
+			{
+				std::cerr << "Could not compile map." << std::endl;
+				return false;
+			}
+		}
+		std::cout << "Map is ready." << std::endl;
+		map->setVisible(true);
 		return true;
 	}
 	bool Client::destroy()
 	{
+		map = 0;
 		return false;
 	}
 

@@ -22,6 +22,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _CLIENT_HPP_
 #define _CLIENT_HPP_
 
+#include "Map.hpp"
+
 namespace backlot
 {
 	class Client
@@ -36,6 +38,8 @@ namespace backlot
 			bool update();
 		private:
 			Client();
+
+			MapPointer map;
 	};
 }
 

@@ -17,6 +17,7 @@ src/Music.cpp
 src/Server.cpp
 src/Client.cpp
 src/QuadBatch.cpp
+src/Camera.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

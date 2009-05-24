@@ -19,36 +19,29 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _GRAPHICS_HPP_
-#define _GRAPHICS_HPP_
+#ifndef _CAMERA_HPP_
+#define _CAMERA_HPP_
 
-#include "Camera.hpp"
+#include "ReferenceCounted.hpp"
+#include "Vector2.hpp"
 
 namespace backlot
 {
-	class Graphics
+	class Camera : public ReferenceCounted
 	{
 		public:
-			static Graphics &get();
-			~Graphics();
+			Camera();
+			~Camera();
 
-			bool init(int width, int height, int bpp, bool fullscreen);
-			bool destroy();
+			void setPosition(Vector2F position);
+			Vector2F getPosition();
 
-			Vector2I getWindowSize();
-
-			bool render();
+			void apply();
 		private:
-			Graphics();
-
-			Vector2I windowsize;
-
-			CameraPointer camera;
-
-			// FPS counter
-			unsigned int frames_rendered;
-			unsigned int last_ticks;
+			Vector2F position;
 	};
+
+	typedef SharedPointer<Camera> CameraPointer;
 }
 
 #endif

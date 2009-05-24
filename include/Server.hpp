@@ -22,6 +22,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _SERVER_HPP_
 #define _SERVER_HPP_
 
+#include "Map.hpp"
+
 #include <string>
 
 namespace backlot
@@ -38,6 +40,8 @@ namespace backlot
 			bool update();
 		private:
 			Server();
+
+			MapPointer map;
 	};
 }
 

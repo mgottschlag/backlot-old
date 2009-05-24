@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Graphics.hpp"
+#include "Map.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -60,6 +61,8 @@ namespace backlot
 			return false;
 		}
 		SDL_WM_SetCaption("Backlot Engine", "Backlot Engine");
+		windowsize.x = width;
+		windowsize.y = height;
 		// Initialize extensions
 		GLenum status = glewInit();
 		if (status != GLEW_OK)
@@ -76,12 +79,20 @@ namespace backlot
 		// Reset fps counter
 		frames_rendered = 0;
 		last_ticks = SDL_GetTicks();
+		// Camera
+		camera = new Camera();
 		return true;
 	}
 	bool Graphics::destroy()
 	{
+		camera = 0;
 		SDL_Quit();
 		return true;
+	}
+
+	Vector2I Graphics::getWindowSize()
+	{
+		return windowsize;
 	}
 
 	bool Graphics::render()
@@ -99,6 +110,14 @@ namespace backlot
 			SDL_WM_SetCaption(caption, caption);
 		}
 		// Render everything
+		glClearColor(0.3, 0.0, 0.0, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		camera->apply();
+		MapPointer map = Map::getVisibleMap();
+		if (!map.isNull())
+		{
+			map->render();
+		}
 		// Swap buffers
 		SDL_GL_SwapBuffers();
 		return true;

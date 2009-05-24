@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tinyxml.h"
 
 #include <iostream>
+#include <GL/gl.h>
 
 namespace backlot
 {
@@ -36,6 +37,9 @@ namespace backlot
 	}
 	Map::~Map()
 	{
+		// Hide
+		if (isVisible())
+			setVisible(false);
 		// Remove from loaded maps
 		std::map<std::string, Map*>::iterator it = maps.find(name);
 		if (it != maps.end())
@@ -194,8 +198,8 @@ namespace backlot
 		getLayerCount();
 		collectTextures();
 		// Compute batch count
-		int batchcountx = (size.x + 63) / 64;
-		int batchcounty = (size.y + 63) / 64;
+		batchcountx = (size.x + 63) / 64;
+		batchcounty = (size.y + 63) / 64;
 		// One solid and one shadow pass per texture
 		int materialcount = textures.size() * 2;
 		// Create render batches
@@ -251,10 +255,11 @@ namespace backlot
 				quad.position.y = (float)position.y + (float)quads[i].offset.y / 32;
 				quad.size.x = (float)quads[i].texturerect.width / 32;
 				quad.size.y = (float)quads[i].texturerect.height / 32;
-				quad.texturecoords.x = (float)quads[i].texturerect.x / 128;
-				quad.texturecoords.y = (float)quads[i].texturerect.y / 128;
-				quad.texturecoords.width = (float)quads[i].texturerect.width / 128;
-				quad.texturecoords.height = (float)quads[i].texturerect.height / 128;
+				quad.texturecoords.x = (float)quads[i].texturerect.x / 256;
+				quad.texturecoords.y = (float)quads[i].texturerect.y / 256;
+				quad.texturecoords.width = (float)quads[i].texturerect.width / 256;
+				quad.texturecoords.height = (float)quads[i].texturerect.height / 256;
+				quad.rotated = quads[i].rotated;
 				if (layer >= ground && layer < ground + shadow)
 				{
 					// Shadow layer
@@ -289,6 +294,59 @@ namespace backlot
 	bool Map::saveCompiled()
 	{
 		return false;
+	}
+
+	void Map::setVisible(bool visible)
+	{
+		if (visible)
+			Map::visible = this;
+		else if (Map::visible == this)
+			Map::visible = 0;
+	}
+	bool Map::isVisible()
+	{
+		return visible == this;
+	}
+	SharedPointer<Map> Map::getVisibleMap()
+	{
+		return visible;
+	}
+
+	void Map::render()
+	{
+		if (!compiled)
+		{
+			std::cout << "Map not compiled." << std::endl;
+			return;
+		}
+		// Normal layers
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glColor3f(1.0, 1.0, 1.0);
+		for (unsigned int tex = 0; tex < textures.size(); tex++)
+		{
+			textures[tex]->bind();
+			for (int i = 0; i < batchcountx * batchcounty; i++)
+			{
+				batches[tex * 2 * batchcountx * batchcounty + i]->render();
+			}
+		}
+		// Shadow layers
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		for (unsigned int tex = 0; tex < textures.size(); tex++)
+		{
+			textures[tex]->bind();
+			for (int i = 0; i < batchcountx * batchcounty; i++)
+			{
+				batches[(tex * 2 + 1) * batchcountx * batchcounty + i]->render();
+			}
+		}
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void Map::createAccessibilityMap()
@@ -345,5 +403,6 @@ namespace backlot
 		}
 	}
 
+	Map *Map::visible = 0;
 	std::map<std::string, Map*> Map::maps;
 }

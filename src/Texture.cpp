@@ -51,12 +51,24 @@ namespace backlot
 		SDL_Surface *surface = IMG_Load(path.c_str());
 		if (!surface)
 			return false;
+		SDL_PixelFormat *format = surface->format;
 		// Set texture
 		glBindTexture(GL_TEXTURE_2D, texture);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_BGR_EXT,
-			GL_UNSIGNED_BYTE, surface->pixels);
+		SDL_LockSurface(surface);
+		if (format->BytesPerPixel == 4)
+			gluBuild2DMipmaps(GL_TEXTURE_2D, 4, surface->w, surface->h, GL_RGBA,
+				GL_UNSIGNED_BYTE, surface->pixels);
+		else
+			gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB,
+				GL_UNSIGNED_BYTE, surface->pixels);
+		SDL_UnlockSurface(surface);
 		// Delete image
 		SDL_FreeSurface(surface);
 		return true;
+	}
+
+	void Texture::bind()
+	{
+		glBindTexture(GL_TEXTURE_2D, texture);
 	}
 }

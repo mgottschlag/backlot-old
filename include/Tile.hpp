@@ -37,6 +37,7 @@ namespace backlot
 		int layer;
 		Vector2I offset;
 		RectangleI texturerect;
+		int rotated;
 	};
 	class Tile
 	{

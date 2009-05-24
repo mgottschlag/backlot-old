@@ -167,6 +167,7 @@ namespace backlot
 			quadinfo.layer = layer;
 			quadinfo.texturerect = texturerect;
 			quadinfo.offset = offset;
+			quadinfo.rotated = rotated;
 			tile.addQuad(quadinfo);
 			quadnode = xml->IterateChildren("quad", quadnode);
 		}

@@ -20,7 +20,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Server.hpp"
-#include "Map.hpp"
 
 #include <iostream>
 
@@ -38,7 +37,7 @@ namespace backlot
 	bool Server::init(int port, std::string mapname, int maxclients)
 	{
 		// Load map
-		MapPointer map = Map::get(mapname);
+		map = Map::get(mapname);
 		if (map.isNull())
 		{
 			std::cerr << "Could not load map." << std::endl;
@@ -58,6 +57,7 @@ namespace backlot
 	}
 	bool Server::destroy()
 	{
+		map = 0;
 		return false;
 	}
 

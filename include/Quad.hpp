@@ -33,6 +33,7 @@ namespace backlot
 		Vector2F position;
 		Vector2F size;
 		RectangleF texturecoords;
+		int rotated;
 	};
 }
 

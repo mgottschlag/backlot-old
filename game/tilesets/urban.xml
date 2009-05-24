@@ -10,13 +10,13 @@
 		<!-- shadow -->
 		<quad layer="1" offset="-32/-32" texture="32/128/32/32" rotated="2" />
 		<quad layer="1" offset="0/-32" texture="0/128/32/32" rotated="2" />
-		<quad layer="1" offset="32/-32" texture="0/128/32/32" rotated="3" />
+		<quad layer="1" offset="32/-32" texture="32/128/32/32" rotated="3" />
 		<quad layer="1" offset="-32/0" texture="0/128/32/32" rotated="1" />
 		<quad layer="1" offset="-32/32" texture="0/128/32/32" rotated="1" />
 		<quad layer="1" offset="32/0" texture="0/128/32/32" rotated="3" />
 		<quad layer="1" offset="32/32" texture="0/128/32/32" rotated="3" />
 		<quad layer="1" offset="-32/64" texture="32/128/32/32" rotated="1" />
 		<quad layer="1" offset="0/64" texture="0/128/32/32" />
-		<quad layer="1" offset="32/64" texture="0/128/32/32" />
+		<quad layer="1" offset="32/64" texture="32/128/32/32" />
 	</tile>
 </tileset>

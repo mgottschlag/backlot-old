@@ -35,6 +35,8 @@ namespace backlot
 			~Texture();
 
 			bool load(std::string path);
+
+			void bind();
 		private:
 			unsigned int texture;
 	};

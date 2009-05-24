@@ -98,14 +98,6 @@ namespace backlot
 			 * Vertex buffer object.
 			 */
 			unsigned int vbo;
-			/**
-			 * Index buffer object.
-			 */
-			unsigned int ibo;
-			/**
-			 * Size of one entry in the index buffer.
-			 */
-			unsigned int indexsize;
 	};
 
 	typedef SharedPointer<QuadBatch> QuadBatchPointer;

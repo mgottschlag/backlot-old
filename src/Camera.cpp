@@ -19,36 +19,40 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _GRAPHICS_HPP_
-#define _GRAPHICS_HPP_
-
 #include "Camera.hpp"
+#include "Graphics.hpp"
+
+#include <GL/gl.h>
 
 namespace backlot
 {
-	class Graphics
+	Camera::Camera()
 	{
-		public:
-			static Graphics &get();
-			~Graphics();
+	}
+	Camera::~Camera()
+	{
+	}
 
-			bool init(int width, int height, int bpp, bool fullscreen);
-			bool destroy();
+	void Camera::setPosition(Vector2F position)
+	{
+		this->position = position;
+	}
+	Vector2F Camera::getPosition()
+	{
+		return position;
+	}
 
-			Vector2I getWindowSize();
-
-			bool render();
-		private:
-			Graphics();
-
-			Vector2I windowsize;
-
-			CameraPointer camera;
-
-			// FPS counter
-			unsigned int frames_rendered;
-			unsigned int last_ticks;
-	};
+	void Camera::apply()
+	{
+		// Set orthogonal projection
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		Vector2I windowsize = Graphics::get().getWindowSize();
+		glOrtho(-(float)windowsize.x / 32 / 2, (float)windowsize.x / 32 / 2,
+			-(float)windowsize.y / 32 / 2, (float)windowsize.y / 32 / 2,
+			256, -256);
+		glScalef(1.0, -1.0, 1.0);
+		glTranslatef(position.x, position.y, 0);
+		glMatrixMode(GL_MODELVIEW);
+	}
 }
-
-#endif

@@ -51,6 +51,12 @@ namespace backlot
 			bool compile();
 			bool isCompiled();
 			bool saveCompiled();
+
+			void setVisible(bool visible);
+			bool isVisible();
+			static SharedPointer<Map> getVisibleMap();
+
+			void render();
 		private:
 			void createAccessibilityMap();
 			void getLayerCount();
@@ -69,6 +75,10 @@ namespace backlot
 			int highlayers;
 			std::vector<TexturePointer> textures;
 			QuadBatchPointer *batches;
+			int batchcountx;
+			int batchcounty;
+
+			static Map *visible;
 
 			static std::map<std::string, Map*> maps;
 	};
