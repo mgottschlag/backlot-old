@@ -41,18 +41,45 @@ namespace backlot
 	
 	bool Preferences::load()
 	{
+		std::cout << "Loading preferences from \"" << path << "\".\n";
+
 		TiXmlDocument conffile(path.c_str());
-		if(!conffile.LoadFile())
+		if (!conffile.LoadFile())
 		{
 			std::cerr << "Unable to load config file \"" << path << "\"!\n";
 			return false;
 		}
 
-		TiXmlNode *node = conffile.FirstChild("config")->FirstChild("graphics");
+		TiXmlNode *node;
+		node = conffile.FirstChild("config");
+		if (node == NULL)
+		{
+			std::cerr << "Can't find \"config\" in config file " << path << "!\n";
+			return false;
+		}
+		node = node->FirstChild("graphics");
+		if (node == NULL)
+		{
+			std::cerr << "Can't find \"graphics\" in config file " << path << "!\n";
+			return false;
+		}
 		TiXmlElement *element = node->ToElement();
-		element->Attribute("width", &screenresolution.x);
-		element->Attribute("height", &screenresolution.y);
-		element->Attribute("colordepth", &colordepth);
+
+		if (element->Attribute("width", &screenresolution.x) == NULL)
+		{
+			std::cerr << "Can't find \"width\" in config file " << path << "!\n";
+			return false;
+		}
+		if (element->Attribute("height", &screenresolution.y) == NULL)
+		{
+			std::cerr << "Can't find \"height\" in config file " << path << "!\n";
+			return false;
+		}
+		if (element->Attribute("colordepth", &colordepth) == NULL)
+		{
+			std::cerr << "Can't find \"colordepth\" in config file " << path << "!\n";
+			return false;
+		}
 		if (((std::string)"yes").compare(element->Attribute("fullscreen")) == 0)
 			fullscreen = true;
 		else if (((std::string)"no").compare(element->Attribute("fullscreen")) == 0)
@@ -62,8 +89,6 @@ namespace backlot
 			std::cerr << "Error on loading preferences: can't read vaule of attribute \"fullscreen\" in " << path << std::endl;
 			return false;
 		}
-
-		std::cout << "fullscreen: " << fullscreen << std::endl;
 
 		return true;
 	}
@@ -91,6 +116,5 @@ namespace backlot
 
 	Preferences::Preferences()
 	{
-		setPath(Engine::get().getGameDirectory() + "/game/config.xml");
 	}
 }
