@@ -19,27 +19,25 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Client.hpp"
-#include "Map.hpp"
+#include "Server.hpp"
 
 #include <iostream>
 
 namespace backlot
 {
-	Client &Client::get()
+	Server &Server::get()
 	{
-		static Client client;
-		return client;
+		static Server server;
+		return server;
 	}
-	Client::~Client()
+	Server::~Server()
 	{
 	}
 
-	bool Client::init()
+	bool Server::init(int port, std::string mapname, int maxclients)
 	{
-		// Connect to server
 		// Load map
-		map = Map::get("test");
+		map = Map::get(mapname);
 		if (map.isNull())
 		{
 			std::cerr << "Could not load map." << std::endl;
@@ -54,21 +52,31 @@ namespace backlot
 			}
 		}
 		std::cout << "Map is ready." << std::endl;
-		map->setVisible(true);
+		// Create network socket
+		ENetAddress address;
+		address.host = ENET_HOST_ANY;
+		address.port = port;
+		host = enet_host_create(&address, 32, 0, 0);
+		if (host == 0)
+		{
+			std::cerr << "Could not create server socket." << std::endl;
+			return false;
+		}
 		return true;
 	}
-	bool Client::destroy()
+	bool Server::destroy()
 	{
+		enet_host_destroy(host);
 		map = 0;
 		return false;
 	}
 
-	bool Client::update()
+	bool Server::update()
 	{
 		return true;
 	}
 
-	Client::Client()
+	Server::Server()
 	{
 	}
 }

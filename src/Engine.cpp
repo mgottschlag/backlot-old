@@ -55,7 +55,15 @@ namespace backlot
 		}
 		// Show configuration dialog
 		// Start engine
-		if (!Graphics::get().init(Preferences::get().getResolution().x, Preferences::get().getResolution().y, Preferences::get().getColorDepth(), Preferences::get().getFullscreen()))
+		if (enet_initialize() != 0)
+		{
+			std::cerr << "Could not initialize networking." << std::endl;
+			return false;
+		}
+		if (!Graphics::get().init(Preferences::get().getResolution().x,
+			Preferences::get().getResolution().y,
+			Preferences::get().getColorDepth(),
+			Preferences::get().getFullscreen()))
 		{
 			std::cerr << "Could not open render window." << std::endl;
 			return false;
@@ -93,6 +101,19 @@ namespace backlot
 		// Shut down engine
 		Audio::get().destroy();
 		Graphics::get().destroy();
+		enet_deinitialize();
+		return true;
+	}
+
+	bool Engine::runServer(std::string path, std::vector<std::string> args)
+	{
+		directory = path;
+		// Start engine
+		if (enet_initialize() != 0)
+		{
+			std::cerr << "Could not initialize networking." << std::endl;
+			return false;
+		}
 		return true;
 	}
 

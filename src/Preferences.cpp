@@ -41,8 +41,7 @@ namespace backlot
 	
 	bool Preferences::load()
 	{
-		std::cout << "Loading preferences from \"" << path << "\".\n";
-
+		setPath(Engine::get().getGameDirectory() + "/config.xml");
 		TiXmlDocument conffile(path.c_str());
 		if (!conffile.LoadFile())
 		{

@@ -19,54 +19,25 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Server.hpp"
+#include "Engine.hpp"
 
 #include <iostream>
 
-namespace backlot
+int main(int argc, char **argv)
 {
-	Server &Server::get()
+	// Parse arguments
+	if (argc == 1)
 	{
-		static Server server;
-		return server;
+		std::cerr << "Error: No game directory given." << std::endl;
+		return -1;
 	}
-	Server::~Server()
+	std::vector<std::string> args;
+	for (int i = 2; i < argc; i++)
+		args.push_back(argv[i]);
+	// Run game
+	if (!backlot::Engine::get().runServer(argv[1], args))
 	{
+		return -1;
 	}
-
-	bool Server::init(int port, std::string mapname, int maxclients)
-	{
-		// Load map
-		map = Map::get(mapname);
-		if (map.isNull())
-		{
-			std::cerr << "Could not load map." << std::endl;
-			return false;
-		}
-		if (!map->isCompiled())
-		{
-			if (!map->compile())
-			{
-				std::cerr << "Could not compile map." << std::endl;
-				return false;
-			}
-		}
-		std::cout << "Map is ready." << std::endl;
-		// Create network socket
-		return true;
-	}
-	bool Server::destroy()
-	{
-		map = 0;
-		return false;
-	}
-
-	bool Server::update()
-	{
-		return true;
-	}
-
-	Server::Server()
-	{
-	}
+	return 0;
 }

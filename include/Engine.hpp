@@ -64,6 +64,16 @@ namespace backlot
 				std::vector<std::string> args = std::vector<std::string>());
 
 			/**
+			 * Initializes the engine and starts a dedicated server.
+			 * @param path Path to the game data. Can be either absolute or
+			 * relative to the current working directory.
+			 * @param args Additional command line arguments.
+			 * @return Returns false if there have been any errors.
+			 */
+			bool runServer(std::string path,
+				std::vector<std::string> args = std::vector<std::string>());
+
+			/**
 			 * Returns the path to the game directory.
 			 */
 			std::string getGameDirectory();

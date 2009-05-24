@@ -19,28 +19,63 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _CLIENT_HPP_
-#define _CLIENT_HPP_
-
+#include "Client.hpp"
 #include "Map.hpp"
+
+#include <iostream>
 
 namespace backlot
 {
-	class Client
+	Client &Client::get()
 	{
-		public:
-			static Client &get();
-			~Client();
+		static Client client;
+		return client;
+	}
+	Client::~Client()
+	{
+	}
 
-			bool init();
-			bool destroy();
+	bool Client::init()
+	{
+		// Connect to server
+		host = enet_host_create(NULL, 1, 0, 0);
+		if (host == 0)
+		{
+			std::cerr << "Could not create client socket." << std::endl;
+			return false;
+		}
+		// Load map
+		map = Map::get("test");
+		if (map.isNull())
+		{
+			std::cerr << "Could not load map." << std::endl;
+			return false;
+		}
+		if (!map->isCompiled())
+		{
+			if (!map->compile())
+			{
+				std::cerr << "Could not compile map." << std::endl;
+				return false;
+			}
+		}
+		std::cout << "Map is ready." << std::endl;
+		map->setVisible(true);
+		return true;
+	}
+	bool Client::destroy()
+	{
+		enet_host_destroy(host);
+		map = 0;
+		return false;
+	}
 
-			bool update();
-		private:
-			Client();
+	bool Client::update()
+	{
+		return true;
+	}
 
-			MapPointer map;
-	};
+	Client::Client()
+	{
+	}
 }
-
-#endif

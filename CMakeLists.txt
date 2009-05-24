@@ -3,22 +3,22 @@ cmake_minimum_required(VERSION 2.6)
 
 project(backlot)
 
-set(SRC
-src/main.cpp
+set(CLIENT_SRC
+src/client/main.cpp
 src/Engine.cpp
 src/Preferences.cpp
-src/Graphics.cpp
-src/Input.cpp
+src/client/Graphics.cpp
+src/client/Input.cpp
 src/Map.cpp
-src/Texture.cpp
+src/client/Texture.cpp
 src/TileSet.cpp
-src/Audio.cpp
-src/Sound.cpp
-src/Music.cpp
-src/Server.cpp
-src/Client.cpp
-src/QuadBatch.cpp
-src/Camera.cpp
+src/client/Audio.cpp
+src/client/Sound.cpp
+src/client/Music.cpp
+src/client/Server.cpp
+src/client/Client.cpp
+src/client/QuadBatch.cpp
+src/client/Camera.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -28,6 +28,27 @@ src/support/tinyxmlparser.cpp
 set(CMAKE_CXX_FLAGS "-Wall")
 
 include_directories(include include/support)
-add_executable(backlot ${SRC})
-target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW)
+add_executable(backlot ${CLIENT_SRC})
+set_target_properties(backlot PROPERTIES COMPILE_DEFINITIONS CLIENT)
+set_target_properties(backlot PROPERTIES COMPILE_FLAGS -Iinclude/client)
+target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet)
+
+set(SERVER_SRC
+src/server/main.cpp
+src/Engine.cpp
+src/Preferences.cpp
+src/Map.cpp
+src/TileSet.cpp
+src/Server.cpp
+src/support/tinystr.cpp
+src/support/tinyxml.cpp
+src/support/tinyxmlerror.cpp
+src/support/tinyxmlparser.cpp
+)
+
+#add_executable(server ${CLIENT_SRC})
+#set_target_properties(server PROPERTIES COMPILE_DEFINITIONS SERVER)
+#set_target_properties(server PROPERTIES COMPILE_FLAGS -Iinclude/server)
+#target_link_libraries(server enet)
+
 
