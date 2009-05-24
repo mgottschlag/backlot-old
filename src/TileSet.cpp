@@ -116,10 +116,14 @@ namespace backlot
 			return 0;
 		return &it->second;
 	}
+	TexturePointer TileSet::getTexture()
+	{
+		return texture;
+	}
 
 	bool TileSet::loadTile(TiXmlElement *xml)
 	{
-		Tile tile(texture);
+		Tile tile(texture, this);
 		// Tile attributes
 		if (!xml->Attribute("name") || !xml->Attribute("size"))
 		{

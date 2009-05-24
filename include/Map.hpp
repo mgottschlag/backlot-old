@@ -24,12 +24,20 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ReferenceCounted.hpp"
 #include "TileSet.hpp"
+#include "Vector2.hpp"
+#include "QuadBatch.hpp"
 
 #include <string>
 #include <map>
+#include <list>
 
 namespace backlot
 {
+	struct TileInfo
+	{
+		Tile *tiledef;
+		Vector2I position;
+	};
 	class Map : public ReferenceCounted
 	{
 		public:
@@ -44,9 +52,23 @@ namespace backlot
 			bool isCompiled();
 			bool saveCompiled();
 		private:
+			void createAccessibilityMap();
+			void getLayerCount();
+			void collectTextures();
+
 			std::string name;
 			std::map<std::string, TileSetPointer> tilesets;
-			std::map<int, std::string> tiledefs;
+			std::map<int, Tile*> tiledefs;
+			std::list<TileInfo> tiles;
+			Vector2I size;
+
+			bool compiled;
+			char *accessible;
+			int groundlayers;
+			int shadowlayers;
+			int highlayers;
+			std::vector<TexturePointer> textures;
+			QuadBatchPointer *batches;
 
 			static std::map<std::string, Map*> maps;
 	};

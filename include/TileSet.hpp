@@ -41,6 +41,7 @@ namespace backlot
 
 			void getLayerCount(int &ground, int &shadow, int &high);
 			Tile *getTile(std::string name);
+			TexturePointer getTexture();
 		private:
 			bool loadTile(TiXmlElement *xml);
 

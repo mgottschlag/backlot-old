@@ -30,6 +30,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	class TileSet;
+
 	struct QuadInfo
 	{
 		int layer;
@@ -39,14 +41,15 @@ namespace backlot
 	class Tile
 	{
 		public:
-			Tile(TexturePointer texture) : texture(texture)
+			Tile(TexturePointer texture, TileSet *tileset) : texture(texture),
+				tileset(tileset)
 			{
 			}
 			void addQuad(const QuadInfo &quad)
 			{
 				quads.push_back(quad);
 			}
-			std::vector<QuadInfo> getQuads()
+			const std::vector<QuadInfo> &getQuads()
 			{
 				return quads;
 			}
@@ -54,7 +57,7 @@ namespace backlot
 			{
 				this->size = size;
 			}
-			Vector2I getSize()
+			const Vector2I &getSize()
 			{
 				return size;
 			}
@@ -66,11 +69,20 @@ namespace backlot
 			{
 				return accessible;
 			}
+			TileSet *getTileSet()
+			{
+				return tileset;
+			}
+			TexturePointer getTexture()
+			{
+				return texture;
+			}
 		private:
 			TexturePointer texture;
 			std::vector<QuadInfo> quads;
 			Vector2I size;
 			bool accessible;
+			TileSet *tileset;
 	};
 }
 
