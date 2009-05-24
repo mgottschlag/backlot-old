@@ -36,6 +36,12 @@ namespace backlot
 			~Music();
 
 			/**
+			 * Get a pointer to the currently played music.
+			 * @return Pointer to Music::currentmusic.
+			 */
+			static Music *getCurrentMusic();
+
+			/**
 			 * Loads the music.
 			 * @param path The path of the music file.
 			 * @return returns true if the music was loaded correctly.
@@ -48,6 +54,10 @@ namespace backlot
 			bool resume();
 		private:
 			Mix_Music *music;
+			/**
+			 * Pointer to the currently played Music instance.
+			 */
+			static Music *currentmusic;
 	};
 
 	typedef SharedPointer<Music> MusicPointer;

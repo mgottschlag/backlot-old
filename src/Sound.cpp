@@ -29,6 +29,7 @@ namespace backlot
 	Sound::Sound() : ReferenceCounted()
 	{
 		sound = NULL;
+		channel = -1;
 	}
 	Sound::~Sound()
 	{
@@ -47,12 +48,13 @@ namespace backlot
 		return true;
 	}
 	
-	bool Sound::play()
+	bool Sound::play(int times)
 	{
 		// If a sound file was loaded
 		if (sound != NULL)
 		{
-			if (Mix_PlayChannel(-1, sound, 0) != 0)
+			channel = Mix_PlayChannel(-1, sound, times);
+			if (channel == -1)
 			{
 				std::cerr << "Failed to start sound playback\n";
 				return false;
@@ -67,15 +69,13 @@ namespace backlot
 	}
 	bool Sound::stop()
 	{
-		return true;
-	}
-	bool Sound::pause()
-	{
-		return true;
-	}
-	bool Sound::resume()
-	{
-		return true;
-	}
+		// If the sound file is still played on the channel
+		if (Mix_GetChunk(channel) == sound && channel != -1)
+		{
+			Mix_HaltChannel(channel);
+			channel = -1;
+		}
 
+		return true;
+	}
 }

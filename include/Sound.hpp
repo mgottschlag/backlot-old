@@ -42,12 +42,19 @@ namespace backlot
 			 **/
 			bool load(std::string path);
 
-			bool play();
+			/**
+			 * Play the loaded soundfile on the next free channel.
+			 * @param times How often the soundfile is played. Standard
+			 * is 0 (one time). -1 plays the sound in an infinite loop.
+			 */
+			bool play(int times = 0);
 			bool stop();
-			bool pause();
-			bool resume();
 		private:
 			Mix_Chunk *sound;
+			/**
+			 * The number of the channel on which the sound is played.
+			 */
+			int channel;
 	};
 	
 	typedef SharedPointer<Sound> SoundPointer;

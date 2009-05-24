@@ -32,7 +32,16 @@ namespace backlot
 	}
 	Music::~Music()
 	{
+		if (currentmusic == this)
+			currentmusic = NULL;
 		Mix_FreeMusic(music);
+	}
+	
+	Music *Music::getCurrentMusic()
+	{
+		if (currentmusic == NULL)
+			std::cerr << "In " << __FILE__ << __LINE__ << ": No music is played. Returning NULL.\n";
+		return currentmusic;
 	}
 
 	bool Music::load(std::string path)
@@ -47,24 +56,20 @@ namespace backlot
 		return true;
 	}
 
-/* Stop Funktion und so anpassen:
-phoenix64: eine mögliche Lösung wäre, dass du eine statische Variable mit nem Pointer auf die derzeitig aktive Musik machst
-und dann jeweils bei nem play() das alte anhälst und den Pointer ersetzt
-und bei nem stop() erst guckst, ob die Instanz selbst aktiv ist und evtl den Pointer dann auf 0 setzt
-*/
 	bool Music::play()
 	{
 		// If a music file was loaded
 		if (music != NULL)
 		{
-			// If no other music is played
-			if (Mix_PlayingMusic() == 0)
+			// If no other music is played or paused
+			if (Mix_PlayingMusic() == 0 && currentmusic == NULL)
 			{
 				if (Mix_PlayMusic(music, -1) != 0)
 				{
 					std::cerr << "Failed to play music\n";
 					return false;
 				}
+				currentmusic = this;
 			}
 			// If an other music file is played
 			else
@@ -79,14 +84,29 @@ und bei nem stop() erst guckst, ob die Instanz selbst aktiv ist und evtl den Poi
 			std::cerr << "No music file was loaded!\n";
 			return false;
 		}
+		return true;
 	}
 	bool Music::stop()
 	{
 		if (Mix_PlayingMusic() == 1)
-			Mix_HaltMusic();
+		{
+			// If this music is played
+			if (currentmusic == this)
+			{
+				Mix_HaltMusic();
+				currentmusic = NULL;
+			}
+			// If an other music is played
+			else
+			{
+				std::cerr << "An other music file is played. Stop that one!\n";
+				return false;
+			}
+		}
+		// If no music is played
 		else
 		{
-			std::cout << "No music is played. Don't stop playback (how could I?)\n";
+			std::cerr << "No music is played. Can't stop playback (how could I?)\n";
 			return false;
 		}
 		return true;
@@ -94,10 +114,20 @@ und bei nem stop() erst guckst, ob die Instanz selbst aktiv ist und evtl den Poi
 	bool Music::pause()
 	{
 		if (Mix_PlayingMusic() == 1)
-			Mix_PauseMusic();
+		{
+			if (currentmusic == this)
+				Mix_PauseMusic();
+			// If an other music is played
+			else
+			{
+				std::cerr << "An other music instance is playing. Pause that one!\n";
+				return false;
+			}
+		}
+		// If no music is playing
 		else
 		{
-			std::cout << "No music is played. Can't pause playback.\n";
+			std::cerr << "No music is played. Can't pause playback.\n";
 			return false;
 		}
 		return true;
@@ -105,7 +135,17 @@ und bei nem stop() erst guckst, ob die Instanz selbst aktiv ist und evtl den Poi
 	bool Music::resume()
 	{
 		if (Mix_PausedMusic() == 1)
-			Mix_ResumeMusic();
+		{
+			if (currentmusic == this)
+				Mix_ResumeMusic();
+			// If an other music is paused
+			else
+			{
+				std::cerr << "An other music is paused. Resume that one!\n";
+				return false;
+			}
+		}
+		// If no music is paused
 		else
 		{
 			std::cerr << "No music is paused. Can't resume playback.\n";
@@ -113,4 +153,7 @@ und bei nem stop() erst guckst, ob die Instanz selbst aktiv ist und evtl den Poi
 		}
 		return true;
 	}
+
+	// Set the static pointer to the current played music to NULL.
+	Music *Music::currentmusic = NULL;
 }
