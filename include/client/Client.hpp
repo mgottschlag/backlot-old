@@ -34,7 +34,7 @@ namespace backlot
 			static Client &get();
 			~Client();
 
-			bool init();
+			bool init(std::string address);
 			bool destroy();
 
 			bool update();
@@ -44,6 +44,7 @@ namespace backlot
 			MapPointer map;
 
 			ENetHost *host;
+			ENetPeer *peer;
 	};
 }
 

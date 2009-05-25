@@ -73,6 +73,28 @@ namespace backlot
 
 	bool Server::update()
 	{
+		// Receive packets
+		ENetEvent event;
+		while (enet_host_service(host, &event, 1000) > 0)
+		{
+			switch (event.type)
+			{
+				case ENET_EVENT_TYPE_CONNECT:
+					std::cout << "Client connected." << std::endl;
+					break;
+				case ENET_EVENT_TYPE_RECEIVE:
+					enet_packet_destroy (event.packet);
+					break;
+				case ENET_EVENT_TYPE_DISCONNECT:
+					std::cout << "Client disconnected." << std::endl;
+					break;
+				default:
+					break;
+			}
+		}
+		// Game logic
+		// Flush socket
+		enet_host_flush(host);
 		return true;
 	}
 

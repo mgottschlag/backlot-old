@@ -75,12 +75,8 @@ namespace backlot
 		}
 		// Show main menu
 		// TODO
-		// Test: Create local server
-		if (!Server::get().init(27272, "test"))
-		{
-			return false;
-		}
-		if (!Client::get().init())
+		// Test: Local server
+		if (!Client::get().init("localhost:27272"))
 		{
 			return false;
 		}
@@ -98,6 +94,8 @@ namespace backlot
 			if (!Graphics::get().render())
 				running = false;
 		}
+		Client::get().destroy();
+		Server::get().destroy();
 		// Shut down engine
 		Audio::get().destroy();
 		Graphics::get().destroy();
