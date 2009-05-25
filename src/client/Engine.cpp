@@ -32,6 +32,21 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <SDL/SDL.h>
 #include <iostream>
 
+#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+int gettimeofday(struct timeval *tv, void *timezone)
+{
+	union {
+		long long ns100;
+		FILETIME ft;
+	} now;
+
+	GetSystemTimeAsFileTime (&now.ft);
+	tv->tv_usec = (long) ((now.ns100 / 10LL) % 1000000LL);
+	tv->tv_sec = (long) ((now.ns100 - 116444736000000000LL) / 10000000LL);
+	return (0);
+}
+#endif
+
 namespace backlot
 {
 	Engine &Engine::get()
@@ -82,6 +97,7 @@ namespace backlot
 		}
 		// Main loop
 		bool running = true;
+		lastframe = getTime();
 		while (running)
 		{
 			// Input
@@ -93,6 +109,11 @@ namespace backlot
 			// Render everything
 			if (!Graphics::get().render())
 				running = false;
+			// Fixed time step
+			uint64_t currenttime = getTime();
+			if (currenttime - lastframe < 20000)
+				usleep(20000 - (currenttime - lastframe));
+			lastframe = lastframe + 20000;
 		}
 		Client::get().destroy();
 		Server::get().destroy();

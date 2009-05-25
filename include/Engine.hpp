@@ -25,6 +25,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <string>
 #include <vector>
 
+#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+#include <time.h>
+#include <winsock2.h>
+#include <winbase.h>
+#define usleep(x) Sleep(x/1000)
+int gettimeofday(struct timeval *tv, void *timezone);
+#else
+#include <sys/time.h>
+#endif
+
 /**
  * @mainpage Backlot Engine
  *
@@ -67,6 +77,13 @@ namespace backlot
 			 * Returns the path to the game directory.
 			 */
 			std::string getGameDirectory();
+
+			static uint64_t getTime()
+			{
+				struct timeval tv;
+				gettimeofday(&tv, 0);
+				return (uint64_t)tv.tv_sec * 1000000 + tv.tv_usec;
+			}
 		private:
 			/**
 			 * Constructor.
@@ -74,6 +91,8 @@ namespace backlot
 			Engine();
 
 			std::string directory;
+
+			uint64_t lastframe;
 	};
 }
 
