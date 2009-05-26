@@ -33,6 +33,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 int gettimeofday(struct timeval *tv, void *timezone);
 #else
 #include <sys/time.h>
+#include <netinet/in.h>
 #endif
 
 /**
