@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <config>
-	<graphics width="1024" height="768" colordepth="32" fullscreen="yes" />
-	<sound stereo="yes" />
+	<graphics width="1024" height="768" colordepth="32" fullscreen="no" />
+	<sound stereo="yes" frequency="22050" bitrate="4096" />
 	<player color="#FF0000" name="player" />
 </config>
