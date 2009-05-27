@@ -40,10 +40,10 @@ namespace backlot
 		return status;
 	}
 
-	void Client::send(BufferPointer buffer, bool reliably)
+	void Client::send(BufferPointer buffer, bool reliable)
 	{
 		ENetPacket *packet = enet_packet_create(buffer->getData(),
-			buffer->getSize(), ENET_PACKET_FLAG_RELIABLE);
+			buffer->getSize(), reliable?ENET_PACKET_FLAG_RELIABLE:0);
 		enet_peer_send(peer, 0, packet);
 	}
 }

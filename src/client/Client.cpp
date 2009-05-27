@@ -134,6 +134,10 @@ namespace backlot
 		}
 		std::cout << "Map is ready." << std::endl;
 		map->setVisible(true);
+		// Send message back to the server
+		BufferPointer msg = new Buffer();
+		msg->write8(EPT_Ready);
+		send(msg, true);
 		return true;
 	}
 	bool Client::destroy()
@@ -193,5 +197,12 @@ namespace backlot
 
 	Client::Client()
 	{
+	}
+
+	void Client::send(BufferPointer buffer, bool reliable)
+	{
+		ENetPacket *packet = enet_packet_create(buffer->getData(),
+			buffer->getSize(), reliable?ENET_PACKET_FLAG_RELIABLE:0);
+		enet_peer_send(peer, 0, packet);
 	}
 }

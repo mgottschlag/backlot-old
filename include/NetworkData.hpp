@@ -26,7 +26,7 @@ namespace backlot
 {
 	enum PacketType
 	{
-		EPT_Ready = 0,
+		EPT_Ready = 1,
 		EPT_InitialData,
 		EPT_MapChange
 	};

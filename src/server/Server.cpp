@@ -97,10 +97,36 @@ namespace backlot
 					break;
 				}
 				case ENET_EVENT_TYPE_RECEIVE:
-					enet_packet_destroy (event.packet);
+				{
+					// Copy packet
+					BufferPointer msg = new Buffer(event.packet->data,
+						event.packet->dataLength, true);
+					enet_packet_destroy(event.packet);
+					PacketType type = (PacketType)msg->read8();
+					// Parse packet
+					if (type == EPT_Ready)
+					{
+						
+					}
+					else
+					{
+						// Invalid packet, disconnect client
+						enet_peer_disconnect(event.peer, 0);
+					}
 					break;
+				}
 				case ENET_EVENT_TYPE_DISCONNECT:
 					std::cout << "Client disconnected." << std::endl;
+					// Remove client from client list
+					for (unsigned int i = 0; i < clients.size(); i++)
+					{
+						if (clients[i]->getPeer() == event.peer)
+						{
+							delete clients[i];
+							clients.erase(clients.begin() + i);
+							break;
+						}
+					}
 					break;
 				default:
 					break;

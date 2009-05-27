@@ -44,7 +44,11 @@ namespace backlot
 			void setStatus(ClientStatus status);
 			ClientStatus getStatus();
 
-			void send(BufferPointer buffer, bool reliably = false);
+			ENetPeer *getPeer()
+			{
+				return peer;
+			}
+			void send(BufferPointer buffer, bool reliable = false);
 		private:
 			ENetPeer *peer;
 			ClientStatus status;

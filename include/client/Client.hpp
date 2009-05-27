@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _CLIENT_HPP_
 
 #include "Map.hpp"
+#include "Buffer.hpp"
 
 #include <enet/enet.h>
 
@@ -40,6 +41,8 @@ namespace backlot
 			bool update();
 		private:
 			Client();
+
+			void send(BufferPointer buffer, bool reliable = false);
 
 			MapPointer map;
 
