@@ -2,6 +2,7 @@ CMakeCache.txt
 CMakeFiles
 backlot
 server
+!server/
 cmake_install.cmake
 *.*~
 Makefile
