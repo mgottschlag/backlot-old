@@ -19,6 +19,7 @@ src/client/Server.cpp
 src/client/Client.cpp
 src/client/QuadBatch.cpp
 src/client/Camera.cpp
+src/Buffer.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -40,6 +41,8 @@ src/Preferences.cpp
 src/Map.cpp
 src/TileSet.cpp
 src/server/Server.cpp
+src/server/Client.cpp
+src/Buffer.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

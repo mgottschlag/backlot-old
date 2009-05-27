@@ -21,6 +21,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Client.hpp"
 #include "Map.hpp"
+#include "Engine.hpp"
+#include "NetworkData.hpp"
+#include "Buffer.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -69,10 +72,53 @@ namespace backlot
 			std::cerr << "Connection refused." << std::endl;
 			return false;
 		}
+		// Receive initial data
+		uint64_t starttime = Engine::get().getTime();
+		std::string mapname;
+		bool gotdata = 0;
+		while (enet_host_service(host, &event, 1000) > 0)
+		{
+			switch (event.type)
+			{
+				case ENET_EVENT_TYPE_RECEIVE:
+				{
+					// Copy packet
+					BufferPointer msg = new Buffer(event.packet->data,
+						event.packet->dataLength, true);
+					enet_packet_destroy(event.packet);
+					PacketType type = (PacketType)msg->read8();
+					// Discard everything but the data we need
+					if (type == EPT_InitialData)
+					{
+						mapname = msg->readString();
+						gotdata = true;
+					}
+					break;
+				}
+				case ENET_EVENT_TYPE_DISCONNECT:
+					std::cout << "Server disconnected." << std::endl;
+					enet_peer_reset(peer);
+					enet_host_destroy(host);
+					return false;
+				default:
+					break;
+			}
+			if (Engine::get().getTime() - starttime > 10000000)
+				break;
+		}
+		if (!gotdata)
+		{
+			enet_peer_reset(peer);
+			enet_host_destroy(host);
+			std::cerr << "Did not receive server info." << std::endl;
+			return false;
+		}
 		// Load map
-		map = Map::get("test");
+		map = Map::get(mapname);
 		if (map.isNull())
 		{
+			enet_peer_reset(peer);
+			enet_host_destroy(host);
 			std::cerr << "Could not load map." << std::endl;
 			return false;
 		}
@@ -80,6 +126,8 @@ namespace backlot
 		{
 			if (!map->compile())
 			{
+				enet_peer_reset(peer);
+				enet_host_destroy(host);
 				std::cerr << "Could not compile map." << std::endl;
 				return false;
 			}

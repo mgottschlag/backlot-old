@@ -19,37 +19,16 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _SERVER_HPP_
-#define _SERVER_HPP_
-
-#include "Map.hpp"
-#include "Client.hpp"
-
-#include <string>
-#include <enet/enet.h>
-#include <vector>
+#ifndef _NETWORKDATA_HPP_
+#define _NETWORKDATA_HPP_
 
 namespace backlot
 {
-	class Server
+	enum PacketType
 	{
-		public:
-			static Server &get();
-			~Server();
-
-			bool init(int port, std::string mapname, int maxclients = 8);
-			bool destroy();
-
-			bool update();
-		private:
-			Server();
-
-			MapPointer map;
-			std::string mapname;
-
-			ENetHost *host;
-
-			std::vector<Client*> clients;
+		EPT_Ready = 0,
+		EPT_InitialData,
+		EPT_MapChange
 	};
 }
 

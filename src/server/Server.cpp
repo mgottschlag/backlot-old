@@ -20,6 +20,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Server.hpp"
+#include "Buffer.hpp"
+#include "NetworkData.hpp"
 
 #include <iostream>
 
@@ -36,6 +38,7 @@ namespace backlot
 
 	bool Server::init(int port, std::string mapname, int maxclients)
 	{
+		this->mapname = mapname;
 		// Load map
 		map = Map::get(mapname);
 		if (map.isNull())
@@ -80,8 +83,19 @@ namespace backlot
 			switch (event.type)
 			{
 				case ENET_EVENT_TYPE_CONNECT:
+				{
 					std::cout << "Client connected." << std::endl;
+					// Add to connected clients
+					Client *newclient = new Client(event.peer);
+					clients.push_back(newclient);
+					newclient->setStatus(ECS_Connecting);
+					// Send map name
+					BufferPointer msg = new Buffer;
+					msg->write8(EPT_InitialData);
+					msg->writeString(mapname);
+					newclient->send(msg);
 					break;
+				}
 				case ENET_EVENT_TYPE_RECEIVE:
 					enet_packet_destroy (event.packet);
 					break;

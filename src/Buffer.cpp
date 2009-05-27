@@ -73,6 +73,11 @@ namespace backlot
 		return size;
 	}
 
+	void *Buffer::getData()
+	{
+		return data;
+	}
+
 	void Buffer::write8(uint8_t value)
 	{
 		if (position == size)
