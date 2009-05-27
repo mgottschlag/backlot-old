@@ -90,7 +90,12 @@ namespace backlot
 		}
 		// Show main menu
 		// TODO
-		// Test: Local server
+		// Start server
+		if (!Server::get().init(27272, "test"))
+		{
+			return false;
+		}
+		// Start client
 		if (!Client::get().init("localhost:27272"))
 		{
 			return false;

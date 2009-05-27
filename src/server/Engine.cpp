@@ -59,14 +59,14 @@ namespace backlot
 		Preferences::get().setPath(getGameDirectory() + "/config.xml");
 		if (!Preferences::get().load())
 		{
-			std::cerr << "Could not load preferences." << std::endl;
+			std::cerr << "error: Could not load preferences." << std::endl;
 			return false;
 		}
 		// Show configuration dialog
 		// Start engine
 		if (enet_initialize() != 0)
 		{
-			std::cerr << "Could not initialize networking." << std::endl;
+			std::cerr << "error: Could not initialize networking." << std::endl;
 			return false;
 		}
 		// Start server
@@ -75,6 +75,7 @@ namespace backlot
 			return false;
 		}
 		// Main loop
+		std::cout << "ready" << std::endl;
 		bool running = true;
 		lastframe = getTime();
 		while (running)

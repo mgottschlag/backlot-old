@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <string>
 #include <enet/enet.h>
+#include <cstdio>
 
 namespace backlot
 {
@@ -41,6 +42,14 @@ namespace backlot
 			bool update();
 		private:
 			Server();
+
+			#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+			#else
+			int in;
+			FILE *infile;
+			int out;
+			int pid;
+			#endif
 	};
 }
 
