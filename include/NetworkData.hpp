@@ -28,7 +28,8 @@ namespace backlot
 	{
 		EPT_Ready = 1,
 		EPT_InitialData,
-		EPT_MapChange
+		EPT_MapChange,
+		EPT_NewPlayer
 	};
 }
 

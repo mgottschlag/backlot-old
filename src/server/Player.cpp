@@ -19,40 +19,55 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _SERVER_HPP_
-#define _SERVER_HPP_
-
-#include "Map.hpp"
-#include "Client.hpp"
 #include "Player.hpp"
-
-#include <string>
-#include <enet/enet.h>
-#include <vector>
 
 namespace backlot
 {
-	class Server
+	Player::Player() : ReferenceCounted()
 	{
-		public:
-			static Server &get();
-			~Server();
+		id = ++lastid;
+	}
+	Player::~Player()
+	{
+	}
 
-			bool init(int port, std::string mapname, int maxclients = 8);
-			bool destroy();
+	bool Player::load()
+	{
+		return false;
+	}
 
-			bool update();
-		private:
-			Server();
+	int Player::getID()
+	{
+		return id;
+	}
 
-			MapPointer map;
-			std::string mapname;
+	void Player::setOwner(Client *owner)
+	{
+	}
+	Client *Player::getOwner()
+	{
+		return 0;
+	}
 
-			ENetHost *host;
+	void Player::setPosition(Vector2F position)
+	{
+	}
+	Vector2F Player::getPosition()
+	{
+		return Vector2F(0, 0);
+	}
 
-			std::vector<Client*> clients;
-			std::vector<PlayerPointer> players;
-	};
+	void Player::setRotation()
+	{
+	}
+	float Player::getRotation()
+	{
+		return 0;
+	}
+
+	void Player::think()
+	{
+	}
+
+	int Player::lastid = 0;
 }
-
-#endif

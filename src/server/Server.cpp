@@ -89,6 +89,7 @@ namespace backlot
 					Client *newclient = new Client(event.peer);
 					clients.push_back(newclient);
 					newclient->setStatus(ECS_Connecting);
+					event.peer->data = newclient;
 					// Send map name
 					BufferPointer msg = new Buffer;
 					msg->write8(EPT_InitialData);
@@ -103,10 +104,38 @@ namespace backlot
 						event.packet->dataLength, true);
 					enet_packet_destroy(event.packet);
 					PacketType type = (PacketType)msg->read8();
+					Client *client = (Client*)event.peer->data;
 					// Parse packet
 					if (type == EPT_Ready)
 					{
-						
+						// Send other players to the client
+						for (unsigned int i = 0; i < players.size(); i++)
+						{
+							BufferPointer msg = new Buffer();
+							msg->write8(EPT_NewPlayer);
+							msg->write32(players[i]->getID());
+							msg->write8(0);
+						}
+						// Create player
+						PlayerPointer newplayer = new Player();
+						newplayer->setOwner(client);
+						newplayer->load();
+						players.push_back(newplayer);
+						// Send message about the player to other clients
+						BufferPointer msg = new Buffer();
+						msg->write8(EPT_NewPlayer);
+						msg->write32(newplayer->getID());
+						msg->write8(0);
+						for (unsigned int i = 0; i < clients.size(); i++)
+						{
+							if (clients[i] != client)
+							{
+								clients[i]->send(msg, true);
+							}
+						}
+						msg->setPosition(5);
+						msg->write8(1);
+						client->send(msg, true);
 					}
 					else
 					{
@@ -117,6 +146,15 @@ namespace backlot
 				}
 				case ENET_EVENT_TYPE_DISCONNECT:
 					std::cout << "Client disconnected." << std::endl;
+					// Remove player
+					for (unsigned int i = 0; i < players.size(); i++)
+					{
+						if (players[i]->getOwner() == event.peer->data)
+						{
+							players.erase(players.begin() + i);
+							break;
+						}
+					}
 					// Remove client from client list
 					for (unsigned int i = 0; i < clients.size(); i++)
 					{

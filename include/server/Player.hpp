@@ -19,13 +19,42 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef _PLAYER_HPP_
+#define _PLAYER_HPP_
+
+#include "ReferenceCounted.hpp"
+#include "Vector2.hpp"
+
 namespace backlot
 {
-	class Player
+	class Client;
+	class Player : public ReferenceCounted
 	{
 		public:
 			Player();
 			~Player();
+
+			bool load();
+
+			int getID();
+
+			void setOwner(Client *owner);
+			Client *getOwner();
+
+			void setPosition(Vector2F position);
+			Vector2F getPosition();
+
+			void setRotation();
+			float getRotation();
+
+			void think();
 		private:
+			int id;
+
+			static int lastid;
 	};
+
+	typedef SharedPointer<Player> PlayerPointer;
 }
+
+#endif
