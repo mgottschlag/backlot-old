@@ -27,13 +27,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
-	Buffer::Buffer()
+	Buffer::Buffer() : ReferenceCounted()
 	{
 		data = 0;
 		size = 0;
 		position = 0;
 	}
-	Buffer::Buffer(void *data, unsigned int size, bool copy)
+	Buffer::Buffer(void *data, unsigned int size, bool copy) : ReferenceCounted()
 	{
 		if (copy)
 		{
@@ -48,7 +48,7 @@ namespace backlot
 		}
 		position = 0;
 	}
-	Buffer::Buffer(const Buffer &b)
+	Buffer::Buffer(const Buffer &b) : ReferenceCounted()
 	{
 		data = (char*)malloc(b.size);
 		memcpy(data, b.data, b.size);
@@ -71,6 +71,17 @@ namespace backlot
 	unsigned int Buffer::getSize()
 	{
 		return size;
+	}
+
+	void Buffer::setPosition(unsigned int position)
+	{
+		this->position = position;
+		if (position > size)
+			this->position = size;
+	}
+	unsigned int Buffer::getPosition()
+	{
+		return position;
 	}
 
 	void *Buffer::getData()

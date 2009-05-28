@@ -43,6 +43,9 @@ namespace backlot
 			void setSize(unsigned int size);
 			unsigned int getSize();
 
+			void setPosition(unsigned int position);
+			unsigned int getPosition();
+
 			void *getData();
 
 			void write8(uint8_t value);
