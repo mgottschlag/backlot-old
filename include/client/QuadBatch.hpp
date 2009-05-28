@@ -98,6 +98,10 @@ namespace backlot
 			 * Vertex buffer object.
 			 */
 			unsigned int vbo;
+			/**
+			 * Vertex data. Used for drawing if VBOs are not available.
+			 */
+			float *vertexdata;
 	};
 
 	typedef SharedPointer<QuadBatch> QuadBatchPointer;

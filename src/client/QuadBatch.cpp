@@ -29,10 +29,16 @@ namespace backlot
 	QuadBatch::QuadBatch() : ReferenceCounted()
 	{
 		dirty = false;
-		glGenBuffers(1, &vbo);
+		vertexdata = 0;
+		if (GLEW_ARB_vertex_buffer_object)
+			glGenBuffers(1, &vbo);
 	}
 	QuadBatch::~QuadBatch()
 	{
+		if (GLEW_ARB_vertex_buffer_object)
+			glDeleteBuffers(1, &vbo);
+		if (vertexdata)
+			delete[] vertexdata;
 	}
 
 	void QuadBatch::addQuad(const Quad &quad)
@@ -65,9 +71,13 @@ namespace backlot
 	}
 	void QuadBatch::rebuild()
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		if (vertexdata)
+		{
+			delete[] vertexdata;
+			vertexdata = 0;
+		}
 		// Compact vertex data
-		float *vertexdata = new float[getSize() * 4 * sizeof(float) * 5];
+		vertexdata = new float[getSize() * 4 * sizeof(float) * 5];
 		// Positions
 		for (unsigned int i = 0; i < getSize(); i++)
 		{
@@ -140,26 +150,47 @@ namespace backlot
 			vertexdata[getSize() * 12 + i * 8 + 6 + 1] = rect.y + rect.height;
 		}
 		// Create VBO
-		glBufferDataARB(GL_ARRAY_BUFFER, getSize() * 4 * sizeof(float) * 5, vertexdata, GL_STATIC_DRAW);
-		delete[] vertexdata;
+		if (GLEW_ARB_vertex_buffer_object)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferDataARB(GL_ARRAY_BUFFER, getSize() * 4 * sizeof(float) * 5, vertexdata, GL_STATIC_DRAW);
+			delete[] vertexdata;
+			vertexdata = 0;
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
 		// Batch data is up-to-date
 		dirty = false;
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
 	void QuadBatch::render()
 	{
-		// Set up arrays
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-		glTexCoordPointer(2, GL_FLOAT, 0, (char*)(getSize() * 48));
-		// Draw
-		glDrawArrays(GL_QUADS, 0, getSize() * 4);
-		// Clean up again
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		if (GLEW_ARB_vertex_buffer_object)
+		{
+			// Set up arrays
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, 0);
+			glTexCoordPointer(2, GL_FLOAT, 0, (char*)(getSize() * 48));
+			// Draw
+			glDrawArrays(GL_QUADS, 0, getSize() * 4);
+			// Clean up again
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+		else
+		{
+			// Set up arrays
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, vertexdata);
+			glTexCoordPointer(2, GL_FLOAT, 0, (char*)vertexdata + getSize() * 48);
+			// Draw
+			glDrawArrays(GL_QUADS, 0, getSize() * 4);
+			// Clean up again
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+		}
 	}
 }

@@ -74,7 +74,6 @@ namespace backlot
 		if (!GLEW_ARB_vertex_buffer_object)
 		{
 			std::cerr << "No VBO support available." << std::endl;
-			return false;
 		}
 		// Reset fps counter
 		frames_rendered = 0;
