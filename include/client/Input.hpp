@@ -22,6 +22,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _INPUT_HPP_
 #define _INPUT_HPP_
 
+#include <stdint.h>
+
 namespace backlot
 {
 	class Input
@@ -33,6 +35,8 @@ namespace backlot
 			bool update();
 		private:
 			Input();
+
+			uint16_t currentkeys;
 	};
 }
 

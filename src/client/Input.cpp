@@ -20,8 +20,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Input.hpp"
+#include "NetworkData.hpp"
+#include "Preferences.hpp"
 
 #include <SDL/SDL.h>
+#include <math.h>
+#include <iostream>
 
 namespace backlot
 {
@@ -38,20 +42,110 @@ namespace backlot
 	{
 		// Handle SDL events
 		SDL_Event event;
+		bool keyschanged = false;
+		float rotation = 0;
+		bool rotationchanged = false;
 		while (SDL_PollEvent(&event))
 		{
 			switch(event.type)
 			{
 				case SDL_QUIT:
 					return false;
+				case SDL_KEYDOWN:
+					// Key was pressed down
+					switch(event.key.keysym.sym)
+					{
+						// WSAD
+						case SDLK_w:
+							keyschanged = true;
+							currentkeys |= EKM_Up;
+							break;
+						case SDLK_s:
+							keyschanged = true;
+							currentkeys |= EKM_Down;
+							break;
+						case SDLK_a:
+							keyschanged = true;
+							currentkeys |= EKM_Left;
+							break;
+						case SDLK_d:
+							keyschanged = true;
+							currentkeys |= EKM_Right;
+							break;
+						// Other keys
+						default:
+							break;
+					}
+					break;
+				case SDL_KEYUP:
+					// Key was left up
+					switch(event.key.keysym.sym)
+					{
+						// WSAD
+						case SDLK_w:
+							keyschanged = true;
+							currentkeys &= ~EKM_Up;
+							break;
+						case SDLK_s:
+							keyschanged = true;
+							currentkeys &= ~EKM_Down;
+							break;
+						case SDLK_a:
+							keyschanged = true;
+							currentkeys &= ~EKM_Left;
+							break;
+						case SDLK_d:
+							keyschanged = true;
+							currentkeys &= ~EKM_Right;
+							break;
+						// Other keys
+						default:
+							break;
+					}
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					// Mouse button was pressed down
+					switch (event.button.button)
+					{
+						case SDL_BUTTON_LEFT:
+							keyschanged = true;
+							currentkeys |= EKM_Shoot;
+							break;
+						default:
+							break;
+					}
+					break;
+				case SDL_MOUSEBUTTONUP:
+					// Mouse button was pressed down
+					switch (event.button.button)
+					{
+						case SDL_BUTTON_LEFT:
+							keyschanged = true;
+							currentkeys &= ~EKM_Shoot;
+							break;
+						default:
+							break;
+					}
+					break;
+				case SDL_MOUSEMOTION:
+				{
+					int x = event.motion.x;
+					int y = event.motion.y;
+					rotationchanged = true;
+					const Vector2I &size = Preferences::get().getResolution();
+					rotation = atan2(x - size.x / 2, size.y / 2 - y);
+					break;
+				}
 				default:
 					break;
 			}
 		}
+		// Send input to player
 		return true;
 	}
 
 	Input::Input()
 	{
+		currentkeys = 0;
 	}
 }
