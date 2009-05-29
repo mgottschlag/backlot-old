@@ -30,6 +30,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	/**
+	 * Client-side player information.
+	 */
 	class Player : public ReferenceCounted
 	{
 		public:

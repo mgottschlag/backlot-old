@@ -30,13 +30,29 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	/**
+	 * Interface to the server executable. This class starts an external server
+	 * executable and communicates with it through pipes.
+	 */
 	class Server
 	{
 		public:
+			/**
+			 * Returns a reference to the server interface.
+			 */
 			static Server &get();
+			/**
+			 * Destructor.
+			 */
 			~Server();
 
+			/**
+			 * Starts the server.
+			 */
 			bool init(int port, std::string mapname, int maxclients = 8);
+			/**
+			 * Kills the server.
+			 */
 			bool destroy();
 
 			bool update();

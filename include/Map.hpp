@@ -40,30 +40,76 @@ namespace backlot
 		Tile *tiledef;
 		Vector2I position;
 	};
+	/**
+	 * Map data. Maps are loaded in an XML format and then compiled into an
+	 * optimized format suited for rendering and game logic.
+	 */
 	class Map : public ReferenceCounted
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Map();
+			/**
+			 * Destructor.
+			 */
 			~Map();
 
+			/**
+			 * Loads the map with the given name or returns an already loaded
+			 * one.
+			 */
 			static SharedPointer<Map> get(std::string name);
 
+			/**
+			 * Loads a map file.
+			 */
 			bool load(std::string name);
 
+			/**
+			 * Compiles the map.
+			 */
 			bool compile();
+			/**
+			 * Returns true if the map has already been compiled and is ready
+			 * for the game.
+			 */
 			bool isCompiled();
 
 			#ifdef CLIENT
+			/**
+			 * If visible is true, the map is set as the currently drawn one,
+			 * else it is hidden.
+			 */
 			void setVisible(bool visible);
+			/**
+			 * Returns true if the map is currently shown.
+			 */
 			bool isVisible();
+			/**
+			 * Returns the currently visible map.
+			 */
 			static SharedPointer<Map> getVisibleMap();
 
+			/**
+			 * Renders the map.
+			 */
 			void render();
 			#endif
 		private:
+			/**
+			 * Optimizes the information needed for pathfinding and game logic.
+			 */
 			void createAccessibilityMap();
 			#ifdef CLIENT
+			/**
+			 * Returns the maximum number of tile layers
+			 */
 			void getLayerCount();
+			/**
+			 * Collects all the needed textures from the tile sets.
+			 */
 			void collectTextures();
 			#endif
 

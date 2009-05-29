@@ -35,19 +35,46 @@ namespace backlot
 		ECS_Playing
 	};
 
+	/**
+	 * Server-side client information.
+	 */
 	class Client
 	{
 		public:
+			/**
+			 * Constructor.
+			 * @param peer Network connection connected to this client.
+			 */
 			Client(ENetPeer *peer);
+			/**
+			 * Destructor.
+			 */
 			~Client();
 
+			/**
+			 * Sets the status of this client. The status sets whether this
+			 * client will get position updates (spectator or playing) or not
+			 * (connecting).
+			 * @param status New client status.
+			 */
 			void setStatus(ClientStatus status);
+			/**
+			 * Returns the client status.
+			 */
 			ClientStatus getStatus();
 
+			/**
+			 * Returns the network connection connected to this client.
+			 */
 			ENetPeer *getPeer()
 			{
 				return peer;
 			}
+			/**
+			 * Sends a packet to the client.
+			 * @param buffer Data to send.
+			 * @param reliable If set to true, the data will be sent reliably.
+			 */
 			void send(BufferPointer buffer, bool reliable = false);
 		private:
 			ENetPeer *peer;
