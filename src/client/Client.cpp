@@ -103,6 +103,8 @@ namespace backlot
 				default:
 					break;
 			}
+			if (gotdata)
+				break;
 			if (Engine::get().getTime() - starttime > 10000000)
 				break;
 		}
@@ -183,8 +185,32 @@ namespace backlot
 					std::cout << "Client connected." << std::endl;
 					break;
 				case ENET_EVENT_TYPE_RECEIVE:
-					enet_packet_destroy (event.packet);
+				{
+					// Copy packet
+					BufferPointer msg = new Buffer(event.packet->data,
+						event.packet->dataLength, true);
+					enet_packet_destroy(event.packet);
+					PacketType type = (PacketType)msg->read8();
+					// Parse packet
+					std::cout << "Received packet." << std::endl;
+					if (type == EPT_NewPlayer)
+					{
+						// Create player
+						int id = msg->read32();
+						bool local = msg->read8();
+						PlayerPointer newplayer = new Player();
+						newplayer->setID(id);
+						//newplayer->setLocal(local);
+						newplayer->load();
+						newplayer->setVisible(true);
+						players.push_back(newplayer);
+					}
+					else
+					{
+						std::cerr << "Unknown packet received." << std::endl;
+					}
 					break;
+				}
 				case ENET_EVENT_TYPE_DISCONNECT:
 					std::cout << "Client disconnected." << std::endl;
 					break;

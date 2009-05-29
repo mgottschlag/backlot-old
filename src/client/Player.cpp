@@ -21,6 +21,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Player.hpp"
 
+#include <GL/gl.h>
+#include <iostream>
+
 namespace backlot
 {
 	Player::Player()
@@ -45,6 +48,8 @@ namespace backlot
 
 	bool Player::load()
 	{
+		texture = new Texture();
+		texture->load("sprites/player.png");
 		return true;
 	}
 
@@ -86,6 +91,32 @@ namespace backlot
 
 	void Player::render()
 	{
+		if (!visible)
+			return;
+		// Setup position
+		glPushMatrix();
+		glTranslatef(position.x + 0.5, position.y + 0.5, 10.0);
+		glRotatef(rotation, 0.0, 0.0, 1.0);
+		// Drawing mode
+		texture->bind();
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		// Draw quad
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0, 0.0);
+		glVertex3f(-0.5, -0.5, 0.0);
+		glTexCoord2f(1.0, 0.0);
+		glVertex3f(0.5, -0.5, 0.0);
+		glTexCoord2f(1.0, 1.0);
+		glVertex3f(0.5, 0.5, 0.0);
+		glTexCoord2f(0.0, 1.0);
+		glVertex3f(-0.5, 0.5, 0.0);
+		glEnd();
+		// Clean up
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
 	}
 	void Player::renderAll()
 	{

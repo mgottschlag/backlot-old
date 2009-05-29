@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ReferenceCounted.hpp"
 #include "Vector2.hpp"
+#include "Texture.hpp"
 
 #include <vector>
 
@@ -57,8 +58,12 @@ namespace backlot
 			float rotation;
 			bool visible;
 
+			TexturePointer texture;
+
 			static std::vector<Player*> players;
 	};
+
+	typedef SharedPointer<Player> PlayerPointer;
 }
 
 #endif
