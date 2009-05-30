@@ -49,6 +49,7 @@ src/TileSet.cpp
 src/server/Server.cpp
 src/server/Client.cpp
 src/server/Player.cpp
+src/server/Weapon.cpp
 src/Buffer.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp

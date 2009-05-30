@@ -31,6 +31,7 @@ namespace backlot
 		rotation = 0;
 		keys = 0;
 		position = Vector2F(0.5, 0.5);
+		lastweaponid = 0;
 	}
 	Player::~Player()
 	{
@@ -80,6 +81,17 @@ namespace backlot
 	uint8_t Player::getKeys()
 	{
 		return keys;
+	}
+
+	int Player::addWeapon(WeaponPointer weapon)
+	{
+		WeaponState state;
+		state.weapon = weapon;
+		state.currentmagazine = weapon->getMagazineSize();
+		state.reserve = weapon->getMagazineSize() * weapon->getMagazineCount();
+		int id = ++lastweaponid;
+		weapons.insert(std::pair<int, WeaponState>(id, state));
+		return id;
 	}
 
 	void Player::think()

@@ -136,6 +136,12 @@ namespace backlot
 						msg->setPosition(5);
 						msg->write8(1);
 						client->send(msg, true);
+						// Initial weapon
+						WeaponPointer weapon = Weapon::get("plasma");
+						if (weapon)
+						{
+							int id = newplayer->addWeapon(weapon);
+						}
 					}
 					else if (type == EPT_Keys)
 					{

@@ -19,34 +19,76 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _NETWORKDATA_HPP_
-#define _NETWORKDATA_HPP_
+#ifndef _WEAPON_HPP_
+#define _WEAPON_HPP_
+
+#include "ReferenceCounted.hpp"
+
+#include <map>
+#include <string>
 
 namespace backlot
 {
-	enum PacketType
+	/**
+	 * Server-side weapon information.
+	 */
+	class Weapon : public ReferenceCounted
 	{
-		EPT_Ready = 1,
-		EPT_InitialData,
-		EPT_MapChange,
-		EPT_NewPlayer,
-		EPT_Rotation,
-		EPT_Keys,
-		EPT_NewWeapon,
-		EPT_ChangeWeapon,
-		EPT_Projectile,
-		EPT_Explosion,
-		EPT_Decal,
-		EPT_Update
+		public:
+			/**
+			 * Constructor.
+			 */
+			Weapon();
+			/**
+			 * Destructor.
+			 */
+			~Weapon();
+
+			/**
+			 * Loads the weapon with the given name or returns an already loaded
+			 * one.
+			 */
+			static SharedPointer<Weapon> get(std::string name);
+
+			/**
+			 * Loads the weapon info with the given name
+			 */
+			bool load(std::string name);
+
+			int getMagazineSize()
+			{
+				return magazinesize;
+			}
+			int getMagazineCount()
+			{
+				return magazines;
+			}
+		private:
+			std::string name;
+
+			int rate;
+			float deviation;
+			int magazines;
+			int magazinesize;
+			float reloadtime;
+
+			int projtype;
+			float projspeed;
+			int hitdamage;
+			bool explosion;
+			float explosionradius;
+			int explosiondamage;
+
+			static std::map<std::string, Weapon*> weapons;
 	};
-	enum KeyMask
+
+	typedef SharedPointer<Weapon> WeaponPointer;
+
+	struct WeaponState
 	{
-		EKM_Up = 0x0001,
-		EKM_Down = 0x0002,
-		EKM_Left = 0x0004,
-		EKM_Right = 0x0008,
-		EKM_Move = 0x000F,
-		EKM_Shoot = 0x0010
+		WeaponPointer weapon;
+		int currentmagazine;
+		int reserve;
 	};
 }
 

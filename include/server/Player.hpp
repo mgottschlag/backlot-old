@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ReferenceCounted.hpp"
 #include "Vector2.hpp"
+#include "Weapon.hpp"
 
 namespace backlot
 {
@@ -53,6 +54,8 @@ namespace backlot
 			void setKeys(uint8_t keys);
 			uint8_t getKeys();
 
+			int addWeapon(WeaponPointer weapon);
+
 			void think();
 		private:
 			int id;
@@ -63,6 +66,9 @@ namespace backlot
 			Vector2F position;
 
 			Client *owner;
+
+			int lastweaponid;
+			std::map<int, WeaponState> weapons;
 
 			static int lastid;
 	};
