@@ -47,12 +47,22 @@ namespace backlot
 			void setPosition(Vector2F position);
 			Vector2F getPosition();
 
-			void setRotation();
+			void setRotation(float rotation);
 			float getRotation();
+
+			void setKeys(uint8_t keys);
+			uint8_t getKeys();
 
 			void think();
 		private:
 			int id;
+
+			uint8_t keys;
+			float rotation;
+
+			Vector2F position;
+
+			Client *owner;
 
 			static int lastid;
 	};

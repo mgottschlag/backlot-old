@@ -137,6 +137,50 @@ namespace backlot
 						msg->write8(1);
 						client->send(msg, true);
 					}
+					else if (type == EPT_Keys)
+					{
+						int id = msg->read32();
+						uint8_t keys = msg->read8();
+						// Get player
+						PlayerPointer player = 0;
+						for (unsigned int i = 0; i < players.size(); i++)
+						{
+							if (players[i]->getID() == id)
+							{
+								player = players[i];
+								break;
+							}
+						}
+						if (!player || player->getOwner() != event.peer->data)
+						{
+							enet_peer_disconnect(event.peer, 0);
+							break;
+						}
+						// Set keyboard info
+						player->setKeys(keys);
+					}
+					else if (type == EPT_Rotation)
+					{
+						int id = msg->read32();
+						float rotation = msg->readFloat();
+						// Get player
+						PlayerPointer player = 0;
+						for (unsigned int i = 0; i < players.size(); i++)
+						{
+							if (players[i]->getID() == id)
+							{
+								player = players[i];
+								break;
+							}
+						}
+						if (!player || player->getOwner() != event.peer->data)
+						{
+							enet_peer_disconnect(event.peer, 0);
+							break;
+						}
+						// Set keyboard info
+						player->setRotation(rotation);
+					}
 					else
 					{
 						// Invalid packet, disconnect client
@@ -171,6 +215,8 @@ namespace backlot
 			}
 		}
 		// Game logic
+		for (unsigned int i = 0; i < players.size(); i++)
+			players[i]->think();
 		// Flush socket
 		enet_host_flush(host);
 		return true;

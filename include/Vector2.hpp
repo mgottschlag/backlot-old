@@ -73,6 +73,12 @@ namespace backlot
 				set(s);
 				return *this;
 			}
+			template<typename T2> Vector2<T> &operator+=(const Vector2<T2> &v)
+			{
+				x += v.x;
+				y += v.y;
+				return *this;
+			}
 
 			void set(const std::string &s)
 			{

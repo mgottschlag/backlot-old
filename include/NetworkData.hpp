@@ -39,6 +39,7 @@ namespace backlot
 		EKM_Down = 0x0002,
 		EKM_Left = 0x0004,
 		EKM_Right = 0x0008,
+		EKM_Move = 0x000F,
 		EKM_Shoot = 0x0010
 	};
 }

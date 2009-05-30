@@ -20,12 +20,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Player.hpp"
+#include "NetworkData.hpp"
 
 namespace backlot
 {
 	Player::Player() : ReferenceCounted()
 	{
 		id = ++lastid;
+		rotation = 0;
+		keys = 0;
 	}
 	Player::~Player()
 	{
@@ -33,7 +36,7 @@ namespace backlot
 
 	bool Player::load()
 	{
-		return false;
+		return true;
 	}
 
 	int Player::getID()
@@ -43,30 +46,61 @@ namespace backlot
 
 	void Player::setOwner(Client *owner)
 	{
+		this->owner = owner;
 	}
 	Client *Player::getOwner()
 	{
-		return 0;
+		return owner;
 	}
 
 	void Player::setPosition(Vector2F position)
 	{
+		this->position = position;
 	}
 	Vector2F Player::getPosition()
 	{
-		return Vector2F(0, 0);
+		return position;
 	}
 
-	void Player::setRotation()
+	void Player::setRotation(float rotation)
 	{
+		this->rotation = rotation;
 	}
 	float Player::getRotation()
 	{
-		return 0;
+		return rotation;
+	}
+
+	void Player::setKeys(uint8_t keys)
+	{
+		this->keys = keys;
+	}
+	uint8_t Player::getKeys()
+	{
+		return keys;
 	}
 
 	void Player::think()
 	{
+		if (keys & EKM_Move)
+		{
+			if (keys & EKM_Up)
+			{
+				position += Vector2F(0, -0.01);
+			}
+			if (keys & EKM_Down)
+			{
+				position += Vector2F(0, 0.01);
+			}
+			if (keys & EKM_Right)
+			{
+				position += Vector2F(0.01, 0);
+			}
+			if (keys & EKM_Left)
+			{
+				position += Vector2F(-0.01, 0);
+			}
+		}
 	}
 
 	int Player::lastid = 0;
