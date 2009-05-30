@@ -136,7 +136,7 @@ namespace backlot
 			return;
 		// Setup position
 		glPushMatrix();
-		glTranslatef(position.x + 0.5, position.y + 0.5, 10.0);
+		glTranslatef(position.x, position.y, 10.0);
 		glRotatef(rotation * 180 / 3.1415, 0.0, 0.0, 1.0);
 		// Drawing mode
 		texture->bind();

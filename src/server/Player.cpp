@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Player.hpp"
 #include "NetworkData.hpp"
+#include "Server.hpp"
 
 namespace backlot
 {
@@ -29,6 +30,7 @@ namespace backlot
 		id = ++lastid;
 		rotation = 0;
 		keys = 0;
+		position = Vector2F(0.5, 0.5);
 	}
 	Player::~Player()
 	{
@@ -84,21 +86,29 @@ namespace backlot
 	{
 		if (keys & EKM_Move)
 		{
+			// Change position
+			Vector2F newpos = position;
 			if (keys & EKM_Up)
 			{
-				position += Vector2F(0, -0.01);
+				newpos += Vector2F(0, -0.02);
 			}
 			if (keys & EKM_Down)
 			{
-				position += Vector2F(0, 0.01);
+				newpos += Vector2F(0, 0.02);
 			}
 			if (keys & EKM_Right)
 			{
-				position += Vector2F(0.01, 0);
+				newpos += Vector2F(0.02, 0);
 			}
 			if (keys & EKM_Left)
 			{
-				position += Vector2F(-0.01, 0);
+				newpos += Vector2F(-0.02, 0);
+			}
+			// Check whether position is valid
+			if (Server::get().getMap()->isAccessible(RectangleF(newpos.x - 0.35,
+				newpos.y - 0.35, 0.7, 0.7)))
+			{
+				position = newpos;
 			}
 		}
 	}

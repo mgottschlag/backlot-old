@@ -41,6 +41,11 @@ namespace backlot
 			bool init(int port, std::string mapname, int maxclients = 8);
 			bool destroy();
 
+			MapPointer getMap()
+			{
+				return map;
+			}
+
 			bool update();
 		private:
 			Server();

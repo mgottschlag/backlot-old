@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ReferenceCounted.hpp"
 #include "TileSet.hpp"
 #include "Vector2.hpp"
+#include "Rectangle.hpp"
 #ifdef CLIENT
 #include "QuadBatch.hpp"
 #endif
@@ -76,6 +77,11 @@ namespace backlot
 			 * for the game.
 			 */
 			bool isCompiled();
+
+			/**
+			 * Returns true if the whole area is accessible.
+			 */
+			bool isAccessible(RectangleF area);
 
 			#ifdef CLIENT
 			/**

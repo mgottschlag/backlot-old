@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include <GL/gl.h>
+#include <cmath>
 
 namespace backlot
 {
@@ -298,6 +299,27 @@ namespace backlot
 	bool Map::isCompiled()
 	{
 		return compiled;
+	}
+
+	bool Map::isAccessible(RectangleF area)
+	{
+		// Get area
+		int x1 = floor(area.x);
+		int y1 = floor(area.y);
+		int x2 = ceil(area.x + area.width);
+		int y2 = ceil(area.y + area.height);
+		// Check
+		if (x1 < 0 || y1 < 0 || x2 > size.x || y2 > size.y)
+			return false;
+		for (int y = y1; y < y2; y++)
+		{
+			for (int x = x1; x < x2; x++)
+			{
+				if (!accessible[y * size.x + x])
+					return false;
+			}
+		}
+		return true;
 	}
 
 	#ifdef CLIENT
