@@ -192,7 +192,6 @@ namespace backlot
 					enet_packet_destroy(event.packet);
 					PacketType type = (PacketType)msg->read8();
 					// Parse packet
-					std::cout << "Received packet." << std::endl;
 					if (type == EPT_NewPlayer)
 					{
 						// Create player
@@ -204,6 +203,34 @@ namespace backlot
 						newplayer->load();
 						newplayer->setVisible(true);
 						players.push_back(newplayer);
+					}
+					else if (type == EPT_Update)
+					{
+						int count = msg->read16();
+						// Loop through sent players
+						for (int i = 0; i < count; i++)
+						{
+							int id = msg->read32();
+							// Get player
+							PlayerPointer player = 0;
+							for (unsigned int j = 0; j < players.size(); j++)
+							{
+								if (players[j]->getID() == id)
+								{
+									player = players[j];
+									break;
+								}
+							}
+							// Update data
+							uint8_t keys = msg->read8();
+							float rotation = msg->readFloat();
+							float x = msg->readFloat();
+							float y = msg->readFloat();
+							if (player.isNull())
+								continue;
+							player->setPosition(Vector2F(x, y));
+							player->setRotation(rotation);
+						}
 					}
 					else
 					{

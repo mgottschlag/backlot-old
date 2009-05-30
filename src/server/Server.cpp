@@ -217,6 +217,24 @@ namespace backlot
 		// Game logic
 		for (unsigned int i = 0; i < players.size(); i++)
 			players[i]->think();
+		// Send updates to clients
+		for (unsigned int i = 0; i < clients.size(); i++)
+		{
+			Client *client = clients[i];
+			BufferPointer msg = new Buffer();
+			msg->write8(EPT_Update);
+			msg->write16(players.size());
+			for (unsigned int j = 0; j < players.size(); j++)
+			{
+				msg->write32(players[j]->getID());
+				msg->write8(players[j]->getKeys());
+				msg->writeFloat(players[j]->getRotation());
+				Vector2F position = players[j]->getPosition();
+				msg->writeFloat(position.x);
+				msg->writeFloat(position.y);
+			}
+			client->send(msg);
+		}
 		// Flush socket
 		enet_host_flush(host);
 		return true;

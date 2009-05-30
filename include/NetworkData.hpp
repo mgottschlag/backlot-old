@@ -31,7 +31,8 @@ namespace backlot
 		EPT_MapChange,
 		EPT_NewPlayer,
 		EPT_Rotation,
-		EPT_Keys
+		EPT_Keys,
+		EPT_Update
 	};
 	enum KeyMask
 	{

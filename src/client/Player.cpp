@@ -137,7 +137,7 @@ namespace backlot
 		// Setup position
 		glPushMatrix();
 		glTranslatef(position.x + 0.5, position.y + 0.5, 10.0);
-		glRotatef(rotation, 0.0, 0.0, 1.0);
+		glRotatef(rotation * 180 / 3.1415, 0.0, 0.0, 1.0);
 		// Drawing mode
 		texture->bind();
 		glEnable(GL_TEXTURE_2D);
@@ -145,13 +145,13 @@ namespace backlot
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		// Draw quad
 		glBegin(GL_QUADS);
-		glTexCoord2f(0.0, 0.0);
-		glVertex3f(-0.5, -0.5, 0.0);
-		glTexCoord2f(1.0, 0.0);
-		glVertex3f(0.5, -0.5, 0.0);
 		glTexCoord2f(1.0, 1.0);
-		glVertex3f(0.5, 0.5, 0.0);
+		glVertex3f(-0.5, -0.5, 0.0);
 		glTexCoord2f(0.0, 1.0);
+		glVertex3f(0.5, -0.5, 0.0);
+		glTexCoord2f(0.0, 0.0);
+		glVertex3f(0.5, 0.5, 0.0);
+		glTexCoord2f(1.0, 0.0);
 		glVertex3f(-0.5, 0.5, 0.0);
 		glEnd();
 		// Clean up
