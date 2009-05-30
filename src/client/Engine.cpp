@@ -115,10 +115,10 @@ namespace backlot
 			if (!Graphics::get().render())
 				running = false;
 			// Fixed time step
-			uint64_t currenttime = getTime();
-			if (currenttime - lastframe < 20000)
-				usleep(20000 - (currenttime - lastframe));
 			lastframe = lastframe + 20000;
+			uint64_t currenttime = getTime();
+			if (currenttime < lastframe)
+				usleep(lastframe - currenttime);
 		}
 		Client::get().destroy();
 		Server::get().destroy();

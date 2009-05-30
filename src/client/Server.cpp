@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 #include <cstring>
 #if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+#include <tchar.h>
 #else
 #include <signal.h>
 #endif
@@ -44,7 +45,84 @@ namespace backlot
 	{
 		// Start server
 		#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
-		#error not implemented
+		HANDLE inread = 0;
+		HANDLE inwrite = 0;
+		HANDLE outread = 0;
+		HANDLE outwrite = 0;
+
+		// Inherit pipes
+		SECURITY_ATTRIBUTES secattr;
+		secattr.nLength = sizeof(SECURITY_ATTRIBUTES);
+		secattr.bInheritHandle = TRUE;
+		secattr.lpSecurityDescriptor = NULL;
+		// Create pipes
+		if (!CreatePipe(&outread, &outwrite, &secattr, 0)
+			|| !CreatePipe(&inread, &inwrite, &secattr, 0))
+		{
+			std::cerr << "Could not create pipes." << std::endl;
+			return false;
+		}
+		// Don't inherit unused ends
+		SetHandleInformation(inread, HANDLE_FLAG_INHERIT, 0);
+		SetHandleInformation(outwrite, HANDLE_FLAG_INHERIT, 0);
+		// Create process
+		TCHAR cmdline[256];
+		_sntprintf(cmdline, 256, TEXT("./server.exe %s %s"),
+			Engine::get().getGameDirectory().c_str(), mapname.c_str());
+		PROCESS_INFORMATION procinfo;
+		STARTUPINFO startinfo;
+		ZeroMemory(&procinfo, sizeof(PROCESS_INFORMATION));
+		ZeroMemory(&startinfo, sizeof(STARTUPINFO));
+		startinfo.cb = sizeof(STARTUPINFO);
+		startinfo.hStdError = inwrite;
+		startinfo.hStdOutput = inwrite;
+		startinfo.hStdInput = outread;
+		startinfo.dwFlags |= STARTF_USESTDHANDLES;
+		if (CreateProcess(NULL, cmdline, NULL, NULL, TRUE, 0, NULL, NULL, &startinfo, &procinfo))
+		{
+			process = procinfo.hProcess;
+			CloseHandle(procinfo.hThread);
+		}
+		else
+		{
+			std::cerr << "Could not start server." << std::endl;
+			return false;
+		}
+		// Wait for server to be ready
+		bool success = true;
+		while (1)
+		{
+			char line[512];
+			memset(line, 0, 512);
+			int bytesread = 0;
+			DWORD byteread = 0;
+			// Read line from pipe
+			while (1)
+			{
+				if (!ReadFile(inread, line + bytesread, 1, &byteread, NULL) || !byteread)
+				{
+					std::cerr << "Server closed unexpectedly." << std::endl;
+					return false;
+				}
+				if (line[bytesread] == '\n')
+				{
+					line[bytesread - 1] = 0;
+					break;
+				}
+				if (bytesread == 510)
+				{
+					line[511] = 0;
+					break;
+				}
+				bytesread++;
+			}
+			// Wait for "ready"
+			std::cout << "Server: \"" << line << "\"" << std::endl;
+			if (!strcmp(line, "ready"))
+			{
+				break;
+			}
+		}
 		#else
 		// Create pipes for connection to the server
 		int serverin[2];
@@ -115,7 +193,8 @@ namespace backlot
 	bool Server::destroy()
 	{
 		#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
-		#error not implemented
+		TerminateProcess(process, 0);
+		CloseHandle(process);
 		#else
 		// TODO: We're a little rough here
 		kill(pid, SIGKILL);

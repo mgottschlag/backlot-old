@@ -28,6 +28,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <enet/enet.h>
 #include <cstdio>
 
+#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+#include <windows.h>
+#endif
+
 namespace backlot
 {
 	/**
@@ -60,6 +64,7 @@ namespace backlot
 			Server();
 
 			#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+			HANDLE process;
 			#else
 			int in;
 			FILE *infile;

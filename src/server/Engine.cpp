@@ -24,22 +24,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Server.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <enet/enet.h>
-
-#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
-int gettimeofday(struct timeval *tv, void *timezone)
-{
-	union {
-		long long ns100;
-		FILETIME ft;
-	} now;
-
-	GetSystemTimeAsFileTime (&now.ft);
-	tv->tv_usec = (long) ((now.ns100 / 10LL) % 1000000LL);
-	tv->tv_sec = (long) ((now.ns100 - 116444736000000000LL) / 10000000LL);
-	return (0);
-}
-#endif
 
 namespace backlot
 {
@@ -76,6 +62,10 @@ namespace backlot
 		}
 		// Main loop
 		std::cout << "ready" << std::endl;
+		static std::ofstream fout;
+		fout.open("./server.log");
+		std::cout.rdbuf(fout.rdbuf());
+		std::cout << "Server started." << std::endl;
 		bool running = true;
 		lastframe = getTime();
 		while (running)
@@ -86,10 +76,10 @@ namespace backlot
 			// Input handling
 			// TODO
 			// Fixed time step
-			uint64_t currenttime = getTime();
-			if (currenttime - lastframe < 20000)
-				usleep(20000 - (currenttime - lastframe));
 			lastframe = lastframe + 20000;
+			uint64_t currenttime = getTime();
+			if (currenttime < lastframe)
+				usleep(lastframe - currenttime);
 		}
 		// Shut down engine
 		enet_deinitialize();

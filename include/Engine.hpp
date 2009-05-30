@@ -29,8 +29,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <time.h>
 #include <winsock2.h>
 #include <winbase.h>
-#define usleep(x) Sleep(x/1000)
-int gettimeofday(struct timeval *tv, void *timezone);
+#define usleep(x) Sleep((x)/1000)
 #else
 #include <sys/time.h>
 #include <netinet/in.h>
@@ -81,9 +80,13 @@ namespace backlot
 
 			static uint64_t getTime()
 			{
+				#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+				return (uint64_t)GetTickCount() * 1000;
+				#else
 				struct timeval tv;
 				gettimeofday(&tv, 0);
 				return (uint64_t)tv.tv_sec * 1000000 + tv.tv_usec;
+				#endif
 			}
 		private:
 			/**
