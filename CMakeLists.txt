@@ -33,7 +33,12 @@ include_directories(include include/support)
 add_executable(backlot ${CLIENT_SRC})
 set_target_properties(backlot PROPERTIES COMPILE_DEFINITIONS CLIENT)
 set_target_properties(backlot PROPERTIES COMPILE_FLAGS -Iinclude/client)
-target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet)
+
+IF(WIN32)
+	target_link_libraries(backlot SDL SDL_image SDL_mixer opengl32 glu32 glew32 enet ws2_32)
+ELSE(WIN32)
+	target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet)
+ENDIF(WIN32)
 
 set(SERVER_SRC
 src/server/main.cpp
