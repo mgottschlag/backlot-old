@@ -35,7 +35,7 @@ set_target_properties(backlot PROPERTIES COMPILE_DEFINITIONS CLIENT)
 set_target_properties(backlot PROPERTIES COMPILE_FLAGS -Iinclude/client)
 
 IF(WIN32)
-	target_link_libraries(backlot SDL SDL_image SDL_mixer opengl32 glu32 glew32 enet ws2_32)
+	target_link_libraries(backlot SDL SDL_image SDL_mixer opengl32 glu32 glew32 enet ws2_32 winmm)
 ELSE(WIN32)
 	target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet)
 ENDIF(WIN32)
@@ -61,4 +61,8 @@ set_target_properties(server PROPERTIES COMPILE_DEFINITIONS SERVER)
 set_target_properties(server PROPERTIES COMPILE_FLAGS -Iinclude/server)
 target_link_libraries(server enet)
 
-
+IF(WIN32)
+	target_link_libraries(server enet ws2_32 winmm)
+ELSE(WIN32)
+	target_link_libraries(server enet)
+ENDIF(WIN32)
