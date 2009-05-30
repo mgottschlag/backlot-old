@@ -41,10 +41,10 @@ namespace backlot
 			bool destroy();
 
 			bool update();
-		private:
-			Client();
 
 			void send(BufferPointer buffer, bool reliable = false);
+		private:
+			Client();
 
 			MapPointer map;
 

@@ -200,7 +200,7 @@ namespace backlot
 						bool local = msg->read8();
 						PlayerPointer newplayer = new Player();
 						newplayer->setID(id);
-						//newplayer->setLocal(local);
+						newplayer->setLocal(local);
 						newplayer->load();
 						newplayer->setVisible(true);
 						players.push_back(newplayer);

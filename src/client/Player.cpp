@@ -20,6 +20,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Player.hpp"
+#include "Client.hpp"
+#include "NetworkData.hpp"
 
 #include <GL/gl.h>
 #include <iostream>
@@ -36,6 +38,8 @@ namespace backlot
 	}
 	Player::~Player()
 	{
+		if (local == this)
+			local = 0;
 		for (unsigned int i = 0; i < players.size(); i++)
 		{
 			if (players[i] == this)
@@ -89,6 +93,43 @@ namespace backlot
 		return visible;
 	}
 
+	void Player::setLocal(bool local)
+	{
+		if (local)
+			Player::local = this;
+		else if (Player::local == this)
+			Player::local = 0;
+	}
+	bool Player::isLocal()
+	{
+		return this == local;
+	}
+	SharedPointer<Player> Player::getLocalPlayer()
+	{
+		return local;
+	}
+
+	void Player::sendKeys(uint8_t keys)
+	{
+		// Send keyboard info to the server
+		BufferPointer buffer = new Buffer();
+		buffer->write8(EPT_Keys);
+		buffer->write32(id);
+		buffer->write8(keys);
+		Client::get().send(buffer);
+		// TODO: Client side prediction
+	}
+	void Player::sendRotation(float rotation)
+	{
+		// Send keyboard info to the server
+		BufferPointer buffer = new Buffer();
+		buffer->write8(EPT_Rotation);
+		buffer->write32(id);
+		buffer->writeFloat(rotation);
+		Client::get().send(buffer);
+		// TODO: Client side prediction
+	}
+
 	void Player::render()
 	{
 		if (!visible)
@@ -127,4 +168,6 @@ namespace backlot
 	}
 
 	std::vector<Player*> Player::players;
+
+	Player *Player::local = 0;
 }

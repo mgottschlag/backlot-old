@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Input.hpp"
 #include "NetworkData.hpp"
 #include "Preferences.hpp"
+#include "Player.hpp"
 
 #include <SDL/SDL.h>
 #include <math.h>
@@ -132,6 +133,7 @@ namespace backlot
 					int x = event.motion.x;
 					int y = event.motion.y;
 					rotationchanged = true;
+					// Get rotation relative to the center of the window
 					const Vector2I &size = Preferences::get().getResolution();
 					rotation = atan2(x - size.x / 2, size.y / 2 - y);
 					break;
@@ -141,6 +143,20 @@ namespace backlot
 			}
 		}
 		// Send input to player
+		PlayerPointer localplayer = Player::getLocalPlayer();
+		if (localplayer)
+		{
+			if (keyschanged)
+			{
+				// Send keyboard info
+				localplayer->sendKeys(currentkeys);
+			}
+			if (rotationchanged)
+			{
+				// Send mouse info
+				localplayer->sendRotation(rotation);
+			}
+		}
 		return true;
 	}
 

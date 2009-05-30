@@ -53,6 +53,13 @@ namespace backlot
 			void setVisible(bool visible);
 			bool isVisible();
 
+			void setLocal(bool local);
+			bool isLocal();
+			static SharedPointer<Player> getLocalPlayer();
+
+			void sendKeys(uint8_t keys);
+			void sendRotation(float rotation);
+
 			void render();
 			static void renderAll();
 		private:
@@ -64,6 +71,8 @@ namespace backlot
 			TexturePointer texture;
 
 			static std::vector<Player*> players;
+
+			static Player *local;
 	};
 
 	typedef SharedPointer<Player> PlayerPointer;
