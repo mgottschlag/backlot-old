@@ -1,8 +1,8 @@
-CMakeCache.txt
+/CMakeCache.txt
 CMakeFiles
-backlot
-server
-!server/
-cmake_install.cmake
+/backlot
+/server
+/cmake_install.cmake
 *.*~
 Makefile
+/server.log
