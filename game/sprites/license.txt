@@ -1,0 +1,13 @@
+
+assaultrifle.png
+feet.png
+minigun.png
+plasma.png
+playerblue.png
+player.png
+playerred.png
+
+Copyright (c) 2009  Lars Heinrichs
+
+License:
+http://creativecommons.org/licenses/by-nc-sa/3.0/
