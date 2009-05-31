@@ -21,6 +21,7 @@ src/client/QuadBatch.cpp
 src/client/Camera.cpp
 src/Buffer.cpp
 src/client/Player.cpp
+src/client/Weapon.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

@@ -28,11 +28,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
-	Player::Player()
+	Player::Player() : ReferenceCounted()
 	{
 		visible = false;
 		position = Vector2F(0, 0);
 		rotation = 0;
+		currentweapon = -1;
 
 		players.push_back(this);
 	}
@@ -130,6 +131,17 @@ namespace backlot
 		// TODO: Client side prediction
 	}
 
+	void Player::addWeapon(int id, WeaponPointer weapon)
+	{
+		WeaponState state;
+		state.weapon = weapon;
+		state.currentmagazine = weapon->getMagazineSize();
+		state.reserve = weapon->getMagazineSize() * weapon->getMagazineCount();
+		weapons.insert(std::pair<int, WeaponState>(id, state));
+		if (currentweapon == -1)
+			currentweapon = id;
+	}
+
 	void Player::render()
 	{
 		if (!visible)
@@ -138,22 +150,37 @@ namespace backlot
 		glPushMatrix();
 		glTranslatef(position.x, position.y, 10.0);
 		glRotatef(rotation * 180 / 3.1415, 0.0, 0.0, 1.0);
-		// Drawing mode
-		texture->bind();
+		// Enable Alpha channel blending
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		// Draw quad
+		// Draw player
+		texture->bind();
 		glBegin(GL_QUADS);
-		glTexCoord2f(1.0, 1.0);
-		glVertex3f(-0.5, -0.5, 0.0);
-		glTexCoord2f(0.0, 1.0);
-		glVertex3f(0.5, -0.5, 0.0);
-		glTexCoord2f(0.0, 0.0);
-		glVertex3f(0.5, 0.5, 0.0);
-		glTexCoord2f(1.0, 0.0);
-		glVertex3f(-0.5, 0.5, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(-0.5, -0.5, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(0.5, -0.5, 0.0);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(0.5, 0.5, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(-0.5, 0.5, 0.0);
 		glEnd();
+		// Draw weapon
+		if (currentweapon != -1)
+		{
+			weapons[currentweapon].weapon->getPlayerTexture()->bind();
+			glBegin(GL_QUADS);
+				glTexCoord2f(1.0, 1.0);
+				glVertex3f(-0.5, -0.5, 0.0);
+				glTexCoord2f(0.0, 1.0);
+				glVertex3f(0.5, -0.5, 0.0);
+				glTexCoord2f(0.0, 0.0);
+				glVertex3f(0.5, 0.5, 0.0);
+				glTexCoord2f(1.0, 0.0);
+				glVertex3f(-0.5, 0.5, 0.0);
+			glEnd();
+		}
 		// Clean up
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);

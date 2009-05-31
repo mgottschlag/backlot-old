@@ -81,6 +81,23 @@ namespace backlot
 			return false;
 		}
 		TiXmlElement *root = node->ToElement();
+		// Textures
+		const char *playerimage = root->Attribute("playerimage");
+		if (!playerimage)
+		{
+			std::cerr << "Weapon player image missing." << std::endl;
+			return false;
+		}
+		playertexture = new Texture();
+		playertexture->load(std::string("sprites/") + playerimage);
+		const char *image = root->Attribute("image");
+		if (!image)
+		{
+			std::cerr << "Weapon image missing." << std::endl;
+			return false;
+		}
+		texture = new Texture();
+		texture->load(std::string("sprites/") + image);
 		// Get attributes
 		rate = -1;
 		TiXmlNode *attributenode = root->FirstChild("attributes");

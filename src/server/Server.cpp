@@ -115,6 +115,7 @@ namespace backlot
 							msg->write8(EPT_NewPlayer);
 							msg->write32(players[i]->getID());
 							msg->write8(0);
+							client->send(msg, true);
 						}
 						// Create player
 						PlayerPointer newplayer = new Player();
@@ -141,6 +142,15 @@ namespace backlot
 						if (weapon)
 						{
 							int id = newplayer->addWeapon(weapon);
+							BufferPointer msg = new Buffer();
+							msg->write8(EPT_NewWeapon);
+							msg->write32(newplayer->getID());
+							msg->write16(id);
+							msg->writeString("plasma");
+							for (unsigned int i = 0; i < clients.size(); i++)
+							{
+								clients[i]->send(msg, true);
+							}
 						}
 					}
 					else if (type == EPT_Keys)

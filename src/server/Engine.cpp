@@ -65,6 +65,7 @@ namespace backlot
 		static std::ofstream fout;
 		fout.open("./server.log");
 		std::cout.rdbuf(fout.rdbuf());
+		std::cerr.rdbuf(fout.rdbuf());
 		std::cout << "Server started." << std::endl;
 		bool running = true;
 		lastframe = getTime();

@@ -19,69 +19,89 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _PLAYER_HPP_
-#define _PLAYER_HPP_
+#ifndef _WEAPON_HPP_
+#define _WEAPON_HPP_
 
 #include "ReferenceCounted.hpp"
-#include "Vector2.hpp"
 #include "Texture.hpp"
-#include "Weapon.hpp"
 
-#include <vector>
+#include <map>
+#include <string>
 
 namespace backlot
 {
 	/**
-	 * Client-side player information.
+	 * Client-side weapon information.
 	 */
-	class Player : public ReferenceCounted
+	class Weapon : public ReferenceCounted
 	{
 		public:
-			Player();
-			~Player();
+			/**
+			 * Constructor.
+			 */
+			Weapon();
+			/**
+			 * Destructor.
+			 */
+			~Weapon();
 
-			bool load();
+			/**
+			 * Loads the weapon with the given name or returns an already loaded
+			 * one.
+			 */
+			static SharedPointer<Weapon> get(std::string name);
 
-			void setID(int id);
-			int getID();
+			/**
+			 * Loads the weapon info with the given name
+			 */
+			bool load(std::string name);
 
-			void setPosition(Vector2F position);
-			Vector2F getPosition();
-
-			void setRotation(float rotation);
-			float getRotation();
-
-			void setVisible(bool visible);
-			bool isVisible();
-
-			void setLocal(bool local);
-			bool isLocal();
-			static SharedPointer<Player> getLocalPlayer();
-
-			void sendKeys(uint8_t keys);
-			void sendRotation(float rotation);
-
-			void addWeapon(int id, WeaponPointer weapon);
-
-			void render();
-			static void renderAll();
+			int getMagazineSize()
+			{
+				return magazinesize;
+			}
+			int getMagazineCount()
+			{
+				return magazines;
+			}
+			TexturePointer getPlayerTexture()
+			{
+				return playertexture;
+			}
+			TexturePointer getTexture()
+			{
+				return texture;
+			}
 		private:
-			int id;
-			Vector2F position;
-			float rotation;
-			bool visible;
+			std::string name;
 
+			TexturePointer playertexture;
 			TexturePointer texture;
 
-			std::map<int, WeaponState> weapons;
-			int currentweapon;
+			int rate;
+			float deviation;
+			int magazines;
+			int magazinesize;
+			float reloadtime;
 
-			static std::vector<Player*> players;
+			int projtype;
+			float projspeed;
+			int hitdamage;
+			bool explosion;
+			float explosionradius;
+			int explosiondamage;
 
-			static Player *local;
+			static std::map<std::string, Weapon*> weapons;
 	};
 
-	typedef SharedPointer<Player> PlayerPointer;
+	typedef SharedPointer<Weapon> WeaponPointer;
+
+	struct WeaponState
+	{
+		WeaponPointer weapon;
+		int currentmagazine;
+		int reserve;
+	};
 }
 
 #endif

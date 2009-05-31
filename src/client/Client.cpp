@@ -232,6 +232,33 @@ namespace backlot
 							player->setRotation(rotation);
 						}
 					}
+					else if (type == EPT_NewWeapon)
+					{
+						int playerid = msg->read32();
+						int id = msg->read16();
+						std::string name = msg->readString();
+						// Load weapon
+						WeaponPointer weapon = Weapon::get("plasma");
+						if (weapon.isNull())
+						{
+							std::cerr << "Could not load weapon" << name << "." << std::endl;
+							continue;
+						}
+						// Get player
+						PlayerPointer player = 0;
+						for (unsigned int j = 0; j < players.size(); j++)
+						{
+							if (players[j]->getID() == playerid)
+							{
+								player = players[j];
+								break;
+							}
+						}
+						if (player.isNull())
+							continue;
+						// Add weapon to player
+						player->addWeapon(id, weapon);
+					}
 					else
 					{
 						std::cerr << "Unknown packet received." << std::endl;
