@@ -98,7 +98,7 @@ namespace backlot
 	{
 		if (keys & EKM_Move)
 		{
-			// Change position
+			// Change vertical position
 			Vector2F newpos = position;
 			if (keys & EKM_Up)
 			{
@@ -108,6 +108,17 @@ namespace backlot
 			{
 				newpos += Vector2F(0, 0.02);
 			}
+			// Check whether position is valid
+			if (Server::get().getMap()->isAccessible(RectangleF(newpos.x - 0.35,
+				newpos.y - 0.35, 0.7, 0.7)))
+			{
+				position = newpos;
+			}
+			else
+			{
+				newpos = position;
+			}
+			// Change horizontal position
 			if (keys & EKM_Right)
 			{
 				newpos += Vector2F(0.02, 0);
