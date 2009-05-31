@@ -6,3 +6,6 @@ CMakeFiles
 *.*~
 Makefile
 /server.log
+/*.dll
+/server.exe
+/backlot.exe
