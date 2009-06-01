@@ -83,7 +83,9 @@ namespace backlot
 			std::cerr << "Could not open render window." << std::endl;
 			return false;
 		}
-		if (!Audio::get().init())
+		if (!Audio::get().init(Preferences::get().getFrequency(),
+			Preferences::get().getStereo(),
+			Preferences::get().getBitrate()))
 		{
 			std::cerr << "Could not initialize sound." << std::endl;
 			return false;
@@ -100,6 +102,7 @@ namespace backlot
 		{
 			return false;
 		}
+
 		// Main loop
 		bool running = true;
 		lastframe = getTime();
@@ -120,6 +123,7 @@ namespace backlot
 			if (currenttime < lastframe)
 				usleep(lastframe - currenttime);
 		}
+
 		Client::get().destroy();
 		Server::get().destroy();
 		// Shut down engine

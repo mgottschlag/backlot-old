@@ -176,6 +176,18 @@ namespace backlot
 		return fullscreen;
 	}
 
+	bool Preferences::getStereo() const
+	{
+		return stereo;
+	}
+	int Preferences::getFrequency() const
+	{
+		return frequency;
+	}
+	int Preferences::getBitrate() const
+	{
+		return bitrate;
+	}
 	Preferences::Preferences()
 	{
 	}

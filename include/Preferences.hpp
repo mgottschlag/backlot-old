@@ -59,6 +59,14 @@ namespace backlot
 			 * @return True if fullscreen mode is enabled and false if it is disabled.
 			 */
 			bool getFullscreen() const;
+			
+			/**
+			 * If the sound is stereo or not.
+			 * @retrun True if stereo, false if mono.
+			 */
+			bool getStereo() const;
+			int getFrequency() const;
+			int getBitrate() const;
 		private:
 			/**
 			 * The private constructor.

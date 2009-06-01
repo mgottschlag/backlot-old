@@ -33,10 +33,16 @@ namespace backlot
 	{
 	}
 
-	bool Audio::init()
+	bool Audio::init(int frequency, bool stereo, int bitrate)
 	{
+		int channels = 0;
+		if (stereo == true)
+			channels = 2;
+		else
+			channels = 1;
+
 		// Initialize SDL_Mixer
-		if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4069) != 0)
+		if (Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, channels, bitrate) != 0)
 			return false;
 
 		return true;

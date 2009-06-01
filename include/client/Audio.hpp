@@ -30,7 +30,7 @@ namespace backlot
 			static Audio &get();
 			~Audio();
 
-			bool init();
+			bool init(int frequency, bool stereo, int bitrate);
 			bool destroy();
 		private:
 			Audio();
