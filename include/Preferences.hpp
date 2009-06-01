@@ -70,6 +70,10 @@ namespace backlot
 			 Vector2I screenresolution;
 			 int colordepth;
 			 bool fullscreen;
+			 
+			 bool stereo;
+			 int frequency;
+			 int bitrate;
 	};
 }
 #endif
