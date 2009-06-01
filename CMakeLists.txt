@@ -12,6 +12,7 @@ src/client/Input.cpp
 src/Map.cpp
 src/client/Texture.cpp
 src/TileSet.cpp
+src/client/Animation.cpp
 src/client/Audio.cpp
 src/client/Sound.cpp
 src/client/Music.cpp

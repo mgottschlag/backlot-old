@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <GL/glu.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <iostream>
 
 namespace backlot
 {
@@ -50,7 +51,10 @@ namespace backlot
 		path = Engine::get().getGameDirectory() + "/" + path;
 		SDL_Surface *surface = IMG_Load(path.c_str());
 		if (!surface)
+		{
+			std::cerr << "Can't load image \"" << path <<"\". Does it exist?\n";
 			return false;
+		}
 		SDL_PixelFormat *format = surface->format;
 		// Set texture
 		glBindTexture(GL_TEXTURE_2D, texture);

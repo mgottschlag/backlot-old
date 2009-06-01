@@ -22,11 +22,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Graphics.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
+#include "Animation.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
 #include <iostream>
-
 namespace backlot
 {
 	Graphics &Graphics::get()
@@ -37,7 +37,6 @@ namespace backlot
 	Graphics::~Graphics()
 	{
 	}
-
 	bool Graphics::init(int width, int height, int bpp, bool fullscreen)
 	{
 		// Initialize SDL
@@ -80,6 +79,7 @@ namespace backlot
 		last_ticks = SDL_GetTicks();
 		// Camera
 		camera = new Camera();
+
 		return true;
 	}
 	bool Graphics::destroy()
@@ -113,6 +113,7 @@ namespace backlot
 			map->render();
 		}
 		Player::renderAll();
+
 		// Swap buffers
 		SDL_GL_SwapBuffers();
 		return true;
