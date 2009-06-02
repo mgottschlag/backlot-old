@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Map.hpp"
 #include "Player.hpp"
 #include "Animation.hpp"
+#include "Bullet.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -113,7 +114,7 @@ namespace backlot
 			map->render();
 		}
 		Player::renderAll();
-
+		Bullet::renderAll();
 		// Swap buffers
 		SDL_GL_SwapBuffers();
 		return true;

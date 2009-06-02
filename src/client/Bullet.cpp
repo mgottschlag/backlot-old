@@ -19,26 +19,64 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _INPUT_HPP_
-#define _INPUT_HPP_
+#include "Bullet.hpp"
 
-#include <stdint.h>
+#include <iostream>
 
 namespace backlot
 {
-	class Input
+	Bullet::Bullet(WeaponPointer weapon) : ReferenceCounted(), weapon(weapon)
 	{
-		public:
-			static Input &get();
-			~Input();
+		bullets.push_back(this);
+	}
+	Bullet::~Bullet()
+	{
+	}
 
-			bool update();
-		private:
-			Input();
+	void Bullet::setPosition(Vector2F position)
+	{
+		this->position = position;
+	}
+	Vector2F Bullet::getPosition()
+	{
+		return position;
+	}
 
-			uint16_t currentkeys;
-			bool shootonce;
-	};
+	void Bullet::setSpeed(Vector2F speed)
+	{
+		this->speed = speed;
+	}
+	Vector2F Bullet::getSpeed()
+	{
+		return speed;
+	}
+
+	bool Bullet::update()
+	{
+		return false;
+	}
+	void Bullet::updateAll()
+	{
+		for (unsigned int i = 0; i < bullets.size(); i++)
+		{
+			if (!bullets[i]->update())
+			{
+				std::cout << "Deleting bullet." << std::endl;
+				bullets.erase(bullets.begin() + i);
+				i--;
+			}
+		}
+	}
+	void Bullet::render()
+	{
+	}
+	void Bullet::renderAll()
+	{
+		for (unsigned int i = 0; i < bullets.size(); i++)
+		{
+			bullets[i]->render();
+		}
+	}
+
+	std::vector<SharedPointer<Bullet> > Bullet::bullets;
 }
-
-#endif

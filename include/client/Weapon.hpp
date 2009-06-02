@@ -49,12 +49,21 @@ namespace backlot
 			 * Loads the weapon with the given name or returns an already loaded
 			 * one.
 			 */
-			static SharedPointer<Weapon> get(std::string name);
+			static SharedPointer<Weapon> get(std::string name, int id = -1);
+
+			/**
+			 * Returns the already loaded weapon with the given id or 0 if none
+			 * exists with this id.
+			 */
+			static SharedPointer<Weapon> get(int id);
 
 			/**
 			 * Loads the weapon info with the given name
 			 */
 			bool load(std::string name);
+
+			void setID(int id);
+			int getID();
 
 			int getMagazineSize()
 			{
@@ -90,6 +99,8 @@ namespace backlot
 			bool explosion;
 			float explosionradius;
 			int explosiondamage;
+
+			int id;
 
 			static std::map<std::string, Weapon*> weapons;
 	};

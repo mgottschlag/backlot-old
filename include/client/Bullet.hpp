@@ -19,26 +19,46 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _INPUT_HPP_
-#define _INPUT_HPP_
+#ifndef _BULLET_HPP_
+#define _BULLET_HPP_
 
-#include <stdint.h>
+#include "ReferenceCounted.hpp"
+#include "Vector2.hpp"
+#include "Weapon.hpp"
+
+#include <vector>
 
 namespace backlot
 {
-	class Input
+	/**
+	 * Client-side bullet-type projectile information.
+	 */
+	class Bullet : public ReferenceCounted
 	{
 		public:
-			static Input &get();
-			~Input();
+			Bullet(WeaponPointer weapon);
+			~Bullet();
+
+			void setPosition(Vector2F position);
+			Vector2F getPosition();
+
+			void setSpeed(Vector2F speed);
+			Vector2F getSpeed();
 
 			bool update();
-		private:
-			Input();
+			static void updateAll();
 
-			uint16_t currentkeys;
-			bool shootonce;
+			void render();
+			static void renderAll();
+		private:
+			WeaponPointer weapon;
+			Vector2F position;
+			Vector2F speed;
+
+			static std::vector<SharedPointer<Bullet> > bullets;
 	};
+
+	typedef SharedPointer<Bullet> BulletPointer;
 }
 
 #endif

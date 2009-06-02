@@ -69,6 +69,7 @@ namespace backlot
 
 			int lastweaponid;
 			std::map<int, WeaponState> weapons;
+			int currentweapon;
 
 			static int lastid;
 	};

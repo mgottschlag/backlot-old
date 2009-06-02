@@ -46,6 +46,7 @@ namespace backlot
 		bool keyschanged = false;
 		float rotation = 0;
 		bool rotationchanged = false;
+		bool shooting = false;
 		while (SDL_PollEvent(&event))
 		{
 			switch(event.type)
@@ -111,6 +112,7 @@ namespace backlot
 						case SDL_BUTTON_LEFT:
 							keyschanged = true;
 							currentkeys |= EKM_Shoot;
+							shooting = true;
 							break;
 						default:
 							break;
@@ -142,14 +144,25 @@ namespace backlot
 					break;
 			}
 		}
+		if (shooting && !(currentkeys & EKM_Shoot))
+		{
+			shootonce = true;
+		}
 		// Send input to player
 		PlayerPointer localplayer = Player::getLocalPlayer();
 		if (localplayer)
 		{
-			if (keyschanged)
+			if (keyschanged || shootonce)
 			{
 				// Send keyboard info
-				localplayer->sendKeys(currentkeys);
+				if (shooting)
+					localplayer->sendKeys(currentkeys | EKM_Shoot);
+				else
+					localplayer->sendKeys(currentkeys);
+				if (shootonce)
+				{
+					shootonce = false;
+				}
 			}
 			if (rotationchanged)
 			{

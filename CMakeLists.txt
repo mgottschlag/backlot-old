@@ -23,6 +23,7 @@ src/client/Camera.cpp
 src/Buffer.cpp
 src/client/Player.cpp
 src/client/Weapon.cpp
+src/client/Bullet.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -53,6 +54,7 @@ src/server/Client.cpp
 src/server/Player.cpp
 src/server/Weapon.cpp
 src/Buffer.cpp
+src/server/Bullet.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

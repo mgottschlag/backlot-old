@@ -22,6 +22,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Player.hpp"
 #include "NetworkData.hpp"
 #include "Server.hpp"
+#include "Engine.hpp"
+#include "Bullet.hpp"
+
+#include <cmath>
+#include <iostream>
 
 namespace backlot
 {
@@ -32,6 +37,7 @@ namespace backlot
 		keys = 0;
 		position = Vector2F(0.5, 0.5);
 		lastweaponid = 0;
+		currentweapon = -1;
 	}
 	Player::~Player()
 	{
@@ -89,13 +95,17 @@ namespace backlot
 		state.weapon = weapon;
 		state.currentmagazine = weapon->getMagazineSize();
 		state.reserve = weapon->getMagazineSize() * weapon->getMagazineCount();
+		state.lastshot = Engine::getTime();
 		int id = ++lastweaponid;
 		weapons.insert(std::pair<int, WeaponState>(id, state));
+		if (currentweapon == -1)
+			currentweapon = id;
 		return id;
 	}
 
 	void Player::think()
 	{
+		// Movement
 		if (keys & EKM_Move)
 		{
 			// Change vertical position
@@ -132,6 +142,35 @@ namespace backlot
 				newpos.y - 0.35, 0.7, 0.7)))
 			{
 				position = newpos;
+			}
+		}
+		// Handle shoot events
+		if (keys & EKM_Shoot)
+		{
+			if (currentweapon != -1)
+			{
+				WeaponState &state = weapons[currentweapon];
+				// Check weapon speed
+				uint64_t currenttime = Engine::get().getTime();
+				uint64_t shotperiod = 60 * 1000000 / state.weapon->getShotsPerMinute();
+				if (currenttime - state.lastshot >= shotperiod)
+				{
+					state.lastshot = currenttime;
+					// Shoot
+					BulletPointer bullet = new Bullet(state.weapon);
+					bullet->setPosition(position);
+					Vector2F speed(sin(rotation), cos(rotation));
+					bullet->setSpeed(speed);
+					// Send bullet message to all clients
+					BufferPointer buffer = new Buffer();
+					buffer->write8(EPT_Projectile);
+					buffer->writeFloat(position.x);
+					buffer->writeFloat(position.y);
+					buffer->writeFloat(speed.x);
+					buffer->writeFloat(speed.y);
+					buffer->write32(state.weapon->getID());
+					Server::get().sendToAll(buffer);
+				}
 			}
 		}
 	}

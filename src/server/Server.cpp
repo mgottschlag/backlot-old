@@ -74,6 +74,14 @@ namespace backlot
 		return false;
 	}
 
+	void Server::sendToAll(BufferPointer buffer, bool reliable)
+	{
+		for (unsigned int i = 0; i < clients.size(); i++)
+		{
+			clients[i]->send(buffer, reliable);
+		}
+	}
+
 	bool Server::update()
 	{
 		// Receive packets
@@ -146,6 +154,7 @@ namespace backlot
 							msg->write8(EPT_NewWeapon);
 							msg->write32(newplayer->getID());
 							msg->write16(id);
+							msg->write32(weapon->getID());
 							msg->writeString("plasma");
 							for (unsigned int i = 0; i < clients.size(); i++)
 							{

@@ -46,6 +46,8 @@ namespace backlot
 				return map;
 			}
 
+			void sendToAll(BufferPointer buffer, bool reliable = false);
+
 			bool update();
 		private:
 			Server();

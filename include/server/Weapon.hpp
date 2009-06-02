@@ -55,6 +55,16 @@ namespace backlot
 			 */
 			bool load(std::string name);
 
+			unsigned int getID()
+			{
+				return id;
+			}
+
+			int getShotsPerMinute()
+			{
+				return rate;
+			}
+
 			int getMagazineSize()
 			{
 				return magazinesize;
@@ -79,6 +89,9 @@ namespace backlot
 			float explosionradius;
 			int explosiondamage;
 
+			unsigned int id;
+			static unsigned int lastweaponid;
+
 			static std::map<std::string, Weapon*> weapons;
 	};
 
@@ -89,6 +102,7 @@ namespace backlot
 		WeaponPointer weapon;
 		int currentmagazine;
 		int reserve;
+		uint64_t lastshot;
 	};
 }
 

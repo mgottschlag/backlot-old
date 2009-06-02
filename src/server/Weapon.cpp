@@ -29,6 +29,7 @@ namespace backlot
 {
 	Weapon::Weapon() : ReferenceCounted()
 	{
+		id = ++lastweaponid;
 	}
 	Weapon::~Weapon()
 	{
@@ -180,5 +181,6 @@ namespace backlot
 		return true;
 	}
 
+	unsigned int Weapon::lastweaponid = 0;
 	std::map<std::string, Weapon*> Weapon::weapons;
 }

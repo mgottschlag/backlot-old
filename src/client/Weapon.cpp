@@ -40,12 +40,13 @@ namespace backlot
 		}
 	}
 
-	SharedPointer<Weapon> Weapon::get(std::string name)
+	SharedPointer<Weapon> Weapon::get(std::string name, int id)
 	{
 		// Get already loaded weapon
 		std::map<std::string, Weapon*>::iterator it = weapons.find(name);
 		if (it != weapons.end())
 		{
+			it->second->setID(id);
 			return it->second;
 		}
 		// Load map
@@ -54,7 +55,23 @@ namespace backlot
 		{
 			return 0;
 		}
+		weapon->setID(id);
 		return weapon;
+	}
+
+	SharedPointer<Weapon> Weapon::get(int id)
+	{
+		// TODO: This is quite slow, better create a second map
+		std::map<std::string, Weapon*>::iterator it = weapons.begin();
+		while (it != weapons.end())
+		{
+			if (it->second->getID() == id)
+			{
+				return it->second;
+			}
+			it++;
+		}
+		return 0;
 	}
 
 	bool Weapon::load(std::string name)
@@ -195,6 +212,15 @@ namespace backlot
 		this->name = name;
 		weapons.insert(std::pair<std::string, Weapon*>(name, this));
 		return true;
+	}
+
+	void Weapon::setID(int id)
+	{
+		this->id = id;
+	}
+	int Weapon::getID()
+	{
+		return id;
 	}
 
 	std::map<std::string, Weapon*> Weapon::weapons;

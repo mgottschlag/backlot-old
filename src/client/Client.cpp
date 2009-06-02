@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "NetworkData.hpp"
 #include "Buffer.hpp"
+#include "Bullet.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -236,9 +237,10 @@ namespace backlot
 					{
 						int playerid = msg->read32();
 						int id = msg->read16();
+						int weaponid = msg->read32();
 						std::string name = msg->readString();
 						// Load weapon
-						WeaponPointer weapon = Weapon::get("plasma");
+						WeaponPointer weapon = Weapon::get("plasma", weaponid);
 						if (weapon.isNull())
 						{
 							std::cerr << "Could not load weapon" << name << "." << std::endl;
@@ -259,6 +261,29 @@ namespace backlot
 						// Add weapon to player
 						player->addWeapon(id, weapon);
 					}
+					else if (type == EPT_Projectile)
+					{
+						// Read bullet information
+						Vector2F position;
+						position.x = msg->readFloat();
+						position.y = msg->readFloat();
+						Vector2F speed;
+						speed.x = msg->readFloat();
+						speed.y = msg->readFloat();
+						int weaponid = msg->read32();
+						// Create bullet
+						WeaponPointer weapon = Weapon::get(weaponid);
+						if (weapon)
+						{
+							BulletPointer bullet = new Bullet(weapon);
+							bullet->setPosition(position);
+							bullet->setSpeed(speed);
+						}
+						else
+						{
+							std::cout << "No weapon for bullet." << std::endl;
+						}
+					}
 					else
 					{
 						std::cerr << "Unknown packet received." << std::endl;
@@ -272,6 +297,8 @@ namespace backlot
 					break;
 			}
 		}
+		// Game logic
+		Bullet::updateAll();
 		return true;
 	}
 
