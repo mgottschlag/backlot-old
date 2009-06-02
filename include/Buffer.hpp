@@ -31,43 +31,133 @@ namespace backlot
 {
 	/**
 	 * Dynamically sized buffer for network data etc.
+	 *
+	 * Data is written/read to/from the buffer via read*() and write*(). All
+	 * read/write operations start at the current read/write position which
+	 * is 0 if the buffer has just been created. If multiple bytes are written
+	 * or read, they are converted to/from network byte order if necessary.
 	 */
 	class Buffer : public ReferenceCounted
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Buffer();
+			/**
+			 * Constructor from preinitialized data.
+			 * @param data Pointer to the new buffer content.
+			 * @param size Length of the data to be used for the buffer.
+			 * @param copy If set to true, a copy of the data is created, else
+			 * the preallocated memory is used and deleted if the buffer is
+			 * destroyed.
+			 */
 			Buffer(void *data, unsigned int size, bool copy = false);
+			/**
+			 * Copy constructor.
+			 */
 			Buffer(const Buffer &b);
+			/**
+			 * Destructor. Frees the memory connected to the buffer.
+			 */
 			~Buffer();
 
+			/**
+			 * Sets the size of the buffer. The read/write position is not
+			 * changed if it is still valid.
+			 */
 			void setSize(unsigned int size);
+			/**
+			 * Returns the size of the buffer.
+			 */
 			unsigned int getSize();
 
+			/**
+			 * Sets the read/write position.
+			 */
 			void setPosition(unsigned int position);
+			/**
+			 * Returns the read/write position.
+			 */
 			unsigned int getPosition();
 
+			/**
+			 * Returns a pointer to the buffer data. The pointer is only valid
+			 * as long as the buffer remains unchanged.
+			 */
 			void *getData();
 
+			/**
+			 * Writes one byte to the buffer.
+			 */
 			void write8(uint8_t value);
+			/**
+			 * Reads one byte from the buffer.
+			 */
 			uint8_t read8();
+			/**
+			 * Writes two bytes to the buffer.
+			 */
 			void write16(uint16_t value);
+			/**
+			 * Reads two bytes from the buffer.
+			 */
 			uint16_t read16();
+			/**
+			 * Writes four bytes to the buffer.
+			 */
 			void write32(uint32_t value);
+			/**
+			 * Reads four bytes from the buffer.
+			 */
 			uint32_t read32();
+			/**
+			 * Writes eight bytes to the buffer.
+			 */
 			void write64(uint64_t value);
+			/**
+			 * Reads eight bytes from the buffer.
+			 */
 			uint64_t read64();
 
+			/**
+			 * Writes a float to the buffer.
+			 */
 			void writeFloat(float value);
+			/**
+			 * Reads a float from the buffer.
+			 */
 			float readFloat();
 
+			/**
+			 * Writes a string to the buffer.
+			 */
 			void writeString(std::string value);
+			/**
+			 * Reads a string from the buffer.
+			 */
 			std::string readString();
 
+			/**
+			 * Creates a copy of buf.
+			 */
 			Buffer &operator=(const Buffer &buf);
+			/**
+			 * Appends one buffer to the other.
+			 */
 			Buffer &operator+=(const Buffer &buf);
 		private:
+			/**
+			 * Buffer data.
+			 */
 			char *data;
+			/**
+			 * Buffer size.
+			 */
 			unsigned int size;
+			/**
+			 * Read/write position.
+			 */
 			unsigned int position;
 	};
 
