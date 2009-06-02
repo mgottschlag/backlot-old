@@ -22,12 +22,17 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Bullet.hpp"
 
 #include <iostream>
+#include <GL/gl.h>
 
 namespace backlot
 {
 	Bullet::Bullet(WeaponPointer weapon) : ReferenceCounted(), weapon(weapon)
 	{
 		bullets.push_back(this);
+		size = weapon->getBulletSize();
+		texture = weapon->getBulletTexture();
+		if (texture.isNull())
+			std::cerr << "No bullet texture." << std::endl;
 	}
 	Bullet::~Bullet()
 	{
@@ -53,7 +58,7 @@ namespace backlot
 
 	bool Bullet::update()
 	{
-		return false;
+		return true;
 	}
 	void Bullet::updateAll()
 	{
@@ -69,6 +74,33 @@ namespace backlot
 	}
 	void Bullet::render()
 	{
+		if (texture.isNull())
+			return;
+		// Setup position
+		glPushMatrix();
+		glLoadIdentity();
+		glTranslatef(position.x, position.y, 10.0);
+		glScalef(size, size, 1.0);
+		// Enable Alpha channel blending
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		// Draw bullet
+		texture->bind();
+		glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(-0.5, -0.5, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(0.5, -0.5, 0.0);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(0.5, 0.5, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(-0.5, 0.5, 0.0);
+		glEnd();
+		// Clean up
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
 	}
 	void Bullet::renderAll()
 	{
@@ -76,6 +108,11 @@ namespace backlot
 		{
 			bullets[i]->render();
 		}
+	}
+
+	void Bullet::clearBullets()
+	{
+		bullets.clear();
 	}
 
 	std::vector<SharedPointer<Bullet> > Bullet::bullets;

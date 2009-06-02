@@ -4,7 +4,7 @@
 	A simple plasma gun to melt your enemies.
 	</description>
 	<attributes rate="120" deviation="10" magazines="3" magazinesize="10" reloadtime="2" />
-	<projectile type="bullet" image="plasma.png" style="add" speed="5">
+	<projectile type="bullet" image="plasma.png" style="add" speed="5" size="0.3">
 		<explosion animation="explosion.png" style="add" radius="1" damage="20" />
 		<hit damage="20" />
 	</projectile>

@@ -50,10 +50,15 @@ namespace backlot
 
 			void render();
 			static void renderAll();
+
+			static void clearBullets();
 		private:
 			WeaponPointer weapon;
 			Vector2F position;
 			Vector2F speed;
+
+			TexturePointer texture;
+			float size;
 
 			static std::vector<SharedPointer<Bullet> > bullets;
 	};

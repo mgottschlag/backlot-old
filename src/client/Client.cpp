@@ -171,6 +171,7 @@ namespace backlot
 			enet_peer_reset(peer);
 		enet_host_destroy(host);
 		map = 0;
+		Bullet::clearBullets();
 		return false;
 	}
 

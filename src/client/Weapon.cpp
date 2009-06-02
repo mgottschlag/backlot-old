@@ -163,6 +163,18 @@ namespace backlot
 					projspeed = 1;
 					projectile->QueryFloatAttribute("speed", &projspeed);
 				}
+				projsize = 1;
+				projectile->QueryFloatAttribute("size", &projsize);
+				// Texture
+				if (projectile->Attribute("image"))
+				{
+					bullettexture = new Texture();
+					std::string path = std::string("sprites/") + projectile->Attribute("image");
+					if (!bullettexture->load(path))
+					{
+						bullettexture = 0;
+					}
+				}
 				// Hit damage
 				hitdamage = 0;
 				TiXmlNode *hitnode = projectile->FirstChild("hit");

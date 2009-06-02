@@ -81,11 +81,20 @@ namespace backlot
 			{
 				return texture;
 			}
+			float getBulletSize()
+			{
+				return projsize;
+			}
+			TexturePointer getBulletTexture()
+			{
+				return bullettexture;
+			}
 		private:
 			std::string name;
 
 			TexturePointer playertexture;
 			TexturePointer texture;
+			TexturePointer bullettexture;
 
 			int rate;
 			float deviation;
@@ -95,6 +104,7 @@ namespace backlot
 
 			int projtype;
 			float projspeed;
+			float projsize;
 			int hitdamage;
 			bool explosion;
 			float explosionradius;
