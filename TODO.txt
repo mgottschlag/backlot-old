@@ -1,0 +1,18 @@
+2-DO-LIST for Backlot engine
+
+- Client- / Server
+- Menu
+- Players
+- Weapons
+- Graphics
+- Sounds / Music
+
+Private Lists:
+phoenix
+
+
+popup
+
+
+pommes
+
