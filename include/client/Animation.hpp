@@ -43,10 +43,9 @@ namespace backlot
 			void setFrameNumbers(int x, int y);
 
 			/**
-			 * Set the position of the animation.
+			 * Set the rotation of the animation.
 			 */
-			void setPosition(Vector2F position);
-
+			void setRotation(float rotation);
 			/**
 			 * Set the time which the animation needs to be played one time.
 			 */
@@ -77,7 +76,7 @@ namespace backlot
 		private:
 			Vector2I frames;
 			Vector2F sizes;
-			Vector2F position;
+			float rotation;
 
 			unsigned int starttime;
 			float frametime;

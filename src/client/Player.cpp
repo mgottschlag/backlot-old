@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -55,6 +55,13 @@ namespace backlot
 	{
 		texture = new Texture();
 		texture->load("sprites/player.png");
+		feettexture = new Texture();
+		feettexture->load("sprites/feet.png");
+		feetanimation = new Animation();
+		feetanimation->setFrameNumbers(4, 2);
+		feetanimation->setPeriod(2000);
+		feetanimation->setLoop(-1);
+		feetanimation->start();
 		return true;
 	}
 
@@ -120,6 +127,10 @@ namespace backlot
 		Client::get().send(buffer);
 		// TODO: Client side prediction
 	}
+	void Player::receiveKeys(uint8_t keys)
+	{
+		this->keys = keys;
+	}
 	void Player::sendRotation(float rotation)
 	{
 		// Send keyboard info to the server
@@ -146,8 +157,40 @@ namespace backlot
 	{
 		if (!visible)
 			return;
+
+		glPushMatrix();	
+		// If the player moved and the feed animation is not played
+		glTranslatef(position.x, position.y, 10.0);
+		glScalef(0.5, 0.5, 1.0);
+
+		if (feetanimation->isPlaying() == false && keys & EKM_Move)
+			feetanimation->start();
+		else if (feetanimation->isPlaying() == true && (keys & EKM_Move) == 0)
+			feetanimation->stop();
+		if (keys & EKM_Move)
+		{
+			if (keys & EKM_Right)
+				glRotatef(270, 0, 0, 1);
+			if (keys & EKM_Down || keys & EKM_Up)
+				glRotatef(0, 0, 0, 1);
+			if (keys & EKM_Left)
+				glRotatef(90, 0, 0, 1);
+		}
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		feettexture->bind();
+
+		if (feetanimation->isPlaying() == false)
+		{
+			glRotatef(rotation * 180 / 3.1415, 0.0, 0.0, 1.0);
+			feetanimation->draw(0);
+		}
+		else
+			feetanimation->draw();
+
 		// Setup position
-		glPushMatrix();
+		glLoadIdentity();
 		glTranslatef(position.x, position.y, 10.0);
 		glRotatef(rotation * 180 / 3.1415, 0.0, 0.0, 1.0);
 		// Enable Alpha channel blending

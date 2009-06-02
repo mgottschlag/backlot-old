@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ReferenceCounted.hpp"
 #include "Vector2.hpp"
 #include "Texture.hpp"
+#include "Animation.hpp"
 #include "Weapon.hpp"
 
 #include <vector>
@@ -59,6 +60,7 @@ namespace backlot
 			static SharedPointer<Player> getLocalPlayer();
 
 			void sendKeys(uint8_t keys);
+			void receiveKeys(uint8_t keys);
 			void sendRotation(float rotation);
 
 			void addWeapon(int id, WeaponPointer weapon);
@@ -72,9 +74,13 @@ namespace backlot
 			bool visible;
 
 			TexturePointer texture;
+			TexturePointer feettexture;
+			AnimationPointer feetanimation;
 
 			std::map<int, WeaponState> weapons;
 			int currentweapon;
+
+			uint8_t keys;
 
 			static std::vector<Player*> players;
 

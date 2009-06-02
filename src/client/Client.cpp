@@ -231,6 +231,7 @@ namespace backlot
 								continue;
 							player->setPosition(Vector2F(x, y));
 							player->setRotation(rotation);
+							player->receiveKeys(keys);
 						}
 					}
 					else if (type == EPT_NewWeapon)
