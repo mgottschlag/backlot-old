@@ -92,15 +92,26 @@ namespace backlot
 		}
 		// Show main menu
 		// TODO
-		// Start server
-		if (!Server::get().init(27272, "test"))
+		if (args.size() == 0)
 		{
-			return false;
+			// Start server
+			if (!Server::get().init(27272, "test"))
+			{
+				return false;
+			}
+			// Start client
+			if (!Client::get().init("localhost:27272"))
+			{
+				return false;
+			}
 		}
-		// Start client
-		if (!Client::get().init("localhost:27272"))
+		else
 		{
-			return false;
+			// Start client
+			if (!Client::get().init(args[0]))
+			{
+				return false;
+			}
 		}
 
 		// Main loop
@@ -125,7 +136,8 @@ namespace backlot
 		}
 
 		Client::get().destroy();
-		Server::get().destroy();
+		if (args.size() == 0)
+			Server::get().destroy();
 		// Shut down engine
 		Audio::get().destroy();
 		Graphics::get().destroy();
