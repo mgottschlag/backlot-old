@@ -102,6 +102,10 @@ namespace backlot
 			currentweapon = id;
 		return id;
 	}
+	std::map<int, WeaponState> &Player::getWeapons()
+	{
+		return weapons;
+	}
 
 	void Player::think()
 	{

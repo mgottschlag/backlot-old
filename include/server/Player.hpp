@@ -55,6 +55,7 @@ namespace backlot
 			uint8_t getKeys();
 
 			int addWeapon(WeaponPointer weapon);
+			std::map<int, WeaponState> &getWeapons();
 
 			void think();
 		private:

@@ -124,6 +124,20 @@ namespace backlot
 							msg->write32(players[i]->getID());
 							msg->write8(0);
 							client->send(msg, true);
+							// Also send weapons
+							std::map<int, WeaponState> &weapons = players[i]->getWeapons();
+							std::map<int, WeaponState>::iterator it = weapons.begin();
+							while (it != weapons.end())
+							{
+								BufferPointer msg = new Buffer();
+								msg->write8(EPT_NewWeapon);
+								msg->write32(players[i]->getID());
+								msg->write16(it->first);
+								msg->write32(it->second.weapon->getID());
+								msg->writeString("plasma");
+								client->send(msg, true);
+								it++;
+							}
 						}
 						// Create player
 						PlayerPointer newplayer = new Player();
