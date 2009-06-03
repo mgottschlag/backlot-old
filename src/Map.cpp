@@ -323,6 +323,65 @@ namespace backlot
 	}
 	bool Map::isAccessible(Vector2F start, Vector2F end, Vector2F *collision)
 	{
+		// TODO: Compute collision point
+		// Area to be checked
+		RectangleI area(floor(start.x), floor(start.y), floor(end.x) - floor(start.x), floor(end.y) - floor(start.y));
+		if (area.width< 0)
+		{
+			area.x = end.x;
+			area.width = -area.width;
+		}
+		if (area.height < 0)
+		{
+			area.y = end.y;
+			area.height = -area.height;
+		}
+		// Loop through all tiles
+		for (int py = area.y; py <= area.y + area.height; py++)
+		{
+			if (py < 0 || py >= size.y)
+				return false;
+			for (int px = area.x; px <= area.x + area.width; px++)
+			{
+				if (px < 0 || px >= size.x)
+					return false;
+				// Check whether tile collides with line
+				if (end.x != start.x)
+				{
+					float dx = (end.y - start.y) / (end.x - start.x);
+					float n = start.y - start.x * dx;
+					bool above0 = (py > (px * dx + n));
+					bool above1 = (py + 1 > (px * dx + n));
+					bool above2 = (py > ((px + 1) * dx + n));
+					bool above3 = (py + 1 > ((px + 1) * dx + n));
+					if ((above0 != above1)
+						|| (above1 != above2)
+						|| (above2 != above3))
+					{
+						// Check tile
+						if (!accessible[py * size.x + px])
+							return false;
+					}
+				}
+				else
+				{
+					float dy = (end.x - start.x) / (end.y - start.y);
+					float n = start.x - start.y * dy;
+					bool above0 = (px > (py * dy + n));
+					bool above1 = (px + 1 > (py * dy + n));
+					bool above2 = (px > ((py + 1) * dy + n));
+					bool above3 = (px + 1 > ((py + 1) * dy + n));
+					if ((above0 != above1)
+						|| (above1 != above2)
+						|| (above2 != above3))
+					{
+						// Check tile
+						if (!accessible[py * size.x + px])
+							return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 
