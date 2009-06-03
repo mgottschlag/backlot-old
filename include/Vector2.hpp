@@ -57,18 +57,32 @@ namespace backlot
 			{
 			}
 
+			template<typename T2> Vector2<T> operator*(T2 s)
+			{
+				return Vector2<T>(x * s, y * s);
+			}
+			template<typename T2> Vector2<T> &operator*=(T2 s)
+			{
+				x = x * s;
+				y = y * s;
+				return *this;
+			}
+			template<typename T2> Vector2<T> operator+(const Vector2<T2> &v)
+			{
+				return Vector2<T>(x + v.x, y + v.y);
+			}
 			template<typename T2> Vector2<T> &operator=(const Vector2<T2> &v)
 			{
 				x = v.x;
 				y = v.y;
 				return *this;
 			}
-			template<typename T2> Vector2<T> &operator=(std::string s)
+			Vector2<T> &operator=(std::string s)
 			{
 				set(s);
 				return *this;
 			}
-			template<typename T2> Vector2<T> &operator=(const char *s)
+			Vector2<T> &operator=(const char *s)
 			{
 				set(s);
 				return *this;
