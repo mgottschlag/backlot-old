@@ -82,6 +82,10 @@ namespace backlot
 			 * Returns true if the whole area is accessible.
 			 */
 			bool isAccessible(RectangleF area);
+			/**
+			 * Returns true if the area along the line is accessible.
+			 */
+			bool isAccessible(Vector2F start, Vector2F end, Vector2F *collision = 0);
 
 			#ifdef CLIENT
 			/**

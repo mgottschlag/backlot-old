@@ -73,6 +73,10 @@ namespace backlot
 			{
 				return magazines;
 			}
+			float getBulletSpeed()
+			{
+				return projspeed;
+			}
 		private:
 			std::string name;
 

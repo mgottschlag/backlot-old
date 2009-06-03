@@ -43,6 +43,8 @@ namespace backlot
 			bool update();
 
 			void send(BufferPointer buffer, bool reliable = false);
+
+			MapPointer getMap();
 		private:
 			Client();
 

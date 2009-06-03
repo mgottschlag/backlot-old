@@ -314,4 +314,9 @@ namespace backlot
 			buffer->getSize(), reliable?ENET_PACKET_FLAG_RELIABLE:0);
 		enet_peer_send(peer, 0, packet);
 	}
+
+	MapPointer Client::getMap()
+	{
+		return map;
+	}
 }

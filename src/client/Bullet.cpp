@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Bullet.hpp"
+#include "Client.hpp"
 
 #include <iostream>
 #include <GL/gl.h>
@@ -58,7 +59,14 @@ namespace backlot
 
 	bool Bullet::update()
 	{
-		return true;
+		Vector2F newpos = position + speed * 0.02;
+		if (Client::get().getMap()->isAccessible(position, newpos))
+		{
+			position = newpos;
+			return true;
+		}
+		else
+			return false;
 	}
 	void Bullet::updateAll()
 	{

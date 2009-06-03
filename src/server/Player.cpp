@@ -159,7 +159,8 @@ namespace backlot
 					// Shoot
 					BulletPointer bullet = new Bullet(state.weapon);
 					bullet->setPosition(position);
-					Vector2F speed(sin(rotation), cos(rotation));
+					Vector2F speed(sin(rotation), -cos(rotation));
+					speed *= state.weapon->getBulletSpeed();
 					bullet->setSpeed(speed);
 					// Send bullet message to all clients
 					BufferPointer buffer = new Buffer();

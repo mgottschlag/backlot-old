@@ -321,6 +321,10 @@ namespace backlot
 		}
 		return true;
 	}
+	bool Map::isAccessible(Vector2F start, Vector2F end, Vector2F *collision)
+	{
+		return true;
+	}
 
 	#ifdef CLIENT
 	void Map::setVisible(bool visible)

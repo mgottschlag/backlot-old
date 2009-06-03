@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Bullet.hpp"
+#include "Server.hpp"
 
 namespace backlot
 {
@@ -51,7 +52,14 @@ namespace backlot
 
 	bool Bullet::update()
 	{
-		return false;
+		Vector2F newpos = position + speed * 0.02;
+		if (Server::get().getMap()->isAccessible(position, newpos))
+		{
+			position = newpos;
+			return true;
+		}
+		else
+			return false;
 	}
 	void Bullet::updateAll()
 	{
