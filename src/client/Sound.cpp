@@ -38,7 +38,7 @@ namespace backlot
 	
 	bool Sound::load(std::string path)
 	{
-		path = Engine::get().getGameDirectory() + "/sounds/" + path;
+		path = Engine::get().getGameDirectory() + "/" + path;
 		sound = Mix_LoadWAV(path.c_str());
 		if (sound == NULL)
 		{
@@ -51,18 +51,18 @@ namespace backlot
 	bool Sound::play(int times)
 	{
 		// If a sound file was loaded
-		if (sound != NULL)
+		if (sound != NULL && isPlaying() == false)
 		{
 			channel = Mix_PlayChannel(-1, sound, times);
 			if (channel == -1)
 			{
-				std::cerr << "Failed to start sound playback\n";
+				std::cerr << "Failed to start sound playback.\n";
 				return false;
 			}
 		}
 		else
 		{
-			std::cerr << "No soudfile was loaded\n";
+			std::cerr << "No soudfile was loaded or it's already played.\n";
 			return false;
 		}
 		return true;
@@ -70,12 +70,19 @@ namespace backlot
 	bool Sound::stop()
 	{
 		// If the sound file is still played on the channel
-		if (Mix_GetChunk(channel) == sound && channel != -1)
+		if (isPlaying())
 		{
 			Mix_HaltChannel(channel);
 			channel = -1;
 		}
 
 		return true;
+	}
+	bool Sound::isPlaying()
+	{
+		if (Mix_GetChunk(channel) == sound && channel != -1)
+			return true;
+		else
+			return false;
 	}
 }

@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Vector2.hpp"
 #include "Texture.hpp"
 #include "Animation.hpp"
+#include "Sound.hpp"
 #include "Weapon.hpp"
 
 #include <vector>
@@ -74,8 +75,10 @@ namespace backlot
 			bool visible;
 
 			TexturePointer texture;
+
 			TexturePointer feettexture;
 			AnimationPointer feetanimation;
+			SoundPointer feetsound;
 
 			std::map<int, WeaponState> weapons;
 			int currentweapon;

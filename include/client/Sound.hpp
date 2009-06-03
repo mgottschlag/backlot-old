@@ -49,6 +49,7 @@ namespace backlot
 			 */
 			bool play(int times = 0);
 			bool stop();
+			bool isPlaying();
 		private:
 			Mix_Chunk *sound;
 			/**

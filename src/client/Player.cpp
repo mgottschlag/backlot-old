@@ -61,7 +61,8 @@ namespace backlot
 		feetanimation->setFrameNumbers(4, 2);
 		feetanimation->setPeriod(2000);
 		feetanimation->setLoop(-1);
-		feetanimation->start();
+		feetsound = new Sound();
+		feetsound->load("sounds/footsteps.wav");
 		return true;
 	}
 
@@ -130,6 +131,11 @@ namespace backlot
 	void Player::receiveKeys(uint8_t keys)
 	{
 		this->keys = keys;
+
+		if ((keys & EKM_Move) && feetsound->isPlaying() == false)
+			feetsound->play(-1);
+		else if ((keys & EKM_Move) == 0 && feetsound->isPlaying() == true)
+			feetsound->stop();			
 	}
 	void Player::sendRotation(float rotation)
 	{
@@ -167,6 +173,7 @@ namespace backlot
 			feetanimation->start();
 		else if (feetanimation->isPlaying() == true && (keys & EKM_Move) == 0)
 			feetanimation->stop();
+
 		if (keys & EKM_Move)
 		{
 			if (keys & EKM_Right)
