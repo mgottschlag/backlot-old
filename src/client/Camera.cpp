@@ -53,7 +53,7 @@ namespace backlot
 			-(float)windowsize.y / 32 / 2, (float)windowsize.y / 32 / 2,
 			256, -256);
 		glScalef(1.0, -1.0, 1.0);
-		glTranslatef(position.x, position.y, 0);
+		glTranslatef(-position.x, -position.y, 0);
 		glMatrixMode(GL_MODELVIEW);
 	}
 }

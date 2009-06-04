@@ -53,9 +53,9 @@ namespace backlot
 
 	bool Player::load()
 	{
-		texture = new Texture();
+		texture = new Texture(ETF_Linear);
 		texture->load("sprites/player.png");
-		feettexture = new Texture();
+		feettexture = new Texture(ETF_Linear);
 		feettexture->load("sprites/feet.png");
 		feetanimation = new Animation();
 		feetanimation->setFrameNumbers(4, 2);

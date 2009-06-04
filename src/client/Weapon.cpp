@@ -105,7 +105,7 @@ namespace backlot
 			std::cerr << "Weapon player image missing." << std::endl;
 			return false;
 		}
-		playertexture = new Texture();
+		playertexture = new Texture(ETF_Linear);
 		playertexture->load(std::string("sprites/") + playerimage);
 		const char *image = root->Attribute("image");
 		if (!image)
@@ -113,7 +113,7 @@ namespace backlot
 			std::cerr << "Weapon image missing." << std::endl;
 			return false;
 		}
-		texture = new Texture();
+		texture = new Texture(ETF_Linear);
 		texture->load(std::string("sprites/") + image);
 		// Get attributes
 		rate = -1;
