@@ -28,17 +28,27 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	enum TextureFilter
+	{
+		ETF_Nearest,
+		ETF_Linear,
+		ETF_LinearMipMap
+	};
 	class Texture : public ReferenceCounted
 	{
 		public:
-			Texture();
+			Texture(TextureFilter filter = ETF_Nearest);
 			~Texture();
 
 			bool load(std::string path);
 
+			void setFilter(TextureFilter filter);
+			TextureFilter getFilter();
+
 			void bind();
 		private:
 			unsigned int texture;
+			TextureFilter filter;
 	};
 
 	typedef SharedPointer<Texture> TexturePointer;
