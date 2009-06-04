@@ -280,6 +280,8 @@ namespace backlot
 							BulletPointer bullet = new Bullet(weapon);
 							bullet->setPosition(position);
 							bullet->setSpeed(speed);
+							if (msg->read8() == 1)
+								weapon->playSound();
 						}
 						else
 						{

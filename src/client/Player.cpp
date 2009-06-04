@@ -133,7 +133,7 @@ namespace backlot
 		this->keys = keys;
 
 		if ((keys & EKM_Move) && feetsound->isPlaying() == false)
-			feetsound->play(-1);
+			feetsound->play(1);
 		else if ((keys & EKM_Move) == 0 && feetsound->isPlaying() == true)
 			feetsound->stop();			
 	}

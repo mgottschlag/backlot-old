@@ -4,3 +4,11 @@ Copyright (c) 2009 Christian James Muise (aka Haz)
 
 License:
 http://creativecommons.org/licenses/sampling+/1.0/
+
+plasmagun.wav
+
+Copyright (c) 2009 Hell's Sound Guy
+http://www.freesound.org/usersViewSingle.php?id=33253
+
+License:
+http://creativecommons.org/licenses/sampling+/1.0/

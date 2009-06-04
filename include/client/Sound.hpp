@@ -52,9 +52,7 @@ namespace backlot
 			bool isPlaying();
 		private:
 			Mix_Chunk *sound;
-			/**
-			 * The number of the channel on which the sound is played.
-			 */
+
 			int channel;
 	};
 	

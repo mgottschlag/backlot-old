@@ -166,6 +166,7 @@ namespace backlot
 					Vector2F speed(sin(rotation), -cos(rotation));
 					speed *= state.weapon->getBulletSpeed();
 					bullet->setSpeed(speed);
+					bool playsound = 1;
 					// Send bullet message to all clients
 					BufferPointer buffer = new Buffer();
 					buffer->write8(EPT_Projectile);
@@ -174,6 +175,7 @@ namespace backlot
 					buffer->writeFloat(speed.x);
 					buffer->writeFloat(speed.y);
 					buffer->write32(state.weapon->getID());
+					buffer->write8(playsound);
 					Server::get().sendToAll(buffer);
 				}
 			}

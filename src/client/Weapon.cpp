@@ -23,12 +23,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "support/tinyxml.h"
 
+#include <string>
 #include <iostream>
 
 namespace backlot
 {
 	Weapon::Weapon() : ReferenceCounted()
 	{
+		sound = new Sound();
 	}
 	Weapon::~Weapon()
 	{
@@ -137,6 +139,17 @@ namespace backlot
 				}
 				reloadtime = 0;
 				attributes->QueryFloatAttribute("reloadtime", &reloadtime);
+ 				if (attributes->Attribute("sound") == 0)
+ 				{
+ 					std::cerr << "No weapon sound available." << std::endl;
+ 					return false;
+ 				}
+				std::string weaponsound = "sounds/" + (std::string)attributes->Attribute("sound");
+				if (sound->load(weaponsound) == false)
+				{
+					std::cerr << "Could not load weaponsound correctly." << std::endl;
+					return false;
+				}
 				break;
 			}
 			attributenode = node->IterateChildren("attributes", attributenode);
@@ -233,6 +246,12 @@ namespace backlot
 	int Weapon::getID()
 	{
 		return id;
+	}
+
+	void Weapon::playSound()
+	{
+		if (sound->isPlaying() == false)
+			sound->play(1);
 	}
 
 	std::map<std::string, Weapon*> Weapon::weapons;

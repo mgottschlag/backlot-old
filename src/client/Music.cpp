@@ -46,6 +46,8 @@ namespace backlot
 
 	bool Music::load(std::string path)
 	{
+		if (music != NULL)
+			Mix_FreeMusic(music);
 		path = Engine::get().getGameDirectory() + "/music/" + path;
 		music = Mix_LoadMUS(path.c_str());
 		if (music == NULL)

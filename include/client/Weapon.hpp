@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ReferenceCounted.hpp"
 #include "Texture.hpp"
+#include "Sound.hpp"
 
 #include <map>
 #include <string>
@@ -53,7 +54,7 @@ namespace backlot
 
 			/**
 			 * Returns the already loaded weapon with the given id or 0 if none
-			 * exists with this id.
+			 * exists with this id.http://pommesdiefritte.bplaced.net/misc/cs2d_114_dedicated.tar.bz2
 			 */
 			static SharedPointer<Weapon> get(int id);
 
@@ -64,6 +65,8 @@ namespace backlot
 
 			void setID(int id);
 			int getID();
+
+			void playSound();
 
 			int getMagazineSize()
 			{
@@ -111,6 +114,8 @@ namespace backlot
 			int explosiondamage;
 
 			int id;
+
+			SoundPointer sound;
 
 			static std::map<std::string, Weapon*> weapons;
 	};

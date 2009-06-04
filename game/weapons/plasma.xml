@@ -3,7 +3,7 @@
 	<description image="plasmagunside.png" name="plasma gun">
 	A simple plasma gun to melt your enemies.
 	</description>
-	<attributes rate="120" deviation="10" magazines="3" magazinesize="10" reloadtime="2" />
+	<attributes rate="120" deviation="10" magazines="3" magazinesize="10" reloadtime="2" sound="plasmagun.wav"/>
 	<projectile type="bullet" image="plasma.png" style="add" speed="5" size="0.3">
 		<explosion animation="explosion.png" style="add" radius="1" damage="20" />
 		<hit damage="20" />

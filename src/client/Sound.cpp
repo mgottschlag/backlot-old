@@ -38,6 +38,8 @@ namespace backlot
 	
 	bool Sound::load(std::string path)
 	{
+		if (sound != NULL)
+			Mix_FreeChunk(sound);
 		path = Engine::get().getGameDirectory() + "/" + path;
 		sound = Mix_LoadWAV(path.c_str());
 		if (sound == NULL)
@@ -80,7 +82,8 @@ namespace backlot
 	}
 	bool Sound::isPlaying()
 	{
-		if (Mix_GetChunk(channel) == sound && channel != -1)
+		// If there is a valid channel, the sound is buffered in this channel and is played.
+		if (channel != -1 && Mix_GetChunk(channel) == sound && Mix_Playing(channel) == true)
 			return true;
 		else
 			return false;
