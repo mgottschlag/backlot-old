@@ -31,12 +31,12 @@ namespace backlot
 		dirty = false;
 		vertexdata = 0;
 		if (GLEW_ARB_vertex_buffer_object)
-			glGenBuffers(1, &vbo);
+			glGenBuffersARB(1, &vbo);
 	}
 	QuadBatch::~QuadBatch()
 	{
 		if (GLEW_ARB_vertex_buffer_object)
-			glDeleteBuffers(1, &vbo);
+			glDeleteBuffersARB(1, &vbo);
 		if (vertexdata)
 			delete[] vertexdata;
 	}
@@ -152,11 +152,11 @@ namespace backlot
 		// Create VBO
 		if (GLEW_ARB_vertex_buffer_object)
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBindBufferARB(GL_ARRAY_BUFFER, vbo);
 			glBufferDataARB(GL_ARRAY_BUFFER, getSize() * 4 * sizeof(float) * 5, vertexdata, GL_STATIC_DRAW);
 			delete[] vertexdata;
 			vertexdata = 0;
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBufferARB(GL_ARRAY_BUFFER, 0);
 		}
 		// Batch data is up-to-date
 		dirty = false;
@@ -167,7 +167,7 @@ namespace backlot
 		if (GLEW_ARB_vertex_buffer_object)
 		{
 			// Set up arrays
-			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBindBufferARB(GL_ARRAY_BUFFER, vbo);
 			glEnableClientState(GL_VERTEX_ARRAY);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -177,7 +177,7 @@ namespace backlot
 			// Clean up again
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisableClientState(GL_VERTEX_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBufferARB(GL_ARRAY_BUFFER, 0);
 		}
 		else
 		{
