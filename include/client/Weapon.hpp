@@ -54,7 +54,7 @@ namespace backlot
 
 			/**
 			 * Returns the already loaded weapon with the given id or 0 if none
-			 * exists with this id.http://pommesdiefritte.bplaced.net/misc/cs2d_114_dedicated.tar.bz2
+			 * exists with this id.
 			 */
 			static SharedPointer<Weapon> get(int id);
 

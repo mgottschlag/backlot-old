@@ -251,7 +251,7 @@ namespace backlot
 	void Weapon::playSound()
 	{
 		if (sound->isPlaying() == false)
-			sound->play(1);
+			sound->play(0);
 	}
 
 	std::map<std::string, Weapon*> Weapon::weapons;
