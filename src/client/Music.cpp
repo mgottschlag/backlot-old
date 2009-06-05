@@ -119,7 +119,7 @@ namespace backlot
 		{
 			if (currentmusic == this)
 				Mix_PauseMusic();
-			// If an other music is played
+			// If another music is playing
 			else
 			{
 				std::cerr << "An other music instance is playing. Pause that one!\n";

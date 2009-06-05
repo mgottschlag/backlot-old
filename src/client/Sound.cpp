@@ -64,7 +64,7 @@ namespace backlot
 		}
 		else
 		{
-			std::cerr << "No soudfile was loaded or it's already played.\n";
+			std::cerr << "No soundfile was loaded or it's already played.\n";
 			return false;
 		}
 		return true;

@@ -45,7 +45,7 @@ namespace backlot
 			/**
 			 * Play the loaded soundfile on the next free channel.
 			 * @param times How often the soundfile is played. Standard
-			 * is 0 (one time). -1 plays the sound in an infinite loop.
+			 * is 0 (play once). -1 plays the sound in an infinite loop.
 			 */
 			bool play(int times = 0);
 			bool stop();
