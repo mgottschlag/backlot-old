@@ -79,6 +79,7 @@ namespace backlot
 			gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB,
 				GL_UNSIGNED_BYTE, surface->pixels);
 		SDL_UnlockSurface(surface);
+		size = Vector2I(surface->w, surface->h);
 		// Delete image
 		SDL_FreeSurface(surface);
 		return true;
@@ -106,6 +107,11 @@ namespace backlot
 	TextureFilter Texture::getFilter()
 	{
 		return filter;
+	}
+
+	const Vector2I &Texture::getSize()
+	{
+		return size;
 	}
 
 	void Texture::bind()

@@ -62,6 +62,10 @@ namespace backlot
 			return false;
 		}
 		SDL_WM_SetCaption("Backlot Engine", "Backlot Engine");
+		glEnable(GL_DEPTH_TEST);
+		glCullFace(GL_FRONT);
+		glEnable(GL_CULL_FACE);
+		glDepthFunc(GL_LEQUAL);
 
 		// Initialize extensions
 		GLenum status = glewInit();

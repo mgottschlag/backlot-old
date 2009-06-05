@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _TEXTURE_HPP_
 
 #include "ReferenceCounted.hpp"
+#include "Vector2.hpp"
 
 #include <string>
 
@@ -45,10 +46,13 @@ namespace backlot
 			void setFilter(TextureFilter filter);
 			TextureFilter getFilter();
 
+			const Vector2I &getSize();
+
 			void bind();
 		private:
 			unsigned int texture;
 			TextureFilter filter;
+			Vector2I size;
 	};
 
 	typedef SharedPointer<Texture> TexturePointer;
