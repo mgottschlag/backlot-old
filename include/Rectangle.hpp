@@ -22,14 +22,23 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _RECTANGLE_HPP_
 #define _RECTANGLE_HPP_
 
+#include "Line.hpp"
+
 #include <string>
 #include <cstdlib>
 
 namespace backlot
 {
+	/**
+	 * Utility class representing a 2D rectangle. The rectangle is defined
+	 * through position and size.
+	 */
 	template<typename T> class Rectangle
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Rectangle()
 			{
 				x = 0;
@@ -37,6 +46,9 @@ namespace backlot
 				width = 0;
 				height = 0;
 			}
+			/**
+			 * Constructor.
+			 */
 			Rectangle(T x, T y, T width, T height)
 			{
 				this->x = x;
@@ -44,6 +56,9 @@ namespace backlot
 				this->width = width;
 				this->height = height;
 			}
+			/**
+			 * Constructor.
+			 */
 			Rectangle(const Rectangle& r)
 			{
 				x = r.x;
@@ -51,14 +66,23 @@ namespace backlot
 				width = r.width;
 				height = r.height;
 			}
+			/**
+			 * Constructor.
+			 */
 			Rectangle(const char *s)
 			{
 				set(s);
 			}
+			/**
+			 * Constructor.
+			 */
 			Rectangle(const std::string &s)
 			{
 				set(s);
 			}
+			/**
+			 * Destructor.
+			 */
 			~Rectangle()
 			{
 			}
@@ -108,9 +132,101 @@ namespace backlot
 				}
 			}
 
+			/**
+			 * Computes the intersections with a line. If start or end are
+			 * within the rectangle, they are counted as intersections.
+			 * @param start Start of the line.
+			 * @param end End of the line.
+			 * @param intersection1 First intersection with the rectangle
+			 * (nearer to start than intersection2).
+			 * @param intersection2 Second intersection with the rectangle.
+			 * @return True, if the line intersects with the rectangle.
+			 */
+			bool getIntersections(const Line &line,
+				Vector2F &intersection1, Vector2F &intersection2)
+			{
+				int intersectioncount = 0;
+				// Get rectangle edges
+				Line edge1(Vector2F(x, y), Vector2F(x, y + height));
+				Line edge2(Vector2F(x, y), Vector2F(x + width, y));
+				Line edge3(Vector2F(x, y + height), Vector2F(x + width, y + height));
+				Line edge4(Vector2F(x + width, y), Vector2F(x + width, y + height));
+				// Get intersections with the line
+				Vector2F intersection;
+				if (edge1.getIntersection(line, intersection))
+				{
+					intersectioncount++;
+					intersection1 = intersection;
+				}
+				if (edge2.getIntersection(line, intersection))
+				{
+					if (intersectioncount == 0)
+						intersection1 = intersection;
+					else
+						intersection2 = intersection;
+					intersectioncount++;
+				}
+				if (edge3.getIntersection(line, intersection))
+				{
+					if (intersectioncount == 0)
+						intersection1 = intersection;
+					else if (intersectioncount == 1)
+						intersection2 = intersection;
+					intersectioncount++;
+				}
+				if (edge4.getIntersection(line, intersection))
+				{
+					if (intersectioncount == 0)
+						intersection1 = intersection;
+					else if (intersectioncount == 1)
+						intersection2 = intersection;
+					intersectioncount++;
+				}
+				// Return result
+				if (intersectioncount == 2)
+				{
+					// Order intersections
+					float dist1 = (intersection1.x - line.start.x)
+						* (intersection1.x - line.start.x)
+						+ (intersection1.y - line.start.y)
+						* (intersection1.y - line.start.y);
+					float dist2 = (intersection2.x - line.start.x)
+						* (intersection2.x - line.start.x)
+						+ (intersection2.y - line.start.y)
+						* (intersection2.y - line.start.y);
+					if (dist2 < dist1)
+					{
+						Vector2F tmp = intersection1;
+						intersection1 = intersection2;
+						intersection2 = tmp;
+					}
+					return true;
+				}
+				else if (intersectioncount == 1)
+				{
+					// Check start and end
+					// TODO
+					intersection2 = intersection1;
+					return true;
+				}
+				return false;
+			}
+
+			/**
+			 * X coordinate of the upper left point of the rectangle.
+			 */
 			T x;
+			/**
+			 * Y coordinate of the upper left point of the rectangle.
+			 */
 			T y;
+			/**
+			 * Width of the rectangle.
+			 */
 			T width;
+			/**
+			 * Height of the rectangle.
+			 */
 			T height;
 	};
 

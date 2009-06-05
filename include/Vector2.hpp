@@ -27,32 +27,53 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	/**
+	 * Utility class for 2D vectors.
+	 */
 	template<typename T> class Vector2
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Vector2()
 			{
 				x = 0;
 				y = 0;
 			}
+			/**
+			 * Constructor.
+			 */
 			Vector2(T x, T y)
 			{
 				this->x = x;
 				this->y = y;
 			}
+			/**
+			 * Constructor.
+			 */
 			Vector2(const char *s)
 			{
 				set(s);
 			}
+			/**
+			 * Constructor.
+			 */
 			Vector2(const std::string &s)
 			{
 				set(s);
 			}
+			/**
+			 * Constructor.
+			 */
 			template<typename T2> Vector2(const Vector2<T2> &v)
 			{
 				x = v.x;
 				y = v.y;
 			}
+			/**
+			 * Destructor.
+			 */
 			~Vector2()
 			{
 			}
@@ -110,7 +131,13 @@ namespace backlot
 				}
 			}
 
+			/**
+			 * X coordinate of the vector.
+			 */
 			T x;
+			/**
+			 * Y coordinate of the vector.
+			 */
 			T y;
 	};
 
