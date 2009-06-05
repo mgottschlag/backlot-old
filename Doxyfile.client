@@ -92,7 +92,7 @@ EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             =
-INPUT_FILTER           = "grep -v server"
+INPUT_FILTER           = "sh docs/doxygen_filter_path.sh server"
 FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
 #---------------------------------------------------------------------------
