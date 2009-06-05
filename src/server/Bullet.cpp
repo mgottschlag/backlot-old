@@ -53,13 +53,18 @@ namespace backlot
 	bool Bullet::update()
 	{
 		Vector2F newpos = position + speed * 0.02;
-		if (Server::get().getMap()->isAccessible(position, newpos))
+		Vector2F hit;
+		if (Server::get().getMap()->isAccessible(position, newpos, &hit))
 		{
 			position = newpos;
 			return true;
 		}
 		else
+		{
+			// We've hit a wall
+			// TODO
 			return false;
+		}
 	}
 	void Bullet::updateAll()
 	{

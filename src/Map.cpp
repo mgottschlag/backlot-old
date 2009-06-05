@@ -254,6 +254,7 @@ namespace backlot
 			QuadBatchPointer normalbatch = batches[batchindex];
 			batchindex += batchcountx * batchcounty;
 			QuadBatchPointer shadowbatch = batches[batchindex];
+			const Vector2I &texsize = textures[textureindex]->getSize();
 			// Add quads
 			for (unsigned int i = 0; i < quads.size(); i++)
 			{
@@ -263,10 +264,10 @@ namespace backlot
 				quad.position.y = (float)position.y + (float)quads[i].offset.y / 32;
 				quad.size.x = (float)quads[i].texturerect.width / 32;
 				quad.size.y = (float)quads[i].texturerect.height / 32;
-				quad.texturecoords.x = (float)quads[i].texturerect.x / 256;
-				quad.texturecoords.y = (float)quads[i].texturerect.y / 256;
-				quad.texturecoords.width = (float)quads[i].texturerect.width / 256;
-				quad.texturecoords.height = (float)quads[i].texturerect.height / 256;
+				quad.texturecoords.x = (float)quads[i].texturerect.x / texsize.x;
+				quad.texturecoords.y = (float)quads[i].texturerect.y / texsize.y;
+				quad.texturecoords.width = (float)quads[i].texturerect.width / texsize.x;
+				quad.texturecoords.height = (float)quads[i].texturerect.height / texsize.y;
 				quad.rotated = quads[i].rotated;
 				if (layer >= ground && layer < ground + shadow)
 				{
@@ -336,6 +337,9 @@ namespace backlot
 			area.y = end.y;
 			area.height = -area.height;
 		}
+		int hitx = -10;
+		int hity = -10;
+		float hitdistance = area.width * area.height + 1;
 		// Loop through all tiles
 		for (int py = area.y; py <= area.y + area.height; py++)
 		{
@@ -360,7 +364,20 @@ namespace backlot
 					{
 						// Check tile
 						if (!accessible[py * size.x + px])
-							return false;
+						{
+							if (!collision)
+								return false;
+							else
+							{
+								// Compute distance from start
+								float distance = sqrt((start.x - px) * (start.x - px) + (start.y - py) * (start.y - py));
+								if (distance < hitdistance)
+								{
+									hitx = px;
+									hity = py;
+								}
+							}
+						}
 					}
 				}
 				else
@@ -377,12 +394,47 @@ namespace backlot
 					{
 						// Check tile
 						if (!accessible[py * size.x + px])
-							return false;
+						{
+							if (!collision)
+								return false;
+							else
+							{
+								// Compute distance from start
+								float distance = sqrt((start.x - px) * (start.x - px) + (start.y - py) * (start.y - py));
+								if (distance < hitdistance)
+								{
+									hitx = px;
+									hity = py;
+								}
+							}
+						}
 					}
 				}
 			}
 		}
-		return true;
+		if (collision)
+		{
+			if (hitx == -10)
+				return true;
+			else
+			{
+				// Compute hit point
+				RectangleF tile(hitx, hity, 1, 1);
+				Vector2F intersection1;
+				Vector2F intersection2;
+				if (!tile.getIntersections(Line(start, end), intersection1,
+					intersection2))
+				{
+					*collision = Vector2F(hitx, hity);
+					std::cerr << "Error: Wrong intersection detection." << std::endl;
+					return false;
+				}
+				*collision = intersection1;
+				return false;
+			}
+		}
+		else
+			return true;
 	}
 
 	#ifdef CLIENT
