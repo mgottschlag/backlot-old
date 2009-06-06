@@ -23,6 +23,7 @@ src/client/Animation.cpp
 src/client/Audio.cpp
 src/client/Sound.cpp
 src/client/Music.cpp
+src/client/Effect.cpp
 src/client/Server.cpp
 src/client/Client.cpp
 src/client/QuadBatch.cpp
