@@ -89,7 +89,6 @@ namespace backlot
 			return false;
 		}
 		// Wait for server to be ready
-		bool success = true;
 		while (1)
 		{
 			char line[512];
