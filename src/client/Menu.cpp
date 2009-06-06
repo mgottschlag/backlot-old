@@ -69,6 +69,8 @@ namespace backlot
 		}
 		// Get font
 		font = Font::get("menu");
+		if (!font)
+			return false;
 		// Add to loaded maps
 		this->name = name;
 		menus.insert(std::pair<std::string, Menu*>(name, this));
@@ -97,7 +99,7 @@ namespace backlot
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		glScalef(1.0, -1.0, 1.0);
+		glOrtho(0, 1, 1, 0, 1, -1);
 
 		// Render background
 		glEnable(GL_BLEND);
@@ -114,8 +116,7 @@ namespace backlot
 		glColor3f(1.0, 1.0, 1.0);
 		glDisable(GL_BLEND);
 
-		if (font)
-			font->render("test", Vector2F(0.1, 0.1), Vector2F(0.3, 0.2));
+		font->render("Press Escape to close menu.", Vector2F(0.0, 0.0), Vector2F(1.0, 0.1));
 
 		glEnable(GL_DEPTH_TEST);
 		// Reenable camera

@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "NetworkData.hpp"
 #include "Preferences.hpp"
 #include "Player.hpp"
+#include "Menu.hpp"
 
 #include <SDL/SDL.h>
 #include <math.h>
@@ -49,6 +50,27 @@ namespace backlot
 		bool shooting = false;
 		while (SDL_PollEvent(&event))
 		{
+			// Disable game input in the menu
+			if (Menu::getActiveMenu())
+			{
+				switch(event.type)
+				{
+					case SDL_QUIT:
+						return false;
+					case SDL_KEYDOWN:
+						// Key was pressed down
+						switch(event.key.keysym.sym)
+						{
+							case SDLK_ESCAPE:
+								Menu::getActiveMenu()->setActive(false);
+								break;
+							default:
+								break;
+						}
+				}
+				continue;
+			}
+			// Game input
 			switch(event.type)
 			{
 				case SDL_QUIT:
@@ -74,6 +96,11 @@ namespace backlot
 							keyschanged = true;
 							currentkeys |= EKM_Right;
 							break;
+						case SDLK_ESCAPE:
+						{
+							MenuPointer menu = Menu::get("main");
+							menu->setActive(true);
+						}
 						// Other keys
 						default:
 							break;
