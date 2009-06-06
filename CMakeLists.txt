@@ -24,6 +24,7 @@ src/Buffer.cpp
 src/client/Player.cpp
 src/client/Weapon.cpp
 src/client/Bullet.cpp
+src/Script.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -32,15 +33,15 @@ src/support/tinyxmlparser.cpp
 
 set(CMAKE_CXX_FLAGS "-Wall")
 
-include_directories(include include/support)
+include_directories(include include/support /usr/include/lua5.1)
 add_executable(backlot ${CLIENT_SRC})
 set_target_properties(backlot PROPERTIES COMPILE_DEFINITIONS CLIENT)
 set_target_properties(backlot PROPERTIES COMPILE_FLAGS -Iinclude/client)
 
 IF(WIN32)
-	target_link_libraries(backlot SDL SDL_image SDL_mixer opengl32 glu32 glew32 enet ws2_32 winmm)
+	target_link_libraries(backlot SDL SDL_image SDL_mixer opengl32 glu32 glew32 enet ws2_32 winmm lua5.1)
 ELSE(WIN32)
-	target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet)
+	target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet lua5.1)
 ENDIF(WIN32)
 
 set(SERVER_SRC
@@ -55,6 +56,7 @@ src/server/Player.cpp
 src/server/Weapon.cpp
 src/Buffer.cpp
 src/server/Bullet.cpp
+src/Script.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -67,7 +69,7 @@ set_target_properties(server PROPERTIES COMPILE_FLAGS -Iinclude/server)
 target_link_libraries(server enet)
 
 IF(WIN32)
-	target_link_libraries(server enet ws2_32 winmm)
+	target_link_libraries(server enet ws2_32 winmm lua5.1)
 ELSE(WIN32)
-	target_link_libraries(server enet)
+	target_link_libraries(server enet lua5.1)
 ENDIF(WIN32)
