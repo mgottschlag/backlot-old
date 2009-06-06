@@ -19,71 +19,79 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MENU_HPP_
-#define _MENU_HPP_
+#ifndef _FONT_HPP_
+#define _FONT_HPP_
 
 #include "ReferenceCounted.hpp"
-#include "Font.hpp"
+#include "Vector2.hpp"
+#include "Texture.hpp"
 
-#include <string>
 #include <map>
 
 namespace backlot
 {
 	/**
-	 * Client menu.
+	 * Bitmap font class. A font is defined through:
+	 * @li A 256x256 pixel large PNG texture in the fonts directory
+	 * (@c fonts/\<name\>.png) which contains glyph images for all chars from 0
+	 * to 255.
+	 * @li A 1024 bytes large file in the same directory with the same name but
+	 * the extension @c .font. It contains 4 bytes for each glyph in the font,
+	 * the first two define the position, the last two the size of the glyph.
 	 */
-	class Menu : public ReferenceCounted
+	class Font : public ReferenceCounted
 	{
 		public:
 			/**
 			 * Constructor.
 			 */
-			Menu();
+			Font();
 			/**
 			 * Destructor.
 			 */
-			~Menu();
+			~Font();
 
 			/**
-			 * Loads the menu with the given name or returns an already loaded
+			 * Loads the font with the given name or returns an already loaded
 			 * one.
 			 */
-			static SharedPointer<Menu> get(std::string name);
+			static SharedPointer<Font> get(std::string name);
 
 			/**
-			 * Loads a menu.
+			 * Loads a font.
 			 */
 			bool load(std::string name);
 
 			/**
-			 * Sets whether the menu is shown at the moment. If set to active,
-			 * the menu decatives any other menu which is active at this time.
+			 * Returns the size (in pixels) of the text if it was rendered with
+			 * this font.
 			 */
-			void setActive(bool active);
+			Vector2I getSize(std::string text);
 			/**
-			 * Returns whether the menu is shown right now.
+			 * Renders the text and scales it to fit into the rectangle.
 			 */
-			bool isActive();
-			/**
-			 * Returns the currently active menu.
-			 */
-			static SharedPointer<Menu> getActiveMenu();
-
-			/**
-			 * Renders this menu.
-			 */
-			void render();
+			void render(std::string text, Vector2F position, Vector2F size,
+				unsigned int color = 0xFFFFFF);
 		private:
+			/**
+			 * Name of the font.
+			 */
 			std::string name;
-
-			FontPointer font;
-
-			static Menu *active;
-			static std::map<std::string, Menu*> menus;
+			/**
+			 * Font texture.
+			 */
+			TexturePointer texture;
+			/**
+			 * Array with the glyph information.
+			 */
+			unsigned char glyphinfo[256][4];
+			/**
+			 * Loaded fonts.
+			 */
+			static std::map<std::string, Font*> fonts;
 	};
 
-	typedef SharedPointer<Menu> MenuPointer;
+	typedef SharedPointer<Font> FontPointer;
 }
 
 #endif

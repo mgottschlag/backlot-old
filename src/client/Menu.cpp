@@ -67,6 +67,8 @@ namespace backlot
 		{
 			menus.erase(it);
 		}
+		// Get font
+		font = Font::get("menu");
 		// Add to loaded maps
 		this->name = name;
 		menus.insert(std::pair<std::string, Menu*>(name, this));
@@ -95,6 +97,7 @@ namespace backlot
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
+		glScalef(1.0, -1.0, 1.0);
 
 		// Render background
 		glEnable(GL_BLEND);
@@ -104,13 +107,17 @@ namespace backlot
 		glColor3f(0.25, 0.25, 0.25);
 		glBegin(GL_QUADS);
 			glVertex2f(-1.0, -1.0);
-			glVertex2f(-1.0, 1.0);
-			glVertex2f(1.0, 1.0);
 			glVertex2f(1.0, -1.0);
+			glVertex2f(1.0, 1.0);
+			glVertex2f(-1.0, 1.0);
 		glEnd();
-		glEnable(GL_DEPTH_TEST);
+		glColor3f(1.0, 1.0, 1.0);
 		glDisable(GL_BLEND);
 
+		if (font)
+			font->render("test", Vector2F(0.1, 0.1), Vector2F(0.3, 0.2));
+
+		glEnable(GL_DEPTH_TEST);
 		// Reenable camera
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();

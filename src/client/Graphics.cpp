@@ -28,6 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include <iostream>
 namespace backlot
 {
@@ -47,6 +48,7 @@ namespace backlot
 			std::cerr << "Could not initialize SDL." << std::endl;
 			return false;
 		}
+		TTF_Init();
 		// Create OpenGL context
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
@@ -91,6 +93,7 @@ namespace backlot
 	bool Graphics::destroy()
 	{
 		camera = 0;
+		TTF_Quit();
 		SDL_Quit();
 		return true;
 	}
