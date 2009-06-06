@@ -4,6 +4,7 @@
 	<tile name="grass" size="32/32" accessible="yes">
 		<quad layer="0" offset="0/0" texture="64/32/32/32" />
 	</tile>
+
 	<tile name="container" size="32/64" accessible="no">
 		<!-- container -->
 		<quad layer="2" offset="0/0" texture="0/64/32/64" />
@@ -18,5 +19,11 @@
 		<quad layer="1" offset="-32/64" texture="32/128/32/32" rotated="1" />
 		<quad layer="1" offset="0/64" texture="0/128/32/32" />
 		<quad layer="1" offset="32/64" texture="32/128/32/32" />
+	</tile>
+	<tile name="container_single" size="32/32" accessible="no">
+		<quad layer="2" offset="0/0" texture="0/64/32/32" />
+	</tile>
+	<tile name="housewall" size="32/32" accessible="no">
+		<quad layer="2" offset="0/0" texture="160/0/32/32" />
 	</tile>
 </tileset>
