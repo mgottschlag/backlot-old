@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 2.6)
 
 project(backlot)
 
-find_package(Lua51)
+if(WIN32)
+	set(LUA_INCLUDE_DIR C:\\Lua\\5.1\\include)
+	set(LUA_LIBRARIES lua51)
+else(WIN32)
+	find_package(Lua51)
+endif(WIN32)
 
 set(CLIENT_SRC
 src/client/main.cpp
@@ -40,11 +45,11 @@ add_executable(backlot ${CLIENT_SRC})
 set_target_properties(backlot PROPERTIES COMPILE_DEFINITIONS CLIENT)
 set_target_properties(backlot PROPERTIES COMPILE_FLAGS -Iinclude/client)
 
-IF(WIN32)
+if(WIN32)
 	target_link_libraries(backlot SDL SDL_image SDL_mixer opengl32 glu32 glew32 enet ws2_32 winmm ${LUA_LIBRARIES})
-ELSE(WIN32)
+else(WIN32)
 	target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet ${LUA_LIBRARIES})
-ENDIF(WIN32)
+endif(WIN32)
 
 set(SERVER_SRC
 src/server/main.cpp
@@ -70,8 +75,8 @@ set_target_properties(server PROPERTIES COMPILE_DEFINITIONS SERVER)
 set_target_properties(server PROPERTIES COMPILE_FLAGS -Iinclude/server)
 target_link_libraries(server enet)
 
-IF(WIN32)
+if(WIN32)
 	target_link_libraries(server enet ws2_32 winmm ${LUA_LIBRARIES})
-ELSE(WIN32)
+elseWIN32)
 	target_link_libraries(server enet ${LUA_LIBRARIES})
-ENDIF(WIN32)
+endif(WIN32)
