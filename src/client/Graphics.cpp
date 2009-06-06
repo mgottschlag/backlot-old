@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Player.hpp"
 #include "Animation.hpp"
 #include "Bullet.hpp"
+#include "Menu.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -122,6 +123,12 @@ namespace backlot
 		}
 		Player::renderAll();
 		Bullet::renderAll();
+		// Render menu
+		MenuPointer menu = Menu::getActiveMenu();
+		if (!menu.isNull())
+		{
+			menu->render();
+		}
 		// Swap buffers
 		SDL_GL_SwapBuffers();
 		return true;

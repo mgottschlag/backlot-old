@@ -28,6 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Music.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
+#include "Menu.hpp"
 
 #include <SDL/SDL.h>
 #include <iostream>
@@ -91,6 +92,11 @@ namespace backlot
 			return false;
 		}
 		// Show main menu
+		MenuPointer mainmenu = Menu::get("main");
+		if (mainmenu)
+		{
+			mainmenu->setActive(true);
+		}
 		// TODO
 		if (args.size() == 0)
 		{

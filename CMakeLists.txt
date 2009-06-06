@@ -32,13 +32,14 @@ src/client/Player.cpp
 src/client/Weapon.cpp
 src/client/Bullet.cpp
 src/Script.cpp
+src/client/Menu.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
 src/support/tinyxmlparser.cpp
 )
 
-set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter")
 
 include_directories(include include/support ${LUA_INCLUDE_DIR})
 add_executable(backlot ${CLIENT_SRC})
