@@ -79,6 +79,6 @@ target_link_libraries(server enet)
 
 if(WIN32)
 	target_link_libraries(server enet ws2_32 winmm ${LUA_LIBRARIES})
-elseWIN32)
+else(WIN32)
 	target_link_libraries(server enet ${LUA_LIBRARIES})
 endif(WIN32)
