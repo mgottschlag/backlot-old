@@ -55,8 +55,28 @@ namespace backlot
 			std::cerr << "error: Could not initialize networking." << std::endl;
 			return false;
 		}
+		
+		int port = 27272;
+		std::string mapname = "test";
+		
+		// Parse command line arguments
+		for (int i = 0; i < int(args.size()); i++)
+		{
+			std::string option = args[i];
+			if ( ( (option == "--map") || (option == "-m") ))
+			{
+				i++;
+				mapname = args[i];
+			}
+			if ( ( (option == "--port") || (option == "-p") ))
+			{
+				i++;
+				port = atoi(args[i].c_str());
+			}
+		}
+		
 		// Start server
-		if (!Server::get().init(27272, "test"))
+		if (!Server::get().init(port, mapname))
 		{
 			return false;
 		}
