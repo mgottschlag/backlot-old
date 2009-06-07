@@ -34,6 +34,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <guichan/opengl/openglgraphics.hpp>
 #include <guichan/opengl/openglimage.hpp>
 #include <guichan/sdl/sdlimageloader.hpp>
+#include <guichan/sdl/sdlinput.hpp>
 
 namespace backlot
 {
@@ -98,8 +99,10 @@ namespace backlot
 		}
 		font = new GuichanFont(menufont);
 		gcn::Widget::setGlobalFont(font);
+		input = new gcn::SDLInput();
 		gui = new gcn::Gui();
 		gui->setGraphics(menugraphics);
+		gui->setInput(input);
 		top = new gcn::Container();
 		top->setOpaque(false);
 		top->setDimension(gcn::Rectangle(0, 0, width, height));
@@ -162,9 +165,9 @@ namespace backlot
 		if (!menu.isNull())
 		{
 			menu->render();
+			gui->logic();
+			gui->draw();
 		}
-		gui->logic();
-		gui->draw();
 		// Swap buffers
 		SDL_GL_SwapBuffers();
 		return true;

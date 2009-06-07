@@ -24,10 +24,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Preferences.hpp"
 #include "Player.hpp"
 #include "Menu.hpp"
+#include "Graphics.hpp"
 
 #include <SDL/SDL.h>
 #include <math.h>
 #include <iostream>
+#include <guichan/sdl/sdlinput.hpp>
 
 namespace backlot
 {
@@ -65,8 +67,12 @@ namespace backlot
 								Menu::getActiveMenu()->setActive(false);
 								break;
 							default:
+								Graphics::get().getGuichanInput()->pushInput(event);
 								break;
 						}
+					default:
+						Graphics::get().getGuichanInput()->pushInput(event);
+						break;
 				}
 				continue;
 			}

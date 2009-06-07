@@ -23,6 +23,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include <guichan/graphics.hpp>
+#include <guichan/color.hpp>
+#include <GL/gl.h>
 
 namespace backlot
 {
@@ -45,6 +47,12 @@ namespace backlot
 		const std::string& text, int x, int y)
 	{
 		const gcn::ClipRectangle &top = graphics->getCurrentClipArea();
-		font->render(text, Vector2I(x + top.xOffset, y + top.yOffset));
+		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
+		font->renderRaw(text, Vector2I(x + top.xOffset, y + top.yOffset));
+		glDisable(GL_TEXTURE_2D);
+		gcn::Color color = graphics->getColor();
+		if (color.a == 255)
+			glDisable(GL_BLEND);
 	}
 }

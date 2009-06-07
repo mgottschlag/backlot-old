@@ -30,6 +30,7 @@ namespace gcn
 	class SDLImageLoader;
 	class OpenGLGraphics;
 	class Container;
+	class SDLInput;
 }
 
 namespace backlot
@@ -46,6 +47,15 @@ namespace backlot
 			bool destroy();
 
 			bool render();
+
+			gcn::Container *getGuichanContainer()
+			{
+				return top;
+			}
+			gcn::SDLInput *getGuichanInput()
+			{
+				return input;
+			}
 		private:
 			Graphics();
 
@@ -57,6 +67,7 @@ namespace backlot
 			gcn::Gui *gui;
 			gcn::Container *top;
 			GuichanFont *font;
+			gcn::SDLInput *input;
 
 			// FPS counter
 			unsigned int frames_rendered;
