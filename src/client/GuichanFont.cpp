@@ -19,49 +19,32 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _GRAPHICS_HPP_
-#define _GRAPHICS_HPP_
+#include "GuichanFont.hpp"
 
-#include "Camera.hpp"
-
-namespace gcn
-{
-	class Gui;
-	class SDLImageLoader;
-	class OpenGLGraphics;
-	class Container;
-}
+#include <iostream>
+#include <guichan/graphics.hpp>
 
 namespace backlot
 {
-	class GuichanFont;
-
-	class Graphics
+	GuichanFont::GuichanFont(FontPointer font) : font(font)
 	{
-		public:
-			static Graphics &get();
-			~Graphics();
+	}
+	GuichanFont::~GuichanFont()
+	{
+	}
 
-			bool init(int width, int height, int bpp, bool fullscreen);
-			bool destroy();
-
-			bool render();
-		private:
-			Graphics();
-
-			CameraPointer camera;
-
-			// guichan classes
-			gcn::SDLImageLoader *imageloader;
-			gcn::OpenGLGraphics *menugraphics;
-			gcn::Gui *gui;
-			gcn::Container *top;
-			GuichanFont *font;
-
-			// FPS counter
-			unsigned int frames_rendered;
-			unsigned int last_ticks;
-	};
+	int GuichanFont::getWidth(const std::string& text) const
+	{
+		return font->getSize(text).x;
+	}
+	int GuichanFont::getHeight() const
+	{
+		return font->getSize("Jj").y;
+	}
+	void GuichanFont::drawString(gcn::Graphics *graphics,
+		const std::string& text, int x, int y)
+	{
+		const gcn::ClipRectangle &top = graphics->getCurrentClipArea();
+		font->render(text, Vector2I(x + top.xOffset, y + top.yOffset));
+	}
 }
-
-#endif

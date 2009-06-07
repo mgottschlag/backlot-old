@@ -8,6 +8,7 @@ if(WIN32)
 	set(LUA_LIBRARIES lua51)
 else(WIN32)
 	find_package(Lua51)
+	find_package(SDL)
 endif(WIN32)
 
 set(CLIENT_SRC
@@ -35,6 +36,7 @@ src/client/Bullet.cpp
 src/Script.cpp
 src/client/Menu.cpp
 src/client/Font.cpp
+src/client/GuichanFont.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -46,12 +48,12 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter")
 include_directories(include include/support ${LUA_INCLUDE_DIR})
 add_executable(backlot ${CLIENT_SRC})
 set_target_properties(backlot PROPERTIES COMPILE_DEFINITIONS CLIENT)
-set_target_properties(backlot PROPERTIES COMPILE_FLAGS -Iinclude/client)
+set_target_properties(backlot PROPERTIES COMPILE_FLAGS "-Iinclude/client -I${SDL_INCLUDE_DIR}")
 
 if(WIN32)
-	target_link_libraries(backlot SDL SDL_image SDL_mixer opengl32 glu32 glew32 enet ws2_32 winmm ${LUA_LIBRARIES})
+	target_link_libraries(backlot SDL SDL_image SDL_mixer guichan_opengl guichan_sdl guichan opengl32 glu32 glew32 enet ws2_32 winmm ${LUA_LIBRARIES})
 else(WIN32)
-	target_link_libraries(backlot SDL SDL_image SDL_mixer GL glut GLEW enet ${LUA_LIBRARIES})
+	target_link_libraries(backlot SDL SDL_image SDL_mixer guichan_opengl guichan_sdl guichan GL glut GLEW enet ${LUA_LIBRARIES})
 endif(WIN32)
 
 set(SERVER_SRC

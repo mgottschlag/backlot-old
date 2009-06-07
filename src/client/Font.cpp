@@ -86,7 +86,7 @@ namespace backlot
 		return true;
 	}
 
-	Vector2I Font::getSize(std::string text)
+	Vector2I Font::getSize(std::string text) const
 	{
 		int width = 0;
 		int height = 0;
@@ -99,7 +99,7 @@ namespace backlot
 		return Vector2I(width, height);
 	}
 	void Font::render(std::string text, Vector2F position, Vector2F size,
-		unsigned int color)
+		unsigned int color) const
 	{
 		Vector2I pixelsize = getSize(text);
 		glEnable(GL_TEXTURE_2D);
@@ -118,7 +118,7 @@ namespace backlot
 				(float)glyphinfo[(unsigned char)text[i]][1] / 256
 				+ (float)glyphinfo[(unsigned char)text[i]][3] / 256);
 			float width = scale.x * glyphinfo[(unsigned char)text[i]][2];
-			float height = scale.y * glyphinfo[(unsigned char)text[i]][2];
+			float height = scale.y * glyphinfo[(unsigned char)text[i]][3];
 			glTexCoord2f(coord1.x, coord1.y);
 			glVertex2f(position.x, position.y);
 			glTexCoord2f(coord2.x, coord1.y);
@@ -133,6 +133,11 @@ namespace backlot
 		glDisable(GL_BLEND);
 		glColor3f(1.0, 1.0, 1.0);
 		glDisable(GL_TEXTURE_2D);
+	}
+	void Font::render(std::string text, Vector2I position, unsigned int color) const
+	{
+		Vector2I pixelsize = getSize(text);
+		render(text, position, pixelsize, color);
 	}
 
 	std::map<std::string, Font*> Font::fonts;

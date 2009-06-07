@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Menu.hpp"
+#include "Preferences.hpp"
 
 #include <GL/gl.h>
 
@@ -99,7 +100,8 @@ namespace backlot
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		glOrtho(0, 1, 1, 0, 1, -1);
+		const Vector2I &size = Preferences::get().getResolution();
+		glOrtho(0, size.x, size.y, 0, -1, 1);
 
 		// Render background
 		glEnable(GL_BLEND);
@@ -108,15 +110,15 @@ namespace backlot
 		glDisable(GL_DEPTH_TEST);
 		glColor3f(0.25, 0.25, 0.25);
 		glBegin(GL_QUADS);
-			glVertex2f(-1.0, -1.0);
-			glVertex2f(1.0, -1.0);
-			glVertex2f(1.0, 1.0);
-			glVertex2f(-1.0, 1.0);
+			glVertex2f(0, 0);
+			glVertex2f(size.x, 0);
+			glVertex2f(size.x, size.y);
+			glVertex2f(0, size.y);
 		glEnd();
 		glColor3f(1.0, 1.0, 1.0);
 		glDisable(GL_BLEND);
 
-		font->render("Press Escape to close menu.", Vector2F(0.0, 0.0), Vector2F(1.0, 0.1));
+		font->render("Press Escape to close menu.", Vector2I(0, 0));
 
 		glEnable(GL_DEPTH_TEST);
 		// Reenable camera

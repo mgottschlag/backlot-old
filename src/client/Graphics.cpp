@@ -25,10 +25,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Animation.hpp"
 #include "Bullet.hpp"
 #include "Menu.hpp"
+#include "GuichanFont.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
 #include <iostream>
+#include <guichan.hpp>
+#include <guichan/opengl/openglgraphics.hpp>
+#include <guichan/opengl/openglimage.hpp>
+#include <guichan/sdl/sdlimageloader.hpp>
+
 namespace backlot
 {
 	Graphics &Graphics::get()
@@ -80,6 +86,29 @@ namespace backlot
 		{
 			std::cerr << "No VBO support available." << std::endl;
 		}
+		// Create menu system
+		imageloader = new gcn::SDLImageLoader();
+		gcn::Image::setImageLoader(imageloader);
+		menugraphics = new gcn::OpenGLGraphics(width, height);
+		FontPointer menufont = Font::get("menu");
+		if (menufont.isNull())
+		{
+			std::cerr << "Could not get menu font." << std::endl;
+			return false;
+		}
+		font = new GuichanFont(menufont);
+		gcn::Widget::setGlobalFont(font);
+		gui = new gcn::Gui();
+		gui->setGraphics(menugraphics);
+		top = new gcn::Container();
+		top->setOpaque(false);
+		top->setDimension(gcn::Rectangle(0, 0, width, height));
+		gui->setTop(top);
+		// Test button
+		gcn::Button *button = new gcn::Button();
+		top->add(button);
+		button->setDimension(gcn::Rectangle(10, 30, 200, 30));
+		button->setCaption("Test button");
 		// Reset fps counter
 		frames_rendered = 0;
 		last_ticks = SDL_GetTicks();
@@ -90,6 +119,11 @@ namespace backlot
 	}
 	bool Graphics::destroy()
 	{
+		delete top;
+		delete gui;
+		delete font;
+		delete menugraphics;
+		delete imageloader;
 		camera = 0;
 		SDL_Quit();
 		return true;
@@ -129,6 +163,8 @@ namespace backlot
 		{
 			menu->render();
 		}
+		gui->logic();
+		gui->draw();
 		// Swap buffers
 		SDL_GL_SwapBuffers();
 		return true;

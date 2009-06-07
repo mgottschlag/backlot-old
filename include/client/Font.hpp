@@ -66,12 +66,17 @@ namespace backlot
 			 * Returns the size (in pixels) of the text if it was rendered with
 			 * this font.
 			 */
-			Vector2I getSize(std::string text);
+			Vector2I getSize(std::string text) const;
 			/**
 			 * Renders the text and scales it to fit into the rectangle.
 			 */
 			void render(std::string text, Vector2F position, Vector2F size,
-				unsigned int color = 0xFFFFFF);
+				unsigned int color = 0xFFFFFF) const;
+			/**
+			 * Renders the text.
+			 */
+			void render(std::string text, Vector2I position,
+				unsigned int color = 0xFFFFFF) const;
 		private:
 			/**
 			 * Name of the font.

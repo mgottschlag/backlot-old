@@ -116,15 +116,15 @@ namespace backlot
 					target->grab();
 				return *this;
 			}
-			T *operator->()
+			T *operator->() const
 			{
 				return target;
 			}
-			bool operator==(const SharedPointer &ptr)
+			bool operator==(const SharedPointer &ptr) const
 			{
 				return &target == &ptr.target;
 			}
-			operator bool()
+			operator bool() const
 			{
 				return target != 0;
 			}

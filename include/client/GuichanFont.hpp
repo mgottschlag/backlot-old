@@ -19,48 +19,30 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _GRAPHICS_HPP_
-#define _GRAPHICS_HPP_
+#ifndef _GUICHANFONT_HPP_
+#define _GUICHANFONT_HPP_
 
-#include "Camera.hpp"
+#include "Font.hpp"
 
-namespace gcn
-{
-	class Gui;
-	class SDLImageLoader;
-	class OpenGLGraphics;
-	class Container;
-}
+#include <guichan/font.hpp>
 
 namespace backlot
 {
-	class GuichanFont;
-
-	class Graphics
+	/**
+	 * Wrapper class for a guichan font using the Font class.
+	 */
+	class GuichanFont : public gcn::Font
 	{
 		public:
-			static Graphics &get();
-			~Graphics();
+			GuichanFont(FontPointer font);
+			virtual ~GuichanFont();
 
-			bool init(int width, int height, int bpp, bool fullscreen);
-			bool destroy();
-
-			bool render();
+			virtual int getWidth(const std::string& text) const;
+			virtual int getHeight() const;
+			virtual void drawString(gcn::Graphics *graphics,
+				const std::string& text, int x, int y);
 		private:
-			Graphics();
-
-			CameraPointer camera;
-
-			// guichan classes
-			gcn::SDLImageLoader *imageloader;
-			gcn::OpenGLGraphics *menugraphics;
-			gcn::Gui *gui;
-			gcn::Container *top;
-			GuichanFont *font;
-
-			// FPS counter
-			unsigned int frames_rendered;
-			unsigned int last_ticks;
+			FontPointer font;
 	};
 }
 
