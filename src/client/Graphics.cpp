@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Bullet.hpp"
 #include "Menu.hpp"
 #include "GuichanFont.hpp"
+#include "HUD.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -112,6 +113,11 @@ namespace backlot
 		last_ticks = SDL_GetTicks();
 		// Camera
 		camera = new Camera();
+		if (HUD::get().load() == false)
+		{
+			std::cerr << "Error while loading HUD." << std::endl;
+			return false;
+		}
 
 		return true;
 	}
@@ -155,6 +161,7 @@ namespace backlot
 		}
 		Player::renderAll();
 		Bullet::renderAll();
+		HUD::get().render();
 		// Render menu
 		MenuPointer menu = Menu::getActiveMenu();
 		if (!menu.isNull())
