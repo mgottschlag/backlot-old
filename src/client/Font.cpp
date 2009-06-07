@@ -139,6 +139,32 @@ namespace backlot
 		Vector2I pixelsize = getSize(text);
 		render(text, position, pixelsize, color);
 	}
+	void Font::renderRaw(std::string text, Vector2I position) const
+	{
+		texture->bind();
+		glBegin(GL_QUADS);
+		for (unsigned int i = 0; i < text.size(); i++)
+		{
+			Vector2F coord1((float)glyphinfo[(unsigned char)text[i]][0] / 256,
+				(float)glyphinfo[(unsigned char)text[i]][1] / 256);
+			Vector2F coord2((float)glyphinfo[(unsigned char)text[i]][0] / 256
+				+ (float)glyphinfo[(unsigned char)text[i]][2] / 256,
+				(float)glyphinfo[(unsigned char)text[i]][1] / 256
+				+ (float)glyphinfo[(unsigned char)text[i]][3] / 256);
+			int width = glyphinfo[(unsigned char)text[i]][2];
+			int height = glyphinfo[(unsigned char)text[i]][3];
+			glTexCoord2f(coord1.x, coord1.y);
+			glVertex2i(position.x, position.y);
+			glTexCoord2f(coord2.x, coord1.y);
+			glVertex2i(position.x + width, position.y);
+			glTexCoord2f(coord2.x, coord2.y);
+			glVertex2i(position.x + width, position.y + height);
+			glTexCoord2f(coord1.x, coord2.y);
+			glVertex2i(position.x, position.y + height);
+			position.x += width;
+		}
+		glEnd();
+	}
 
 	std::map<std::string, Font*> Font::fonts;
 }

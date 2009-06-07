@@ -77,6 +77,10 @@ namespace backlot
 			 */
 			void render(std::string text, Vector2I position,
 				unsigned int color = 0xFFFFFF) const;
+			/**
+			 * Renders the text without any material settings changed.
+			 */
+			void renderRaw(std::string text, Vector2I position) const;
 		private:
 			/**
 			 * Name of the font.
