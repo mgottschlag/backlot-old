@@ -21,8 +21,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Menu.hpp"
 #include "Preferences.hpp"
+#include "Engine.hpp"
+#include "Preferences.hpp"
+#include "Graphics.hpp"
+
+#include "support/tinyxml.h"
 
 #include <GL/gl.h>
+#include <iostream>
+#include <guichan/widgets/button.hpp>
+#include <guichan/widgets/container.hpp>
 
 namespace backlot
 {
@@ -72,6 +80,57 @@ namespace backlot
 		font = Font::get("menu");
 		if (!font)
 			return false;
+		// Open XML file
+		std::string filename = Engine::get().getGameDirectory() + "/menus/" + name + ".xml";
+		TiXmlDocument xml(filename.c_str());
+		if (!xml.LoadFile() || xml.Error())
+		{
+			std::cerr << "Could not load XML file " << name << ".xml: " << xml.ErrorDesc() << std::endl;
+			return false;
+		}
+		TiXmlNode *node = xml.FirstChild("menu");
+		if (!node)
+		{
+			std::cerr << "Parser error: <menu> not found." << std::endl;
+			return false;
+		}
+		TiXmlElement *root = node->ToElement();
+		// Get items
+		TiXmlNode *itemnode = root->FirstChild("item");
+		while (itemnode)
+		{
+			TiXmlElement *itemdata = itemnode->ToElement();
+			if (itemdata)
+			{
+				// Get item data
+				int position = 0;
+				if (itemdata->Attribute("position", &position) == 0)
+				{
+					std::cerr << "Missing menu item position." << std::endl;
+					return false;
+				}
+				const char *label = itemdata->Attribute("label");
+				if (!label)
+				{
+					std::cerr << "Missing menu item label." << std::endl;
+					return false;
+				}
+				// Add item
+				gcn::Button *button = new gcn::Button();
+				button->setCaption(label);
+				items.insert(items.begin() + position, button);
+			}
+			itemnode = node->IterateChildren("item", itemnode);
+		}
+		// Position widgets
+		Vector2I screensize = Preferences::get().getResolution();
+		int xpos = screensize.x - 200;
+		int ypos = screensize.y - 40 * items.size();
+		for (unsigned int i = 0; i < items.size(); i++)
+		{
+			items[i]->setDimension(gcn::Rectangle(xpos, ypos + i * 40, 180, 30));
+			Graphics::get().getGuichanContainer()->add(items[i]);
+		}
 		// Add to loaded maps
 		this->name = name;
 		menus.insert(std::pair<std::string, Menu*>(name, this));
@@ -81,9 +140,21 @@ namespace backlot
 	void Menu::setActive(bool active)
 	{
 		if (active)
+		{
+			if (Menu::active && Menu::active != this)
+				Menu::active->setActive(false);
 			Menu::active = this;
+			// Show items
+			for (unsigned int i = 0; i < items.size(); i++)
+				items[i]->setVisible(true);
+		}
 		else if (Menu::active == this)
+		{
 			Menu::active = 0;
+			// Hide items
+			for (unsigned int i = 0; i < items.size(); i++)
+				items[i]->setVisible(false);
+		}
 	}
 	bool Menu::isActive()
 	{

@@ -107,11 +107,6 @@ namespace backlot
 		top->setOpaque(false);
 		top->setDimension(gcn::Rectangle(0, 0, width, height));
 		gui->setTop(top);
-		// Test button
-		gcn::Button *button = new gcn::Button();
-		top->add(button);
-		button->setDimension(gcn::Rectangle(10, 30, 200, 30));
-		button->setCaption("Test button");
 		// Reset fps counter
 		frames_rendered = 0;
 		last_ticks = SDL_GetTicks();

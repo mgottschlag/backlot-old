@@ -27,6 +27,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <string>
 #include <map>
+#include <vector>
+
+namespace gcn
+{
+	class Button;
+}
 
 namespace backlot
 {
@@ -78,6 +84,8 @@ namespace backlot
 			std::string name;
 
 			FontPointer font;
+
+			std::vector<gcn::Button*> items;
 
 			static Menu *active;
 			static std::map<std::string, Menu*> menus;
