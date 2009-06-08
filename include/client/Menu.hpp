@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ReferenceCounted.hpp"
 #include "Font.hpp"
+#include "Script.hpp"
 
 #include <string>
 #include <map>
@@ -32,10 +33,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace gcn
 {
 	class Button;
+	class ActionEvent;
 }
 
 namespace backlot
 {
+	class MenuListener;
+
 	/**
 	 * Client menu.
 	 */
@@ -80,12 +84,21 @@ namespace backlot
 			 * Renders this menu.
 			 */
 			void render();
+
+			/**
+			 * Injects a GUI event.
+			 */
+			void buttonPressed(const gcn::ActionEvent &event);
 		private:
 			std::string name;
 
 			FontPointer font;
 
 			std::vector<gcn::Button*> items;
+
+			ScriptPointer script;
+
+			MenuListener *listener;
 
 			static Menu *active;
 			static std::map<std::string, Menu*> menus;

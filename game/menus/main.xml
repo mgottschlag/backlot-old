@@ -11,19 +11,19 @@
 	<![CDATA[
 	function on_menu_item(index)
 		if index == 0 then
-			show_dialog("singleplayer");
-		else if index == 1 then
-			show_dialog("server");
-		else if index == 2 then
-			show_dialog("join");
-		else if index == 3 then
-			start_editor();
-		else if index == 4 then
-			show_dialog("settings");
-		else if index == 5 then
-			show_dialog("profile");
-		else if index == 6 then
-			exit_program();
+			menu.show_dialog("singleplayer");
+		elseif index == 1 then
+			menu.show_dialog("server");
+		elseif index == 2 then
+			menu.show_dialog("join");
+		elseif index == 3 then
+			menu.start_editor();
+		elseif index == 4 then
+			menu.show_dialog("settings");
+		elseif index == 5 then
+			menu.show_dialog("profile");
+		elseif index == 6 then
+			core.exit();
 		end
 	end
 	]]>

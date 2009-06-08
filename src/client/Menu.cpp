@@ -31,11 +31,30 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 #include <guichan/widgets/button.hpp>
 #include <guichan/widgets/container.hpp>
+#include <guichan/actionlistener.hpp>
 
 namespace backlot
 {
+	class MenuListener : public gcn::ActionListener
+	{
+		public:
+			MenuListener(Menu *menu)
+			{
+				this->menu = menu;
+			}
+
+			virtual void action(const gcn::ActionEvent &actionEvent)
+			{
+				menu->buttonPressed(actionEvent);
+			}
+		private:
+			Menu *menu;
+	};
+
 	Menu::Menu() : ReferenceCounted()
 	{
+		// Create input receiver
+		listener = new MenuListener(this);
 	}
 
 	Menu::~Menu()
@@ -49,6 +68,8 @@ namespace backlot
 		{
 			menus.erase(it);
 		}
+		// Delete listener
+		delete listener;
 	}
 
 	SharedPointer<Menu> Menu::get(std::string name)
@@ -130,6 +151,32 @@ namespace backlot
 		{
 			items[i]->setDimension(gcn::Rectangle(xpos, ypos + i * 40, 180, 30));
 			Graphics::get().getGuichanContainer()->add(items[i]);
+			items[i]->addActionListener(listener);
+		}
+		// Load script
+		script = new Script();
+		script->addCoreFunctions();
+		script->addMenuFunctions();
+		TiXmlNode *scriptnode = root->FirstChild("script");
+		while (scriptnode)
+		{
+			TiXmlElement *scriptdata = scriptnode->ToElement();
+			std::string code;
+			if (scriptdata)
+			{
+				TiXmlNode *textnode = scriptdata->FirstChild();
+				while (textnode)
+				{
+					TiXmlText *text = textnode->ToText();
+					if (text && text->Value())
+					{
+						code += text->Value();
+					}
+					textnode = scriptdata->IterateChildren(textnode);
+				}
+			}
+			script->runString(code);
+			scriptnode = node->IterateChildren("script", scriptnode);
 		}
 		// Add to loaded maps
 		this->name = name;
@@ -195,6 +242,23 @@ namespace backlot
 		// Reenable camera
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
+	}
+
+	void Menu::buttonPressed(const gcn::ActionEvent &event)
+	{
+		// Look for menu item
+		for (unsigned int i = 0; i < items.size(); i++)
+		{
+			if (event.getSource() == items[i])
+			{
+				// Call event handler
+				if (script->isFunction("on_menu_item"))
+				{
+					script->callFunction("on_menu_item", (int)i);
+				}
+				break;
+			}
+		}
 	}
 
 	Menu *Menu::active;
