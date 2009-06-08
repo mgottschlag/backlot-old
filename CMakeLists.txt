@@ -32,6 +32,7 @@ src/client/Client.cpp
 src/client/QuadBatch.cpp
 src/client/Camera.cpp
 src/client/HUD.cpp
+src/client/HUDElement.cpp
 src/Buffer.cpp
 src/client/Player.cpp
 src/client/Weapon.cpp

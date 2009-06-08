@@ -19,33 +19,43 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _HUD_HPP_
-#define _HUD_HPP_
+#ifndef _HUDELEMENT_HPP_
+#define _HUDELEMENT_HPP_
 
-#include "HUDElement.hpp"
-#include "Font.hpp"
 #include "Vector2.hpp"
-
-#include <vector>
+#include "Font.hpp"
+#include "tinyxml.h"
 
 namespace backlot
 {
-	class HUD
+	enum HUDElementTypes
+	{
+		EHET_Health
+	};
+
+	class HUDElement
 	{
 		public:
-			static HUD &get();
-			~HUD();
-
-			bool load();
- 			void render();
-		private:
 			/**
-			 * Constructor.
+			 * Constructur.
 			 */
-			HUD();
+			HUDElement();
+			~HUDElement();
 
-			std::vector<HUDElement> hudelements;
+			/**
+			 * Initialize the element.
+			 * @param xmlelement Takes a pointer to a xml node (from a config file, see also
+			 * HUD.hpp) to initialise its member variables.
+			 */
+			bool load(TiXmlElement *element);
+
+			void render();
+		private:
+			int type;
+			Vector2F position;
+			Vector2F offset;
+			Vector2F size;
+			FontPointer font;
 	};
 }
-
 #endif

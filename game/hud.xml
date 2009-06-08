@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <hud>
-	<health position="0.0/1.0" size="200/50" offset="20/-70" font="menu"/>
+	<element type="health" position="0.0/1.0" size="200/50" offset="20/-70" font="menu"/>
 </hud>
