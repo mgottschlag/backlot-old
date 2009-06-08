@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Script.hpp"
+#include "Engine.hpp"
 
 #include <iostream>
 extern "C"
@@ -109,4 +110,27 @@ namespace backlot
 	{
 		// TODO: Pop string.
 	}
+
+	static int core_exit(lua_State *state)
+	{
+		Engine::get().stop();
+		return 0;
+	}
+	void Script::addCoreFunctions()
+	{
+		// Create namespace
+		lua_newtable(state);
+		int space = lua_gettop(state);
+		// Push functions
+		lua_pushliteral(state, "exit");
+		lua_pushcfunction(state, core_exit);
+		lua_settable(state, space);
+		// Done
+		lua_setglobal(state, "core");
+	}
+	#ifdef CLIENT
+	void Script::addMenuFunctions()
+	{
+	}
+	#endif
 }

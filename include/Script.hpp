@@ -114,6 +114,11 @@ namespace backlot
 				pop(value);
 				return value;
 			};
+
+			void addCoreFunctions();
+			#ifdef CLIENT
+			void addMenuFunctions();
+			#endif
 		private:
 			void push(int value);
 			void push(float value);
@@ -127,6 +132,8 @@ namespace backlot
 
 			lua_State *state;
 	};
+
+	typedef SharedPointer<Script> ScriptPointer;
 }
 
 #endif
