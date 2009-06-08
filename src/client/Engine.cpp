@@ -61,6 +61,7 @@ namespace backlot
 
 	bool Engine::run(std::string path, std::vector<std::string> args)
 	{
+		stopping = false;
 		directory = path;
 		// Load main configuration file
 		Preferences::get().setPath(getGameDirectory() + "/config.xml");
@@ -121,19 +122,18 @@ namespace backlot
 		}
 
 		// Main loop
-		bool running = true;
 		lastframe = getTime();
-		while (running)
+		while (!stopping)
 		{
 			// Input
 			if (!Input::get().update())
-				running = false;
+				stopping = true;
 			// Game logic
 			Server::get().update();
 			Client::get().update();
 			// Render everything
 			if (!Graphics::get().render())
-				running = false;
+				stopping = true;
 			// Fixed time step
 			lastframe = lastframe + 20000;
 			uint64_t currenttime = getTime();
@@ -154,6 +154,11 @@ namespace backlot
 	std::string Engine::getGameDirectory()
 	{
 		return directory;
+	}
+
+	void Engine::stop()
+	{
+		stopping = true;
 	}
 
 	Engine::Engine()

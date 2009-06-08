@@ -78,6 +78,11 @@ namespace backlot
 			 */
 			std::string getGameDirectory();
 
+			/**
+			 * Stops execution after the next frame.
+			 */
+			void stop();
+
 			static uint64_t getTime()
 			{
 				#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
@@ -97,6 +102,8 @@ namespace backlot
 			std::string directory;
 
 			uint64_t lastframe;
+
+			bool stopping;
 	};
 }
 
