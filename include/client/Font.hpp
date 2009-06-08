@@ -73,6 +73,11 @@ namespace backlot
 			void render(std::string text, Vector2F position, Vector2F size,
 				unsigned int color = 0xFFFFFF) const;
 			/**
+			 * Renders the text with the font scaled to the given character height.
+			 */
+			void render(std::string text, Vector2F position, int height,
+				unsigned int color = 0xFFFFFF) const;
+			/**
 			 * Renders the text.
 			 */
 			void render(std::string text, Vector2I position,

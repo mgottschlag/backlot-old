@@ -134,6 +134,14 @@ namespace backlot
 		glColor3f(1.0, 1.0, 1.0);
 		glDisable(GL_TEXTURE_2D);
 	}
+	void Font::render(std::string text, Vector2F position, int height, unsigned int color) const
+	{
+		Vector2I size = getSize(text);
+		Vector2F sizefloat;
+		sizefloat.x = ((float)height / size.y) * size.x;
+		sizefloat.y = (float)height;
+		render(text, position, sizefloat, color);
+	}
 	void Font::render(std::string text, Vector2I position, unsigned int color) const
 	{
 		Vector2I pixelsize = getSize(text);
