@@ -66,7 +66,11 @@ namespace backlot
 		for (int i = 0; node; i++)
 		{
 			hudelements.push_back(HUDElement());
-			hudelements[i].load(node->ToElement());
+			if (hudelements[i].load(node) == false)
+			{
+				std::cerr << "Error while loading HUD element #" << i << ".\n";
+				return false;
+			}
 			node = root->IterateChildren("element", node);
 		}
 

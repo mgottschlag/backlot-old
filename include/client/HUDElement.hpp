@@ -30,7 +30,8 @@ namespace backlot
 {
 	enum HUDElementTypes
 	{
-		EHET_Health
+		EHET_Health,
+		EHET_Ammo
 	};
 
 	class HUDElement
@@ -44,10 +45,10 @@ namespace backlot
 
 			/**
 			 * Initialize the element.
-			 * @param xmlelement Takes a pointer to a xml node (from a config file, see also
+			 * @param xmlnode Takes a pointer to a xml node (from a config file, see also
 			 * HUD.hpp) to initialise its member variables.
 			 */
-			bool load(TiXmlElement *element);
+			bool load(TiXmlNode *xmlnode);
 
 			void render();
 		private:
@@ -56,6 +57,8 @@ namespace backlot
 			Vector2F offset;
 			Vector2F size;
 			FontPointer font;
+			Vector2F fontoffset;
+			int fontsize;
 	};
 }
 #endif
