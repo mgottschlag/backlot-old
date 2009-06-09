@@ -30,6 +30,7 @@ namespace backlot
 {
 	HUDElement::HUDElement()
 	{
+		image = new Texture();
 	}
 	HUDElement::~HUDElement()
 	{
@@ -77,7 +78,6 @@ namespace backlot
 			return false;
 		}
 		size = xmlelement->Attribute("size");
-
 		if (xmlnode->FirstChild("font"))
 		{
 			childnode = xmlnode->FirstChild("font");
@@ -102,6 +102,27 @@ namespace backlot
 			else
 				fontsize = 20;
 		}
+		if (xmlnode->FirstChild("image"))
+		{
+			childnode = xmlnode->FirstChild("image");
+			xmlelement = childnode->ToElement();
+			if (xmlelement->Attribute("path") == 0)
+			{
+				std::cerr << "No image path found for HUD element.\n";
+				return false;
+			}
+ 			image->load(xmlelement->Attribute("path"));
+			if (xmlelement->Attribute("size") == 0)
+			{
+				std::cerr << "No image size for HUD element given.\n";
+				return false;
+			}
+			imagesize = xmlelement->Attribute("size");
+			if (xmlelement->Attribute("offset") == 0)
+				imageoffset = Vector2F(0, 0);
+			else
+				imageoffset = xmlelement->Attribute("offset");
+		}
 
 		return true;
 	}
@@ -124,8 +145,8 @@ namespace backlot
 			glVertex3f((position.x * resolution.x + size.x), (position.y * resolution.y + size.y), 0);
 			glVertex3f((position.x * resolution.x), (position.y * resolution.y + size.y), 0);
 		glEnd();
-		glColor3f(1.0, 1.0, 1.0);
 		glDisable(GL_BLEND);
+		glColor3f(1.0, 1.0, 1.0);
 
 		if (type == EHET_Health)
 		{
@@ -139,7 +160,27 @@ namespace backlot
 				font->render("Ammo:", Vector2F((position.x * resolution.x) + fontoffset.x,
 					(position.y * resolution.y) + fontoffset.y), fontsize);
 		}
-		glDisable(GL_BLEND);
+
+		// Render the image
+		if (image != NULL)
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			image->bind();
+			glEnable(GL_TEXTURE_2D);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0);
+				glVertex3f((position.x * resolution.x) + imageoffset.x, (position.y * resolution.y) + imageoffset.y, 0);
+				glTexCoord2f(1.0, 0.0);
+				glVertex3f((position.x * resolution.x + imagesize.x) + imageoffset.x, (position.y * resolution.y) + imageoffset.y, 0);
+				glTexCoord2f(1.0, 1.0);
+				glVertex3f((position.x * resolution.x + imagesize.x) + imageoffset.x, (position.y * resolution.y + imagesize.y) + imageoffset.y, 0);
+				glTexCoord2f(0.0, 1.0);
+				glVertex3f((position.x * resolution.x) + imageoffset.x, (position.y * resolution.y + imagesize.y) + imageoffset.y, 0); 
+			glEnd();
+			glDisable(GL_TEXTURE_2D);
+		}
+
 		glEnable(GL_DEPTH_TEST);
 		glPopMatrix();
 	}

@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _HUDELEMENT_HPP_
 
 #include "Vector2.hpp"
+#include "Texture.hpp"
 #include "Font.hpp"
 #include "tinyxml.h"
 
@@ -54,11 +55,16 @@ namespace backlot
 		private:
 			int type;
 			Vector2F position;
-			Vector2F offset;
-			Vector2F size;
+			Vector2I offset;
+			Vector2I size;
+
 			FontPointer font;
-			Vector2F fontoffset;
+			Vector2I fontoffset;
 			int fontsize;
+
+			TexturePointer image;
+			Vector2I imagesize;
+			Vector2I imageoffset;
 	};
 }
 #endif
