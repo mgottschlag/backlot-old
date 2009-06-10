@@ -41,6 +41,7 @@ src/Script.cpp
 src/client/Menu.cpp
 src/client/Font.cpp
 src/client/GuichanFont.cpp
+src/client/Dialog.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

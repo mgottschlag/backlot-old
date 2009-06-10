@@ -29,6 +29,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Menu.hpp"
+#include "Dialog.hpp"
 
 #include <SDL/SDL.h>
 #include <iostream>
@@ -145,6 +146,7 @@ namespace backlot
 		if (args.size() == 0)
 			Server::get().destroy();
 		// Shut down engine
+		Dialog::unloadAll();
 		Audio::get().destroy();
 		Graphics::get().destroy();
 		enet_deinitialize();

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dialog size="400/300" title="Settings">
+	<tabcontrol position="0/0" size="390/260">
+		<tab index="0" label="Game">
+		</tab>
+		<tab index="1" label="Graphics">
+		</tab>
+		<tab index="2" label="Sound">
+		</tab>
+	</tabcontrol>
+	<button id="0" position="320/270" size="60/20" label="Close" />
+	<button id="1" position="250/270" size="60/20" label="Apply" />
+
+	<script>
+	<![CDATA[
+	function on_button(index)
+		if index == 0 then
+			menu.hide_dialog("settings");
+		elseif index == 1 then
+		end
+	end
+	]]>
+	</script>
+</dialog>
