@@ -122,7 +122,11 @@ namespace backlot
 			}
 			bool operator==(const SharedPointer &ptr) const
 			{
-				return &target == &ptr.target;
+				return target == ptr.target;
+			}
+			bool operator==(T *ptr) const
+			{
+				return target == ptr;
 			}
 			operator bool() const
 			{
