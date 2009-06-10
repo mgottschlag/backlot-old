@@ -105,18 +105,18 @@ namespace backlot
 				float x = det_x / det;
 				float y = det_y / det;
 				// Check whether intersection is still on both lines
-				if (min(start.x, end.x) <= x
-					&& max(start.x, end.x) >= x
-					&& min(start.y, end.y) <= y
-					&& max(start.y, end.y) >= y
-					&& min(other.start.x, other.end.x) <= x
-					&& max(other.start.x, other.end.x) >= x
-					&& min(other.start.y, other.end.y) <= y
-					&& max(other.start.y, other.end.y) >= y)
+				if (min(start.x, end.x) - x <= 0.001
+					&& max(start.x, end.x) - x >= -0.001
+					&& min(start.y, end.y) - y <= 0.001
+					&& max(start.y, end.y) - y >= -0.001
+					&& min(other.start.x, other.end.x) - x <= 0.001
+					&& max(other.start.x, other.end.x) - x >= -0.001
+					&& min(other.start.y, other.end.y) - y <= 0.001
+					&& max(other.start.y, other.end.y) - y >= -0.001)
 				{
 					intersection.x = det_x / det;
 					intersection.y = det_y / det;
-					return false;
+					return true;
 				}
 				else
 					return false;
