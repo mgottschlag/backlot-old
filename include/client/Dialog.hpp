@@ -34,10 +34,13 @@ namespace gcn
 	class Window;
 	class Container;
 	class TabbedArea;
+	class ActionEvent;
 }
 
 namespace backlot
 {
+	class DialogListener;
+
 	/**
 	 * Menu dialog class.
 	 */
@@ -82,6 +85,11 @@ namespace backlot
 			 * Returns whether the dialog is shown.
 			 */
 			bool isVisible();
+
+			/**
+			 * Injects a GUI event.
+			 */
+			void injectAction(const gcn::ActionEvent &event);
 		private:
 			bool parseWidgets(TiXmlElement *xml, gcn::Container *parent);
 			bool parseTabControl(TiXmlElement *xml, gcn::TabbedArea *tabctrl);
@@ -91,6 +99,8 @@ namespace backlot
 			bool loaded;
 			bool visible;
 			ScriptPointer script;
+
+			DialogListener *listener;
 
 			static std::map<std::string, SharedPointer<Dialog> > dialogs;
 	};

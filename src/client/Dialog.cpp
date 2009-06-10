@@ -33,13 +33,31 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	class DialogListener : public gcn::ActionListener
+	{
+		public:
+			DialogListener(Dialog *dialog)
+			{
+				this->dialog = dialog;
+			}
+
+			virtual void action(const gcn::ActionEvent &actionEvent)
+			{
+				dialog->injectAction(actionEvent);
+			}
+		private:
+			Dialog *dialog;
+	};
+
 	Dialog::Dialog()
 	{
 		loaded = false;
 		visible = false;
+		listener = new DialogListener(this);
 	}
 	Dialog::~Dialog()
 	{
+		delete listener;
 	}
 
 	SharedPointer<Dialog> Dialog::get(std::string name)
@@ -87,6 +105,7 @@ namespace backlot
 		window = new gcn::Window(title);
 		window->setDimension(gcn::Rectangle(10, 10, size.x, size.y));
 		Graphics::get().getGuichanContainer()->add(window);
+		window->setVisible(false);
 		// Transparency
 		gcn::Color bgcolor = window->getBaseColor();
 		bgcolor.a = 200;
@@ -150,11 +169,25 @@ namespace backlot
 
 	void Dialog::setVisible(bool visible)
 	{
+		window->setVisible(visible);
 		this->visible = visible;
 	}
 	bool Dialog::isVisible()
 	{
 		return visible;
+	}
+
+	void Dialog::injectAction(const gcn::ActionEvent &event)
+	{
+		std::string idstr = event.getSource()->getId();
+		std::cout << "\"" << idstr << "\": action received." << std::endl;
+		if (idstr == "")
+			return;
+		// Call event handler
+		if (script->isFunction("on_button"))
+		{
+			script->callFunction("on_button", atoi(idstr.c_str()));
+		}
 	}
 
 	bool Dialog::parseWidgets(TiXmlElement *xml, gcn::Container *parent)
@@ -215,7 +248,7 @@ namespace backlot
 				snprintf(idstr, 10, "%d", id);
 				button->setId(idstr);
 				parent->add(button);
-				//items[i]->addActionListener(listener);
+				button->addActionListener(listener);
 			}
 			buttonnode = xml->IterateChildren("button", buttonnode);
 		}
@@ -242,7 +275,6 @@ namespace backlot
 				const char *label = tabdata->Attribute("label");
 				gcn::Tab *tab = new gcn::Tab();
 				tab->setCaption(label);
-				//tab->setTabbedArea(tabctrl);
 				gcn::Container *container = new gcn::Container();
 				tabctrl->addTab(tab, container);
 				parseWidgets(tabdata, container);

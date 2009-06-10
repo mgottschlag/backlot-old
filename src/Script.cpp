@@ -146,6 +146,20 @@ namespace backlot
 			dialog->setVisible(true);
 		return 0;
 	}
+	static int menu_hide_dialog(lua_State *state)
+	{
+		const char *name = luaL_checkstring(state, 1);
+		if (!name)
+		{
+			std::cerr << "Wrong use of \"hide_dialog(name)\"" << std::endl;
+			return 0;
+		}
+		std::cout << "Hiding dialog " << name << std::endl;
+		DialogPointer dialog = Dialog::get(name);
+		if (dialog)
+			dialog->setVisible(false);
+		return 0;
+	}
 	void Script::addMenuFunctions()
 	{
 		// Create namespace
@@ -154,6 +168,9 @@ namespace backlot
 		// Push functions
 		lua_pushliteral(state, "show_dialog");
 		lua_pushcfunction(state, menu_show_dialog);
+		lua_settable(state, space);
+		lua_pushliteral(state, "hide_dialog");
+		lua_pushcfunction(state, menu_hide_dialog);
 		lua_settable(state, space);
 		// Done
 		lua_setglobal(state, "menu");
