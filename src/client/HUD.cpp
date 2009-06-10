@@ -50,7 +50,6 @@ namespace backlot
 
 		TiXmlNode *root;
 		TiXmlNode *node;
-		TiXmlElement *element;
 
 		if ((root = configfile.FirstChild("hud")) == NULL)
 		{

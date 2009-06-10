@@ -21,9 +21,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "HUDElement.hpp"
 #include "Preferences.hpp"
+#include "Player.hpp"
 
 #include <GL/gl.h>
 #include <iostream>
+#include <cstdio>
 #include <string>
 
 namespace backlot
@@ -148,17 +150,37 @@ namespace backlot
 		glDisable(GL_BLEND);
 		glColor3f(1.0, 1.0, 1.0);
 
-		if (type == EHET_Health)
+		PlayerPointer localplayer = Player::getLocalPlayer();
+		if (localplayer.isNull() == true)
+			std::cerr << "no localplayer\n";
+
+		if (localplayer.isNull() == false)
 		{
-			if (font != NULL)
-				font->render("Health:", Vector2F((position.x * resolution.x) + fontoffset.x,
-					(position.y * resolution.y) + fontoffset.y), fontsize);
-		}
-		if (type == EHET_Ammo)
-		{
-			if (font != NULL)
-				font->render("Ammo:", Vector2F((position.x * resolution.x) + fontoffset.x,
-					(position.y * resolution.y) + fontoffset.y), fontsize);
+			if (type == EHET_Health)
+			{
+				char message[8];
+				std::snprintf(message, 5, "%d %%", localplayer->getHitpoints());
+				if (font != NULL)
+					font->render(message, Vector2F((position.x * resolution.x) + fontoffset.x,
+						(position.y * resolution.y) + fontoffset.y), fontsize);
+			}
+			if (type == EHET_Ammo)
+			{
+				if (font != NULL)
+				{
+					char message[16];
+					// How many rounds are left in the current magazine.
+					int currentmagazine = localplayer->getCurrentWeapon()->currentmagazine;
+					// How many rounds are in one magazine.
+					int magazinesize = localplayer->getCurrentWeapon()->weapon->getMagazineSize();
+					// How many unused rounds the player still has.
+					int totalrounds = localplayer->getCurrentWeapon()->reserve;
+					std::snprintf(message, 16, "%d / %d (%d)", currentmagazine, magazinesize, totalrounds);
+
+					font->render(message, Vector2F((position.x * resolution.x) + fontoffset.x,
+						(position.y * resolution.y) + fontoffset.y), fontsize);
+				}
+			}
 		}
 
 		// Render the image
