@@ -34,6 +34,7 @@ namespace backlot
 		EPT_Keys,
 		EPT_NewWeapon,
 		EPT_ChangeWeapon,
+		EPT_UpdateWeapon,
 		EPT_Projectile,
 		EPT_Explosion,
 		EPT_Decal,

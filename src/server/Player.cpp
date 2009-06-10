@@ -183,30 +183,62 @@ namespace backlot
 				// Check weapon speed
 				uint64_t currenttime = Engine::get().getTime();
 				uint64_t shotperiod = 60 * 1000000 / state.weapon->getShotsPerMinute();
+				// If the weapon has reloaded.
 				if (currenttime - state.lastshot >= shotperiod)
 				{
-					state.lastshot = currenttime;
-					// Shoot
-					BulletPointer bullet = new Bullet(state.weapon);
-					bullet->setPosition(position);
-					Vector2F speed(sin(rotation), -cos(rotation));
-					speed *= state.weapon->getBulletSpeed();
-					bullet->setSpeed(speed);
-					bool playsound = 1;
-					// Send bullet message to all clients
-					BufferPointer buffer = new Buffer();
-					buffer->write8(EPT_Projectile);
-					buffer->writeFloat(position.x);
-					buffer->writeFloat(position.y);
-					buffer->writeFloat(speed.x);
-					buffer->writeFloat(speed.y);
-					buffer->write32(state.weapon->getID());
-					buffer->write8(playsound);
-					Server::get().sendToAll(buffer);
-				}
-			}
+					// If the magazine is not empty.
+					if (state.currentmagazine > 0)
+					{
+						state.lastshot = currenttime;
+						state.currentmagazine--;
+						// Shoot
+						BulletPointer bullet = new Bullet(state.weapon);
+						bullet->setPosition(position);
+						Vector2F speed(sin(rotation), -cos(rotation));
+						speed *= state.weapon->getBulletSpeed();
+						bullet->setSpeed(speed);
+						// Send bullet message to all clients
+						BufferPointer buffer = new Buffer();
+						buffer->write8(EPT_Projectile);
+						buffer->writeFloat(position.x);
+						buffer->writeFloat(position.y);
+						buffer->writeFloat(speed.x);
+						buffer->writeFloat(speed.y);
+						buffer->write32(state.weapon->getID());
+						Server::get().sendToAll(buffer);
+						// Send new weaponstates to the player who shot.
+						buffer->setPosition(0);
+						buffer->write8(EPT_UpdateWeapon);
+						buffer->write8(state.currentmagazine);
+						buffer->write8(state.reserve);
+						owner->send(buffer);
+					}
+					// If the player has still bullets left, reload the weapon.
+					else if (state.reserve > 0)
+					{
+						int magazinesize = state.weapon->getMagazineSize();
+
+						if (state.reserve < magazinesize)
+						{
+							state.currentmagazine = state.reserve;
+							state.reserve = 0;
+						}
+						else
+						{
+							state.currentmagazine = magazinesize;
+							state.reserve -= magazinesize;
+						}
+						// Send new weaponstates to the player who shot.
+						BufferPointer buffer = new Buffer();
+						buffer->write8(EPT_UpdateWeapon);
+						buffer->write8(state.currentmagazine);
+						buffer->write8(state.reserve);
+						owner->send(buffer);
+					} // else if (state.reserve > 0)
+				} // if (currenttime - state.lastshot >= shotperiod)
+			} // if (currentweapon != -1)
 		}
-	}
+	} // Player::think()
 
 	std::vector<Player*> Player::players;
 

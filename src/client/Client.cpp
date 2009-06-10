@@ -265,6 +265,13 @@ namespace backlot
 						// Add weapon to player
 						player->addWeapon(id, weapon);
 					}
+					else if (type == EPT_UpdateWeapon)
+					{
+						WeaponState *state = Player::getLocalPlayer()->getCurrentWeapon();
+						state->currentmagazine = msg->read8();
+					std::cout << "magazine: " << state->currentmagazine << std::endl;
+						state->reserve = msg->read8();
+					}
 					else if (type == EPT_Projectile)
 					{
 						// Read bullet information
@@ -282,8 +289,7 @@ namespace backlot
 							BulletPointer bullet = new Bullet(weapon);
 							bullet->setPosition(position);
 							bullet->setSpeed(speed);
-							if (msg->read8() == 1)
-								weapon->playSound();
+							weapon->playSound();
 						}
 						else
 						{
