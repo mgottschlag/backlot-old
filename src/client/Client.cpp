@@ -198,9 +198,11 @@ namespace backlot
 					{
 						// Create player
 						int id = msg->read32();
+						int hitpoints = msg->read8();
 						bool local = msg->read8();
 						PlayerPointer newplayer = new Player();
 						newplayer->setID(id);
+						newplayer->setHitpoints(hitpoints);
 						newplayer->setLocal(local);
 						newplayer->load();
 						newplayer->setVisible(true);
