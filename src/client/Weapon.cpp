@@ -213,6 +213,7 @@ namespace backlot
 					TiXmlElement *explosion = explosionnode->ToElement();
 					if (explosion)
 					{
+						this->explosion = true;
 						if (explosion->Attribute("damage", &explosiondamage) == 0)
 						{
 							std::cerr << "No explosion damage available." << std::endl;
@@ -224,6 +225,10 @@ namespace backlot
 					}
 					explosionnode = projectile->IterateChildren("explosion", explosionnode);
 				}
+				// Load explosion texture
+				explosiontexture = new Texture(ETF_Linear);
+				if (!explosiontexture->load("sprites/explosion.png"))
+					explosiontexture = 0;
 				break;
 			}
 			projectilenode = node->IterateChildren("projectile", projectilenode);
@@ -252,6 +257,42 @@ namespace backlot
 	{
 		if (sound->isPlaying() == false)
 			sound->play(0);
+	}
+
+	int Weapon::getMagazineSize()
+	{
+		return magazinesize;
+	}
+	int Weapon::getMagazineCount()
+	{
+		return magazines;
+	}
+	TexturePointer Weapon::getPlayerTexture()
+	{
+		return playertexture;
+	}
+	TexturePointer Weapon::getTexture()
+	{
+		return texture;
+	}
+	float Weapon::getBulletSize()
+	{
+		return projsize;
+	}
+	TexturePointer Weapon::getBulletTexture()
+	{
+		return bullettexture;
+	}
+	float Weapon::getHitDamage()
+	{
+		return hitdamage;
+	}
+	bool Weapon::getExplosion(float &radius, int &damage, TexturePointer &texture)
+	{
+		radius = explosionradius;
+		damage = explosiondamage;
+		texture = explosiontexture;
+		return explosion;
 	}
 
 	std::map<std::string, Weapon*> Weapon::weapons;

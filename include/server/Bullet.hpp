@@ -49,6 +49,8 @@ namespace backlot
 			bool update();
 			static void updateAll();
 		private:
+			void applyExplosion(Vector2F position);
+
 			WeaponPointer weapon;
 			Vector2F position;
 			Vector2F speed;

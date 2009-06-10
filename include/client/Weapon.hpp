@@ -68,36 +68,21 @@ namespace backlot
 
 			void playSound();
 
-			int getMagazineSize()
-			{
-				return magazinesize;
-			}
-			int getMagazineCount()
-			{
-				return magazines;
-			}
-			TexturePointer getPlayerTexture()
-			{
-				return playertexture;
-			}
-			TexturePointer getTexture()
-			{
-				return texture;
-			}
-			float getBulletSize()
-			{
-				return projsize;
-			}
-			TexturePointer getBulletTexture()
-			{
-				return bullettexture;
-			}
+			int getMagazineSize();
+			int getMagazineCount();
+			TexturePointer getPlayerTexture();
+			TexturePointer getTexture();
+			float getBulletSize();
+			TexturePointer getBulletTexture();
+			float getHitDamage();
+			bool getExplosion(float &radius, int &damage, TexturePointer &texture);
 		private:
 			std::string name;
 
 			TexturePointer playertexture;
 			TexturePointer texture;
 			TexturePointer bullettexture;
+			TexturePointer explosiontexture;
 
 			int rate;
 			float deviation;

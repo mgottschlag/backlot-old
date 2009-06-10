@@ -155,6 +155,7 @@ namespace backlot
 					TiXmlElement *explosion = explosionnode->ToElement();
 					if (explosion)
 					{
+						this->explosion = true;
 						if (explosion->Attribute("damage", &explosiondamage) == 0)
 						{
 							std::cerr << "No explosion damage available." << std::endl;
@@ -179,6 +180,39 @@ namespace backlot
 		this->name = name;
 		weapons.insert(std::pair<std::string, Weapon*>(name, this));
 		return true;
+	}
+
+	unsigned int Weapon::getID()
+	{
+		return id;
+	}
+
+	int Weapon::getShotsPerMinute()
+	{
+		return rate;
+	}
+
+	int Weapon::getMagazineSize()
+	{
+		return magazinesize;
+	}
+	int Weapon::getMagazineCount()
+	{
+		return magazines;
+	}
+	float Weapon::getBulletSpeed()
+	{
+		return projspeed;
+	}
+	float Weapon::getHitDamage()
+	{
+		return hitdamage;
+	}
+	bool Weapon::getExplosion(float &radius, int &damage)
+	{
+		radius = explosionradius;
+		damage = explosiondamage;
+		return explosion;
 	}
 
 	unsigned int Weapon::lastweaponid = 0;

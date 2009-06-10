@@ -56,28 +56,15 @@ namespace backlot
 			 */
 			bool load(std::string name);
 
-			unsigned int getID()
-			{
-				return id;
-			}
+			unsigned int getID();
 
-			int getShotsPerMinute()
-			{
-				return rate;
-			}
+			int getShotsPerMinute();
 
-			int getMagazineSize()
-			{
-				return magazinesize;
-			}
-			int getMagazineCount()
-			{
-				return magazines;
-			}
-			float getBulletSpeed()
-			{
-				return projspeed;
-			}
+			int getMagazineSize();
+			int getMagazineCount();
+			float getBulletSpeed();
+			float getHitDamage();
+			bool getExplosion(float &radius, int &damage);
 		private:
 			std::string name;
 

@@ -296,6 +296,23 @@ namespace backlot
 							std::cout << "No weapon for bullet." << std::endl;
 						}
 					}
+					else if (type == EPT_Explosion)
+					{
+						// Read explosion info
+						int weaponid = msg->read32();
+						Vector2F position;
+						position.x = msg->readFloat();
+						position.y = msg->readFloat();
+						// Create explosion
+						WeaponPointer weapon = Weapon::get(weaponid);
+						if (weapon)
+						{
+						}
+						else
+						{
+							std::cout << "No weapon for explosion." << std::endl;
+						}
+					}
 					else
 					{
 						std::cerr << "Unknown packet received." << std::endl;

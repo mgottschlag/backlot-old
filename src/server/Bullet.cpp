@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Bullet.hpp"
 #include "Server.hpp"
+#include "NetworkData.hpp"
 
 #include <iostream>
 
@@ -71,6 +72,10 @@ namespace backlot
 			if (playerrect.getIntersections(Line(position, newpos), hit, hit2))
 			{
 				std::cout << "Player hit." << std::endl;
+				// Hit damage
+				// TODO
+				// Explosion
+				applyExplosion(hit);
 				return false;
 			}
 		}
@@ -83,7 +88,7 @@ namespace backlot
 		else
 		{
 			// We've hit a wall
-			// TODO
+			applyExplosion(hit);
 			return false;
 		}
 	}
@@ -96,6 +101,24 @@ namespace backlot
 				bullets.erase(bullets.begin() + i);
 				i--;
 			}
+		}
+	}
+
+	void Bullet::applyExplosion(Vector2F position)
+	{
+		float radius;
+		int damage;
+		if (weapon->getExplosion(radius, damage))
+		{
+			// Damage players
+			// TODO
+			// Send explosion to clients
+			BufferPointer buffer = new Buffer();
+			buffer->write8(EPT_Explosion);
+			buffer->write32(weapon->getID());
+			buffer->writeFloat(position.x);
+			buffer->writeFloat(position.y);
+			Server::get().sendToAll(buffer);
 		}
 	}
 
