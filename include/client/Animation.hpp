@@ -43,13 +43,9 @@ namespace backlot
 			void setFrameNumbers(int x, int y);
 
 			/**
-			 * Set the rotation of the animation.
-			 */
-			void setRotation(float rotation);
-			/**
 			 * Set the time which the animation needs to be played one time.
 			 */
-			void setPeriod(unsigned int period);
+			void setPeriod(float period);
 			
 			/**
 			 * Set how often the animation is played. -1 for infinite loop.
@@ -76,7 +72,6 @@ namespace backlot
 		private:
 			Vector2I frames;
 			Vector2F sizes;
-			float rotation;
 
 			unsigned int starttime;
 			float frametime;

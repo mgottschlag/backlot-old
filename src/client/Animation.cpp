@@ -23,15 +23,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <SDL/SDL.h>
 #include <GL/gl.h>
-#include <iostream>
 
 namespace backlot
 {
 	Animation::Animation() : ReferenceCounted()
 	{
-		rotation = 0;
 		starttime = 0;
 		isplayed = false;
+		frametime = 0.05;
 
  		animations.push_back(this);
 	}
@@ -49,12 +48,7 @@ namespace backlot
 		sizes.y = (float) 1/y;
 	}
 
-	void Animation::setRotation(float rotation)
-	{
-		this->rotation = rotation;
-	}
-
-	void Animation::setPeriod(unsigned int period)
+	void Animation::setPeriod(float period)
 	{
 		frametime = (float)period / (frames.x * frames.y);
 	}
@@ -69,9 +63,9 @@ namespace backlot
 		if(isplayed == false)
 			return false;
 
-		int currentframe = (SDL_GetTicks() - starttime) / frametime;
+		int currentframe = (float)(SDL_GetTicks() - starttime) / frametime;
 
-		if (loopcount != -1 && currentframe > loopcount * frames.x * frames.y)
+		if (loopcount != -1 && currentframe >= loopcount * frames.x * frames.y)
 			return false;
 
 		return true;
@@ -85,7 +79,6 @@ namespace backlot
 		glMatrixMode(GL_TEXTURE);
 		glLoadIdentity();
 		glTranslatef(sizes.x * (frame % frames.x), sizes.y * (frame / frames.y), 0);
-// 		glRotatef(rotation, 0, 0, 1);
 
 		glMatrixMode(GL_MODELVIEW);
 		glBegin(GL_QUADS);
@@ -109,7 +102,7 @@ namespace backlot
 		if (isPlaying() == true)
 		{
 			// Draw the current frame
-			draw((SDL_GetTicks() - starttime) / frametime);
+			draw((float)(SDL_GetTicks() - starttime) / frametime);
 			return true;
 		}
 		else
