@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ReferenceCounted.hpp"
 #include "Vector2.hpp"
 #include "Weapon.hpp"
+#include "Player.hpp"
 
 #include <vector>
 
@@ -36,7 +37,7 @@ namespace backlot
 	class Bullet : public ReferenceCounted
 	{
 		public:
-			Bullet(WeaponPointer weapon);
+			Bullet(WeaponPointer weapon, Player *player = 0);
 			~Bullet();
 
 			void setPosition(Vector2F position);
@@ -51,6 +52,8 @@ namespace backlot
 			WeaponPointer weapon;
 			Vector2F position;
 			Vector2F speed;
+
+			Player *player;
 
 			static std::vector<SharedPointer<Bullet> > bullets;
 	};

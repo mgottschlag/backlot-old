@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Server.hpp"
 #include "Buffer.hpp"
 #include "NetworkData.hpp"
+#include "Bullet.hpp"
 
 #include <iostream>
 
@@ -257,6 +258,7 @@ namespace backlot
 		// Game logic
 		for (unsigned int i = 0; i < players.size(); i++)
 			players[i]->think();
+		Bullet::updateAll();
 		// Send updates to clients
 		for (unsigned int i = 0; i < clients.size(); i++)
 		{

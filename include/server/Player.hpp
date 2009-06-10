@@ -118,7 +118,7 @@ namespace backlot
 			/**
 			 * Returns an array with all players.
 			 */
-			std::vector<Player*> &getPlayers();
+			static std::vector<Player*> &getPlayers();
 
 			/**
 			 * Moves the player and executes other actions depending on the

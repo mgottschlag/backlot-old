@@ -22,9 +22,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Bullet.hpp"
 #include "Server.hpp"
 
+#include <iostream>
+
 namespace backlot
 {
-	Bullet::Bullet(WeaponPointer weapon) : ReferenceCounted(), weapon(weapon)
+	Bullet::Bullet(WeaponPointer weapon, Player *player) : ReferenceCounted(),
+		weapon(weapon), player(player)
 	{
 		bullets.push_back(this);
 	}
@@ -54,6 +57,24 @@ namespace backlot
 	{
 		Vector2F newpos = position + speed * 0.02;
 		Vector2F hit;
+		// Check player hits
+		std::vector<Player*> &players = Player::getPlayers();
+		for (unsigned int i = 0; i < players.size(); i++)
+		{
+			// Don't shoot yourself
+			if (players[i] == player)
+				continue;
+			// Get hit point
+			Vector2F pos = players[i]->getPosition();
+			RectangleF playerrect(pos.x - 0.3, pos.y - 0.3, 0.6, 0.6);
+			Vector2F hit2;
+			if (playerrect.getIntersections(Line(position, newpos), hit, hit2))
+			{
+				std::cout << "Player hit." << std::endl;
+				return false;
+			}
+		}
+		// Check terrain hits
 		if (Server::get().getMap()->isAccessible(position, newpos, &hit))
 		{
 			position = newpos;

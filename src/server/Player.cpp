@@ -192,7 +192,7 @@ namespace backlot
 						state.lastshot = currenttime;
 						state.currentmagazine--;
 						// Shoot
-						BulletPointer bullet = new Bullet(state.weapon);
+						BulletPointer bullet = new Bullet(state.weapon, this);
 						bullet->setPosition(position);
 						Vector2F speed(sin(rotation), -cos(rotation));
 						speed *= state.weapon->getBulletSpeed();
