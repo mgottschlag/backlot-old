@@ -37,33 +37,93 @@ namespace backlot
 	class Player : public ReferenceCounted
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Player();
+			/**
+			 * Destructor.
+			 */
 			~Player();
 
+			/**
+			 * Initializes the player.
+			 */
 			bool load();
 
+			/**
+			 * Returns the unique identification number of the player. This
+			 * number is the same on the server and the client.
+			 */
 			int getID();
 
+			/**
+			 * Sets the owner of the player. Only the owner is allowed to
+			 * control a player.
+			 */
 			void setOwner(Client *owner);
+			/**
+			 * Returns the owner of the player.
+			 */
 			Client *getOwner();
 
+			/**
+			 * Sets the position of the player.
+			 */
 			void setPosition(Vector2F position);
+			/**
+			 * Returns the position of the player.
+			 */
 			Vector2F getPosition();
 
+			/**
+			 * Sets the rotation of the player in radians.
+			 */
 			void setRotation(float rotation);
+			/**
+			 * Returns the rotation of the player.
+			 */
 			float getRotation();
 
+			/**
+			 * Sets the keyboard status of the player. This is sent directly
+			 * from the client and includes mouse buttons. The bits are set
+			 * according to KeyMask.
+			 */
 			void setKeys(uint8_t keys);
+			/**
+			 * Returns the keyboard status of the player.
+			 */
 			uint8_t getKeys();
 
+			/**
+			 * Returns the current hitpoints of the player.
+			 */
 			int getHitpoints();
+			/**
+			 * Sets the hitpoints of the player.
+			 */
 			void setHitpoints(int newhitpoints);
 
+			/**
+			 * Adds a weapon to the player. The weapon is not automatically
+			 * sent to all clients.
+			 */
 			int addWeapon(WeaponPointer weapon);
+			/**
+			 * Returns all weapons the player currently carries.
+			 */
 			std::map<int, WeaponState> &getWeapons();
 
+			/**
+			 * Returns an array with all players.
+			 */
 			std::vector<Player*> &getPlayers();
 
+			/**
+			 * Moves the player and executes other actions depending on the
+			 * keyboard status.
+			 */
 			void think();
 		private:
 			int id;
