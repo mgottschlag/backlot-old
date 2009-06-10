@@ -148,6 +148,15 @@ namespace backlot
 		// TODO: Client side prediction
 	}
 
+	int Player::getHitpoints()
+	{
+		return hitpoints;
+	}
+	void Player::setHitpoints(int newhitpoints)
+	{
+		hitpoints = newhitpoints;
+	}
+
 	void Player::addWeapon(int id, WeaponPointer weapon)
 	{
 		WeaponState state;
@@ -157,6 +166,10 @@ namespace backlot
 		weapons.insert(std::pair<int, WeaponState>(id, state));
 		if (currentweapon == -1)
 			currentweapon = id;
+	}
+	WeaponState *Player::getCurrentWeapon()
+	{
+		return &weapons[currentweapon];
 	}
 
 	void Player::render()

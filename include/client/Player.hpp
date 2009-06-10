@@ -64,7 +64,11 @@ namespace backlot
 			void receiveKeys(uint8_t keys);
 			void sendRotation(float rotation);
 
+			int getHitpoints();
+			void setHitpoints(int newhitpoints);
+
 			void addWeapon(int id, WeaponPointer weapon);
+			WeaponState *getCurrentWeapon();
 
 			void render();
 			static void renderAll();
@@ -79,6 +83,8 @@ namespace backlot
 			TexturePointer feettexture;
 			AnimationPointer feetanimation;
 			SoundPointer feetsound;
+
+			int hitpoints;
 
 			std::map<int, WeaponState> weapons;
 			int currentweapon;

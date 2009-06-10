@@ -54,6 +54,9 @@ namespace backlot
 			void setKeys(uint8_t keys);
 			uint8_t getKeys();
 
+			int getHitpoints();
+			void setHitpoints(int newhitpoints);
+
 			int addWeapon(WeaponPointer weapon);
 			std::map<int, WeaponState> &getWeapons();
 
@@ -67,6 +70,8 @@ namespace backlot
 			Vector2F position;
 
 			Client *owner;
+
+			int hitpoints;
 
 			int lastweaponid;
 			std::map<int, WeaponState> weapons;

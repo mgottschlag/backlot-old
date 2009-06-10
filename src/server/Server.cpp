@@ -148,6 +148,7 @@ namespace backlot
 						BufferPointer msg = new Buffer();
 						msg->write8(EPT_NewPlayer);
 						msg->write32(newplayer->getID());
+						msg->write8(newplayer->getHitpoints());
 						msg->write8(0);
 						for (unsigned int i = 0; i < clients.size(); i++)
 						{
@@ -156,7 +157,7 @@ namespace backlot
 								clients[i]->send(msg, true);
 							}
 						}
-						msg->setPosition(5);
+						msg->setPosition(6);
 						msg->write8(1);
 						client->send(msg, true);
 						// Initial weapon

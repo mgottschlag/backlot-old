@@ -45,6 +45,7 @@ namespace backlot
 
 	bool Player::load()
 	{
+		hitpoints = 100;
 		return true;
 	}
 
@@ -87,6 +88,15 @@ namespace backlot
 	uint8_t Player::getKeys()
 	{
 		return keys;
+	}
+
+	int Player::getHitpoints()
+	{
+		return hitpoints;
+	}
+	void Player::setHitpoints(int newhitpoints)
+	{
+		hitpoints = newhitpoints;
 	}
 
 	int Player::addWeapon(WeaponPointer weapon)
