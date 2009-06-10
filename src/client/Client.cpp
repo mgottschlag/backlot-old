@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "NetworkData.hpp"
 #include "Buffer.hpp"
 #include "Bullet.hpp"
+#include "Effect.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -305,8 +306,17 @@ namespace backlot
 						position.y = msg->readFloat();
 						// Create explosion
 						WeaponPointer weapon = Weapon::get(weaponid);
-						if (weapon)
+						float radius;
+						int damage;
+						TexturePointer texture;
+						if (weapon && weapon->getExplosion(radius, damage, texture))
 						{
+							EffectPointer explosion = new Effect();
+							if (explosion->load(texture, Vector2I(4, 4), 0))
+							{
+								explosion->setPeriod(300);
+								explosion->play(1);
+							}
 						}
 						else
 						{

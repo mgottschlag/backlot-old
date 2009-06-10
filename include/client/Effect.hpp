@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Simon Kerler
+Copyright (C) 2009  Simon Kerler, Mathias Gottschlag
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -45,17 +45,19 @@ namespace backlot
 			 * @param soundpath The sound file that is used for effect sound.
 			 * @return If everything was loaded correctly return true.
 			 */
-			bool load(std::string texturepath, Vector2I framenuber, std::string soundpath);
+			bool load(std::string texturepath, Vector2I framenumber, std::string soundpath);
+
+			bool load(TexturePointer texture, Vector2I framenumber, SoundPointer sound);
 
 			/**
-			 * Set the periode of the animation.
+			 * Set the period of the animation.
 			 */
 			void setPeriod(float time);
 
 			/**
 			 * Renders the animation.
 			 */
-			void render();
+			bool render();
 			/**
 			 * Start animation and sound playback.
 			 * @param loop How often the effect is played. -1 for infinite loop.
@@ -65,13 +67,16 @@ namespace backlot
 			 * Stop the animation and sound playback.
 			 */
 			void stop();
-			
+
+			static void renderAll();
 		private:
 			TexturePointer texture;
 			AnimationPointer animation;
 			SoundPointer sound;
 
 			bool playing;
+
+			static std::vector<SharedPointer<Effect> > effects;
 	};
 
 	typedef SharedPointer<Effect> EffectPointer;

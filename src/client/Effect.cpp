@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Simon Kerler
+Copyright (C) 2009  Simon Kerler, Mathias Gottschlag
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Effect.hpp"
 
 #include <GL/gl.h>
+#include <iostream>
 
 namespace backlot
 {
@@ -46,29 +47,77 @@ namespace backlot
 		return true;
 	}
 
+	bool Effect::load(TexturePointer texture, Vector2I framenumber, SoundPointer sound)
+	{
+		this->texture = texture;
+		animation->setFrameNumbers(framenumber.x, framenumber.y);
+		this->sound = sound;
+		return true;
+	}
+
 	void Effect::setPeriod(float time)
 	{
 		animation->setPeriod(time);
 	}
 
-	void Effect::render()
+	bool Effect::render()
 	{
+		if (!playing)
+			return false;
+		glPushMatrix();
+		//glScalef(5.0, 5.0, 5.0);
+		texture->bind();
 		animation->draw();
+		glPopMatrix();
+		if (!animation->isPlaying() && (!sound || !sound->isPlaying()))
+			return false;
+		return true;
 	}
 
 	void Effect::play(int loop)
 	{
 		animation->setLoop(loop);
 		animation->start();
-		sound->play(loop);
+		if (sound)
+			sound->play(loop);
 		playing = true;
+		// Add to effect list
+		effects.push_back(this);
 	}
 	void Effect::stop()
 	{
 		if (playing == true)
 		{
+			// Stop effect
 			animation->stop();
-			sound->stop();
+			if (sound)
+				sound->stop();
+			playing = false;
+		}
+		// Remove from effect list
+		for (unsigned int i = 0; i < effects.size(); i++)
+		{
+			if (effects[i] == this)
+			{
+				std::cout << "Erased " << i << std::endl;
+				effects.erase(effects.begin() + i);
+				break;
+			}
 		}
 	}
+
+	void Effect::renderAll()
+	{
+		for (int i = 0; i < (int)effects.size(); i++)
+		{
+			if (!effects[i]->render())
+			{
+				std::cout << "Deleting effect " << i << "." << std::endl;
+				effects[i]->stop();
+				i--;
+			}
+		}
+	}
+
+	std::vector<EffectPointer> Effect::effects;
 }

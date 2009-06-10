@@ -27,6 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Menu.hpp"
 #include "GuichanFont.hpp"
 #include "HUD.hpp"
+#include "Effect.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -161,6 +162,7 @@ namespace backlot
 		}
 		Player::renderAll();
 		Bullet::renderAll();
+		Effect::renderAll();
 		HUD::get().render();
 		// Render menu
 		MenuPointer menu = Menu::getActiveMenu();
