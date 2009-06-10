@@ -272,7 +272,6 @@ namespace backlot
 					{
 						WeaponState *state = Player::getLocalPlayer()->getCurrentWeapon();
 						state->currentmagazine = msg->read8();
-					std::cout << "magazine: " << state->currentmagazine << std::endl;
 						state->reserve = msg->read8();
 					}
 					else if (type == EPT_Projectile)

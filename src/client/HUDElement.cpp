@@ -151,8 +151,6 @@ namespace backlot
 		glColor3f(1.0, 1.0, 1.0);
 
 		PlayerPointer localplayer = Player::getLocalPlayer();
-		if (localplayer.isNull() == true)
-			std::cerr << "no localplayer\n";
 
 		if (localplayer.isNull() == false)
 		{
