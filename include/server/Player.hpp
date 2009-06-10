@@ -26,6 +26,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Vector2.hpp"
 #include "Weapon.hpp"
 
+#include <vector>
+
 namespace backlot
 {
 	class Client;
@@ -60,6 +62,8 @@ namespace backlot
 			int addWeapon(WeaponPointer weapon);
 			std::map<int, WeaponState> &getWeapons();
 
+			std::vector<Player*> &getPlayers();
+
 			void think();
 		private:
 			int id;
@@ -76,6 +80,8 @@ namespace backlot
 			int lastweaponid;
 			std::map<int, WeaponState> weapons;
 			int currentweapon;
+
+			static std::vector<Player*> players;
 
 			static int lastid;
 	};

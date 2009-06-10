@@ -38,9 +38,20 @@ namespace backlot
 		position = Vector2F(0.5, 0.5);
 		lastweaponid = 0;
 		currentweapon = -1;
+		// Add player to player list
+		players.push_back(this);
 	}
 	Player::~Player()
 	{
+		// Remove player from list
+		for (unsigned int i = 0; i < players.size(); i++)
+		{
+			if (players[i] == this)
+			{
+				players.erase(players.begin() + i);
+				break;
+			}
+		}
 	}
 
 	bool Player::load()
@@ -117,6 +128,11 @@ namespace backlot
 		return weapons;
 	}
 
+	std::vector<Player*> &Player::getPlayers()
+	{
+		return players;
+	}
+
 	void Player::think()
 	{
 		// Movement
@@ -191,6 +207,8 @@ namespace backlot
 			}
 		}
 	}
+
+	std::vector<Player*> Player::players;
 
 	int Player::lastid = 0;
 }
