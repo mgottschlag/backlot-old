@@ -29,6 +29,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <map>
 
 class TiXmlElement;
+namespace gcn
+{
+	class Window;
+	class Container;
+	class TabbedArea;
+}
 
 namespace backlot
 {
@@ -77,8 +83,10 @@ namespace backlot
 			 */
 			bool isVisible();
 		private:
-			bool parseWidgets(TiXmlElement *xml);
+			bool parseWidgets(TiXmlElement *xml, gcn::Container *parent);
+			bool parseTabControl(TiXmlElement *xml, gcn::TabbedArea *tabctrl);
 
+			gcn::Window *window;
 			std::string name;
 			bool loaded;
 			bool visible;

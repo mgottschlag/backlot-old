@@ -21,10 +21,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Dialog.hpp"
 #include "Engine.hpp"
+#include "Graphics.hpp"
 
 #include "support/tinyxml.h"
 
 #include <iostream>
+#include <guichan/widgets/window.hpp>
+#include <guichan/widgets/button.hpp>
+#include <guichan/widgets/tabbedarea.hpp>
+#include <guichan/widgets/tab.hpp>
 
 namespace backlot
 {
@@ -71,8 +76,23 @@ namespace backlot
 			return false;
 		}
 		TiXmlElement *root = node->ToElement();
+		// Create window
+		if (!root->Attribute("size") || !root->Attribute("title"))
+		{
+			std::cerr << "No dialog size or title given." << std::endl;
+			return false;
+		}
+		Vector2I size = root->Attribute("size");
+		std::string title = root->Attribute("title");
+		window = new gcn::Window(title);
+		window->setDimension(gcn::Rectangle(10, 10, size.x, size.y));
+		Graphics::get().getGuichanContainer()->add(window);
+		// Transparency
+		gcn::Color bgcolor = window->getBaseColor();
+		bgcolor.a = 200;
+		window->setBaseColor(bgcolor);
 		// Load widgets
-		if (!parseWidgets(root))
+		if (!parseWidgets(root, window))
 		{
 			return false;
 		}
@@ -137,8 +157,98 @@ namespace backlot
 		return visible;
 	}
 
-	bool Dialog::parseWidgets(TiXmlElement *xml)
+	bool Dialog::parseWidgets(TiXmlElement *xml, gcn::Container *parent)
 	{
+		// Tab controls
+		TiXmlNode *tabctrlnode = xml->FirstChild("tabcontrol");
+		while (tabctrlnode)
+		{
+			TiXmlElement *tabctrldata = tabctrlnode->ToElement();
+			if (tabctrldata)
+			{
+				// Check attributes
+				if (!tabctrldata->Attribute("size") || !tabctrldata->Attribute("position"))
+				{
+					std::cerr << "Tab control size or position missing." << std::endl;
+					return false;
+				}
+				// Create tab area
+				Vector2I position = tabctrldata->Attribute("position");
+				Vector2I size = tabctrldata->Attribute("size");
+				gcn::TabbedArea *tabarea = new gcn::TabbedArea();
+				tabarea->setDimension(gcn::Rectangle(position.x, position.y,
+					size.x, size.y));
+				parent->add(tabarea);
+				// Add tabs
+				parseTabControl(tabctrldata, tabarea);
+			}
+			tabctrlnode = xml->IterateChildren("tabcontrol", tabctrlnode);
+		}
+		// Buttons
+		TiXmlNode *buttonnode = xml->FirstChild("button");
+		while (buttonnode)
+		{
+			TiXmlElement *buttondata = buttonnode->ToElement();
+			if (buttondata)
+			{
+				// Check attributes
+				if (!buttondata->Attribute("size") || !buttondata->Attribute("position"))
+				{
+					std::cerr << "Button size or position missing." << std::endl;
+					return false;
+				}
+				if (!buttondata->Attribute("id") || !buttondata->Attribute("label"))
+				{
+					std::cerr << "Button id or label missing." << std::endl;
+					return false;
+				}
+				// Create button
+				Vector2I position = buttondata->Attribute("position");
+				Vector2I size = buttondata->Attribute("size");
+				int id = atoi(buttondata->Attribute("id"));
+				const char *label = buttondata->Attribute("label");
+				gcn::Button *button = new gcn::Button();
+				button->setCaption(label);
+				button->setDimension(gcn::Rectangle(position.x, position.y,
+					size.x, size.y));
+				char idstr[10];
+				snprintf(idstr, 10, "%d", id);
+				button->setId(idstr);
+				parent->add(button);
+				//items[i]->addActionListener(listener);
+			}
+			buttonnode = xml->IterateChildren("button", buttonnode);
+		}
+		return true;
+	}
+	bool Dialog::parseTabControl(TiXmlElement *xml, gcn::TabbedArea *tabctrl)
+	{
+		// Tabs
+		TiXmlNode *tabnode = xml->FirstChild("tab");
+		while (tabnode)
+		{
+			TiXmlElement *tabdata = tabnode->ToElement();
+			if (tabdata)
+			{
+				// Check attributes
+				if (!tabdata->Attribute("label"))
+				{
+					std::cerr << "Tab label missing." << std::endl;
+					return false;
+				}
+				// Create tab
+				int index = -1;
+				tabdata->Attribute("index", &index);
+				const char *label = tabdata->Attribute("label");
+				gcn::Tab *tab = new gcn::Tab();
+				tab->setCaption(label);
+				//tab->setTabbedArea(tabctrl);
+				gcn::Container *container = new gcn::Container();
+				tabctrl->addTab(tab, container);
+				parseWidgets(tabdata, container);
+			}
+			tabnode = xml->IterateChildren("tab", tabnode);
+		}
 		return true;
 	}
 
