@@ -327,28 +327,58 @@ namespace backlot
 		// TODO: Compute collision point
 		// Area to be checked
 		RectangleI area(floor(start.x), floor(start.y), floor(end.x) - floor(start.x), floor(end.y) - floor(start.y));
-		if (area.width< 0)
+		if (area.width < 0)
 		{
-			area.x = end.x;
+			area.x = floor(end.x);
 			area.width = -area.width;
 		}
 		if (area.height < 0)
 		{
-			area.y = end.y;
+			area.y = floor(end.y);
 			area.height = -area.height;
 		}
 		int hitx = -10;
 		int hity = -10;
-		float hitdistance = area.width * area.height + 1;
+		float hitdistance = area.width * area.height + 100;
 		// Loop through all tiles
 		for (int py = area.y; py <= area.y + area.height; py++)
 		{
+			// FIXME: This is ugly. We need just half as much code as this.
 			if (py < 0 || py >= size.y)
-				return false;
+			{
+				if (!collision)
+					return false;
+				else
+				{
+					for (int px = area.x; px <= area.x + area.width; px++)
+					{
+						// Compute distance from start
+						float distance = sqrt((start.x - px) * (start.x - px) + (start.y - py) * (start.y - py));
+						if (distance < hitdistance)
+						{
+							hitx = px;
+							hity = py;
+						}
+					}
+				}
+			}
 			for (int px = area.x; px <= area.x + area.width; px++)
 			{
 				if (px < 0 || px >= size.x)
-					return false;
+				{
+					if (!collision)
+						return false;
+					else
+					{
+						// Compute distance from start
+						float distance = sqrt((start.x - px) * (start.x - px) + (start.y - py) * (start.y - py));
+						if (distance < hitdistance)
+						{
+							hitx = px;
+							hity = py;
+						}
+					}
+				}
 				// Check whether tile collides with line
 				if (end.x != start.x)
 				{
