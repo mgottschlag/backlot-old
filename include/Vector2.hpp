@@ -92,6 +92,10 @@ namespace backlot
 			{
 				return Vector2<T>(x + v.x, y + v.y);
 			}
+			template<typename T2> Vector2<T> operator-(const Vector2<T2> &v) const
+			{
+				return Vector2<T>(x - v.x, y - v.y);
+			}
 			template<typename T2> Vector2<T> &operator=(const Vector2<T2> &v)
 			{
 				x = v.x;
@@ -137,6 +141,23 @@ namespace backlot
 					const char *ys = s.c_str() + separator + 1;
 					y = atof(ys);
 				}
+			}
+
+			/**
+			 * Returns the squared length of the vector. Much less
+			 * computationally expensive than getLength(). Good for comparing
+			 * vector lengths.
+			 */
+			float getLengthSquared()
+			{
+				return x * x + y * y;
+			}
+			/**
+			 * Returns the length of the vector.
+			 */
+			float getLength()
+			{
+				return sqrt(getLengthSquared());
 			}
 
 			/**
