@@ -53,7 +53,7 @@ namespace backlot
 	bool Sound::play(int times)
 	{
 		// If a sound file was loaded
-		if (sound != NULL && isPlaying() == false)
+		if (sound != NULL)
 		{
 			channel = Mix_PlayChannel(-1, sound, times);
 			if (channel == -1)
@@ -64,7 +64,7 @@ namespace backlot
 		}
 		else
 		{
-			std::cerr << "No soundfile was loaded or it's already played.\n";
+			std::cerr << "No soundfile was loaded.\n";
 			return false;
 		}
 		return true;

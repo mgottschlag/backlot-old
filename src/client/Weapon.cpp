@@ -258,7 +258,6 @@ namespace backlot
 
 	void Weapon::playSound()
 	{
-		if (sound->isPlaying() == false)
 			sound->play(0);
 	}
 
