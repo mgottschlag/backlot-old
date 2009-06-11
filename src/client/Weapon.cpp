@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -221,6 +221,9 @@ namespace backlot
 						}
 						explosionradius = 1;
 						explosion->QueryFloatAttribute("radius", &explosionradius);
+						std::string explosionsoundpath= "sounds/" + (std::string)explosion->Attribute("sound");
+						explosionsound = new Sound();
+						explosionsound->load(explosionsoundpath);
 						break;
 					}
 					explosionnode = projectile->IterateChildren("explosion", explosionnode);
@@ -287,11 +290,12 @@ namespace backlot
 	{
 		return hitdamage;
 	}
-	bool Weapon::getExplosion(float &radius, int &damage, TexturePointer &texture)
+	bool Weapon::getExplosion(float &radius, int &damage, TexturePointer &texture, SoundPointer &sound)
 	{
 		radius = explosionradius;
 		damage = explosiondamage;
 		texture = explosiontexture;
+		sound = explosionsound;
 		return explosion;
 	}
 

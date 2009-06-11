@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -75,7 +75,7 @@ namespace backlot
 			float getBulletSize();
 			TexturePointer getBulletTexture();
 			float getHitDamage();
-			bool getExplosion(float &radius, int &damage, TexturePointer &texture);
+			bool getExplosion(float &radius, int &damage, TexturePointer &texture, SoundPointer &sound);
 		private:
 			std::string name;
 
@@ -97,6 +97,7 @@ namespace backlot
 			bool explosion;
 			float explosionradius;
 			int explosiondamage;
+			SoundPointer explosionsound;
 
 			int id;
 

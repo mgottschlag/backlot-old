@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -310,10 +310,11 @@ namespace backlot
 						float radius;
 						int damage;
 						TexturePointer texture;
-						if (weapon && weapon->getExplosion(radius, damage, texture))
+						SoundPointer sound;
+						if (weapon && weapon->getExplosion(radius, damage, texture, sound))
 						{
 							EffectPointer explosion = new Effect();
-							if (explosion->load(texture, Vector2I(4, 4), 0))
+							if (explosion->load(texture, Vector2I(4, 4), sound))
 							{
 								explosion->setPeriod(300);
 								explosion->setPosition(position);
