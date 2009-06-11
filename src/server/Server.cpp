@@ -274,6 +274,7 @@ namespace backlot
 				Vector2F position = players[j]->getPosition();
 				msg->writeFloat(position.x);
 				msg->writeFloat(position.y);
+				msg->write8(players[j]->getHitpoints());
 			}
 			client->send(msg);
 		}

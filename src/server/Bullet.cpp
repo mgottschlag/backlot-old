@@ -73,7 +73,18 @@ namespace backlot
 			{
 				std::cout << "Player hit." << std::endl;
 				// Hit damage
-				// TODO
+				int damage = weapon->getHitDamage();
+				int hitpoints = players[i]->getHitpoints();
+				hitpoints -= damage;
+				if (hitpoints <= 0)
+				{
+					// Kill player
+					// TODO
+				}
+				else
+				{
+					players[i]->setHitpoints(hitpoints);
+				}
 				// Explosion
 				applyExplosion(hit);
 				return false;
@@ -111,7 +122,28 @@ namespace backlot
 		if (weapon->getExplosion(radius, damage))
 		{
 			// Damage players
-			// TODO
+			std::vector<Player*> &players = Player::getPlayers();
+			for (unsigned int i = 0; i < players.size(); i++)
+			{
+				float distance = (position - players[i]->getPosition()).getLength();
+				if (distance < radius)
+				{
+					// Interpolate damage
+					int playerdamage = (radius - distance) / radius * damage;
+					// Apply damage
+					int hitpoints = players[i]->getHitpoints();
+					hitpoints -= playerdamage;
+					if (hitpoints <= 0)
+					{
+						// Kill player
+						// TODO
+					}
+					else
+					{
+						players[i]->setHitpoints(hitpoints);
+					}
+				}
+			}
 			// Send explosion to clients
 			BufferPointer buffer = new Buffer();
 			buffer->write8(EPT_Explosion);

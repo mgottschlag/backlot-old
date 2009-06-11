@@ -231,11 +231,13 @@ namespace backlot
 							float rotation = msg->readFloat();
 							float x = msg->readFloat();
 							float y = msg->readFloat();
+							int hitpoints = msg->read8();
 							if (player.isNull())
 								continue;
 							player->setPosition(Vector2F(x, y));
 							player->setRotation(rotation);
 							player->receiveKeys(keys);
+							player->setHitpoints(hitpoints);
 						}
 					}
 					else if (type == EPT_NewWeapon)
