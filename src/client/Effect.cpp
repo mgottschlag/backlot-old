@@ -91,7 +91,7 @@ namespace backlot
 		animation->setLoop(loop);
 		animation->start();
 		if (sound)
-			sound->play(loop);
+			sound->play(loop-1);
 		playing = true;
 		// Add to effect list
 		effects.push_back(this);
