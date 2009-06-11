@@ -63,23 +63,35 @@ namespace backlot
 			}
 
 			/**
-			* Returns the linear equation for the line in the form ax + by = 1.
+			* Returns the linear equation for the line in the form ax + by = c.
 			*/
-			void getEquation(float &a, float &b) const
+			void getEquation(float &a, float &b, float &c) const
 			{
-				// Determinant D
-				float d = start.x * end.y - start.y * end.x;
-				if (d == 0)
+				if (start == end)
 				{
+					// Not a line
 					a = 0;
 					b = 0;
-					return;
+					c = 0;
 				}
-				// Other determinants
-				float da = end.y - start.y;
-				float db = start.x - end.x;
-				a = da / d;
-				b = db / d;
+				else if (start.x != end.x)
+				{
+					// f(x) = mx + n
+					float m = (end.y - start.y) / (end.x - start.x);
+					float n = start.y - start.x * m;
+					a = -m;
+					b = 1;
+					c = n;
+				}
+				else
+				{
+					// f(y) = my + n
+					float m = (end.x - start.x) / (end.y - start.y);
+					float n = start.x - start.y * m;
+					a = 1;
+					b = -m;
+					c = n;
+				}
 			}
 			/**
 			* Computes the intersection between this line and another.
@@ -92,16 +104,16 @@ namespace backlot
 				// Linear equations:
 				// ax + by = 1
 				// cx + dy = 1
-				float a, b, c, d;
-				getEquation(a, b);
-				other.getEquation(c, d);
+				float a, b, c, d, e, f;
+				getEquation(a, b, c);
+				other.getEquation(d, e, f);
 				// Determinants
-				float det = a * d - b * c;
+				float det = a * e - b * d;
 				// TODO: parallel
 				if (det == 0)
 					return false;
-				float det_x = 1 * d - b * 1;
-				float det_y = a * 1 - 1 * c;
+				float det_x = c * e - b * f;
+				float det_y = a * f - c * d;
 				float x = det_x / det;
 				float y = det_y / det;
 				// Check whether intersection is still on both lines

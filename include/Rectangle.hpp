@@ -145,6 +145,7 @@ namespace backlot
 			bool getIntersections(const Line &line,
 				Vector2F &intersection1, Vector2F &intersection2)
 			{
+				// TODO: In the corners we might get more than 2 intersections
 				int intersectioncount = 0;
 				// Get rectangle edges
 				Line edge1(Vector2F(x, y), Vector2F(x, y + height));
@@ -161,26 +162,41 @@ namespace backlot
 				if (edge2.getIntersection(line, intersection))
 				{
 					if (intersectioncount == 0)
+					{
 						intersection1 = intersection;
-					else
+						intersectioncount++;
+					}
+					else if (intersectioncount == 1 && intersection != intersection1)
+					{
 						intersection2 = intersection;
-					intersectioncount++;
+						intersectioncount++;
+					}
 				}
 				if (edge3.getIntersection(line, intersection))
 				{
 					if (intersectioncount == 0)
+					{
 						intersection1 = intersection;
-					else if (intersectioncount == 1)
+						intersectioncount++;
+					}
+					else if (intersectioncount == 1 && intersection != intersection1)
+					{
 						intersection2 = intersection;
-					intersectioncount++;
+						intersectioncount++;
+					}
 				}
 				if (edge4.getIntersection(line, intersection))
 				{
 					if (intersectioncount == 0)
+					{
 						intersection1 = intersection;
-					else if (intersectioncount == 1)
+						intersectioncount++;
+					}
+					else if (intersectioncount == 1 && intersection != intersection1)
+					{
 						intersection2 = intersection;
-					intersectioncount++;
+						intersectioncount++;
+					}
 				}
 				// Return result
 				if (intersectioncount == 2)
