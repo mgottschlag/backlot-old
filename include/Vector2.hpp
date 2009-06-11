@@ -78,7 +78,7 @@ namespace backlot
 			{
 			}
 
-			template<typename T2> Vector2<T> operator*(T2 s)
+			template<typename T2> Vector2<T> operator*(T2 s) const
 			{
 				return Vector2<T>(x * s, y * s);
 			}
@@ -88,7 +88,7 @@ namespace backlot
 				y = y * s;
 				return *this;
 			}
-			template<typename T2> Vector2<T> operator+(const Vector2<T2> &v)
+			template<typename T2> Vector2<T> operator+(const Vector2<T2> &v) const
 			{
 				return Vector2<T>(x + v.x, y + v.y);
 			}
@@ -113,6 +113,14 @@ namespace backlot
 				x += v.x;
 				y += v.y;
 				return *this;
+			}
+			template<typename T2> bool operator==(const Vector2<T2> &v) const
+			{
+				return x == v.x && y == v.y;
+			}
+			template<typename T2> bool operator!=(const Vector2<T2> &v) const
+			{
+				return x != v.x || y != v.y;
 			}
 
 			void set(const std::string &s)
