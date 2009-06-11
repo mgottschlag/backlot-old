@@ -54,6 +54,9 @@ namespace backlot
 			 */
 			void setPeriod(float time);
 
+			void setPosition(Vector2F position);
+			Vector2F getPosition();
+
 			/**
 			 * Renders the animation.
 			 */
@@ -73,6 +76,8 @@ namespace backlot
 			TexturePointer texture;
 			AnimationPointer animation;
 			SoundPointer sound;
+
+			Vector2F position;
 
 			bool playing;
 

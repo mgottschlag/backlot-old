@@ -315,6 +315,7 @@ namespace backlot
 							if (explosion->load(texture, Vector2I(4, 4), 0))
 							{
 								explosion->setPeriod(300);
+								explosion->setPosition(position);
 								explosion->play(1);
 							}
 						}

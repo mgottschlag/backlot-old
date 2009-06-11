@@ -60,14 +60,26 @@ namespace backlot
 		animation->setPeriod(time);
 	}
 
+	void Effect::setPosition(Vector2F position)
+	{
+		this->position = position;
+	}
+	Vector2F Effect::getPosition()
+	{
+		return position;
+	}
+
 	bool Effect::render()
 	{
 		if (!playing)
 			return false;
 		glPushMatrix();
-		//glScalef(5.0, 5.0, 5.0);
+		glTranslatef(position.x, position.y, 10.0);
 		texture->bind();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		animation->draw();
+		glDisable(GL_BLEND);
 		glPopMatrix();
 		if (!animation->isPlaying() && (!sound || !sound->isPlaying()))
 			return false;
