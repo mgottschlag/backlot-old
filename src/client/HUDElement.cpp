@@ -56,7 +56,7 @@ namespace backlot
 			type = EHET_Ammo;
 		else
 		{
-			std::cout << "Unknown HUD element type: \"" << typestring << "\"\n";
+			std::cerr << "Unknown HUD element type: \"" << typestring << "\"\n";
 			return false;
 		}
 
@@ -80,6 +80,15 @@ namespace backlot
 			return false;
 		}
 		size = xmlelement->Attribute("size");
+
+		if (xmlelement->Attribute("backgroundcolor") != 0)
+		{
+			const char *backgroundcolorstring = xmlelement->Attribute("backgroundcolor") + 1;
+ 			backgroundcolor = std::strtoul(backgroundcolorstring, NULL, 16);
+		}	
+		else
+			backgroundcolor = 0x0000007F;
+
 		if (xmlnode->FirstChild("font"))
 		{
 			childnode = xmlnode->FirstChild("font");
@@ -103,6 +112,14 @@ namespace backlot
 				xmlelement->Attribute("size", &fontsize);
 			else
 				fontsize = 20;
+
+ 			if (xmlelement->Attribute("color") != 0)
+			{
+ 				const char *fontcolorstring = xmlelement->Attribute("color") + 1;
+				fontcolor = std::strtoul(fontcolorstring, NULL, 16);
+			}
+			else
+				fontcolor = 0xFFFFFFFF;
 		}
 		if (xmlnode->FirstChild("image"))
 		{
@@ -132,14 +149,19 @@ namespace backlot
 	void HUDElement::render()
 	{
 		Vector2I resolution = Preferences::get().getResolution();
+		float red = (float)(backgroundcolor >> 24) / 255;
+		float green = (float)((backgroundcolor & 0x00FF0000) >> 16) / 255;
+		float blue = (float)((backgroundcolor & 0x0000FF00) >> 8) / 255;
+		float alpha = (float)(backgroundcolor & 0x000000FF) / 255;
+	std::cout << "alpha: " << alpha << std::endl;
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
  		glLoadIdentity();
  		glOrtho(0, resolution.x, resolution.y, 0, -1, 1);
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_DST_COLOR, GL_ZERO);
-		glColor4f(0.5, 0.5, 0.5, 0.5);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(red, green, blue, alpha);
  		glTranslatef(offset.x, offset.y, 0);
 		glBegin(GL_QUADS);
 			glVertex3f((position.x * resolution.x), (position.y * resolution.y), 0);
@@ -157,10 +179,10 @@ namespace backlot
 			if (type == EHET_Health)
 			{
 				char message[8];
-				std::snprintf(message, 5, "%d %%", localplayer->getHitpoints());
+				std::snprintf(message, 8, "%d %%", localplayer->getHitpoints());
 				if (font != NULL)
 					font->render(message, Vector2F((position.x * resolution.x) + fontoffset.x,
-						(position.y * resolution.y) + fontoffset.y), fontsize);
+						(position.y * resolution.y) + fontoffset.y), fontsize, (int)fontcolor);
 			}
 			if (type == EHET_Ammo)
 			{
@@ -176,7 +198,7 @@ namespace backlot
 					std::snprintf(message, 16, "%d / %d (%d)", currentmagazine, magazinesize, totalrounds);
 
 					font->render(message, Vector2F((position.x * resolution.x) + fontoffset.x,
-						(position.y * resolution.y) + fontoffset.y), fontsize);
+						(position.y * resolution.y) + fontoffset.y), fontsize, fontcolor);
 				}
 			}
 		}

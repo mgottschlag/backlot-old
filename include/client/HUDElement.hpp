@@ -57,10 +57,12 @@ namespace backlot
 			Vector2F position;
 			Vector2I offset;
 			Vector2I size;
+			unsigned int backgroundcolor;
 
 			FontPointer font;
 			Vector2I fontoffset;
 			int fontsize;
+			unsigned int fontcolor;
 
 			TexturePointer image;
 			Vector2I imagesize;
