@@ -74,7 +74,6 @@ namespace backlot
 		{
 			if (!bullets[i]->update())
 			{
-				std::cout << "Deleting bullet." << std::endl;
 				bullets.erase(bullets.begin() + i);
 				i--;
 			}

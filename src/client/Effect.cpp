@@ -124,7 +124,6 @@ namespace backlot
 		{
 			if (!effects[i]->render())
 			{
-				std::cout << "Deleting effect " << i << "." << std::endl;
 				effects[i]->stop();
 				i--;
 			}

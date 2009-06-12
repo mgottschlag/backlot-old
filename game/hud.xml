@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <hud>
-	<element type="health" position="0.0/1.0" size="140/60" offset="20/-80">
-		<font name="menu" offset="65/10" size="40" />
+	<element type="health" position="0.0/1.0" size="180/60" offset="20/-80" backgroundcolor="#007F00E0">
+		<font name="menu" offset="65/10" size="40" color="#00FF007F" />
 		<image path="sprites/hud/health.png" size="50/50" offset ="10/5" />
 	</element>
-	<element type="ammo" position="1.0/1.0" size="220/60" offset="-240/-80">
-		<font name="menu" offset="65/15" size="30" />
+	<element type="ammo" position="1.0/1.0" size="220/60" offset="-240/-80" backgroundcolor="#007F00E0">
+		<font name="menu" offset="65/15" size="30" color="#00FF007F" />
 		<image path="sprites/hud/ammo.png" size="50/50" offset="5/5" />
 	</element>
 </hud>

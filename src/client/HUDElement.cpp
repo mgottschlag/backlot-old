@@ -153,7 +153,6 @@ namespace backlot
 		float green = (float)((backgroundcolor & 0x00FF0000) >> 16) / 255;
 		float blue = (float)((backgroundcolor & 0x0000FF00) >> 8) / 255;
 		float alpha = (float)(backgroundcolor & 0x000000FF) / 255;
-	std::cout << "alpha: " << alpha << std::endl;
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
  		glLoadIdentity();
