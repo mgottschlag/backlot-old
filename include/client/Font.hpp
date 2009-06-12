@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -71,17 +71,17 @@ namespace backlot
 			 * Renders the text and scales it to fit into the rectangle.
 			 */
 			void render(std::string text, Vector2F position, Vector2F size,
-				unsigned int color = 0xFFFFFF) const;
+				unsigned int color = 0xFF0000FF) const;
 			/**
 			 * Renders the text with the font scaled to the given character height.
 			 */
 			void render(std::string text, Vector2F position, int height,
-				unsigned int color = 0xFFFFFF) const;
+				unsigned int color = 0xFF0000FF) const;
 			/**
 			 * Renders the text.
 			 */
 			void render(std::string text, Vector2I position,
-				unsigned int color = 0xFFFFFF) const;
+				unsigned int color = 0xFF0000FF) const;
 			/**
 			 * Renders the text without any material settings changed.
 			 */

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -101,10 +101,14 @@ namespace backlot
 	void Font::render(std::string text, Vector2F position, Vector2F size,
 		unsigned int color) const
 	{
+		float red = (float)(color >> 24) / 255;
+		float green = (float)((color & 0x00FF0000) >> 16) / 255;
+		float blue = (float)((color & 0x0000FF00) >> 8) / 255;
+		float alpha = (float)(color & 0x000000FF) / 255;
 		Vector2I pixelsize = getSize(text);
 		glEnable(GL_TEXTURE_2D);
 		texture->bind();
-		glColor3f(1.0, 0.0, 0.0);
+		glColor4f(red, green, blue, alpha);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBegin(GL_QUADS);
