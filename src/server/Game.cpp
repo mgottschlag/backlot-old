@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Game.hpp"
 #include "Engine.hpp"
+#include "NetworkData.hpp"
 
 #include "support/tinyxml.h"
 
@@ -37,8 +38,12 @@ namespace backlot
 	{
 	}
 
-	bool Game::load(std::string mode)
+	bool Game::load(std::string mapname, std::string mode)
 	{
+		lastclientid = 0;
+		this->mapname = mapname;
+		for (int i = 0; i < 65535; i++)
+			entities[i] = 0;
 		// Open XML file
 		std::string filename = Engine::get().getGameDirectory() + "/modes/" + mode + ".xml";
 		TiXmlDocument xml(filename.c_str());
@@ -113,6 +118,7 @@ namespace backlot
 	}
 	bool Game::destroy()
 	{
+		clients.clear();
 		script = 0;
 		return false;
 	}
@@ -130,13 +136,46 @@ namespace backlot
 		return speed;
 	}
 
-	void Game::addPlayer(PlayerPointer player)
+	EntityPointer Game::addEntity(std::string type, int owner)
+	{
+		return 0;
+	}
+	void Game::removeEntity(Entity *entity)
 	{
 	}
-	void Game::removePlayer(PlayerPointer player)
+	EntityPointer Game::getEntity(int id)
 	{
+		return 0;
 	}
-	void Game::onPlayerDied(PlayerPointer dead, PlayerPointer killer)
+	std::vector<EntityPointer> Game::getEntities(std::string type)
+	{
+		return std::vector<EntityPointer>();
+	}
+
+	bool Game::onClientConnecting(Client *client)
+	{
+		// Create packet with initial world state
+		BufferPointer msg = new Buffer;
+		msg->write8(EPT_InitialData);
+		// Add map name
+		msg->writeString(mapname);
+		// Add entities
+		// TODO
+		// Send packet
+		client->send(msg);
+		return true;
+	}
+	void Game::addClient(Client *client)
+	{
+		// Add to client list
+		clients.insert(std::pair<int, Client*>(++lastclientid, client));
+	}
+	void Game::removeClient(Client *client)
+	{
+		
+	}
+
+	void Game::update()
 	{
 	}
 

@@ -19,45 +19,44 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _SERVER_HPP_
-#define _SERVER_HPP_
+#ifndef _ENTITY_HPP_
+#define _ENTITY_HPP_
 
-#include "Map.hpp"
-#include "Client.hpp"
+#include "ReferenceCounted.hpp"
+#include "Buffer.hpp"
+#include "Script.hpp"
+#include "entity/EntityTemplate.hpp"
 
-#include <string>
-#include <enet/enet.h>
 #include <vector>
 
 namespace backlot
 {
-	class Server
+	class Entity : public ReferenceCounted
 	{
 		public:
-			static Server &get();
-			~Server();
+			Entity();
+			~Entity();
 
-			bool init(int port, std::string mapname, int maxclients = 8);
-			bool destroy();
+			bool create(EntityTemplatePointer tpl, BufferPointer state = 0);
 
-			MapPointer getMap()
-			{
-				return map;
-			}
+			void getState(BufferPointer buffer);
 
-			void sendToAll(BufferPointer buffer, bool reliable = false);
+			void saveState();
+			void getUpdate(BufferPointer buffer);
+			void applyUpdate(BufferPointer buffer);
+			bool hasChanged();
 
-			bool update();
+			bool isVisible(Entity *from);
+
+			void update();
 		private:
-			Server();
+			EntityTemplatePointer tpl;
 
-			MapPointer map;
-			std::string mapname;
-
-			ENetHost *host;
-
-			std::vector<Client*> clients;
+			ScriptPointer script;
+			std::vector<Property> properties;
 	};
+
+	typedef SharedPointer<Entity> EntityPointer;
 }
 
 #endif

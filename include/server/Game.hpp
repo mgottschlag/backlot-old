@@ -23,7 +23,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _GAME_HPP_
 
 #include "Script.hpp"
-#include "Player.hpp"
+#include "entity/Entity.hpp"
+#include "Client.hpp"
 
 namespace backlot
 {
@@ -33,7 +34,7 @@ namespace backlot
 			static Game &get();
 			~Game();
 
-			bool load(std::string mode);
+			bool load(std::string mapname, std::string mode);
 			bool destroy();
 
 			std::string getMode();
@@ -41,9 +42,16 @@ namespace backlot
 			int getWeaponSlotCount();
 			float getPlayerSpeed();
 
-			void addPlayer(PlayerPointer player);
-			void removePlayer(PlayerPointer player);
-			void onPlayerDied(PlayerPointer dead, PlayerPointer killer);
+			EntityPointer addEntity(std::string type, int owner = 0);
+			void removeEntity(Entity *entity);
+			EntityPointer getEntity(int id);
+			std::vector<EntityPointer> getEntities(std::string type);
+
+			bool onClientConnecting(Client *client);
+			void addClient(Client *client);
+			void removeClient(Client *client);
+
+			void update();
 		private:
 			Game();
 
@@ -52,6 +60,12 @@ namespace backlot
 			int weaponslots;
 			float speed;
 			ScriptPointer script;
+			std::string mapname;
+
+			EntityPointer entities[65535];
+
+			std::map<int, Client*> clients;
+			int lastclientid;
 	};
 }
 

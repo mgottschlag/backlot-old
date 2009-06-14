@@ -19,45 +19,46 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _SERVER_HPP_
-#define _SERVER_HPP_
-
-#include "Map.hpp"
-#include "Client.hpp"
-
-#include <string>
-#include <enet/enet.h>
-#include <vector>
+#include "entity/Entity.hpp"
 
 namespace backlot
 {
-	class Server
+	Entity::Entity()
 	{
-		public:
-			static Server &get();
-			~Server();
+	}
+	Entity::~Entity()
+	{
+	}
 
-			bool init(int port, std::string mapname, int maxclients = 8);
-			bool destroy();
+	bool Entity::create(EntityTemplatePointer tpl, BufferPointer state)
+	{
+		return false;
+	}
 
-			MapPointer getMap()
-			{
-				return map;
-			}
+	void Entity::getState(BufferPointer buffer)
+	{
+	}
 
-			void sendToAll(BufferPointer buffer, bool reliable = false);
+	void Entity::saveState()
+	{
+	}
+	void Entity::getUpdate(BufferPointer buffer)
+	{
+	}
+	void Entity::applyUpdate(BufferPointer buffer)
+	{
+	}
+	bool Entity::hasChanged()
+	{
+		return false;
+	}
 
-			bool update();
-		private:
-			Server();
+	bool Entity::isVisible(Entity *from)
+	{
+		return false;
+	}
 
-			MapPointer map;
-			std::string mapname;
-
-			ENetHost *host;
-
-			std::vector<Client*> clients;
-	};
+	void Entity::update()
+	{
+	}
 }
-
-#endif

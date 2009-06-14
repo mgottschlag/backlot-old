@@ -22,7 +22,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Server.hpp"
 #include "Buffer.hpp"
 #include "NetworkData.hpp"
-#include "Bullet.hpp"
 #include "Game.hpp"
 
 #include <iostream>
@@ -58,7 +57,7 @@ namespace backlot
 		}
 		std::cout << "Map is ready." << std::endl;
 		// Load game mode
-		Game::get().load("ffa");
+		Game::get().load(mapname, "ffa");
 		// Create network socket
 		ENetAddress address;
 		address.host = ENET_HOST_ANY;
@@ -102,11 +101,12 @@ namespace backlot
 					clients.push_back(newclient);
 					newclient->setStatus(ECS_Connecting);
 					event.peer->data = newclient;
-					// Send map name
-					BufferPointer msg = new Buffer;
-					msg->write8(EPT_InitialData);
-					msg->writeString(mapname);
-					newclient->send(msg);
+					// Send world info
+					if (!Game::get().onClientConnecting(newclient))
+					{
+						// Client was not accepted
+						enet_peer_disconnect(event.peer, 0);
+					}
 					break;
 				}
 				case ENET_EVENT_TYPE_RECEIVE:
@@ -120,111 +120,8 @@ namespace backlot
 					// Parse packet
 					if (type == EPT_Ready)
 					{
-						// Send other players to the client
-						for (unsigned int i = 0; i < players.size(); i++)
-						{
-							BufferPointer msg = new Buffer();
-							msg->write8(EPT_NewPlayer);
-							msg->write32(players[i]->getID());
-							msg->write8(0);
-							client->send(msg, true);
-							// Also send weapons
-							std::map<int, WeaponState> &weapons = players[i]->getWeapons();
-							std::map<int, WeaponState>::iterator it = weapons.begin();
-							while (it != weapons.end())
-							{
-								BufferPointer msg = new Buffer();
-								msg->write8(EPT_NewWeapon);
-								msg->write32(players[i]->getID());
-								msg->write16(it->first);
-								msg->write32(it->second.weapon->getID());
-								msg->writeString("plasma");
-								client->send(msg, true);
-								it++;
-							}
-						}
-						// Create player
-						PlayerPointer newplayer = new Player();
-						Game::get().addPlayer(newplayer);
-						newplayer->setOwner(client);
-						newplayer->load();
-						players.push_back(newplayer);
-						// Send message about the player to other clients
-						BufferPointer msg = new Buffer();
-						msg->write8(EPT_NewPlayer);
-						msg->write32(newplayer->getID());
-						msg->write8(newplayer->getHitpoints());
-						msg->write8(0);
-						for (unsigned int i = 0; i < clients.size(); i++)
-						{
-							if (clients[i] != client)
-							{
-								clients[i]->send(msg, true);
-							}
-						}
-						msg->setPosition(6);
-						msg->write8(1);
-						client->send(msg, true);
-						// Initial weapon
-						WeaponPointer weapon = Weapon::get("plasma");
-						if (weapon)
-						{
-							int id = newplayer->addWeapon(weapon);
-							BufferPointer msg = new Buffer();
-							msg->write8(EPT_NewWeapon);
-							msg->write32(newplayer->getID());
-							msg->write16(id);
-							msg->write32(weapon->getID());
-							msg->writeString("plasma");
-							for (unsigned int i = 0; i < clients.size(); i++)
-							{
-								clients[i]->send(msg, true);
-							}
-						}
-					}
-					else if (type == EPT_Keys)
-					{
-						int id = msg->read32();
-						uint8_t keys = msg->read8();
-						// Get player
-						PlayerPointer player = 0;
-						for (unsigned int i = 0; i < players.size(); i++)
-						{
-							if (players[i]->getID() == id)
-							{
-								player = players[i];
-								break;
-							}
-						}
-						if (!player || player->getOwner() != event.peer->data)
-						{
-							enet_peer_disconnect(event.peer, 0);
-							break;
-						}
-						// Set keyboard info
-						player->setKeys(keys);
-					}
-					else if (type == EPT_Rotation)
-					{
-						int id = msg->read32();
-						float rotation = msg->readFloat();
-						// Get player
-						PlayerPointer player = 0;
-						for (unsigned int i = 0; i < players.size(); i++)
-						{
-							if (players[i]->getID() == id)
-							{
-								player = players[i];
-								break;
-							}
-						}
-						if (!player || player->getOwner() != event.peer->data)
-						{
-							enet_peer_disconnect(event.peer, 0);
-							break;
-						}
-						// Set keyboard info
-						player->setRotation(rotation);
+						// Insert client into the game
+						Game::get().addClient(client);
 					}
 					else
 					{
@@ -234,54 +131,33 @@ namespace backlot
 					break;
 				}
 				case ENET_EVENT_TYPE_DISCONNECT:
+				{
 					std::cout << "Client disconnected." << std::endl;
-					// Remove player
-					for (unsigned int i = 0; i < players.size(); i++)
-					{
-						if (players[i]->getOwner() == event.peer->data)
-						{
-							players.erase(players.begin() + i);
-							break;
-						}
-					}
 					// Remove client from client list
+					Client *client = 0;
 					for (unsigned int i = 0; i < clients.size(); i++)
 					{
 						if (clients[i]->getPeer() == event.peer)
 						{
-							delete clients[i];
+							client = clients[i];
 							clients.erase(clients.begin() + i);
 							break;
 						}
 					}
+					if (client)
+					{
+						// Remove client from the game
+						Game::get().removeClient(client);
+						delete client;
+					}
 					break;
+				}
 				default:
 					break;
 			}
 		}
 		// Game logic
-		for (unsigned int i = 0; i < players.size(); i++)
-			players[i]->think();
-		Bullet::updateAll();
-		// Send updates to clients
-		for (unsigned int i = 0; i < clients.size(); i++)
-		{
-			Client *client = clients[i];
-			BufferPointer msg = new Buffer();
-			msg->write8(EPT_Update);
-			msg->write16(players.size());
-			for (unsigned int j = 0; j < players.size(); j++)
-			{
-				msg->write32(players[j]->getID());
-				msg->write8(players[j]->getKeys());
-				msg->writeFloat(players[j]->getRotation());
-				Vector2F position = players[j]->getPosition();
-				msg->writeFloat(position.x);
-				msg->writeFloat(position.y);
-				msg->write8(players[j]->getHitpoints());
-			}
-			client->send(msg);
-		}
+		Game::get().update();
 		// Flush socket
 		enet_host_flush(host);
 		return true;
