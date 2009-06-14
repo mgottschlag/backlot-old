@@ -106,6 +106,15 @@ namespace backlot
 			void setHitpoints(int newhitpoints);
 
 			/**
+			 * Sets the team of the player.
+			 */
+			void setTeam(int team);
+			/**
+			 * Returns the team of the player.
+			 */
+			int getTeam();
+
+			/**
 			 * Adds a weapon to the player. The weapon is not automatically
 			 * sent to all clients.
 			 */
@@ -136,6 +145,7 @@ namespace backlot
 			Client *owner;
 
 			int hitpoints;
+			int team;
 
 			int lastweaponid;
 			std::map<int, WeaponState> weapons;

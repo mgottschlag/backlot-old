@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mode teams="2">
+	<playerinfo weaponslots="2" speed="1">
+		<weapon name="plasma" slot="0" />
+	</playerinfo>
+	<script>
+	<![CDATA[
+	function on_enter(player)
+		server.reset_player(player);
+	end
+	function on_death(player, killer)
+		if server.get_team(killer) ~= server.get_team(player) then
+			server.increase_score(killer);
+		else
+			server.decrease_score(killer);
+		end
+		server.deactivate_player(player);
+		server.reset_player(player);
+		team = server.get_team(player);
+		if server.players_alive(team) == 0 then
+			server.increase_team_score(team);
+			server.reset_all_players();
+			server.respawn_all_players();
+		end
+	end
+	]]>
+	</script>
+</mode>

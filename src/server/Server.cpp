@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Buffer.hpp"
 #include "NetworkData.hpp"
 #include "Bullet.hpp"
+#include "Game.hpp"
 
 #include <iostream>
 
@@ -56,6 +57,8 @@ namespace backlot
 			}
 		}
 		std::cout << "Map is ready." << std::endl;
+		// Load game mode
+		Game::get().load("ffa");
 		// Create network socket
 		ENetAddress address;
 		address.host = ENET_HOST_ANY;
@@ -142,6 +145,7 @@ namespace backlot
 						}
 						// Create player
 						PlayerPointer newplayer = new Player();
+						Game::get().addPlayer(newplayer);
 						newplayer->setOwner(client);
 						newplayer->load();
 						players.push_back(newplayer);

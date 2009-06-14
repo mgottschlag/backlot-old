@@ -74,6 +74,7 @@ src/server/Weapon.cpp
 src/Buffer.cpp
 src/server/Bullet.cpp
 src/Script.cpp
+src/server/Game.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

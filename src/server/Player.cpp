@@ -38,6 +38,7 @@ namespace backlot
 		position = Vector2F(0.5, 0.5);
 		lastweaponid = 0;
 		currentweapon = -1;
+		team = 0;
 		// Add player to player list
 		players.push_back(this);
 	}
@@ -108,6 +109,15 @@ namespace backlot
 	void Player::setHitpoints(int newhitpoints)
 	{
 		hitpoints = newhitpoints;
+	}
+
+	void Player::setTeam(int team)
+	{
+		this->team = team;
+	}
+	int Player::getTeam()
+	{
+		return team;
 	}
 
 	int Player::addWeapon(WeaponPointer weapon)
