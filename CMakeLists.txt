@@ -42,6 +42,8 @@ src/client/Menu.cpp
 src/client/Font.cpp
 src/client/GuichanFont.cpp
 src/client/Dialog.cpp
+src/entity/EntityTemplate.cpp
+src/entity/Property.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
@@ -75,6 +77,8 @@ src/Buffer.cpp
 src/server/Bullet.cpp
 src/Script.cpp
 src/server/Game.cpp
+src/entity/EntityTemplate.cpp
+src/entity/Property.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp
