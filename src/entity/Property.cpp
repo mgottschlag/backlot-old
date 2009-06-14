@@ -1,0 +1,198 @@
+/*
+Copyright (C) 2009  Mathias Gottschlag
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in the
+Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+#include "entity/Property.hpp"
+
+#include <cstring>
+#include <iostream>
+
+namespace backlot
+{
+	Property::Property()
+	{
+		type = EPT_Integer;
+		flags = EPF_None;
+		size = 32;
+		memset(data, 0, 8);
+	}
+	Property::Property(std::string name, PropertyType type,
+		PropertyFlags flags) : name(name), type(type), flags(flags)
+	{
+		size = 32;
+		memset(data, 0, 8);
+	}
+	Property::Property(const Property &property)
+	{
+		name = property.name;
+		type = property.type;
+		flags = property.flags;
+		size = property.size;
+		memcpy(data, property.data, 8);
+	}
+	Property::~Property()
+	{
+	}
+
+	void Property::setName(std::string name)
+	{
+		this->name = name;
+	}
+	std::string Property::getName()
+	{
+		return name;
+	}
+	void Property::setType(PropertyType type)
+	{
+		this->type = type;
+	}
+	PropertyType Property::getType()
+	{
+		return type;
+	}
+	void Property::setFlags(PropertyFlags flags)
+	{
+		this->flags = flags;
+	}
+	PropertyFlags Property::getFlags()
+	{
+		return flags;
+	}
+
+	void Property::setSize(unsigned int size)
+	{
+		this->size = size;
+	}
+	unsigned int Property::getSize()
+	{
+		return size;
+	}
+
+	void Property::setInt(int data)
+	{
+		if (type == EPT_Integer)
+		{
+			*((int*)this->data) = data;
+		}
+		else
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+	}
+	int Property::getInt()
+	{
+		if (type == EPT_Integer)
+		{
+			return *((int*)this->data);
+		}
+		else
+		{
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+			return 0;
+		}
+	}
+	void Property::setUnsignedInt(unsigned int data)
+	{
+		if (type == EPT_Integer)
+		{
+			*((unsigned int*)this->data) = data;
+		}
+		else
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+	}
+	unsigned int Property::getUnsignedInt()
+	{
+		if (type == EPT_Integer)
+		{
+			return *((unsigned int*)this->data);
+		}
+		else
+		{
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+			return 0;
+		}
+	}
+	void Property::setFloat(float data)
+	{
+		if (type == EPT_Float)
+		{
+			*((float*)this->data) = data;
+		}
+		else
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+	}
+	float Property::getFloat()
+	{
+		if (type == EPT_Float)
+		{
+			return *((float*)this->data);
+		}
+		else
+		{
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+			return 0;
+		}
+	}
+	void Property::setVector(const Vector2F &data)
+	{
+		if (type == EPT_Vector2F)
+		{
+			((float*)this->data)[0] = data.x;
+			((float*)this->data)[1] = data.y;
+		}
+		else
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+	}
+	Vector2F Property::getVector()
+	{
+		if (type == EPT_Vector2F)
+		{
+			return Vector2F(((float*)this->data)[0], ((float*)this->data)[1]);
+		}
+		else
+		{
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+			return Vector2F();
+		}
+	}
+
+	Property &Property::operator=(const Property &property)
+	{
+		if (name == "")
+		{
+			name = property.name;
+			type = property.type;
+			flags = property.flags;
+			size = property.size;
+			memcpy(data, property.data, 8);
+		}
+		else if (type == property.type)
+			memcpy(data, property.data, 8);
+		return *this;
+	}
+	bool Property::operator==(const Property &property)
+	{
+		if (type != property.type)
+			return false;
+		if (type == EPT_Vector2F)
+			return ((float*)data)[0] == ((float*)property.data)[0]
+				&& ((float*)data)[1] == ((float*)property.data)[1];
+		else
+			return !memcmp(data, property.data, 4);
+	}
+}
