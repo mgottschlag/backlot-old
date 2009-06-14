@@ -32,7 +32,8 @@ namespace backlot
 	{
 		EPT_Integer,
 		EPT_Float,
-		EPT_Vector2F
+		EPT_Vector2F,
+		EPT_Vector2I
 	};
 
 	enum PropertyFlags
@@ -67,8 +68,12 @@ namespace backlot
 			unsigned int getUnsignedInt();
 			void setFloat(float data);
 			float getFloat();
-			void setVector(const Vector2F &data);
-			Vector2F getVector();
+			void setVector2F(const Vector2F &data);
+			Vector2F getVector2F();
+			void setVector2I(const Vector2I &data);
+			Vector2I getVector2I();
+
+			void set(std::string s);
 
 			Property &operator=(const Property &property);
 			bool operator==(const Property &property);

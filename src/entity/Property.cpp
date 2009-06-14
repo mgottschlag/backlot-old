@@ -148,7 +148,7 @@ namespace backlot
 			return 0;
 		}
 	}
-	void Property::setVector(const Vector2F &data)
+	void Property::setVector2F(const Vector2F &data)
 	{
 		if (type == EPT_Vector2F)
 		{
@@ -158,7 +158,7 @@ namespace backlot
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
 	}
-	Vector2F Property::getVector()
+	Vector2F Property::getVector2F()
 	{
 		if (type == EPT_Vector2F)
 		{
@@ -168,6 +168,47 @@ namespace backlot
 		{
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
 			return Vector2F();
+		}
+	}
+	void Property::setVector2I(const Vector2I &data)
+	{
+		if (type == EPT_Vector2I)
+		{
+			((int*)this->data)[0] = data.x;
+			((int*)this->data)[1] = data.y;
+		}
+		else
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+	}
+	Vector2I Property::getVector2I()
+	{
+		if (type == EPT_Vector2I)
+		{
+			return Vector2I(((int*)this->data)[0], ((int*)this->data)[1]);
+		}
+		else
+		{
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+			return Vector2I();
+		}
+	}
+
+	void Property::set(std::string s)
+	{
+		switch (type)
+		{
+			case EPT_Integer:
+				setInt(atoi(s.c_str()));
+				break;
+			case EPT_Float:
+				setFloat(atof(s.c_str()));
+				break;
+			case EPT_Vector2F:
+				setVector2F(Vector2F(s));
+				break;
+			case EPT_Vector2I:
+				setVector2I(Vector2I(s));
+				break;
 		}
 	}
 
@@ -192,6 +233,9 @@ namespace backlot
 		if (type == EPT_Vector2F)
 			return ((float*)data)[0] == ((float*)property.data)[0]
 				&& ((float*)data)[1] == ((float*)property.data)[1];
+		else if (type == EPT_Vector2I)
+			return ((int*)data)[0] == ((int*)property.data)[0]
+				&& ((int*)data)[1] == ((int*)property.data)[1];
 		else
 			return !memcmp(data, property.data, 4);
 	}
