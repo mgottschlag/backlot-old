@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<entity size="0.6/0.6" origin="0.3/0.3" blocking="yes">
+	<properties>
+		<position predict="1" />
+		<rotation predict="1" updatelocally="0" />
+		<team default="0" type="uint" size="4" />
+		<currentweapon default="-1" type="int" size="4" />
+		<keys default="0" type="uint" size="8" unlocked="1" />
+		<health default="100" type="uint" size="8" />
+		<mousepos default="0/0" type="vector2i" size="12" unlocked="1" />
+	</properties>
+
+	<image name="feet" src="sprites/feet.png" position="-0.5/-0.5" rotate="no" />
+	<animation name="feetanim" image="feet" size="4/2" status="stopped" />
+	<image name="body" src="sprites/player.png" position="-0.5/-0.5" rotate="no" />
+	<image name="weapon" position="-0.5/-0.5" rotate="no" />
+
+	<script>
+	<![CDATA[
+		weapons = {};
+
+		function on_load()
+		end
+		function on_loaded()
+			if Client ~= nil then
+				if this.isLocal() then
+					Game.get().setInputTarget(this);
+				end
+			end
+		end
+		function on_changed(property)
+			if property.getName() == "rotation" then
+				if Client ~= nil then
+					body.setRotation(0);
+					body.setPosition(-0.5, -0.5);
+					body.rotate(property.getFloat(), 0.5, 0.5);
+					weapon.setRotation(0);
+					weapon.setPosition(-0.5, -0.5);
+					weapon.rotate(property.getFloat(), 0.5, 0.5);
+				end
+			end
+			-- Movement
+			if property.getName() == "keys" then
+				yspeed = 0;
+				xspeed = 0;
+				-- Get movement speed
+				if keys.bit(0) == true then
+					yspeed = yspeed + 1;
+				end
+				if keys.bit(1) == true then
+					yspeed = yspeed - 1;
+				end
+				if keys.bit(2) == true then
+					xspeed = xspeed + 1;
+				end
+				if keys.bit(3) == true then
+					xspeed = xspeed - 1;
+				end
+				-- Set movement
+				this.setSpeed(xspeed, yspeed, false, true);
+				if Client ~= nil then
+					feet.setRotation(0);
+					feet.setPosition(-0.5, -0.5);
+					if xspeed ~= 0 and yspeed ~= 0 then
+						feet.setRotation(Vector2F(xspeed, yspeed).getRotation());
+					end
+				end
+				if Server ~= nil then
+					-- Shooting
+					if keys.bit(4) == true then
+					end
+				end
+			end
+			if property.getName() == "currentweapon" then
+				if Client ~= nil then
+					-- TODO: Change HUD
+				end
+			end
+		end
+		function on_set_weapon(weapon)
+			currentweapon.setInt(weapon);
+		end
+	]]>
+	</script>
+</entity>

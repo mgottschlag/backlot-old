@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<entity size="1.0/1.0" origin="0.5/0.5">
+	<properties>
+		<lifted type="int" size="1" />
+	</properties>
+
+	<image name="weapon" position="-0.5/-0.5" rotate="no" />
+
+	<script>
+	<![CDATA[
+		function shoot(player)
+		end
+		function pickup(player)
+			lifted.setBool(true);
+		end
+		function putdown(player)
+			lifted.setBool(false);
+		end
+		function on_changed(property)
+			if property.getName() == "lifted" then
+				weapon.setVisible(not lifted.getBool());
+			end
+		end
+	]]>
+	</script>
+</entity>
