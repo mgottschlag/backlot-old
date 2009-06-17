@@ -27,6 +27,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	static inline unsigned int bytes(unsigned int bits)
+	{
+		return (bits + 7) / 8;
+	}
 	Buffer::Buffer() : ReferenceCounted()
 	{
 		data = 0;
@@ -76,8 +80,8 @@ namespace backlot
 	void Buffer::setPosition(unsigned int position)
 	{
 		this->position = position;
-		if (position > size)
-			this->position = size;
+		if (position > size * 8)
+			this->position = size * 8;
 	}
 	unsigned int Buffer::getPosition()
 	{
@@ -91,165 +95,375 @@ namespace backlot
 
 	void Buffer::write8(uint8_t value)
 	{
-		if (position == size)
+		if (position % 8)
 		{
-			data = (char*)realloc(data, size + 1);
-			*(uint8_t*)(data + position) = value;
-			size++;
-			position++;
+			if (position + 8 > size * 8)
+			{
+				data = (char*)realloc(data, size + 1);
+				size++;
+			}
+			writeByte(value);
+			position += 8;
 		}
 		else
 		{
-			*(uint8_t*)(data + position) = value;
-			position++;
+			// We are on an even position
+			if (position / 8 == size)
+			{
+				data = (char*)realloc(data, size + 1);
+				*(uint8_t*)(data + position / 8) = value;
+				size++;
+				position += 8;
+			}
+			else
+			{
+				*(uint8_t*)(data + position / 8) = value;
+				position++;
+			}
 		}
 	}
 	uint8_t Buffer::read8()
 	{
-		if (position == size)
+		if (position % 8)
 		{
-			return 0;
-		}
-		uint8_t value = *(uint8_t*)(data + position);
-		position++;
-		return value;
-	}
-	void Buffer::write16(uint16_t value)
-	{
-		if (position + 2 > size)
-		{
-			data = (char*)realloc(data, position + 2);
-			*(uint16_t*)(data + position) = htons(value);
-			position += 2;
-			size += 2;
+			uint8_t byte = readByte();
+			position += 8;
+			if (position > size * 8)
+				position = size * 8;
+			return byte;
 		}
 		else
 		{
-			*(uint16_t*)(data + position) = htons(value);
-			position += 2;
+			// We are on an even position
+			if (position / 8 == size)
+			{
+				return 0;
+			}
+			uint8_t value = *(uint8_t*)(data + position / 8);
+			position += 8;
+			return value;
+		}
+	}
+	void Buffer::write16(uint16_t value)
+	{
+		if (position % 8)
+		{
+			if (position + 16 > size * 8)
+			{
+				data = (char*)realloc(data, bytes(position + 16));
+				size = bytes(position + 16);
+			}
+			writeByte(value >> 8);
+			position += 8;
+			writeByte(value & 0xFF);
+			position += 8;
+		}
+		else
+		{
+			// We are on an even position
+			if (position / 8 + 2 > size)
+			{
+				data = (char*)realloc(data, position / 8 + 2);
+				*(uint16_t*)(data + position / 8) = htons(value);
+				position += 16;
+				size = position / 8;
+			}
+			else
+			{
+				*(uint16_t*)(data + position / 8) = htons(value);
+				position += 16;
+			}
 		}
 	}
 	uint16_t Buffer::read16()
 	{
-		if (position + 2 > size)
+		if (position % 8)
 		{
-			return 0;
-		}
-		uint16_t value = *(uint16_t*)(data + position);
-		position += 2;
-		return ntohs(value);
-	}
-	void Buffer::write32(uint32_t value)
-	{
-		if (position + 4 > size)
-		{
-			data = (char*)realloc(data, position + 4);
-			*(uint32_t*)(data + position) = htonl(value);
-			position += 4;
-			size += 4;
+			uint16_t value = readByte() << 8;
+			position += 8;
+			if (position > size * 8)
+				position = size * 8;
+			value |= readByte();
+			position += 8;
+			if (position > size * 8)
+				position = size * 8;
+			return value;
 		}
 		else
 		{
-			*(uint32_t*)(data + position) = htonl(value);
-			position += 4;
+			// We are on an even position
+			if (position / 8 + 2 > size)
+			{
+				return 0;
+			}
+			uint16_t value = *(uint16_t*)(data + position / 8);
+			position += 16;
+			return ntohs(value);
+		}
+	}
+	void Buffer::write32(uint32_t value)
+	{
+		if (position % 8)
+		{
+			if (position + 32 > size * 8)
+			{
+				data = (char*)realloc(data, bytes(position + 32));
+				size = bytes(position + 32);
+			}
+			for (int shift = 24; shift >= 0; shift -= 8)
+			{
+				writeByte((value >> shift) & 0xFF);
+				position += 8;
+			}
+		}
+		else
+		{
+			// We are on an even position
+			if (position / 8 + 4 > size)
+			{
+				data = (char*)realloc(data, position / 8 + 4);
+				*(uint32_t*)(data + position / 8) = htonl(value);
+				position += 32;
+				size += 4;
+			}
+			else
+			{
+				*(uint32_t*)(data + position / 8) = htonl(value);
+				position += 32;
+			}
 		}
 	}
 	uint32_t Buffer::read32()
 	{
-		if (position + 4 > size)
+		if (position % 8)
 		{
-			return 0;
-		}
-		uint32_t value = *(uint32_t*)(data + position);
-		position += 4;
-		return ntohl(value);
-	}
-	void Buffer::write64(uint64_t value)
-	{
-		// TODO: Byte ordering
-		if (position + 8 > size)
-		{
-			data = (char*)realloc(data, position + 8);
-			*(uint64_t*)(data + position) = value;
-			position += 8;
-			size += 8;
+			uint32_t value = 0;
+			for (int shift = 24; shift >= 0; shift -= 8)
+			{
+				value |= (uint32_t)readByte() << shift;
+				position += 8;
+				if (position > size * 8)
+					position = size * 8;
+			}
+			return value;
 		}
 		else
 		{
-			*(uint64_t*)(data + position) = value;
-			position += 8;
+			// We are on an even position
+			if (position / 8 + 4 > size)
+			{
+				return 0;
+			}
+			uint32_t value = *(uint32_t*)(data + position / 8);
+			position += 32;
+			return ntohl(value);
+		}
+	}
+	void Buffer::write64(uint64_t value)
+	{
+		if (position % 8)
+		{
+			if (position + 64 > size * 8)
+			{
+				data = (char*)realloc(data, bytes(position + 64));
+				size = bytes(position + 64);
+			}
+			for (int shift = 56; shift >= 0; shift -= 8)
+			{
+				writeByte((value >> shift) & 0xFF);
+				position += 8;
+			}
+		}
+		else
+		{
+			// We are on an even position
+			// TODO: Byte ordering
+			if (position / 8 + 8 > size)
+			{
+				data = (char*)realloc(data, position / 8 + 8);
+				*(uint64_t*)(data + position / 8) = value;
+				position += 64;
+				size += 8;
+			}
+			else
+			{
+				*(uint64_t*)(data + position / 8) = value;
+				position += 64;
+			}
 		}
 	}
 	uint64_t Buffer::read64()
 	{
-		// TODO: Byte ordering
-		if (position + 8 > size)
+		if (position % 8)
 		{
-			return 0;
+			uint32_t value = 0;
+			for (int shift = 56; shift >= 0; shift -= 8)
+			{
+				value |= (uint64_t)readByte() << shift;
+				position += 8;
+				if (position > size * 8)
+					position = size * 8;
+			}
+			return value;
 		}
-		uint64_t value = *(uint64_t*)(data + position);
-		position += 8;
-		return value;
+		else
+		{
+			// We are on an even position
+			// TODO: Byte ordering
+			if (position / 8 + 8 > size)
+			{
+				return 0;
+			}
+			uint64_t value = *(uint64_t*)(data + position / 8);
+			position += 64;
+			return value;
+		}
 	}
 
 	void Buffer::writeFloat(float value)
 	{
-		// TODO: Byte ordering
-		if (position + 4 > size)
-		{
-			data = (char*)realloc(data, position + 4);
-			*(float*)(data + position) = value;
-			position += 4;
-			size += 4;
-		}
-		else
-		{
-			*(float*)(data + position) = value;
-			position += 4;
-		}
+		unsigned int intvalue;
+		*(float*)&intvalue = value;
+		write32(intvalue);
 	}
 	float Buffer::readFloat()
 	{
-		// TODO: Byte ordering
-		if (position + 4 > size)
-		{
-			return 0;
-		}
-		float value = *(float*)(data + position);
-		position += 4;
-		return value;
+		unsigned int intvalue = read32();
+		return *(float*)&intvalue;
 	}
 
 	void Buffer::writeString(std::string value)
 	{
-		if (position + value.size() + 1 > size)
+		if (position % 8)
 		{
-			data = (char*)realloc(data, position + value.size() + 1);
-			strcpy(data + position, value.c_str());
-			position += value.size() + 1;
-			size += value.size() + 1;
+			const char *str = value.c_str();
+			for (unsigned int i = 0; i < value.size() + 1; i++)
+			{
+				write8(str[i]);
+			}
 		}
 		else
 		{
-			strcpy(data + position, value.c_str());
-			position += value.size() + 1;
+			// We are on an even position
+			if (position / 8 + value.size() + 1 > size)
+			{
+				data = (char*)realloc(data, position / 8 + value.size() + 1);
+				strcpy(data + position / 8, value.c_str());
+				position += (value.size() + 1) * 8;
+				size += value.size() + 1;
+			}
+			else
+			{
+				strcpy(data + position / 8, value.c_str());
+				position += (value.size() + 1) * 8;
+			}
 		}
 	}
 	std::string Buffer::readString()
 	{
-		if (position == size)
-			return "";
-		std::string value;
-		while (data[position] != 0)
+		if (position % 8)
 		{
-			value += data[position];
-			position++;
-			if (position == size)
-				break;
+			std::string value;
+			char c = read8();
+			while (c)
+			{
+				value += c;
+				c = read8();
+			}
+			return value;
 		}
-		if (position < size)
-			position++;
-		return value;
+		else
+		{
+			// We are on an even position
+			if (position / 8 == size)
+				return "";
+			std::string value;
+			while (data[position / 8] != 0)
+			{
+				value += data[position / 8];
+				position += 8;
+				if (position / 8 == size)
+					break;
+			}
+			if (position / 8 < size)
+				position += 8;
+			return value;
+		}
+	}
+
+	void Buffer::writeInt(int value, unsigned int size)
+	{
+		writeUnsignedInt(value, size);
+	}
+	int Buffer::readInt(unsigned int size)
+	{
+		unsigned int value = 0;
+		for (unsigned int i = 0; i < (size + 7) / 8; i++)
+		{
+			((char*)&value)[i] = readByte();
+			if (size - i * 8 >= 8)
+				position += 8;
+			else
+			{
+				position += size - i * 8;
+				((char*)&value)[i] &= 0xFF << (((size + 7) & ~7) - size);
+			}
+		}
+		if (position > this->size * 8)
+			position = this->size * 8;
+		value = ntohl(value);
+		// Extend sign if necessary
+		if (value & 0x80000000)
+			return (value >> (32 - size)) | (0xFFFFFFFF << size);
+		else
+			return value >> (32 - size);
+	}
+	void Buffer::writeUnsignedInt(unsigned int value, unsigned int size)
+	{
+		// Allocate memory
+		if (position + size > this->size * 8)
+		{
+			data = (char*)realloc(data, bytes(position + size));
+			this->size = bytes(position + size);
+		}
+		// Left-align the number in memory
+		value <<= 32 - this->size * 8;
+		value = htonl(value);
+		for (unsigned int i = 0; i < (size + 7) / 8; i++)
+		{
+			writeByte(((char*)&value)[i]);
+			if (size - i * 8 >= 8)
+				position += 8;
+			else
+				position += size - i * 8;
+		}
+		// Adjust position
+		position -= (size + 7) & ~7;
+		position += size;
+	}
+	unsigned int Buffer::readUnsignedInt(unsigned int size)
+	{
+		unsigned int value = 0;
+		for (unsigned int i = 0; i < (size + 7) / 8; i++)
+		{
+			((char*)&value)[i] = readByte();
+			if (size - i * 8 >= 8)
+				position += 8;
+			else
+			{
+				position += size - i * 8;
+				((char*)&value)[i] &= 0xFF << (((size + 7) & ~7) - size);
+			}
+		}
+		if (position > this->size * 8)
+			position = this->size * 8;
+		value = ntohl(value);
+		return value >> (32 - size);
+	}
+
+	void Buffer::nextByte()
+	{
+		position = (position + 7) & ~7;
 	}
 
 	Buffer &Buffer::operator=(const Buffer &b)
@@ -266,5 +480,57 @@ namespace backlot
 		memcpy(data + size, b.data, b.size);
 		size += b.size;
 		return *this;
+	}
+
+	void Buffer::writeByte(unsigned char value)
+	{
+		if (position % 8)
+		{
+			// Write two halves of the byte
+			int offset = position % 8;
+			unsigned char b1 = value >> offset;
+			unsigned char b2 = value << (8 - offset);
+			unsigned char mask1 = 0xFF >> offset;
+			unsigned char mask2 = 0xFF << (8 - offset);
+			data[position / 8] &= mask2;
+			data[position / 8] |= b1;
+			if (position / 8 + 1 < size)
+			{
+				data[position / 8 + 1] &= mask1;
+				data[position / 8 + 1] |= b2;
+			}
+		}
+		else
+		{
+			// Directly write one byte
+			data[position / 8] = value;
+		}
+	}
+	unsigned char Buffer::readByte()
+	{
+		if (position >= size * 8)
+			return 0;
+		if (position % 8)
+		{
+			int offset = position % 8;
+			if (size * 8 < position + 8)
+			{
+				// Only read one half
+				unsigned char b = data[position / 8];
+				b <<= offset;
+				return b;
+			}
+			else
+			{
+				// Read the whole byte
+				unsigned char b1 = data[position / 8];
+				unsigned char b2 = data[position / 8 + 1];
+				return (b1 << offset) | (b2 >> (8 - offset));
+			}
+		}
+		else
+		{
+			return data[position / 8];
+		}
 	}
 }

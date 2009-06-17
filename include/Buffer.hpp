@@ -35,7 +35,13 @@ namespace backlot
 	 * Data is written/read to/from the buffer via read*() and write*(). All
 	 * read/write operations start at the current read/write position which
 	 * is 0 if the buffer has just been created. If multiple bytes are written
-	 * or read, they are converted to/from network byte order if necessary.
+	 * or read, they are converted to/from network byte order if necessary. The
+	 * buffer uses bit-packing, so integers with arbitrary size can be written
+	 * and read without wasting any space. Note that reads/writes at byte
+	 * boundaries are faster than reads/writes starting in the middle of a byte.
+	 * nextByte() can be used to align the current position in order to
+	 * minimize CPU usage, although this usually comes with a larger buffer
+	 * size.
 	 */
 	class Buffer : public ReferenceCounted
 	{
@@ -139,6 +145,32 @@ namespace backlot
 			std::string readString();
 
 			/**
+			 * Writes an integer with an arbitrary size to the buffer. Only
+			 * sizes from 1 to 32 are supported.
+			 */
+			void writeInt(int value, unsigned int size);
+			/**
+			 * Reads an integer with an arbitrary size from the buffer.
+			 */
+			int readInt(unsigned int size);
+			/**
+			 * Writes a unsigned integer with an arbitrary size to the buffer.
+			 */
+			void writeUnsignedInt(unsigned int value, unsigned int size);
+			/**
+			 * Reads a unsigned integer with an arbitrary size from the buffer.
+			 * Only sizes from 1 to 32 are supported.
+			 */
+			unsigned int readUnsignedInt(unsigned int size);
+
+			/**
+			 * Rounds the read/write position up to the next byte. This is
+			 * useful to reduce CPU load if there is no gain from using bit
+			 * packing.
+			 */
+			void nextByte();
+
+			/**
 			 * Creates a copy of buf.
 			 */
 			Buffer &operator=(const Buffer &buf);
@@ -148,15 +180,26 @@ namespace backlot
 			Buffer &operator+=(const Buffer &buf);
 		private:
 			/**
+			 * Writes one byte to the buffer, does not change the current
+			 * position.
+			 */
+			void writeByte(unsigned char value);
+			/**
+			 * Reads one byte from the buffer, does not change the current
+			 * position.
+			 */
+			unsigned char readByte();
+
+			/**
 			 * Buffer data.
 			 */
 			char *data;
 			/**
-			 * Buffer size.
+			 * Buffer size in bytes.
 			 */
 			unsigned int size;
 			/**
-			 * Read/write position.
+			 * Read/write position in bits.
 			 */
 			unsigned int position;
 	};
