@@ -1,11 +1,12 @@
-/CMakeCache.txt
+CMakeCache.txt
 CMakeFiles
 /backlot
 /server
-/cmake_install.cmake
+cmake_install.cmake
 *.*~
 Makefile
 /server.log
 /*.dll
 /server.exe
 /backlot.exe
+/tests/buffertest
