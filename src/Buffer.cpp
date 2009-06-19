@@ -427,7 +427,7 @@ namespace backlot
 			this->size = bytes(position + size);
 		}
 		// Left-align the number in memory
-		value <<= 32 - this->size * 8;
+		value <<= 32 - size;
 		value = htonl(value);
 		for (unsigned int i = 0; i < (size + 7) / 8; i++)
 		{
@@ -437,9 +437,6 @@ namespace backlot
 			else
 				position += size - i * 8;
 		}
-		// Adjust position
-		position -= (size + 7) & ~7;
-		position += size;
 	}
 	unsigned int Buffer::readUnsignedInt(unsigned int size)
 	{

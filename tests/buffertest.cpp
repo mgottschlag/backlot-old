@@ -65,13 +65,17 @@ int main(int argc, char **argv)
 	if (buffer->getPosition() != 57)
 		std::cout << "Wrong buffer position (57): " << buffer->getSize() << std::endl;
 	buffer->setPosition(0);
+	u32 = buffer->read32();
+	if (u32 != 0xAEB6BADB)
+		std::cout << "4 bytes (0xAEB6BADB): " << u32 << std::endl;
+	buffer->setPosition(0);
 	u16 = buffer->readUnsignedInt(14);
 	if (u16 != 0x2BAD)
 		std::cout << "Wrong data (0x2BAD): " << u16 << std::endl;
 	std::cout << std::dec;
 	int s32 = buffer->readInt(14);
-	if (s32 != -1)
-		std::cout << "Wrong data (-1): " << s32 << std::endl;
+	if (s32 != -5203)
+		std::cout << "Wrong data (-5203): " << s32 << std::endl;
 	std::cout << std::hex;
 	u32 = buffer->readUnsignedInt(28);
 	if (u32 != 0xBADCAFE)
