@@ -58,9 +58,9 @@ set_target_properties(backlot PROPERTIES COMPILE_DEFINITIONS CLIENT)
 set_target_properties(backlot PROPERTIES COMPILE_FLAGS "-Iinclude/client -I${SDL_INCLUDE_DIR}")
 
 if(WIN32)
-	target_link_libraries(backlot SDL SDL_image SDL_mixer guichan_opengl guichan_sdl guichan opengl32 glu32 glew32 enet ws2_32 winmm ${LUA_LIBRARIES})
+	target_link_libraries(backlot SDL SDL_image SDL_mixer guichan_opengl guichan_sdl guichan opengl32 glu32 glew32 enet ws2_32 winmm luabind ${LUA_LIBRARIES})
 else(WIN32)
-	target_link_libraries(backlot SDL SDL_image SDL_mixer guichan_opengl guichan_sdl guichan GL glut GLEW enet ${LUA_LIBRARIES})
+	target_link_libraries(backlot SDL SDL_image SDL_mixer guichan_opengl guichan_sdl guichan GL glut GLEW enet luabind ${LUA_LIBRARIES})
 endif(WIN32)
 
 set(SERVER_SRC
@@ -89,7 +89,7 @@ set_target_properties(server PROPERTIES COMPILE_FLAGS -Iinclude/server)
 target_link_libraries(server enet)
 
 if(WIN32)
-	target_link_libraries(server enet ws2_32 winmm ${LUA_LIBRARIES})
+	target_link_libraries(server enet ws2_32 winmm luabind ${LUA_LIBRARIES})
 else(WIN32)
-	target_link_libraries(server enet ${LUA_LIBRARIES})
+	target_link_libraries(server enet luabind ${LUA_LIBRARIES})
 endif(WIN32)

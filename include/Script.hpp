@@ -119,6 +119,9 @@ namespace backlot
 			#ifdef CLIENT
 			void addMenuFunctions();
 			#endif
+			#ifdef SERVER
+			void addServerFunctions();
+			#endif
 		private:
 			void push(int value);
 			void push(float value);

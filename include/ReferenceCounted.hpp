@@ -85,7 +85,7 @@ namespace backlot
 			/**
 			 * Copy constructor.
 			 */
-			SharedPointer(const SharedPointer &ptr) : target(ptr.target)
+			SharedPointer(const SharedPointer<T> &ptr) : target(ptr.target)
 			{
 				if (target)
 					target->grab();
@@ -105,6 +105,14 @@ namespace backlot
 			bool isNull()
 			{
 				return target == 0;
+			}
+
+			/**
+			 * Returns the raw pointer. This should usually not be used.
+			 */
+			T *get() const
+			{
+				return target;
 			}
 
 			SharedPointer &operator=(const SharedPointer &ptr)

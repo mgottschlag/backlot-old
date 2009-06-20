@@ -24,6 +24,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifdef CLIENT
 #include "Dialog.hpp"
 #endif
+#ifdef SERVER
+#include "Game.hpp"
+#endif
 
 #include <iostream>
 extern "C"
@@ -31,15 +34,27 @@ extern "C"
 	#include "lualib.h"
 	#include "lauxlib.h"
 }
+#include <luabind/luabind.hpp>
 
 namespace backlot
 {
+	template<class T> T *get_pointer(const SharedPointer<T> &p)
+	{
+		return p.get();
+	}
+
+	template<class A> SharedPointer<A> *get_const_holder(SharedPointer<A>*)
+	{
+		return 0;
+	}
+
 	Script::Script() : ReferenceCounted()
 	{
 		state = lua_open();
 		luaopen_base(state);
 		luaopen_string(state);
 		luaopen_math(state);
+		luabind::open(state);
 	}
 	Script::~Script()
 	{
@@ -174,6 +189,28 @@ namespace backlot
 		lua_settable(state, space);
 		// Done
 		lua_setglobal(state, "menu");
+	}
+	#endif
+	#ifdef SERVER
+	void Script::addServerFunctions()
+	{
+		luabind::module(state)
+		[
+			// Game class
+			luabind::class_<Game>("Game")
+				.scope
+				[
+					luabind::def("get", &Game::get)
+				]
+				.def("update", &Game::update)
+				.def("addEntity", &Game::addEntity)
+				.def("removeEntity", &Game::removeEntity)
+		];
+		luabind::module(state)
+		[
+			// Entitiy class
+			luabind::class_<Entity, EntityPointer>("Entity")
+		];
 	}
 	#endif
 }
