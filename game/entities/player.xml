@@ -23,62 +23,62 @@
 		end
 		function on_loaded()
 			if Client ~= nil then
-				if this.isLocal() then
-					Game.get().setInputTarget(this);
+				if this:isLocal() then
+					Game.get():setInputTarget(this);
 				end
 			end
 		end
 		function on_changed(property)
-			if property.getName() == "rotation" then
+			if property:getName() == "rotation" then
 				if Client ~= nil then
-					body.setRotation(0);
-					body.setPosition(-0.5, -0.5);
-					body.rotate(property.getFloat(), 0.5, 0.5);
-					weapon.setRotation(0);
-					weapon.setPosition(-0.5, -0.5);
-					weapon.rotate(property.getFloat(), 0.5, 0.5);
+					body:setRotation(0);
+					body:setPosition(-0.5, -0.5);
+					body:rotate(property:getFloat(), 0.5, 0.5);
+					weapon:setRotation(0);
+					weapon:setPosition(-0.5, -0.5);
+					weapon:rotate(property:getFloat(), 0.5, 0.5);
 				end
 			end
 			-- Movement
-			if property.getName() == "keys" then
+			if property:getName() == "keys" then
 				yspeed = 0;
 				xspeed = 0;
 				-- Get movement speed
-				if keys.bit(0) == true then
+				if keys:bit(0) == true then
 					yspeed = yspeed + 1;
 				end
-				if keys.bit(1) == true then
+				if keys:bit(1) == true then
 					yspeed = yspeed - 1;
 				end
-				if keys.bit(2) == true then
+				if keys:bit(2) == true then
 					xspeed = xspeed + 1;
 				end
-				if keys.bit(3) == true then
+				if keys:bit(3) == true then
 					xspeed = xspeed - 1;
 				end
 				-- Set movement
-				this.setSpeed(xspeed, yspeed, false, true);
+				this:setSpeed(xspeed, yspeed, false, true);
 				if Client ~= nil then
-					feet.setRotation(0);
-					feet.setPosition(-0.5, -0.5);
+					feet:setRotation(0);
+					feet:setPosition(-0.5, -0.5);
 					if xspeed ~= 0 and yspeed ~= 0 then
-						feet.setRotation(Vector2F(xspeed, yspeed).getRotation());
+						feet:setRotation(Vector2F(xspeed, yspeed):getRotation());
 					end
 				end
 				if Server ~= nil then
 					-- Shooting
-					if keys.bit(4) == true then
+					if keys:bit(4) == true then
 					end
 				end
 			end
-			if property.getName() == "currentweapon" then
+			if property:getName() == "currentweapon" then
 				if Client ~= nil then
 					-- TODO: Change HUD
 				end
 			end
 		end
 		function on_set_weapon(weapon)
-			currentweapon.setInt(weapon);
+			currentweapon:setInt(weapon);
 		end
 	]]>
 	</script>

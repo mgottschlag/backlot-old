@@ -5,15 +5,8 @@
 	</playerinfo>
 	<script>
 	<![CDATA[
-	function on_enter()
-		server.reset_player(player);
-		server.activate_player(player);
-	end
-	function on_death(player, killer)
-		server.increase_score(killer);
-		server.deactivate_player(player);
-		server.reset_player(player);
-		server.respawn_player(player);
+	function on_new_client(client)
+		Game.get():addEntity("player", client);
 	end
 	]]>
 	</script>
