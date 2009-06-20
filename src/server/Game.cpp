@@ -91,6 +91,7 @@ namespace backlot
 		// Load script
 		script = new Script();
 		script->addCoreFunctions();
+		script->addServerFunctions();
 		// TODO: Other functions
 		TiXmlNode *scriptnode = root->FirstChild("script");
 		while (scriptnode)
@@ -125,7 +126,7 @@ namespace backlot
 
 	int Game::getTeamCount()
 	{
-		return 0;
+		return teamcount;
 	}
 	int Game::getWeaponSlotCount()
 	{
@@ -138,9 +139,10 @@ namespace backlot
 
 	EntityPointer Game::addEntity(std::string type, int owner)
 	{
+		std::cout << "addEntity" << std::endl;
 		return 0;
 	}
-	void Game::removeEntity(Entity *entity)
+	void Game::removeEntity(EntityPointer entity)
 	{
 	}
 	EntityPointer Game::getEntity(int id)
@@ -159,16 +161,22 @@ namespace backlot
 		msg->write8(EPT_InitialData);
 		// Add map name
 		msg->writeString(mapname);
-		// Add entities
-		// TODO
 		// Send packet
-		client->send(msg);
+		client->send(msg, true);
 		return true;
 	}
 	void Game::addClient(Client *client)
 	{
+		std::cout << "New client." << std::endl;
 		// Add to client list
 		clients.insert(std::pair<int, Client*>(++lastclientid, client));
+		// Send entities
+		// TODO
+		// Script callback
+		if (script->isFunction("on_new_client"))
+		{
+			script->callFunction("on_new_client", lastclientid);
+		}
 	}
 	void Game::removeClient(Client *client)
 	{
