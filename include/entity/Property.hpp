@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _PROPERTY_HPP_
 
 #include "Vector2.hpp"
+#include "Buffer.hpp"
 
 #include <string>
 
@@ -75,8 +76,12 @@ namespace backlot
 
 			void set(std::string s);
 
+			void write(const BufferPointer &buffer);
+			void read(const BufferPointer &buffer);
+
 			Property &operator=(const Property &property);
 			bool operator==(const Property &property);
+			bool operator!=(const Property &property);
 		private:
 			std::string name;
 			PropertyType type;

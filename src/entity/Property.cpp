@@ -212,6 +212,53 @@ namespace backlot
 		}
 	}
 
+	void Property::write(const BufferPointer &buffer)
+	{
+		switch (type)
+		{
+			case EPT_Integer:
+				// TODO: Unsigned integer
+				buffer->writeInt(getInt(), size);
+				break;
+			case EPT_Float:
+				buffer->writeFloat(getFloat());
+				break;
+			case EPT_Vector2F:
+			{
+				Vector2F vector = getVector2F();
+				buffer->writeFloat(vector.x);
+				buffer->writeFloat(vector.y);
+				break;
+			}
+			case EPT_Vector2I:
+			{
+				Vector2I vector = getVector2I();
+				buffer->writeInt(vector.x, size);
+				buffer->writeInt(vector.y, size);
+				break;
+			}
+		}
+	}
+	void Property::read(const BufferPointer &buffer)
+	{
+		switch (type)
+		{
+			case EPT_Integer:
+				setInt(buffer->readInt(size));
+				break;
+			case EPT_Float:
+				setFloat(buffer->readFloat());
+				break;
+			case EPT_Vector2F:
+				setVector2F(Vector2F(buffer->readFloat(), buffer->readFloat()));
+				break;
+			case EPT_Vector2I:
+				setVector2I(Vector2I(buffer->readInt(size),
+					buffer->readInt(size)));
+				break;
+		}
+	}
+
 	Property &Property::operator=(const Property &property)
 	{
 		if (name == "")
@@ -238,5 +285,9 @@ namespace backlot
 				&& ((int*)data)[1] == ((int*)property.data)[1];
 		else
 			return !memcmp(data, property.data, 4);
+	}
+	bool Property::operator!=(const Property &property)
+	{
+		return !(*this == property);
 	}
 }
