@@ -32,23 +32,49 @@ namespace backlot
 
 	bool Entity::create(EntityTemplatePointer tpl, BufferPointer state)
 	{
-		return false;
+		// Get a copy of the properties and their default values
+		properties = tpl->getProperties();
+		// Apply state
+		applyUpdate(state);
+		// Create the script
+		script = new Script();
+		script->addCoreFunctions();
+		// TODO: Other functions
+		if (!script->runString(tpl->getScript()))
+		{
+			return false;
+		}
+		this->tpl = tpl;
+		return true;
 	}
 
 	void Entity::getState(BufferPointer buffer)
 	{
+		const std::vector<Property> &tplproperties = tpl->getProperties();
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if (properties[i] != tplproperties[i])
+			{
+				// Bit set: Property changed.
+				buffer->writeUnsignedInt(0, 1);
+				// Write the property to the stream.
+				properties[i].write(buffer);
+			}
+			else
+			{
+				// Bit not set: Property remained unchanged.
+				buffer->writeUnsignedInt(0, 1);
+			}
+		}
 	}
 
-	void Entity::saveState()
-	{
-	}
-	void Entity::getUpdate(BufferPointer buffer)
+	void Entity::getUpdate(BufferPointer state, BufferPointer buffer)
 	{
 	}
 	void Entity::applyUpdate(BufferPointer buffer)
 	{
 	}
-	bool Entity::hasChanged()
+	bool Entity::hasChanged(BufferPointer state)
 	{
 		return false;
 	}

@@ -42,9 +42,9 @@ namespace backlot
 			void getState(BufferPointer buffer);
 
 			void saveState();
-			void getUpdate(BufferPointer buffer);
+			void getUpdate(BufferPointer state, BufferPointer buffer);
 			void applyUpdate(BufferPointer buffer);
-			bool hasChanged();
+			bool hasChanged(BufferPointer state);
 
 			bool isVisible(Entity *from);
 
