@@ -51,6 +51,11 @@ namespace backlot
 			void addClient(Client *client);
 			void removeClient(Client *client);
 
+			/**
+			 * Returns the number of ticks passed since the start of the game.
+			 */
+			unsigned int getTime();
+
 			void update();
 		private:
 			Game();
@@ -63,9 +68,12 @@ namespace backlot
 			std::string mapname;
 
 			EntityPointer entities[65535];
+			int nextentity;
 
 			std::map<int, Client*> clients;
 			int lastclientid;
+
+			unsigned int time;
 	};
 }
 

@@ -44,6 +44,7 @@ namespace backlot
 		this->mapname = mapname;
 		for (int i = 0; i < 65535; i++)
 			entities[i] = 0;
+		nextentity = 0;
 		// Open XML file
 		std::string filename = Engine::get().getGameDirectory() + "/modes/" + mode + ".xml";
 		TiXmlDocument xml(filename.c_str());
@@ -115,6 +116,7 @@ namespace backlot
 			scriptnode = node->IterateChildren("script", scriptnode);
 		}
 		this->mode = mode;
+		time = 0;
 		return true;
 	}
 	bool Game::destroy()
@@ -140,14 +142,60 @@ namespace backlot
 	EntityPointer Game::addEntity(std::string type, int owner)
 	{
 		std::cout << "addEntity" << std::endl;
-		return 0;
+		// Get entity template
+		EntityTemplatePointer tpl = EntityTemplate::get(type);
+		if (tpl.isNull())
+		{
+			std::cerr << "Could not get entity template \"" << type << "\"." << std::endl;
+			return 0;
+		}
+		// Get new entity id
+		int newindex = 65535;
+		for (int i = 0; i < 65535; i++)
+		{
+			int id = (nextentity + i) % 65535;
+			if (entities[id].isNull())
+			{
+				newindex = id;
+				break;
+			}
+		}
+		if (newindex == 65535)
+		{
+			std::cerr << "Too many entities." << std::endl;
+			return 0;
+		}
+		nextentity = (newindex + 1) % 65535;
+		// Create entity
+		EntityPointer entity = new Entity();
+		entity->create(tpl);
+		// Set owner
+		// TODO
+		// Insert entity into list
+		entities[newindex] = entity;
+		// Send entity to all connected clients
+		// TODO
+		return entity;
 	}
 	void Game::removeEntity(EntityPointer entity)
 	{
+		// Send message to all connected clients
+		// TODO
+		// Remove entity
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i] == entity)
+			{
+				entities[i] = 0;
+				break;
+			}
+		}
 	}
 	EntityPointer Game::getEntity(int id)
 	{
-		return 0;
+		if (id >= 65535)
+			return 0;
+		return entities[id];
 	}
 	std::vector<EntityPointer> Game::getEntities(std::string type)
 	{
@@ -183,8 +231,22 @@ namespace backlot
 		
 	}
 
+	unsigned int Game::getTime()
+	{
+		return time;
+	}
+
 	void Game::update()
 	{
+		// Update entities
+		for (int i = 0; i < 65535; i++)
+		{
+			entities[i]->update();
+		}
+		// Increase tick counter
+		time++;
+		// Send updates
+		// TODO
 	}
 
 	Game::Game()
