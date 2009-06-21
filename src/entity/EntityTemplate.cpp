@@ -71,10 +71,10 @@ namespace backlot
 			std::cerr << "Could not load XML file " << name << ".xml: " << xml.ErrorDesc() << std::endl;
 			return false;
 		}
-		TiXmlNode *node = xml.FirstChild("weapon");
+		TiXmlNode *node = xml.FirstChild("entity");
 		if (!node)
 		{
-			std::cerr << "Parser error: <weapon> not found." << std::endl;
+			std::cerr << "Parser error: <entity> not found." << std::endl;
 			return false;
 		}
 		TiXmlElement *root = node->ToElement();
@@ -107,7 +107,7 @@ namespace backlot
 			std::cerr << "Parser error: <properties> not found." << std::endl;
 			return false;
 		}
-		TiXmlNode *propertynode = root->FirstChild();
+		TiXmlNode *propertynode = properties->FirstChild();
 		while (propertynode)
 		{
 			TiXmlElement *property = propertynode->ToElement();
@@ -149,12 +149,16 @@ namespace backlot
 				if (property->Attribute("default"))
 					newprop.set(property->Attribute("default"));
 			}
-			propertiesnode = root->IterateChildren(propertiesnode);
+			propertynode = properties->IterateChildren(propertynode);
 		}
 		// Add to list
 		this->name = name;
 		templates.insert(std::pair<std::string, EntityTemplate*>(name, this));
 		return true;
+	}
+	std::string EntityTemplate::getName()
+	{
+		return name;
 	}
 
 	const std::vector<Property> &EntityTemplate::getProperties()

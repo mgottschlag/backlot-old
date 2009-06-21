@@ -47,6 +47,10 @@ namespace backlot
 		this->tpl = tpl;
 		return true;
 	}
+	EntityTemplatePointer Entity::getTemplate()
+	{
+		return tpl;
+	}
 
 	void Entity::getState(BufferPointer buffer)
 	{

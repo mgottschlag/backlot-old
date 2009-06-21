@@ -40,6 +40,7 @@ namespace backlot
 			static SharedPointer<EntityTemplate> get(std::string name);
 
 			bool load(std::string name);
+			std::string getName();
 
 			const std::vector<Property> &getProperties();
 			const std::string &getScript();

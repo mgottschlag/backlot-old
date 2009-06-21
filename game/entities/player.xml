@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <entity size="0.6/0.6" origin="0.3/0.3" blocking="yes">
 	<properties>
-		<position predict="1" />
-		<rotation predict="1" updatelocally="0" />
+		<position type="vector2f" predict="1" />
+		<rotation type="float" predict="1" updatelocally="0" />
 		<team default="0" type="uint" size="4" />
 		<currentweapon default="-1" type="int" size="4" />
 		<keys default="0" type="uint" size="8" unlocked="1" />

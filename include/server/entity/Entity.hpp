@@ -38,6 +38,7 @@ namespace backlot
 			~Entity();
 
 			bool create(EntityTemplatePointer tpl, BufferPointer state = 0);
+			EntityTemplatePointer getTemplate();
 
 			void getState(BufferPointer buffer);
 

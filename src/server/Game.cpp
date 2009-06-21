@@ -199,6 +199,14 @@ namespace backlot
 	}
 	std::vector<EntityPointer> Game::getEntities(std::string type)
 	{
+		std::vector<EntityPointer> entitylist;
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i] && entities[i]->getTemplate()->getName() == type)
+			{
+				entitylist.push_back(entities[i]);
+			}
+		}
 		return std::vector<EntityPointer>();
 	}
 
