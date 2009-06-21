@@ -91,4 +91,9 @@ namespace backlot
 	void Entity::update()
 	{
 	}
+
+	void Entity::onChange(Property *property)
+	{
+		// TODO
+	}
 }

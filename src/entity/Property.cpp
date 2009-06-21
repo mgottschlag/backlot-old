@@ -20,6 +20,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "entity/Property.hpp"
+#ifdef SERVER
+#include "entity/Entity.hpp"
+#endif
 
 #include <cstring>
 #include <iostream>
@@ -32,12 +35,16 @@ namespace backlot
 		flags = EPF_None;
 		size = 32;
 		memset(data, 0, 8);
+		entity = 0;
+		callbacks = true;
 	}
 	Property::Property(std::string name, PropertyType type,
 		PropertyFlags flags) : name(name), type(type), flags(flags)
 	{
 		size = 32;
 		memset(data, 0, 8);
+		entity = 0;
+		callbacks = true;
 	}
 	Property::Property(const Property &property)
 	{
@@ -46,6 +53,8 @@ namespace backlot
 		flags = property.flags;
 		size = property.size;
 		memcpy(data, property.data, 8);
+		entity = 0;
+		callbacks = true;
 	}
 	Property::~Property()
 	{
@@ -85,11 +94,29 @@ namespace backlot
 		return size;
 	}
 
+	void Property::setEntity(Entity *entity)
+	{
+		this->entity = entity;
+	}
+	Entity *Property::getEntity()
+	{
+		return entity;
+	}
+	void Property::setCallbacks(bool callbacks)
+	{
+		this->callbacks = callbacks;
+	}
+	bool Property::getCallbacks()
+	{
+		return callbacks;
+	}
+
 	void Property::setInt(int data)
 	{
 		if (type == EPT_Integer)
 		{
 			*((int*)this->data) = data;
+			onChange();
 		}
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
@@ -111,6 +138,7 @@ namespace backlot
 		if (type == EPT_Integer)
 		{
 			*((unsigned int*)this->data) = data;
+			onChange();
 		}
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
@@ -132,6 +160,7 @@ namespace backlot
 		if (type == EPT_Float)
 		{
 			*((float*)this->data) = data;
+			onChange();
 		}
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
@@ -154,6 +183,7 @@ namespace backlot
 		{
 			((float*)this->data)[0] = data.x;
 			((float*)this->data)[1] = data.y;
+			onChange();
 		}
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
@@ -176,6 +206,7 @@ namespace backlot
 		{
 			((int*)this->data)[0] = data.x;
 			((int*)this->data)[1] = data.y;
+			onChange();
 		}
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
@@ -210,6 +241,7 @@ namespace backlot
 				setVector2I(Vector2I(s));
 				break;
 		}
+		onChange();
 	}
 
 	void Property::write(const BufferPointer &buffer)
@@ -257,6 +289,7 @@ namespace backlot
 					buffer->readInt(size)));
 				break;
 		}
+		onChange();
 	}
 
 	Property &Property::operator=(const Property &property)
@@ -271,6 +304,7 @@ namespace backlot
 		}
 		else if (type == property.type)
 			memcpy(data, property.data, 8);
+		onChange();
 		return *this;
 	}
 	bool Property::operator==(const Property &property)
@@ -289,5 +323,18 @@ namespace backlot
 	bool Property::operator!=(const Property &property)
 	{
 		return !(*this == property);
+	}
+
+	void Property::onChange()
+	{
+		#ifdef SERVER
+		if (!callbacks)
+			return;
+		if (!entity)
+			return;
+		entity->onChange(this);
+		#else
+		// TODO
+		#endif
 	}
 }

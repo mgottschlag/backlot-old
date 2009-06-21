@@ -29,6 +29,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	class Entity;
+
 	enum PropertyType
 	{
 		EPT_Integer,
@@ -63,6 +65,11 @@ namespace backlot
 			void setSize(unsigned int size);
 			unsigned int getSize();
 
+			void setEntity(Entity *entity);
+			Entity *getEntity();
+			void setCallbacks(bool callbacks);
+			bool getCallbacks();
+
 			void setInt(int data);
 			int getInt();
 			void setUnsignedInt(unsigned int data);
@@ -83,11 +90,15 @@ namespace backlot
 			bool operator==(const Property &property);
 			bool operator!=(const Property &property);
 		private:
+			void onChange();
+
 			std::string name;
 			PropertyType type;
 			PropertyFlags flags;
 			unsigned int size;
 			char data[8];
+			Entity *entity;
+			bool callbacks;
 	};
 }
 

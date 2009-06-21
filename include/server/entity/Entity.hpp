@@ -50,6 +50,8 @@ namespace backlot
 			bool isVisible(Entity *from);
 
 			void update();
+
+			void onChange(Property *property);
 		private:
 			EntityTemplatePointer tpl;
 
