@@ -47,7 +47,7 @@ namespace backlot
 		return p.get();
 	}
 
-	template<class A> SharedPointer<A> *get_const_holder(SharedPointer<A>*)
+	template<class A> SharedPointer<A const> *get_const_holder(SharedPointer<A>*)
 	{
 		return 0;
 	}

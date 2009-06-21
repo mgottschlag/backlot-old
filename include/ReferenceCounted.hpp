@@ -24,6 +24,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	template<typename T> struct remove_const
+	{
+		typedef T type;
+	};
+	template<typename T> struct remove_const<const T>
+	{
+		typedef T type;
+	};
+
 	/**
 	 * Base class for all classes which use reference counting. Reference
 	 * counting makes sure that objects aren't deallocated as long as there are
@@ -44,14 +53,14 @@ namespace backlot
 			/**
 			 * Increments the reference count.
 			 */
-			void grab()
+			void grab() const
 			{
 				refcount++;
 			}
 			/**
 			 * Decrements the reference count.
 			 */
-			void drop()
+			void drop() const
 			{
 				refcount--;
 				if (refcount <= 0)
@@ -61,7 +70,7 @@ namespace backlot
 			/**
 			 * Number of references to the object.
 			 */
-			int refcount;
+			mutable int refcount;
 	};
 
 	/**
@@ -85,7 +94,7 @@ namespace backlot
 			/**
 			 * Copy constructor.
 			 */
-			SharedPointer(const SharedPointer<T> &ptr) : target(ptr.target)
+			SharedPointer(const SharedPointer<typename remove_const<T>::type> &ptr) : target(ptr.get())
 			{
 				if (target)
 					target->grab();
