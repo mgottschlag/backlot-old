@@ -21,11 +21,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Script.hpp"
 #include "Engine.hpp"
+#include "entity/Property.hpp"
 #ifdef CLIENT
 #include "Dialog.hpp"
+#include "Client.hpp"
 #endif
 #ifdef SERVER
 #include "Game.hpp"
+#include "Server.hpp"
 #endif
 
 #include <iostream>
@@ -35,6 +38,7 @@ extern "C"
 	#include "lauxlib.h"
 }
 #include <luabind/luabind.hpp>
+#include <luabind/operator.hpp>
 
 namespace backlot
 {
@@ -145,6 +149,70 @@ namespace backlot
 		lua_settable(state, space);
 		// Done
 		lua_setglobal(state, "core");
+
+		luabind::module(state)
+		[
+			// ReferenceCounted class
+			luabind::class_<ReferenceCounted, SharedPointer<ReferenceCounted> >("ReferenceCounted")
+				.def(luabind::constructor<>()),
+			// Vector2F
+			luabind::class_<Vector2F>("Vector2F")
+				.def(luabind::constructor<>())
+				.def(luabind::constructor<float, float>())
+				.def(luabind::constructor<const char *>())
+				.def(luabind::constructor<const Vector2F &>())
+				.def(luabind::constructor<const Vector2I &>())
+				.def("set", &Vector2F::set)
+				.def("getLengthSquared", &Vector2F::getLengthSquared)
+				.def("getLength", &Vector2F::getLength)
+				.def(luabind::self * float())
+				.def(luabind::self + Vector2F())
+				.def(luabind::self - Vector2F())
+				.def(luabind::self + Vector2I())
+				.def(luabind::self - Vector2I())
+				.def(luabind::self == Vector2F())
+				.def(luabind::self == Vector2I())
+				.def_readwrite("x", &Vector2F::x)
+				.def_readwrite("y", &Vector2F::y),
+			// Vector2I
+			luabind::class_<Vector2I>("Vector2I")
+				.def(luabind::constructor<>())
+				.def(luabind::constructor<float, float>())
+				.def(luabind::constructor<const char *>())
+				.def(luabind::constructor<const Vector2F &>())
+				.def(luabind::constructor<const Vector2I &>())
+				.def("set", &Vector2I::set)
+				.def("getLengthSquared", &Vector2I::getLengthSquared)
+				.def("getLength", &Vector2I::getLength)
+				.def(luabind::self * float())
+				.def(luabind::self + Vector2F())
+				.def(luabind::self - Vector2F())
+				.def(luabind::self + Vector2I())
+				.def(luabind::self - Vector2I())
+				.def(luabind::self == Vector2F())
+				.def(luabind::self == Vector2I())
+				.def_readwrite("x", &Vector2I::x)
+				.def_readwrite("y", &Vector2I::y),
+			// Property class
+			luabind::class_<Property>("Property")
+				.def("getName", &Property::getName)
+				.def("getType", &Property::getType)
+				.def("getFlags", &Property::getFlags)
+				.def("getSize", &Property::getSize)
+				.def("setInt", &Property::setInt)
+				.def("getInt", &Property::getInt)
+				.def("setUnsignedInt", &Property::setUnsignedInt)
+				.def("getUnsignedInt", &Property::getUnsignedInt)
+				.def("setFloat", &Property::setFloat)
+				.def("getFloat", &Property::getFloat)
+				.def("setVector2F", &Property::setVector2F)
+				.def("getVector2F", &Property::getVector2F)
+				.def("setVector2I", &Property::setVector2I)
+				.def("getVector2I", &Property::getVector2I)
+				.def("set", &Property::set)
+				.def("write", &Property::write)
+				.def("read", &Property::read)
+		];
 	}
 	#ifdef CLIENT
 	static int menu_show_dialog(lua_State *state)
@@ -190,12 +258,35 @@ namespace backlot
 		// Done
 		lua_setglobal(state, "menu");
 	}
+	void Script::addClientFunctions()
+	{
+		luabind::module(state)
+		[
+			// Client class
+			luabind::class_<Client>("Client")
+				.scope
+				[
+					luabind::def("get", &Client::get)
+				]
+				.def("getMap", &Client::getMap)
+		];
+	}
 	#endif
 	#ifdef SERVER
 	void Script::addServerFunctions()
 	{
 		luabind::module(state)
 		[
+			// Entitiy class
+			luabind::class_<Entity, ReferenceCounted, SharedPointer<Entity> >("Entity")
+				.def(luabind::constructor<>()),
+			// Server class
+			luabind::class_<Server>("Server")
+				.scope
+				[
+					luabind::def("get", &Server::get)
+				]
+				.def("getMap", &Server::getMap),
 			// Game class
 			luabind::class_<Game>("Game")
 				.scope
@@ -205,11 +296,6 @@ namespace backlot
 				.def("update", &Game::update)
 				.def("addEntity", &Game::addEntity)
 				.def("removeEntity", &Game::removeEntity)
-		];
-		luabind::module(state)
-		[
-			// Entitiy class
-			luabind::class_<Entity, EntityPointer>("Entity")
 		];
 	}
 	#endif

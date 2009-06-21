@@ -118,6 +118,7 @@ namespace backlot
 			void addCoreFunctions();
 			#ifdef CLIENT
 			void addMenuFunctions();
+			void addClientFunctions();
 			#endif
 			#ifdef SERVER
 			void addServerFunctions();
