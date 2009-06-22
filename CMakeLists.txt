@@ -44,6 +44,7 @@ src/client/GuichanFont.cpp
 src/client/Dialog.cpp
 src/entity/EntityTemplate.cpp
 src/entity/Property.cpp
+src/client/entity/Entity.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

@@ -20,9 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "entity/Property.hpp"
-#ifdef SERVER
 #include "entity/Entity.hpp"
-#endif
 
 #include <cstring>
 #include <iostream>
@@ -327,14 +325,10 @@ namespace backlot
 
 	void Property::onChange()
 	{
-		#ifdef SERVER
 		if (!callbacks)
 			return;
 		if (!entity)
 			return;
 		entity->onChange(this);
-		#else
-		// TODO
-		#endif
 	}
 }
