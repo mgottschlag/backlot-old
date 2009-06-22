@@ -37,7 +37,6 @@ extern "C"
 	#include "lualib.h"
 	#include "lauxlib.h"
 }
-#include <luabind/luabind.hpp>
 #include <luabind/operator.hpp>
 
 namespace backlot

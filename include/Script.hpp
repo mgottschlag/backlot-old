@@ -29,6 +29,7 @@ extern "C"
 {
 	#include "lua.h"
 }
+#include <luabind/luabind.hpp>
 
 namespace backlot
 {
@@ -46,73 +47,37 @@ namespace backlot
 			// Functions without return value
 			template <typename A> void callFunction(std::string name, A arg1)
 			{
-				lua_getglobal(state, name.c_str());
-				push(arg1);
-				lua_call(state, 1, 0);
+				luabind::call_function<void>(state, name.c_str(), arg1);
 			};
 			template <typename A1, typename A2> void callFunction(std::string name, A1 arg1, A2 arg2)
 			{
-				lua_getglobal(state, name.c_str());
-				push(arg1);
-				push(arg2);
-				lua_call(state, 2, 0);
+				luabind::call_function<void>(state, name.c_str(), arg1, arg2);
 			};
 			template <typename A1, typename A2, typename A3> void callFunction(std::string name, A1 arg1, A2 arg2, A3 arg3)
 			{
-				lua_getglobal(state, name.c_str());
-				push(arg1);
-				push(arg2);
-				push(arg3);
-				lua_call(state, 3, 0);
+				luabind::call_function<void>(state, name.c_str(), arg1, arg2, arg3);
 			};
 			template <typename A1, typename A2, typename A3, typename A4> void callFunction(std::string name, A1 arg1, A2 arg2, A3 arg3, A4 arg4)
 			{
-				lua_getglobal(state, name.c_str());
-				push(arg1);
-				push(arg2);
-				push(arg3);
-				push(arg4);
-				lua_call(state, 4, 0);
+				luabind::call_function<void>(state, name.c_str(), arg1, arg2, arg3, arg4);
 			};
 
 			// Functions with return value
 			template <typename R> R callFunction(std::string name)
 			{
-				lua_getglobal(state, name.c_str());
-				lua_call(state, 0, 1);
-				R value;
-				pop(value);
-				return value;
+				return luabind::call_function<R>(state, name);
 			};
 			template <typename R, typename A> R callFunction(std::string name, A arg1)
 			{
-				lua_getglobal(state, name.c_str());
-				push(arg1);
-				lua_call(state, 1, 1);
-				R value;
-				pop(value);
-				return value;
+				return luabind::call_function<R>(state, name.c_str(), arg1);
 			};
 			template <typename R, typename A1, typename A2> R callFunction(std::string name, A1 arg1, A2 arg2)
 			{
-				lua_getglobal(state, name.c_str());
-				push(arg1);
-				push(arg2);
-				lua_call(state, 2, 1);
-				R value;
-				pop(value);
-				return value;
+				return luabind::call_function<R>(state, name.c_str(), arg1, arg2);
 			};
 			template <typename R, typename A1, typename A2, typename A3> R callFunction(std::string name, A1 arg1, A2 arg2, A3 arg3)
 			{
-				lua_getglobal(state, name.c_str());
-				push(arg1);
-				push(arg2);
-				push(arg3);
-				lua_call(state, 3, 1);
-				R value;
-				pop(value);
-				return value;
+				return luabind::call_function<R>(state, name.c_str(), arg1, arg2, arg3);
 			};
 
 			void addCoreFunctions();
