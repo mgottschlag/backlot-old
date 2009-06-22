@@ -21,6 +21,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "entity/Entity.hpp"
 
+#include <iostream>
+
 namespace backlot
 {
 	Entity::Entity()
@@ -36,15 +38,25 @@ namespace backlot
 		properties = tpl->getProperties();
 		// Apply state
 		applyUpdate(state);
+		// Attack properties to this entity
+		for (unsigned int i = 0; i < properties.size(); i++)
+			properties[i].setEntity(this);
 		// Create the script
 		script = new Script();
 		script->addCoreFunctions();
+		script->addServerFunctions();
 		// TODO: Other functions
 		if (!script->runString(tpl->getScript()))
 		{
 			return false;
 		}
 		this->tpl = tpl;
+		changed = false;
+		// Call on_loaded()
+		if (script->isFunction("on_loaded"))
+		{
+			script->callFunction("on_loaded");
+		}
 		return true;
 	}
 	EntityTemplatePointer Entity::getTemplate()
@@ -80,7 +92,7 @@ namespace backlot
 	}
 	bool Entity::hasChanged(BufferPointer state)
 	{
-		return false;
+		return changed;
 	}
 
 	bool Entity::isVisible(Entity *from)
@@ -94,6 +106,11 @@ namespace backlot
 
 	void Entity::onChange(Property *property)
 	{
-		// TODO
+		changed = true;
+		// Callback
+		if (script->isFunction("on_changed"))
+		{
+			script->callFunction("on_changed", property);
+		}
 	}
 }

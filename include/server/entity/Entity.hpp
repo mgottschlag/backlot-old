@@ -57,6 +57,8 @@ namespace backlot
 
 			ScriptPointer script;
 			std::vector<Property> properties;
+
+			bool changed;
 	};
 
 	typedef SharedPointer<Entity> EntityPointer;

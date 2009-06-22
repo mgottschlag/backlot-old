@@ -151,6 +151,26 @@ namespace backlot
 			}
 			propertynode = properties->IterateChildren(propertynode);
 		}
+		// Load script
+		TiXmlNode *scriptnode = root->FirstChild("script");
+		while (scriptnode)
+		{
+			TiXmlElement *scriptdata = scriptnode->ToElement();
+			if (scriptdata)
+			{
+				TiXmlNode *textnode = scriptdata->FirstChild();
+				while (textnode)
+				{
+					TiXmlText *text = textnode->ToText();
+					if (text && text->Value())
+					{
+						script += text->Value();
+					}
+					textnode = scriptdata->IterateChildren(textnode);
+				}
+			}
+			scriptnode = node->IterateChildren("script", scriptnode);
+		}
 		// Add to list
 		this->name = name;
 		templates.insert(std::pair<std::string, EntityTemplate*>(name, this));
