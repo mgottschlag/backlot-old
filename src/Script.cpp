@@ -226,14 +226,21 @@ namespace backlot
 		[
 			// Entitiy class
 			luabind::class_<Entity, ReferenceCounted, SharedPointer<Entity> >("Entity")
-				.def(luabind::constructor<>()),
+				.def(luabind::constructor<>())
+				.def("isLocal", &Entity::isLocal),
 			// Client class
 			luabind::class_<Client>("Client")
 				.scope
 				[
 					luabind::def("get", &Client::get)
 				]
-				.def("getMap", &Client::getMap)
+				.def("getMap", &Client::getMap),
+			// Game class
+			luabind::class_<Game>("Game")
+				.scope
+				[
+					luabind::def("get", &Game::get)
+				]
 		];
 	}
 	#endif

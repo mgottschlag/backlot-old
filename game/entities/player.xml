@@ -25,7 +25,7 @@
 				print("Entity: Client.");
 				if this:isLocal() then
 					print("Entity: local.");
-					Game.get():setInputTarget(this);
+					--Game.get():setInputTarget(this);
 				end
 			end
 		end
