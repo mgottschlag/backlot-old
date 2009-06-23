@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Game.hpp"
 #include "Engine.hpp"
 #include "NetworkData.hpp"
+#include "Server.hpp"
 
 #include "support/tinyxml.h"
 
@@ -174,18 +175,28 @@ namespace backlot
 		// Insert entity into list
 		entities[newindex] = entity;
 		// Send entity to all connected clients
-		// TODO
+		BufferPointer buffer = new Buffer();
+		buffer->write8(EPT_EntityCreated);
+		buffer->write16(newindex);
+		buffer->write16(owner);
+		buffer->writeString(type);
+		entity->getState(buffer);
+		Server::get().sendToAll(buffer, true);
 		return entity;
 	}
 	void Game::removeEntity(EntityPointer entity)
 	{
-		// Send message to all connected clients
-		// TODO
-		// Remove entity
+		// Look for entity to delete
 		for (int i = 0; i < 65535; i++)
 		{
 			if (entities[i] == entity)
 			{
+				// Send message to all connected clients
+				BufferPointer buffer = new Buffer();
+				buffer->write8(EPT_EntityDeleted);
+				buffer->write16(i);
+				Server::get().sendToAll(buffer, true);
+				// Delete entity
 				entities[i] = 0;
 				break;
 			}

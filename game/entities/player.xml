@@ -8,6 +8,8 @@
 		<keys default="0" type="uint" size="8" unlocked="1" />
 		<health default="100" type="uint" size="8" />
 		<mousepos default="0/0" type="vector2i" size="12" unlocked="1" />
+		<weapon0 type="entity" />
+		<weapon1 type="entity" />
 	</properties>
 
 	<image name="feet" src="sprites/feet.png" position="-0.5/-0.5" rotate="no" />
@@ -17,18 +19,18 @@
 
 	<script>
 	<![CDATA[
-		weapons = {};
-
-		function on_load()
-		end
 		function on_loaded()
+			print("Entity loaded.");
 			if Client ~= nil then
+				print("Entity: Client.");
 				if this:isLocal() then
+					print("Entity: local.");
 					Game.get():setInputTarget(this);
 				end
 			end
 		end
 		function on_changed(property)
+			print("Property changed.");
 			if property:getName() == "rotation" then
 				if Client ~= nil then
 					body:setRotation(0);

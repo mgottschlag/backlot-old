@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Buffer.hpp"
 #include "Bullet.hpp"
 #include "Effect.hpp"
+#include "Game.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -93,6 +94,8 @@ namespace backlot
 					if (type == EPT_InitialData)
 					{
 						mapname = msg->readString();
+						int clientid = msg->read16();
+						Game::get().load(mapname, clientid);
 						gotdata = true;
 					}
 					break;
@@ -195,19 +198,26 @@ namespace backlot
 					enet_packet_destroy(event.packet);
 					PacketType type = (PacketType)msg->read8();
 					// Parse packet
-					if (type == EPT_NewPlayer)
+					if (type == EPT_EntityCreated)
 					{
-						// Create player
-						int id = msg->read32();
-						int hitpoints = msg->read8();
-						bool local = msg->read8();
-						PlayerPointer newplayer = new Player();
-						newplayer->setID(id);
-						newplayer->setHitpoints(hitpoints);
-						newplayer->setLocal(local);
-						newplayer->load();
-						newplayer->setVisible(true);
-						players.push_back(newplayer);
+						std::cout << "New entity." << std::endl;
+						int id = msg->read16();
+						int owner = msg->read16();
+						std::string type = msg->readString();
+						// Create entity
+						EntityPointer entity = Game::get().addEntity(type, owner,
+							id, msg);
+						if (!entity)
+						{
+							std::cerr << "Could not create entity." << std::endl;
+							return false;
+						}
+						std::cout << "Created client entity." << std::endl;
+					}
+					else if (type == EPT_EntityDeleted)
+					{
+						std::cout << "Entity deleted." << std::endl;
+						// TODO
 					}
 					else if (type == EPT_Update)
 					{
@@ -240,92 +250,6 @@ namespace backlot
 							player->setHitpoints(hitpoints);
 						}
 					}
-					else if (type == EPT_NewWeapon)
-					{
-						int playerid = msg->read32();
-						int id = msg->read16();
-						int weaponid = msg->read32();
-						std::string name = msg->readString();
-						// Load weapon
-						WeaponPointer weapon = Weapon::get("plasma", weaponid);
-						if (weapon.isNull())
-						{
-							std::cerr << "Could not load weapon" << name << "." << std::endl;
-							continue;
-						}
-						// Get player
-						PlayerPointer player = 0;
-						for (unsigned int j = 0; j < players.size(); j++)
-						{
-							if (players[j]->getID() == playerid)
-							{
-								player = players[j];
-								break;
-							}
-						}
-						if (player.isNull())
-							continue;
-						// Add weapon to player
-						player->addWeapon(id, weapon);
-					}
-					else if (type == EPT_UpdateWeapon)
-					{
-						WeaponState *state = Player::getLocalPlayer()->getCurrentWeapon();
-						state->currentmagazine = msg->read8();
-						state->reserve = msg->read8();
-					}
-					else if (type == EPT_Projectile)
-					{
-						// Read bullet information
-						Vector2F position;
-						position.x = msg->readFloat();
-						position.y = msg->readFloat();
-						Vector2F speed;
-						speed.x = msg->readFloat();
-						speed.y = msg->readFloat();
-						int weaponid = msg->read32();
-						// Create bullet
-						WeaponPointer weapon = Weapon::get(weaponid);
-						if (weapon)
-						{
-							BulletPointer bullet = new Bullet(weapon);
-							bullet->setPosition(position);
-							bullet->setSpeed(speed);
-							weapon->playSound();
-						}
-						else
-						{
-							std::cout << "No weapon for bullet." << std::endl;
-						}
-					}
-					else if (type == EPT_Explosion)
-					{
-						// Read explosion info
-						int weaponid = msg->read32();
-						Vector2F position;
-						position.x = msg->readFloat();
-						position.y = msg->readFloat();
-						// Create explosion
-						WeaponPointer weapon = Weapon::get(weaponid);
-						float radius;
-						int damage;
-						TexturePointer texture;
-						SoundPointer sound;
-						if (weapon && weapon->getExplosion(radius, damage, texture, sound))
-						{
-							EffectPointer explosion = new Effect();
-							if (explosion->load(texture, Vector2I(4, 4), sound))
-							{
-								explosion->setPeriod(300);
-								explosion->setPosition(position);
-								explosion->play(1);
-							}
-						}
-						else
-						{
-							std::cout << "No weapon for explosion." << std::endl;
-						}
-					}
 					else
 					{
 						std::cerr << "Unknown packet received." << std::endl;
@@ -340,7 +264,7 @@ namespace backlot
 			}
 		}
 		// Game logic
-		Bullet::updateAll();
+		Game::get().update();
 		return true;
 	}
 

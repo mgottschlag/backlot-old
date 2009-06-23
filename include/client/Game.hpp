@@ -19,30 +19,45 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _NETWORKDATA_HPP_
-#define _NETWORKDATA_HPP_
+#ifndef _GAME_HPP_
+#define _GAME_HPP_
+
+#include "Script.hpp"
+#include "entity/Entity.hpp"
+#include "Client.hpp"
 
 namespace backlot
 {
-	enum PacketType
+	class Game
 	{
-		EPT_Ready = 1,
-		EPT_InitialData,
-		EPT_MapChange,
-		EPT_EntityCreated,
-		EPT_EntityDeleted,
-		EPT_Rotation,
-		EPT_Keys,
-		EPT_Update
-	};
-	enum KeyMask
-	{
-		EKM_Up = 0x0001,
-		EKM_Down = 0x0002,
-		EKM_Left = 0x0004,
-		EKM_Right = 0x0008,
-		EKM_Move = 0x000F,
-		EKM_Shoot = 0x0010
+		public:
+			static Game &get();
+			~Game();
+
+			bool load(std::string mapname, int clientid);
+			bool destroy();
+
+			EntityPointer addEntity(std::string type, int owner, int id,
+				BufferPointer state = 0);
+			void removeEntity(EntityPointer entity);
+			EntityPointer getEntity(int id);
+			std::vector<EntityPointer> getEntities(std::string type);
+
+			/**
+			 * Returns the number of ticks passed since the start of the game.
+			 */
+			unsigned int getTime();
+
+			void update();
+		private:
+			Game();
+
+			int clientid;
+			std::string mapname;
+
+			EntityPointer entities[65535];
+
+			unsigned int time;
 	};
 }
 
