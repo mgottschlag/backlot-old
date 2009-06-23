@@ -95,43 +95,6 @@ namespace backlot
 		lua_call(state, 0, 0);
 	}
 
-	void Script::push(int value)
-	{
-		lua_pushinteger(state, value);
-	}
-	void Script::push(float value)
-	{
-		lua_pushnumber(state, value);
-	}
-	void Script::push(double value)
-	{
-		lua_pushnumber(state, value);
-	}
-	void Script::push(std::string value)
-	{
-		lua_pushstring(state, value.c_str());
-	}
-
-	void Script::pop(int &value)
-	{
-		value = (int)lua_tointeger(state, -1);
-		lua_pop(state, 1);
-	}
-	void Script::pop(float &value)
-	{
-		value = (float)lua_tonumber(state, -1);
-		lua_pop(state, 1);
-	}
-	void Script::pop(double &value)
-	{
-		value = (double)lua_tonumber(state, -1);
-		lua_pop(state, 1);
-	}
-	void Script::pop(std::string &value)
-	{
-		// TODO: Pop string.
-	}
-
 	static int core_exit(lua_State *state)
 	{
 		Engine::get().stop();

@@ -89,16 +89,6 @@ namespace backlot
 			void addServerFunctions();
 			#endif
 		private:
-			void push(int value);
-			void push(float value);
-			void push(double value);
-			void push(std::string value);
-
-			void pop(int &value);
-			void pop(float &value);
-			void pop(double &value);
-			void pop(std::string &value);
-
 			lua_State *state;
 	};
 
