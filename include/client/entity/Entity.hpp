@@ -47,6 +47,10 @@ namespace backlot
 			void applyUpdate(BufferPointer buffer);
 			bool hasChanged(BufferPointer state);
 
+			void setOwner(int owner);
+			int getOwner();
+			bool isLocal();
+
 			bool isVisible(Entity *from);
 
 			void update();
@@ -59,6 +63,8 @@ namespace backlot
 			std::vector<Property> properties;
 
 			bool changed;
+
+			int owner;
 	};
 
 	typedef SharedPointer<Entity> EntityPointer;

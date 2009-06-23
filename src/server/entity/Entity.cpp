@@ -27,6 +27,7 @@ namespace backlot
 {
 	Entity::Entity()
 	{
+		owner = 0;
 	}
 	Entity::~Entity()
 	{
@@ -98,6 +99,15 @@ namespace backlot
 	bool Entity::hasChanged(BufferPointer state)
 	{
 		return changed;
+	}
+
+	void Entity::setOwner(int owner)
+	{
+		this->owner = owner;
+	}
+	int Entity::getOwner()
+	{
+		return owner;
 	}
 
 	bool Entity::isVisible(Entity *from)

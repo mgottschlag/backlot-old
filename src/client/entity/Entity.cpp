@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "entity/Entity.hpp"
+#include "Game.hpp"
 
 #include <iostream>
 
@@ -27,6 +28,7 @@ namespace backlot
 {
 	Entity::Entity()
 	{
+		owner = 0;
 	}
 	Entity::~Entity()
 	{
@@ -99,6 +101,19 @@ namespace backlot
 	bool Entity::hasChanged(BufferPointer state)
 	{
 		return changed;
+	}
+
+	void Entity::setOwner(int owner)
+	{
+		this->owner = owner;
+	}
+	int Entity::getOwner()
+	{
+		return owner;
+	}
+	bool Entity::isLocal()
+	{
+		return getOwner() == Game::get().getClientID();
 	}
 
 	bool Entity::isVisible(Entity *from)

@@ -43,6 +43,8 @@ namespace backlot
 			EntityPointer getEntity(int id);
 			std::vector<EntityPointer> getEntities(std::string type);
 
+			int getClientID();
+
 			/**
 			 * Returns the number of ticks passed since the start of the game.
 			 */

@@ -66,6 +66,7 @@ namespace backlot
 		}
 		// Create entity
 		EntityPointer entity = new Entity();
+		entity->setOwner(owner);
 		entity->create(tpl, state);
 		// Set owner
 		// TODO
@@ -103,6 +104,11 @@ namespace backlot
 			}
 		}
 		return std::vector<EntityPointer>();
+	}
+
+	int Game::getClientID()
+	{
+		return clientid;
 	}
 
 	unsigned int Game::getTime()

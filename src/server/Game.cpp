@@ -169,6 +169,7 @@ namespace backlot
 		nextentity = (newindex + 1) % 65535;
 		// Create entity
 		EntityPointer entity = new Entity();
+		entity->setOwner(owner);
 		entity->create(tpl);
 		// Set owner
 		// TODO
