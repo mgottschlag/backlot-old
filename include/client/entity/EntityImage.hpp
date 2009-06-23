@@ -19,67 +19,54 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _ENTITYTEMPLATE_HPP_
-#define _ENTITYTEMPLATE_HPP_
+#ifndef _ENTITYIMAGE_HPP_
+#define _ENTITYIMAGE_HPP_
 
 #include "ReferenceCounted.hpp"
-#include "entity/Property.hpp"
-#ifdef CLIENT
 #include "Texture.hpp"
-#endif
+#include "Vector2.hpp"
 
-#include <string>
-#include <vector>
-#include <map>
+#include <list>
 
 namespace backlot
 {
-	#ifdef CLIENT
-	struct EntityImageInfo
-	{
-		std::string name;
-		TexturePointer texture;
-		Vector2F position;
-		Vector2F size;
-		float depth;
-		bool rotate;
-	};
-	#endif
+	class Entity;
 
-	class EntityTemplate : public ReferenceCounted
+	class EntityImage : public ReferenceCounted
 	{
 		public:
-			EntityTemplate();
-			~EntityTemplate();
+			EntityImage(Entity *entity);
+			~EntityImage();
 
-			static SharedPointer<EntityTemplate> get(std::string name);
+			bool load(std::string image);
 
-			bool load(std::string name);
-			std::string getName();
+			void setPosition(Vector2F position);
+			Vector2F getPosition();
 
-			const std::vector<Property> &getProperties();
-			const std::string &getScript();
-			const Vector2F &getSize();
-			const Vector2F &getOrigin();
-			#ifdef CLIENT
-			const std::vector<EntityImageInfo> &getImages();
-			#endif
+			void setSize(Vector2F size);
+			Vector2F getSize();
+
+			void setRotation(float rotation);
+			float getRotation();
+
+			void setDepth(float depth);
+			float getDepth();
+
+			void rotate(float rotation, Vector2F center);
+
+			void render();
+			static void renderAll();
 		private:
-			std::string name;
+			Entity *entity;
+			TexturePointer texture;
 
-			std::vector<Property> properties;
-			std::string script;
+			Vector2F position;
 			Vector2F size;
-			Vector2F origin;
-			bool blocking;
-			#ifdef CLIENT
-			std::vector<EntityImageInfo> images;
-			#endif
+			float rotation;
+			float depth;
 
-			static std::map<std::string, EntityTemplate*> templates;
+			static std::list<EntityImage*> images;
 	};
-
-	typedef SharedPointer<EntityTemplate> EntityTemplatePointer;
 }
 
 #endif

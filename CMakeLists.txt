@@ -46,6 +46,7 @@ src/entity/EntityTemplate.cpp
 src/entity/Property.cpp
 src/client/entity/Entity.cpp
 src/client/Game.cpp
+src/client/entity/EntityImage.cpp
 src/support/tinystr.cpp
 src/support/tinyxml.cpp
 src/support/tinyxmlerror.cpp

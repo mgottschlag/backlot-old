@@ -171,6 +171,50 @@ namespace backlot
 			}
 			scriptnode = node->IterateChildren("script", scriptnode);
 		}
+		#ifdef CLIENT
+		// Load image information
+		TiXmlNode *imagenode = root->FirstChild("image");
+		while (imagenode)
+		{
+			TiXmlElement *imagedata = imagenode->ToElement();
+			if (imagedata)
+			{
+				EntityImageInfo image;
+				// Image name
+				if (imagedata->Attribute("name"))
+					image.name = imagedata->Attribute("name");
+				// Texture file
+				if (imagedata->Attribute("src"))
+				{
+					image.texture = new Texture();
+					if (!image.texture->load(imagedata->Attribute("src")))
+						image.texture = 0;
+				}
+				// Position relative to the entity
+				if (imagedata->Attribute("position"))
+					image.position = imagedata->Attribute("position");
+				// Size
+				if (imagedata->Attribute("size"))
+					image.size = imagedata->Attribute("size");
+				// Depth relative to the entity
+				if (imagedata->Attribute("depth"))
+				{
+					double depth;
+					imagedata->Attribute("depth", &depth);
+					image.depth = depth;
+				}
+				else
+					image.depth = 0;
+				// If set to true, the image rotates with the entity
+				if (imagedata->Attribute("rotate"))
+					image.rotate = strcmp(imagedata->Attribute("rotate"), "no");
+				else
+					image.rotate = false;
+				images.push_back(image);
+			}
+			imagenode = node->IterateChildren("image", imagenode);
+		}
+		#endif
 		// Add to list
 		this->name = name;
 		templates.insert(std::pair<std::string, EntityTemplate*>(name, this));
@@ -197,6 +241,12 @@ namespace backlot
 	{
 		return origin;
 	}
+	#ifdef CLIENT
+	const std::vector<EntityImageInfo> &EntityTemplate::getImages()
+	{
+		return images;
+	}
+	#endif
 
 	std::map<std::string, EntityTemplate*> EntityTemplate::templates;
 }
