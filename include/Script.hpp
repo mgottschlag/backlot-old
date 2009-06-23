@@ -80,6 +80,11 @@ namespace backlot
 				return luabind::call_function<R>(state, name.c_str(), arg1, arg2, arg3);
 			};
 
+			template <typename T> void setVariable(std::string name, T value)
+			{
+				luabind::globals(state)[name.c_str()] = value;
+			}
+
 			void addCoreFunctions();
 			#ifdef CLIENT
 			void addMenuFunctions();
