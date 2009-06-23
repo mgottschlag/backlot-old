@@ -22,12 +22,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Script.hpp"
 #include "Engine.hpp"
 #include "entity/Property.hpp"
+#include "Game.hpp"
 #ifdef CLIENT
 #include "Dialog.hpp"
 #include "Client.hpp"
 #endif
 #ifdef SERVER
-#include "Game.hpp"
 #include "Server.hpp"
 #endif
 
@@ -224,6 +224,9 @@ namespace backlot
 	{
 		luabind::module(state)
 		[
+			// Entitiy class
+			luabind::class_<Entity, ReferenceCounted, SharedPointer<Entity> >("Entity")
+				.def(luabind::constructor<>()),
 			// Client class
 			luabind::class_<Client>("Client")
 				.scope

@@ -38,7 +38,7 @@ namespace backlot
 		properties = tpl->getProperties();
 		// Apply state
 		applyUpdate(state);
-		// Attack properties to this entity
+		// Attach properties to this entity
 		for (unsigned int i = 0; i < properties.size(); i++)
 			properties[i].setEntity(this);
 		// Create the script
@@ -46,6 +46,11 @@ namespace backlot
 		script->addCoreFunctions();
 		script->addServerFunctions();
 		// TODO: Other functions
+		// Export script variables
+		script->setVariable("this", this);
+		for (unsigned int i = 0; i < properties.size(); i++)
+			script->setVariable(properties[i].getName(), &properties[i]);
+		// Run the script code
 		if (!script->runString(tpl->getScript()))
 		{
 			return false;
