@@ -28,7 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
-	EntityTemplate::EntityTemplate()
+	EntityTemplate::EntityTemplate() : ReferenceCounted()
 	{
 	}
 	EntityTemplate::~EntityTemplate()

@@ -25,7 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
-	Entity::Entity()
+	Entity::Entity() : ReferenceCounted()
 	{
 		owner = 0;
 	}
