@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Buffer.hpp"
 #include "Script.hpp"
 #include "entity/EntityTemplate.hpp"
+#include "EntityImage.hpp"
 
 #include <vector>
 
@@ -61,6 +62,7 @@ namespace backlot
 
 			ScriptPointer script;
 			std::vector<Property> properties;
+			std::vector<EntityImagePointer> images;
 
 			bool changed;
 

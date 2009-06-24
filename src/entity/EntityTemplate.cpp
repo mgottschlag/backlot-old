@@ -194,6 +194,7 @@ namespace backlot
 				if (imagedata->Attribute("position"))
 					image.position = imagedata->Attribute("position");
 				// Size
+				image.size = Vector2F(1, 1);
 				if (imagedata->Attribute("size"))
 					image.size = imagedata->Attribute("size");
 				// Depth relative to the entity

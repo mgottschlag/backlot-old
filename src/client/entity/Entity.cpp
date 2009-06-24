@@ -43,6 +43,18 @@ namespace backlot
 		// Attach properties to this entity
 		for (unsigned int i = 0; i < properties.size(); i++)
 			properties[i].setEntity(this);
+		// Create images
+		const std::vector<EntityImageInfo> &imageinfo = tpl->getImages();
+		for (unsigned int i = 0; i < imageinfo.size(); i++)
+		{
+			EntityImagePointer newimage = new EntityImage(this);
+			newimage->setTexture(imageinfo[i].texture);
+			newimage->setPosition(imageinfo[i].position);
+			newimage->setSize(imageinfo[i].size);
+			newimage->setDepth(imageinfo[i].depth);
+			// TODO: Rotate with entity?
+			images.push_back(newimage);
+		}
 		// Create the script
 		script = new Script();
 		script->addCoreFunctions();
@@ -53,6 +65,8 @@ namespace backlot
 		script->setVariable("this", this);
 		for (unsigned int i = 0; i < properties.size(); i++)
 			script->setVariable(properties[i].getName(), &properties[i]);
+		for (unsigned int i = 0; i < imageinfo.size(); i++)
+			script->setVariable(imageinfo[i].name, images[i]);
 		// Run the script
 		if (!script->runString(tpl->getScript()))
 		{

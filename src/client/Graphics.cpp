@@ -28,6 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "GuichanFont.hpp"
 #include "HUD.hpp"
 #include "Effect.hpp"
+#include "entity/EntityImage.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -160,8 +161,7 @@ namespace backlot
 		{
 			map->render();
 		}
-		Player::renderAll();
-		Bullet::renderAll();
+		EntityImage::renderAll();
 		Effect::renderAll();
 		HUD::get().render();
 		// Render menu

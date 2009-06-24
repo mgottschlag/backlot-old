@@ -39,6 +39,7 @@ namespace backlot
 			~EntityImage();
 
 			bool load(std::string image);
+			void setTexture(TexturePointer texture);
 
 			void setPosition(Vector2F position);
 			Vector2F getPosition();
@@ -52,6 +53,9 @@ namespace backlot
 			void setDepth(float depth);
 			float getDepth();
 
+			void setVisible(bool visible);
+			bool isVisible();
+
 			void rotate(float rotation, Vector2F center);
 
 			void render();
@@ -64,9 +68,12 @@ namespace backlot
 			Vector2F size;
 			float rotation;
 			float depth;
+			bool visible;
 
 			static std::list<EntityImage*> images;
 	};
+
+	typedef SharedPointer<EntityImage> EntityImagePointer;
 }
 
 #endif

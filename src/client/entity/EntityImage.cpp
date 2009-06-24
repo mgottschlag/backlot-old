@@ -22,14 +22,29 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "entity/EntityImage.hpp"
 #include "entity/Entity.hpp"
 
+#include <GL/gl.h>
+#include <iostream>
+
 namespace backlot
 {
 	EntityImage::EntityImage(Entity *entity) : ReferenceCounted(),
 		entity(entity)
 	{
+		visible = true;
+		images.push_back(this);
 	}
 	EntityImage::~EntityImage()
 	{
+		std::list<EntityImage*>::iterator it = images.begin();
+		while (it != images.end())
+		{
+			if (*it == this)
+			{
+				images.erase(it);
+				break;
+			}
+			it++;
+		}
 	}
 
 	bool EntityImage::load(std::string image)
@@ -39,6 +54,10 @@ namespace backlot
 		if (!texture->load(image))
 			return false;
 		return true;
+	}
+	void EntityImage::setTexture(TexturePointer texture)
+	{
+		this->texture = texture;
 	}
 
 	void EntityImage::setPosition(Vector2F position)
@@ -77,12 +96,47 @@ namespace backlot
 		return depth;
 	}
 
+	void EntityImage::setVisible(bool visible)
+	{
+		this->visible = visible;
+	}
+	bool EntityImage::isVisible()
+	{
+		return visible;
+	}
+
 	void EntityImage::rotate(float rotation, Vector2F center)
 	{
 	}
 
 	void EntityImage::render()
 	{
+		// Check whether the image can be rendered
+		if (!texture || !visible)
+			return;
+		// Render the image
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+		glTranslatef(position.x, position.y, depth);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (texture)
+			texture->bind();
+		glEnable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex2f(0, 0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex2f(size.x, 0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex2f(size.x, size.y);
+			glTexCoord2f(0.0, 1.0);
+			glVertex2f(0, size.y);
+		glEnd();
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
 	}
 	void EntityImage::renderAll()
 	{

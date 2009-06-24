@@ -224,10 +224,23 @@ namespace backlot
 	{
 		luabind::module(state)
 		[
-			// Entitiy class
+			// Entity class
 			luabind::class_<Entity, ReferenceCounted, SharedPointer<Entity> >("Entity")
-				.def(luabind::constructor<>())
 				.def("isLocal", &Entity::isLocal),
+			// EntityImage
+			luabind::class_<EntityImage, ReferenceCounted, SharedPointer<EntityImage> >("EntityImage")
+				.def("load", &EntityImage::load)
+				.def("setPosition", &EntityImage::setPosition)
+				.def("getPosition", &EntityImage::getPosition)
+				.def("setRotation", &EntityImage::setRotation)
+				.def("getRotation", &EntityImage::getRotation)
+				.def("setSize", &EntityImage::setSize)
+				.def("getSize", &EntityImage::getSize)
+				.def("setDepth", &EntityImage::setDepth)
+				.def("getDepth", &EntityImage::getDepth)
+				.def("setVisible", &EntityImage::setVisible)
+				.def("isVisible", &EntityImage::isVisible)
+				.def("rotate", &EntityImage::rotate),
 			// Client class
 			luabind::class_<Client>("Client")
 				.scope
