@@ -36,7 +36,9 @@ namespace backlot
 	Preferences::~Preferences()
 	{
 	 	// Save the preferences before deleting
+	 	#if defined(CLIENT)
 	 	save();
+	 	#endif
 	}
 	
 	bool Preferences::load()
