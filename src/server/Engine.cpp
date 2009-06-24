@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 #include <fstream>
 #include <enet/enet.h>
+#include <sys/stat.h> 
 
 namespace backlot
 {
@@ -42,6 +43,15 @@ namespace backlot
 	{
 		stopping = false;
 		directory = path;
+
+		//Check to see if the Gamedir exist
+		struct stat fileinfo;
+		if (stat(getGameDirectory().c_str(), &fileinfo))
+		{
+			std::cerr << "Game directory does not exist!" << std::endl;
+			return false;
+		}
+		
 		// Load main configuration file
 		Preferences::get().setPath(getGameDirectory() + "/config.xml");
 		if (!Preferences::get().load())

@@ -33,6 +33,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <SDL/SDL.h>
 #include <iostream>
+#include <sys/stat.h> 
 
 #if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
 int gettimeofday(struct timeval *tv, void *timezone)
@@ -64,6 +65,15 @@ namespace backlot
 	{
 		stopping = false;
 		directory = path;
+		
+		//Check to see if the Gamedir exist
+		struct stat fileinfo;
+		if (stat(getGameDirectory().c_str(), &fileinfo))
+		{
+			std::cerr << "Game directory does not exist!" << std::endl;
+			return false;
+		}
+		
 		// Load main configuration file
 		Preferences::get().setPath(getGameDirectory() + "/config.xml");
 		if (!Preferences::get().load())
