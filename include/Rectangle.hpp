@@ -122,13 +122,13 @@ namespace backlot
 				}
 				else
 				{
-					x = atof(s.c_str());
+					x = (T)atof(s.c_str());
 					const char *ys = s.c_str() + separator1 + 1;
-					y = atof(ys);
+					y = (T)atof(ys);
 					const char *widths = s.c_str() + separator2 + 1;
-					width = atof(widths);
+					width = (T)atof(widths);
 					const char *heights = s.c_str() + separator3 + 1;
-					height = atof(heights);
+					height = (T)atof(heights);
 				}
 			}
 

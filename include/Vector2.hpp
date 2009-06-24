@@ -44,10 +44,10 @@ namespace backlot
 			/**
 			 * Constructor.
 			 */
-			Vector2(T x, T y)
+			template <class T2> Vector2(T2 x, T2 y)
 			{
-				this->x = x;
-				this->y = y;
+				this->x = (T)x;
+				this->y = (T)y;
 			}
 			/**
 			 * Constructor.
@@ -68,8 +68,8 @@ namespace backlot
 			 */
 			template<typename T2> Vector2(const Vector2<T2> &v)
 			{
-				x = v.x;
-				y = v.y;
+				x = (T)v.x;
+				y = (T)v.y;
 			}
 			/**
 			 * Destructor.
@@ -80,7 +80,7 @@ namespace backlot
 
 			template<typename T2> Vector2<T> operator*(T2 s) const
 			{
-				return Vector2<T>(x * s, y * s);
+				return Vector2<T>((T)(x * s),(T)(y * s));
 			}
 			template<typename T2> Vector2<T> &operator*=(T2 s)
 			{
@@ -90,16 +90,16 @@ namespace backlot
 			}
 			template<typename T2> Vector2<T> operator+(const Vector2<T2> &v) const
 			{
-				return Vector2<T>(x + v.x, y + v.y);
+				return Vector2<T>((T)(x + v.x),(T)(y + v.y));
 			}
 			template<typename T2> Vector2<T> operator-(const Vector2<T2> &v) const
 			{
-				return Vector2<T>(x - v.x, y - v.y);
+				return Vector2<T>((T)(x - v.x),(T)(y - v.y));
 			}
 			template<typename T2> Vector2<T> &operator=(const Vector2<T2> &v)
 			{
-				x = v.x;
-				y = v.y;
+				x = (T)v.x;
+				y = (T)v.y;
 				return *this;
 			}
 			Vector2<T> &operator=(std::string s)
@@ -137,9 +137,9 @@ namespace backlot
 				}
 				else
 				{
-					x = atof(s.c_str());
+					x = (T)atof(s.c_str());
 					const char *ys = s.c_str() + separator + 1;
-					y = atof(ys);
+					y = (T)atof(ys);
 				}
 			}
 

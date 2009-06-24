@@ -179,13 +179,13 @@ namespace backlot
 			{
 				char message[8];
 				std::snprintf(message, 8, "%d %%", localplayer->getHitpoints());
-				if (font != NULL)
+				if (font)
 					font->render(message, Vector2F((position.x * resolution.x) + fontoffset.x,
 						(position.y * resolution.y) + fontoffset.y), fontsize, (int)fontcolor);
 			}
 			if (type == EHET_Ammo)
 			{
-				if (font != NULL)
+				if (font)
 				{
 					char message[16];
 					// How many rounds are left in the current magazine.
@@ -203,7 +203,7 @@ namespace backlot
 		}
 
 		// Render the image
-		if (image != NULL)
+		if (image)
 		{
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

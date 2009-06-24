@@ -63,7 +63,7 @@ namespace backlot
 		if(isplayed == false)
 			return false;
 
-		int currentframe = (float)(SDL_GetTicks() - starttime) / frametime;
+		int currentframe = (int)((float)(SDL_GetTicks() - starttime) / frametime);
 
 		if (loopcount != -1 && currentframe >= loopcount * frames.x * frames.y)
 			return false;
@@ -102,7 +102,7 @@ namespace backlot
 		if (isPlaying() == true)
 		{
 			// Draw the current frame
-			draw((float)(SDL_GetTicks() - starttime) / frametime);
+			draw((int)((float)(SDL_GetTicks() - starttime) / frametime));
 			return true;
 		}
 		else

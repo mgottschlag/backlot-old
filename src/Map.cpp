@@ -305,10 +305,10 @@ namespace backlot
 	bool Map::isAccessible(RectangleF area)
 	{
 		// Get area
-		int x1 = floor(area.x);
-		int y1 = floor(area.y);
-		int x2 = ceil(area.x + area.width);
-		int y2 = ceil(area.y + area.height);
+		int x1 = (int)floor(area.x);
+		int y1 = (int)floor(area.y);
+		int x2 = (int)ceil(area.x + area.width);
+		int y2 = (int)ceil(area.y + area.height);
 		// Check
 		if (x1 < 0 || y1 < 0 || x2 > size.x || y2 > size.y)
 			return false;
@@ -326,16 +326,16 @@ namespace backlot
 	{
 		// TODO: Compute collision point
 		// Area to be checked
-		RectangleI area(floor(start.x), floor(start.y), floor(end.x) - floor(start.x), floor(end.y) - floor(start.y));
+		RectangleI area((int)floor(start.x), (int)floor(start.y), (int)(floor(end.x) - floor(start.x)), (int)(floor(end.y) - floor(start.y)));
 		if (area.width < 0)
 		{
-			area.x = floor(end.x);
-			area.width = -area.width;
+			area.x = (int)floor(end.x);
+			area.width = (int)-area.width;
 		}
 		if (area.height < 0)
 		{
-			area.y = floor(end.y);
-			area.height = -area.height;
+			area.y = (int)floor(end.y);
+			area.height = (int)-area.height;
 		}
 		int hitx = -10;
 		int hity = -10;

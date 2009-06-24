@@ -142,7 +142,7 @@ namespace backlot
 		{
 			unsigned int ticks = SDL_GetTicks();
 			frames_rendered = 0;
-			int fps = 1000.0 / (ticks - last_ticks) * 10;
+			int fps = (int)(1000.0 / (ticks - last_ticks) * 10);
 			last_ticks = ticks;
 			char caption[100];
 			snprintf(caption, 100, "Backlot Engine - %d fps", fps);
