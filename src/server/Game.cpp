@@ -284,8 +284,51 @@ namespace backlot
 		}
 		// Increase tick counter
 		time++;
-		// Send updates
-		// TODO
+		// Send updates to all clients
+		std::map<int, Client*>::iterator it = clients.begin();
+		while (it != clients.end())
+		{
+			Client *client = it->second;
+			int from = client->getAcknowledgedPacket();
+			BufferPointer buffer = new Buffer();
+			buffer->write8(EPT_Update);
+			// Check all entities
+			for (int i = 0; i < 65535; i++)
+			{
+				if (entities[i].isNull())
+					continue;
+				bool currentlyactive = client->isEntityActive(i);
+				// TODO
+				bool active = true;
+				if (active)
+				{
+					if (!currentlyactive)
+					{
+						// Activate object
+						// TODO
+					}
+					// Add update to the packet
+					if (entities[i]->hasChanged(from))
+					{
+						buffer->write16(i);
+						entities[i]->getUpdate(from, buffer);
+					}
+				}
+				else
+				{
+					if (currentlyactive)
+					{
+						// Deactivate object
+						// TODO
+					}
+				}
+			}
+			// Finish update packet
+			buffer->write16(65535);
+			// Send updates
+			client->send(buffer);
+			it++;
+		}
 	}
 
 	Game::Game()

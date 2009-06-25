@@ -78,7 +78,7 @@ namespace backlot
 			if (properties[i] != tplproperties[i])
 			{
 				// Bit set: Property changed.
-				buffer->writeUnsignedInt(0, 1);
+				buffer->writeUnsignedInt(1, 1);
 				// Write the property to the stream.
 				properties[i].write(buffer);
 			}
@@ -90,15 +90,37 @@ namespace backlot
 		}
 	}
 
-	void Entity::getUpdate(BufferPointer state, BufferPointer buffer)
+	void Entity::getUpdate(int time, BufferPointer buffer)
 	{
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if (properties[i].getChangeTime() > time)
+			{
+				// Bit set: Property changed.
+				buffer->writeUnsignedInt(1, 1);
+				// Write the property to the stream.
+				properties[i].write(buffer);
+			}
+			else
+			{
+				// Bit not set: Property remained unchanged.
+				buffer->writeUnsignedInt(0, 1);
+			}
+		}
 	}
 	void Entity::applyUpdate(BufferPointer buffer)
 	{
 	}
-	bool Entity::hasChanged(BufferPointer state)
+	bool Entity::hasChanged(int time)
 	{
-		return changed;
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if (properties[i].getChangeTime() > time)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void Entity::setOwner(int owner)

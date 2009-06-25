@@ -52,7 +52,7 @@ namespace backlot
 	{
 		lastreceived = time;
 	}
-	int Client::getAcknowledgetdPacket()
+	int Client::getAcknowledgedPacket()
 	{
 		return lastreceived;
 	}

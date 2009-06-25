@@ -88,7 +88,7 @@ namespace backlot
 			/**
 			 * Returns the time of the last received packet.
 			 */
-			int getAcknowledgetdPacket();
+			int getAcknowledgedPacket();
 			/**
 			 * Tracks whether entity updates for this entity are sent to
 			 * this client.
