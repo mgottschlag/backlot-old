@@ -183,6 +183,13 @@ namespace backlot
 		buffer->writeString(type);
 		entity->getState(buffer);
 		Server::get().sendToAll(buffer, true);
+		// Set to active on all clients
+		std::map<int, Client*>::iterator it = clients.begin();
+		while (it != clients.end())
+		{
+			it->second->setEntityActive(newindex, true);
+			it++;
+		}
 		return entity;
 	}
 	void Game::removeEntity(EntityPointer entity)
@@ -239,7 +246,19 @@ namespace backlot
 		// Add to client list
 		clients.insert(std::pair<int, Client*>(++lastclientid, client));
 		// Send entities
-		// TODO
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i])
+			{
+				BufferPointer buffer = new Buffer();
+				buffer->write8(EPT_EntityCreated);
+				buffer->write16(i);
+				buffer->write16(entities[i]->getOwner());
+				buffer->writeString(entities[i]->getTemplate()->getName());
+				entities[i]->getState(buffer);
+				client->send(buffer, true);
+			}
+		}
 		// Script callback
 		if (script->isFunction("on_new_client"))
 		{

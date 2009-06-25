@@ -68,8 +68,6 @@ namespace backlot
 		EntityPointer entity = new Entity();
 		entity->setOwner(owner);
 		entity->create(tpl, state);
-		// Set owner
-		// TODO
 		// Insert entity into list
 		entities[id] = entity;
 		return entity;
@@ -114,6 +112,11 @@ namespace backlot
 	unsigned int Game::getTime()
 	{
 		return time;
+	}
+
+	void Game::injectUpdates(BufferPointer buffer)
+	{
+		std::cout << "Got updates." << std::endl;
 	}
 
 	void Game::update()

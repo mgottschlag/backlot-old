@@ -29,6 +29,7 @@ namespace backlot
 	Entity::Entity() : ReferenceCounted()
 	{
 		owner = 0;
+		active = true;
 	}
 	Entity::~Entity()
 	{
@@ -132,7 +133,16 @@ namespace backlot
 
 	bool Entity::isVisible(Entity *from)
 	{
-		return false;
+		return true;
+	}
+
+	void Entity::setActive(bool active)
+	{
+		this->active = active;
+	}
+	bool Entity::isActive()
+	{
+		return active;
 	}
 
 	void Entity::update()

@@ -36,7 +36,11 @@ namespace backlot
 	};
 
 	/**
-	 * Server-side client information.
+	 * Server-side client information. Here both network connection information
+	 * and the time of the last packet which definately has been received by the
+	 * player are tracked.
+	 * The latter provides a safe way to send only the info which really is
+	 * needed.
 	 */
 	class Client
 	{
@@ -76,9 +80,30 @@ namespace backlot
 			 * @param reliable If set to true, the data will be sent reliably.
 			 */
 			void send(BufferPointer buffer, bool reliable = false);
+
+			/**
+			 * Sets the time of the last packet which the client definately got.
+			 */
+			void setAcknowledgedPacket(int time);
+			/**
+			 * Returns the time of the last received packet.
+			 */
+			int getAcknowledgetdPacket();
+			/**
+			 * Tracks whether entity updates for this entity are sent to
+			 * this client.
+			 */
+			void setEntityActive(int entity, bool active);
+			/**
+			 * Returns whether entity updates for this entity are sent to the
+			 * client.
+			 */
+			bool isEntityActive(int entity);
 		private:
 			ENetPeer *peer;
 			ClientStatus status;
+			int lastreceived;
+			bool active[65535];
 	};
 }
 

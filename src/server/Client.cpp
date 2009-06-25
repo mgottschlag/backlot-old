@@ -26,6 +26,7 @@ namespace backlot
 	Client::Client(ENetPeer *peer) : peer(peer)
 	{
 		status = ECS_Connecting;
+		lastreceived = 0;
 	}
 	Client::~Client()
 	{
@@ -45,5 +46,22 @@ namespace backlot
 		ENetPacket *packet = enet_packet_create(buffer->getData(),
 			buffer->getSize(), reliable?ENET_PACKET_FLAG_RELIABLE:0);
 		enet_peer_send(peer, 0, packet);
+	}
+
+	void Client::setAcknowledgedPacket(int time)
+	{
+		lastreceived = time;
+	}
+	int Client::getAcknowledgetdPacket()
+	{
+		return lastreceived;
+	}
+	void Client::setEntityActive(int entity, bool active)
+	{
+		this->active[entity] = active;
+	}
+	bool Client::isEntityActive(int entity)
+	{
+		return active[entity];
 	}
 }

@@ -54,6 +54,9 @@ namespace backlot
 
 			bool isVisible(Entity *from);
 
+			void setActive(bool active);
+			bool isActive();
+
 			void update();
 
 			void onChange(Property *property);
@@ -67,6 +70,8 @@ namespace backlot
 			bool changed;
 
 			int owner;
+
+			bool active;
 	};
 
 	typedef SharedPointer<Entity> EntityPointer;

@@ -86,6 +86,8 @@ namespace backlot
 			void write(const BufferPointer &buffer);
 			void read(const BufferPointer &buffer);
 
+			int getChangeTime();
+
 			Property &operator=(const Property &property);
 			bool operator==(const Property &property);
 			bool operator!=(const Property &property);
@@ -99,6 +101,7 @@ namespace backlot
 			char data[8];
 			Entity *entity;
 			bool callbacks;
+			int changetime;
 	};
 }
 

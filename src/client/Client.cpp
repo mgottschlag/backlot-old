@@ -217,38 +217,13 @@ namespace backlot
 					else if (type == EPT_EntityDeleted)
 					{
 						std::cout << "Entity deleted." << std::endl;
-						// TODO
+						int id = msg->read16();
+						EntityPointer entity = Game::get().getEntity(id);
+						Game::get().removeEntity(entity);
 					}
 					else if (type == EPT_Update)
 					{
-						int count = msg->read16();
-						// Loop through sent players
-						for (int i = 0; i < count; i++)
-						{
-							int id = msg->read32();
-							// Get player
-							PlayerPointer player = 0;
-							for (unsigned int j = 0; j < players.size(); j++)
-							{
-								if (players[j]->getID() == id)
-								{
-									player = players[j];
-									break;
-								}
-							}
-							// Update data
-							uint8_t keys = msg->read8();
-							float rotation = msg->readFloat();
-							float x = msg->readFloat();
-							float y = msg->readFloat();
-							int hitpoints = msg->read8();
-							if (player.isNull())
-								continue;
-							player->setPosition(Vector2F(x, y));
-							player->setRotation(rotation);
-							player->receiveKeys(keys);
-							player->setHitpoints(hitpoints);
-						}
+						Game::get().injectUpdates(msg);
 					}
 					else
 					{

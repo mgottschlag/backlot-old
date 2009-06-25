@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "entity/Property.hpp"
 #include "entity/Entity.hpp"
+#include "Game.hpp"
 
 #include <cstring>
 #include <iostream>
@@ -35,6 +36,7 @@ namespace backlot
 		memset(data, 0, 8);
 		entity = 0;
 		callbacks = true;
+		changetime = Game::get().getTime();
 	}
 	Property::Property(std::string name, PropertyType type,
 		PropertyFlags flags) : name(name), type(type), flags(flags)
@@ -43,6 +45,7 @@ namespace backlot
 		memset(data, 0, 8);
 		entity = 0;
 		callbacks = true;
+		changetime = Game::get().getTime();
 	}
 	Property::Property(const Property &property)
 	{
@@ -53,6 +56,7 @@ namespace backlot
 		memcpy(data, property.data, 8);
 		entity = 0;
 		callbacks = true;
+		changetime = Game::get().getTime();
 	}
 	Property::~Property()
 	{
@@ -290,6 +294,11 @@ namespace backlot
 		onChange();
 	}
 
+	int Property::getChangeTime()
+	{
+		return changetime;
+	}
+
 	Property &Property::operator=(const Property &property)
 	{
 		if (name == "")
@@ -329,6 +338,9 @@ namespace backlot
 			return;
 		if (!entity)
 			return;
+		// Update time of the last change
+		changetime = Game::get().getTime();
+		// Entity callback
 		entity->onChange(this);
 	}
 }

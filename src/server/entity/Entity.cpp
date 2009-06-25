@@ -112,7 +112,7 @@ namespace backlot
 
 	bool Entity::isVisible(Entity *from)
 	{
-		return false;
+		return true;
 	}
 
 	void Entity::update()

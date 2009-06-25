@@ -31,6 +31,8 @@ namespace backlot
 		EPT_MapChange,
 		EPT_EntityCreated,
 		EPT_EntityDeleted,
+		EPT_ActivateEntity,
+		EPT_DeactivateEntity,
 		EPT_Rotation,
 		EPT_Keys,
 		EPT_Update
