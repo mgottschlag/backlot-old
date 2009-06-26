@@ -267,7 +267,28 @@ namespace backlot
 	}
 	void Game::removeClient(Client *client)
 	{
-		
+		int clientid = -1;
+		// Remove client
+		std::map<int, Client*>::iterator it = clients.begin();
+		while (it != clients.end())
+		{
+			if (client == it->second)
+			{
+				clientid = it->first;
+				clients.erase(it);
+				break;
+			}
+		}
+		if (clientid == -1)
+			return;
+		// Remove entities
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i] && entities[i]->getOwner() == clientid)
+			{
+				removeEntity(entities[i]);
+			}
+		}
 	}
 
 	unsigned int Game::getTime()
@@ -292,6 +313,7 @@ namespace backlot
 			int from = client->getAcknowledgedPacket();
 			BufferPointer buffer = new Buffer();
 			buffer->write8(EPT_Update);
+			buffer->write32(time);
 			// Check all entities
 			for (int i = 0; i < 65535; i++)
 			{
@@ -310,7 +332,7 @@ namespace backlot
 					// Add update to the packet
 					if (entities[i]->hasChanged(from))
 					{
-						buffer->write16(i);
+						buffer->write16(i + 1);
 						entities[i]->getUpdate(from, buffer);
 					}
 				}
@@ -323,8 +345,6 @@ namespace backlot
 					}
 				}
 			}
-			// Finish update packet
-			buffer->write16(65535);
 			// Send updates
 			client->send(buffer);
 			it++;

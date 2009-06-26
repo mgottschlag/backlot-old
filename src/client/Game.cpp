@@ -117,6 +117,32 @@ namespace backlot
 	void Game::injectUpdates(BufferPointer buffer)
 	{
 		std::cout << "Got updates." << std::endl;
+		// Get server time step to which this update belongs to
+		unsigned int updatetime = buffer->read32();
+		time = updatetime;
+		while (1)
+		{
+			// Get entity
+			int entityid = buffer->read16();
+			if (!entityid)
+				break;
+			entityid--;
+			if (entities[entityid].isNull())
+			{
+				std::cout << "Entity " << entityid << " not available." << std::endl;
+				return;
+			}
+			EntityPointer entity = entities[entityid];
+			// Apply update
+			std::cout << "Updating entity." << std::endl;
+			entity->applyUpdate(buffer);
+			break;
+		}
+		// Ack updates.
+		BufferPointer received = new Buffer();
+		received->write8(EPT_UpdateReceived);
+		received->write32(updatetime);
+		Client::get().send(received);
 	}
 
 	void Game::update()

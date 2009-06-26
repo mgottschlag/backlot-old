@@ -112,6 +112,16 @@ namespace backlot
 	}
 	void Entity::applyUpdate(BufferPointer buffer)
 	{
+		std::cout << "Updating entity." << std::endl;
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			int changed = buffer->readUnsignedInt(1);
+			if (changed)
+			{
+				std::cout << i << " changed." << std::endl;
+				properties[i].read(buffer);
+			}
+		}
 	}
 	bool Entity::hasChanged(BufferPointer state)
 	{

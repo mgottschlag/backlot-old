@@ -291,7 +291,6 @@ namespace backlot
 					buffer->readInt(size)));
 				break;
 		}
-		onChange();
 	}
 
 	int Property::getChangeTime()

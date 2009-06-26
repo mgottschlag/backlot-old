@@ -35,7 +35,8 @@ namespace backlot
 		EPT_DeactivateEntity,
 		EPT_Rotation,
 		EPT_Keys,
-		EPT_Update
+		EPT_Update,
+		EPT_UpdateReceived
 	};
 	enum KeyMask
 	{

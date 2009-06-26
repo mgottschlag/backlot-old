@@ -123,6 +123,11 @@ namespace backlot
 						// Insert client into the game
 						Game::get().addClient(client);
 					}
+					else if (type == EPT_UpdateReceived)
+					{
+						unsigned int time = msg->read32();
+						client->setAcknowledgedPacket(time);
+					}
 					else
 					{
 						// Invalid packet, disconnect client
