@@ -57,6 +57,7 @@ namespace backlot
 			std::cerr << "Could not initialize SDL." << std::endl;
 			return false;
 		}
+		SDL_EnableUNICODE(1);
 		// Create OpenGL context
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
