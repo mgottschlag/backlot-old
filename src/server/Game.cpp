@@ -301,7 +301,8 @@ namespace backlot
 		// Update entities
 		for (int i = 0; i < 65535; i++)
 		{
-			entities[i]->update();
+			if (entities[i])
+				entities[i]->update();
 		}
 		// Increase tick counter
 		time++;
