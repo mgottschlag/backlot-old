@@ -64,6 +64,10 @@ namespace backlot
 	{
 		this->position = position;
 	}
+	void EntityImage::setPosition(float x, float y)
+	{
+		position = Vector2F(x, y);
+	}
 	Vector2F EntityImage::getPosition()
 	{
 		return position;
@@ -107,6 +111,10 @@ namespace backlot
 
 	void EntityImage::rotate(float rotation, Vector2F center)
 	{
+	}
+	void EntityImage::rotate(float rotation, float centerx, float centery)
+	{
+		rotate(rotation, Vector2F(centerx, centery));
 	}
 
 	void EntityImage::render()

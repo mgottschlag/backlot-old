@@ -42,6 +42,7 @@ namespace backlot
 			void setTexture(TexturePointer texture);
 
 			void setPosition(Vector2F position);
+			void setPosition(float x, float y);
 			Vector2F getPosition();
 
 			void setSize(Vector2F size);
@@ -57,6 +58,7 @@ namespace backlot
 			bool isVisible();
 
 			void rotate(float rotation, Vector2F center);
+			void rotate(float rotation, float centerx, float centery);
 
 			void render();
 			static void renderAll();

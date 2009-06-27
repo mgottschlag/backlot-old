@@ -28,6 +28,7 @@ namespace backlot
 	Entity::Entity() : ReferenceCounted()
 	{
 		owner = 0;
+		positionproperty = 0;
 	}
 	Entity::~Entity()
 	{
@@ -48,7 +49,7 @@ namespace backlot
 		script->addServerFunctions();
 		// TODO: Other functions
 		// Export script variables
-		script->setVariable("this", this);
+		script->setVariable("this", EntityPointer(this));
 		for (unsigned int i = 0; i < properties.size(); i++)
 			script->setVariable(properties[i].getName(), &properties[i]);
 		// Run the script code
@@ -130,6 +131,26 @@ namespace backlot
 	int Entity::getOwner()
 	{
 		return owner;
+	}
+
+	void Entity::setPosition(const Vector2F &position)
+	{
+		if (positionproperty)
+			positionproperty->setVector2F(position);
+	}
+	Vector2F Entity::getPosition()
+	{
+		if (positionproperty)
+			return positionproperty->getVector2F();
+		return Vector2F();
+	}
+	void Entity::setSpeed(const Vector2F &speed, bool ignoreobstacles)
+	{
+		this->speed = speed;
+	}
+	Vector2F Entity::getSpeed()
+	{
+		return speed;
 	}
 
 	bool Entity::isVisible(Entity *from)

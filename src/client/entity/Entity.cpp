@@ -30,6 +30,7 @@ namespace backlot
 	{
 		owner = 0;
 		active = true;
+		positionproperty = 0;
 	}
 	Entity::~Entity()
 	{
@@ -60,10 +61,9 @@ namespace backlot
 		script = new Script();
 		script->addCoreFunctions();
 		script->addClientFunctions();
-		script->setVariable("this", this);
 		// TODO: Other functions
 		// Export script variables
-		script->setVariable("this", this);
+		script->setVariable("this", EntityPointer(this));
 		for (unsigned int i = 0; i < properties.size(); i++)
 			script->setVariable(properties[i].getName(), &properties[i]);
 		for (unsigned int i = 0; i < imageinfo.size(); i++)
@@ -139,6 +139,26 @@ namespace backlot
 	bool Entity::isLocal()
 	{
 		return getOwner() == Game::get().getClientID();
+	}
+
+	void Entity::setPosition(const Vector2F &position)
+	{
+		if (positionproperty)
+			positionproperty->setVector2F(position);
+	}
+	Vector2F Entity::getPosition()
+	{
+		if (positionproperty)
+			return positionproperty->getVector2F();
+		return Vector2F();
+	}
+	void Entity::setSpeed(Vector2F speed, bool ignoreobstacles)
+	{
+		this->speed = speed;
+	}
+	Vector2F Entity::getSpeed()
+	{
+		return speed;
 	}
 
 	bool Entity::isVisible(Entity *from)

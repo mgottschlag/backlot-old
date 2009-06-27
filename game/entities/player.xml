@@ -28,6 +28,8 @@
 					--Game.get():setInputTarget(this);
 				end
 			end
+			if Server ~= nil then
+			end
 		end
 		function on_changed(property)
 			print("Property changed.");
@@ -59,7 +61,7 @@
 					xspeed = xspeed - 1;
 				end
 				-- Set movement
-				this:setSpeed(xspeed, yspeed, false, true);
+				this:setSpeed(Vector2F(xspeed, yspeed), false);
 				if Client ~= nil then
 					feet:setRotation(0);
 					feet:setPosition(-0.5, -0.5);

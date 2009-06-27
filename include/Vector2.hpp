@@ -161,6 +161,14 @@ namespace backlot
 			}
 
 			/**
+			 * Returns the angle between (0, 1) and this vector in degrees.
+			 */
+			float getRotation()
+			{
+				return atan2(y, x) * 180 / 3.1415;
+			}
+
+			/**
 			 * X coordinate of the vector.
 			 */
 			T x;

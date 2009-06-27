@@ -52,6 +52,11 @@ namespace backlot
 			int getOwner();
 			bool isLocal();
 
+			void setPosition(const Vector2F &position);
+			Vector2F getPosition();
+			void setSpeed(Vector2F speed, bool ignoreobstacles);
+			Vector2F getSpeed();
+
 			bool isVisible(Entity *from);
 
 			void setActive(bool active);
@@ -66,6 +71,8 @@ namespace backlot
 			ScriptPointer script;
 			std::vector<Property> properties;
 			std::vector<EntityImagePointer> images;
+			Property *positionproperty;
+			Vector2F speed;
 
 			bool changed;
 

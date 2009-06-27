@@ -226,6 +226,19 @@ namespace backlot
 		}
 	}
 
+	bool Property::bit(int index)
+	{
+		if (type == EPT_Integer)
+		{
+			return (*((unsigned int*)this->data) >> index) & 1;
+		}
+		else
+		{
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+			return 0;
+		}
+	}
+
 	void Property::set(std::string s)
 	{
 		switch (type)

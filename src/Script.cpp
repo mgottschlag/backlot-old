@@ -146,6 +146,7 @@ namespace backlot
 				.def("set", &Vector2I::set)
 				.def("getLengthSquared", &Vector2I::getLengthSquared)
 				.def("getLength", &Vector2I::getLength)
+				.def("getRotation", &Vector2I::getRotation)
 				.def(luabind::self * float())
 				.def(luabind::self + Vector2F())
 				.def(luabind::self - Vector2F())
@@ -171,6 +172,7 @@ namespace backlot
 				.def("getVector2F", &Property::getVector2F)
 				.def("setVector2I", &Property::setVector2I)
 				.def("getVector2I", &Property::getVector2I)
+				.def("bit", &Property::bit)
 				.def("set", &Property::set)
 				.def("write", &Property::write)
 				.def("read", &Property::read)
@@ -226,11 +228,16 @@ namespace backlot
 		[
 			// Entity class
 			luabind::class_<Entity, ReferenceCounted, SharedPointer<Entity> >("Entity")
-				.def("isLocal", &Entity::isLocal),
+				.def("isLocal", &Entity::isLocal)
+				.def("setPosition", &Entity::setPosition)
+				.def("getPosition", &Entity::getPosition)
+				.def("setSpeed", &Entity::setSpeed)
+				.def("getSpeed", &Entity::getSpeed),
 			// EntityImage
 			luabind::class_<EntityImage, ReferenceCounted, SharedPointer<EntityImage> >("EntityImage")
 				.def("load", &EntityImage::load)
-				.def("setPosition", &EntityImage::setPosition)
+				.def("setPosition", (void (EntityImage::*)(Vector2F))&EntityImage::setPosition)
+				.def("setPosition", (void (EntityImage::*)(float, float))&EntityImage::setPosition)
 				.def("getPosition", &EntityImage::getPosition)
 				.def("setRotation", &EntityImage::setRotation)
 				.def("getRotation", &EntityImage::getRotation)
@@ -240,7 +247,8 @@ namespace backlot
 				.def("getDepth", &EntityImage::getDepth)
 				.def("setVisible", &EntityImage::setVisible)
 				.def("isVisible", &EntityImage::isVisible)
-				.def("rotate", &EntityImage::rotate),
+				.def("rotate", (void (EntityImage::*)(float, Vector2F))&EntityImage::rotate)
+				.def("rotate", (void (EntityImage::*)(float, float, float))&EntityImage::rotate),
 			// Client class
 			luabind::class_<Client>("Client")
 				.scope
@@ -264,7 +272,10 @@ namespace backlot
 		[
 			// Entitiy class
 			luabind::class_<Entity, ReferenceCounted, SharedPointer<Entity> >("Entity")
-				.def(luabind::constructor<>()),
+				.def("setPosition", &Entity::setPosition)
+				.def("getPosition", &Entity::getPosition)
+				.def("setSpeed", &Entity::setSpeed)
+				.def("getSpeed", &Entity::getSpeed),
 			// Server class
 			luabind::class_<Server>("Server")
 				.scope

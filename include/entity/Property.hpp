@@ -81,6 +81,8 @@ namespace backlot
 			void setVector2I(const Vector2I &data);
 			Vector2I getVector2I();
 
+			bool bit(int index);
+
 			void set(std::string s);
 
 			void write(const BufferPointer &buffer);
