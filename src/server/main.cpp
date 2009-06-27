@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 
 #include <iostream>
+#include <luabind/luabind.hpp>
 
 int main(int argc, char **argv)
 {
@@ -35,9 +36,20 @@ int main(int argc, char **argv)
 	for (int i = 2; i < argc; i++)
 		args.push_back(argv[i]);
 	// Run game
-	if (!backlot::Engine::get().run(argv[1], args))
+	try
 	{
-		return -1;
+		if (!backlot::Engine::get().run(argv[1], args))
+		{
+			return -1;
+		}
 	}
+	catch (luabind::error &e)
+	{
+        lua_State *state = e.state();
+		std::cerr << "Script exception: " << e.what() << std::endl;
+		std::cerr <<  lua_tostring(state, -1) << std::endl;
+		return -1;
+    }
+
 	return 0;
 }
