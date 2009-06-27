@@ -88,6 +88,16 @@ namespace backlot
 				y = y * s;
 				return *this;
 			}
+			template<typename T2> Vector2<T> operator/(T2 s) const
+			{
+				return Vector2<T>((T)(x / s),(T)(y / s));
+			}
+			template<typename T2> Vector2<T> &operator/=(T2 s)
+			{
+				x = x / s;
+				y = y / s;
+				return *this;
+			}
 			template<typename T2> Vector2<T> operator+(const Vector2<T2> &v) const
 			{
 				return Vector2<T>((T)(x + v.x),(T)(y + v.y));
