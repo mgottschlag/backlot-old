@@ -59,6 +59,8 @@ namespace backlot
 
 			void update();
 
+			ScriptPointer getScript();
+
 			void onChange(Property *property);
 		private:
 			EntityTemplatePointer tpl;

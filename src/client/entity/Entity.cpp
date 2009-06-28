@@ -190,6 +190,11 @@ namespace backlot
 		}
 	}
 
+	ScriptPointer Entity::getScript()
+	{
+		return script;
+	}
+
 	void Entity::onChange(Property *property)
 	{
 		changed = true;
