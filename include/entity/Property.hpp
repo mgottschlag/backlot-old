@@ -82,6 +82,7 @@ namespace backlot
 			Vector2I getVector2I();
 
 			bool bit(int index);
+			void bit(int index, int value);
 
 			void set(std::string s);
 
