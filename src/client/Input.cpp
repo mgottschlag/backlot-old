@@ -70,6 +70,7 @@ namespace backlot
 								Graphics::get().getGuichanInput()->pushInput(event);
 								break;
 						}
+						break;
 					default:
 						Graphics::get().getGuichanInput()->pushInput(event);
 						break;
