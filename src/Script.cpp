@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -23,9 +23,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "entity/Property.hpp"
 #include "Game.hpp"
+#include "Preferences.hpp"
 #ifdef CLIENT
 #include "Dialog.hpp"
 #include "Client.hpp"
+#include <guichan/widgets/checkbox.hpp>
+#include <guichan/widgets/textfield.hpp>
 #endif
 #ifdef SERVER
 #include "Server.hpp"
@@ -175,7 +178,26 @@ namespace backlot
 				.def("bit", &Property::bit)
 				.def("set", &Property::set)
 				.def("write", &Property::write)
-				.def("read", &Property::read)
+				.def("read", &Property::read),
+			// Preferences class
+			luabind::class_<Preferences>("Preferences")
+				.scope
+				[
+					luabind::def("get", &Preferences::get)
+				]
+				.def("getResolution", &Preferences::getResolution)
+				.def("setXResolution", &Preferences::setXResolution)
+				.def("setYResolution", &Preferences::setYResolution)
+				.def("getFullscreen", &Preferences::getFullscreen)
+				.def("setFullscreen", &Preferences::setFullscreen)
+				.def("getColorDepth", &Preferences::getColorDepth)
+				.def("setColorDepth", &Preferences::setColorDepth)
+				.def("getStereo", &Preferences::getStereo)
+				.def("setStereo", &Preferences::setStereo)
+				.def("getFrequency", &Preferences::getFrequency)
+				.def("setFrequency", &Preferences::setFrequency)
+				.def("getBitrate", &Preferences::getBitrate)
+				.def("setBitrate", &Preferences::setBitrate)
 		];
 	}
 	#ifdef CLIENT
@@ -222,6 +244,21 @@ namespace backlot
 		// Done
 		lua_setglobal(state, "menu");
 	}
+	void Script::addDialogFunctions()
+	{
+		luabind::module(state)
+		[
+			// Export guichan Widgets
+			// Textfield
+			luabind::class_<gcn::TextField>("TextField")
+				.def("getText", &gcn::TextField::getText)
+				.def("setText", &gcn::TextField::setText),
+			// CheckBox
+			luabind::class_<gcn::CheckBox>("CheckBox")
+				.def("isSelected", &gcn::CheckBox::isSelected)
+				.def("setSelected",  &gcn::CheckBox::setSelected)
+		];
+	}
 	void Script::addClientFunctions()
 	{
 		luabind::module(state)
@@ -262,6 +299,7 @@ namespace backlot
 				[
 					luabind::def("get", &Game::get)
 				]
+				.def("getMap", &Client::getMap)
 		];
 	}
 	#endif

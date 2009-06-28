@@ -49,24 +49,81 @@ namespace backlot
 			
 			void setPath(std::string newpath);
 			/**
-			 * Get the screenresolutions.
+			 * Returns the screenresolutions.
 			 * @return A Vector2I with the width (x) and height (y) of the screen.
 			 */
 			const Vector2I &getResolution() const;
+			/**
+			 * Sets the screenresolutions.
+			 * @param resolution A Vector2I with the width(x) and height(y)
+			 * of the screen.
+			 */
+			void setResolution(Vector2I resolution);
+			/**
+			 * Set the x resolution of the screen.
+			 * @param x The new x resolution.
+			 */
+			void setXResolution(int x);
+			/**
+			 * Set the y resolution of the screen.
+			 * @param y The new y resolution.
+			 */
+			void setYResolution(int y);
+			
+			/**
+			 * Returns the color depth of the display.
+			 * @return The color depth.
+			 */
 			int getColorDepth() const;
+			/**
+			 * Sets the color depth of the display.
+			 * @param depth The new color depth of the display
+			 */
+			void setColorDepth(int depth);
+			
 			/**
 			 * If the game runs in fullscreen mode or not.
 			 * @return True if fullscreen mode is enabled and false if it is disabled.
 			 */
 			bool getFullscreen() const;
+			/**
+			 * Set the fullscreenmode.
+			 * @param fullscreen true if game runs in fullscreen mode.
+			 */
+			void setFullscreen(bool fullscreen);
+			 
 			
 			/**
 			 * If the sound is stereo or not.
 			 * @retrun True if stereo, false if mono.
 			 */
 			bool getStereo() const;
+			/**
+			 * Enables / disables the use of stereo sound.
+			 * @param stereo True to enable and false to disable stereo sound.
+			 */
+			void setStereo(bool stereo);
+			
+			/**
+			 * Returns the sound frequency used by SDL_Mixer.
+			 * @return The used sound frequency.
+			 */ 
 			int getFrequency() const;
+			/**
+			 * Sets the sound frequency used by SDL_Mixer.
+			 * @param frequency The new frequency.
+			 */
+			void setFrequency(int frequency);
+			/**
+			 * Returns the sound bitrate used by SDL_Mixer.
+			 * @return The sound bitrate.
+			 */
 			int getBitrate() const;
+			/**
+			 * Sets the sound bitrate used by SDL_Mixer.
+			 * @param bitrate The new sound bitrate.
+			 */
+			void setBitrate(int bitrate);
 		private:
 			/**
 			 * The private constructor.

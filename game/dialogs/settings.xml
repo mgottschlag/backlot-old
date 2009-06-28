@@ -1,23 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <dialog size="400/300" title="Settings">
-	<tabcontrol position="0/0" size="390/260">
+<label position="10/0" size="250/20" text="Restart to apply changes!" />
+	<!--<tabcontrol position="0/0" size="390/250">
 		<tab index="0" label="Game">
 		</tab>
-		<tab index="1" label="Graphics">
-		</tab>
-		<tab index="2" label="Sound">
-		</tab>
-	</tabcontrol>
-	<button id="0" position="320/270" size="60/20" label="Close" />
-	<button id="1" position="250/270" size="60/20" label="Apply" />
+		<tab index="1" label="Graphics"> -->
+			<label position="10/20" size="50/20" text="Graphics" />
+			<label position="10/40" size="110/20" text="X-Resolution:" />
+			<label position="10/60" size="110/20" text="Y-Resolution:" />
+			<textfield name="xrestext" position="130/40" size="100/20" />
+			<textfield name="yrestext" position="130/60" size="100/20" />
+			<checkbox name="fullscreen" position="10/80" size="150/20" label="Fullscreen" />
+		<!--</tab>
+		<tab index="2" label="Sound">-->
+			<label position="10/110" size="50/20" text="Sound" />
+			<checkbox name="stereo" position="10/130" size="150/20" label="Stereo" />
+		<!--</tab>
+	</tabcontrol>-->
+	<button id="0" position="320/260" size="60/20" label="Close" />
+	<button id="1" position="250/260" size="60/20" label="Apply" />
 
 	<script>
 	<![CDATA[
+	print(Preferences);
+	
 	function on_button(index)
 		if index == 0 then
 			menu.hide_dialog("settings");
+			print(xrestext:getText())
 		elseif index == 1 then
+			apply()
 		end
+	end
+	
+	function on_show()
+		update()
+	end
+	
+	function update()
+		xrestext:setText(tostring(Preferences.get():getResolution().x))
+		yrestext:setText(tostring(Preferences.get():getResolution().y))
+		fullscreen:setSelected(Preferences.get():getFullscreen())
+		stereo:setSelected(Preferences.get():getStereo())
+	end
+	
+	function apply()
+		Preferences.get():setXResolution(tonumber(xrestext:getText()))
+		Preferences.get():setYResolution(tonumber(yrestext:getText()))
+		Preferences.get():setFullscreen(fullscreen:isSelected())
+		Preferences.get():setStereo(stereo:isSelected())
 	end
 	]]>
 	</script>

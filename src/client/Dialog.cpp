@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2009  Mathias Gottschlag
+Copyright (C) 2009  Mathias Gottschlag, Simon Kerler
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in the
@@ -22,6 +22,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Dialog.hpp"
 #include "Engine.hpp"
 #include "Graphics.hpp"
+#include "Font.hpp"
+#include "GuichanFont.hpp"
+#include "Debug.hpp"
 
 #include "support/tinyxml.h"
 
@@ -30,6 +33,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <guichan/widgets/button.hpp>
 #include <guichan/widgets/tabbedarea.hpp>
 #include <guichan/widgets/tab.hpp>
+#include <guichan/widgets/textfield.hpp>
+#include <guichan/widgets/label.hpp>
+#include <guichan/widgets/checkbox.hpp>
+#include <guichan/keylistener.hpp>
 
 namespace backlot
 {
@@ -110,15 +117,18 @@ namespace backlot
 		gcn::Color bgcolor = window->getBaseColor();
 		bgcolor.a = 200;
 		window->setBaseColor(bgcolor);
+		// Load basic script functions
+		script = new Script();
+		script->addCoreFunctions();
+		script->addMenuFunctions();
+		script->addClientFunctions();
+		script->addDialogFunctions();
 		// Load widgets
 		if (!parseWidgets(root, window))
 		{
 			return false;
 		}
-		// Load scripts
-		script = new Script();
-		script->addCoreFunctions();
-		script->addMenuFunctions();
+		// Load scripts from XML
 		TiXmlNode *scriptnode = root->FirstChild("script");
 		while (scriptnode)
 		{
@@ -171,6 +181,7 @@ namespace backlot
 	{
 		window->setVisible(visible);
 		this->visible = visible;
+		script->callFunction("on_show");
 	}
 	bool Dialog::isVisible()
 	{
@@ -252,6 +263,96 @@ namespace backlot
 			}
 			buttonnode = xml->IterateChildren("button", buttonnode);
 		}
+		// Textfields
+		TiXmlNode *textfieldnode = xml->FirstChild("textfield");
+		while (textfieldnode)
+		{
+			TiXmlElement *textfielddata = textfieldnode->ToElement();
+			if (textfielddata)
+			{
+				// Check attributes
+				if (!textfielddata->Attribute("size") || !textfielddata->Attribute("position"))
+				{
+					std::cerr << "Textfield size or position missing." << std::endl;
+					return false;
+				}
+				// Create textfield
+				Vector2I size = textfielddata->Attribute("size");
+				Vector2I position = textfielddata->Attribute("position");
+				gcn::TextField *textfield = new gcn::TextField();
+				textfield->setDimension(gcn::Rectangle(position.x, position.y,
+					size.x, size.y));
+				parent->add(textfield);
+				// Add to script
+				if (textfielddata->Attribute("name"))
+					script->setVariable(textfielddata->Attribute("name"), textfield);
+			}
+			textfieldnode = xml->IterateChildren("textfield", textfieldnode);
+		}
+		// Labels
+		TiXmlNode *labelnode = xml->FirstChild("label");
+		while (labelnode)
+		{
+			TiXmlElement *labeldata = labelnode->ToElement();
+			if (labeldata)
+			{
+				// Check attributes
+				if (!labeldata->Attribute("size") || !labeldata->Attribute("position"))
+				{
+					std::cerr << "Label size or position missing." << std::endl;
+					return false;
+				}
+				if (!labeldata->Attribute("text"))
+				{
+					std::cerr << "Label text missing." << std::endl;
+					return false;
+				}
+				// Create label
+				Vector2I size = labeldata->Attribute("size");
+				Vector2I position = labeldata->Attribute("position");
+				const char *text = labeldata->Attribute("text");
+				gcn::Label *label = new gcn::Label();
+				label->setCaption(text);
+				label->setDimension(gcn::Rectangle(position.x, position.y,
+					size.x, size.y));
+				parent->add(label);
+			}
+			labelnode = xml->IterateChildren("label", labelnode);
+		}
+		// Checkboxes
+		TiXmlNode *checkboxnode = xml->FirstChild("checkbox");
+		while (checkboxnode)
+		{
+			TiXmlElement *checkboxdata = checkboxnode->ToElement();
+			if (checkboxdata)
+			{
+				// Check attributes
+				if (!checkboxdata->Attribute("size") || !checkboxdata->Attribute("position"))
+				{
+					std::cerr << "Checkbox size or position missing." << std::endl;
+					return false;
+				}
+				if (!checkboxdata->Attribute("label"))
+				{
+					std::cerr << "Checkbox label missing." << std::endl;
+					return false;
+				}
+				// Create checkbox
+				Vector2I size = checkboxdata->Attribute("size");
+				Vector2I position = checkboxdata->Attribute("position");
+				const char *label = checkboxdata->Attribute("label");
+				gcn::CheckBox *checkbox = new gcn::CheckBox();
+				checkbox->setCaption(label);
+				checkbox->setDimension(gcn::Rectangle(position.x, position.y,
+					size.x, size.y));
+				parent->add(checkbox);
+				// Add to script
+				if (checkboxdata->Attribute("name"))
+					script->setVariable(checkboxdata->Attribute("name"), checkbox);
+			}
+			checkboxnode = xml->IterateChildren("checkbox", checkboxnode);
+		}
+
 		return true;
 	}
 	bool Dialog::parseTabControl(TiXmlElement *xml, gcn::TabbedArea *tabctrl)
@@ -276,6 +377,7 @@ namespace backlot
 				gcn::Tab *tab = new gcn::Tab();
 				tab->setCaption(label);
 				gcn::Container *container = new gcn::Container();
+ 				container->setSize(tabctrl->getWidth(), tabctrl->getHeight());
 				tabctrl->addTab(tab, container);
 				parseWidgets(tabdata, container);
 			}

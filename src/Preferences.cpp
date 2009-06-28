@@ -169,26 +169,58 @@ namespace backlot
 	{
 		return screenresolution;
 	}
+	void Preferences::setResolution(Vector2I resolution)
+	{
+		screenresolution = resolution;
+	}
+	void Preferences::setXResolution(int x)
+	{
+		screenresolution.x = x;
+	}
+	void Preferences::setYResolution(int y)
+	{
+		screenresolution.y = y;
+	}
 	int Preferences::getColorDepth() const
 	{
 		return colordepth;
 	}
+	void Preferences::setColorDepth(int depth)
+	{
+		colordepth = depth;
+	}
 	bool Preferences::getFullscreen() const
 	{
 		return fullscreen;
+	}
+	void Preferences::setFullscreen(bool fullscreen)
+	{
+		this->fullscreen = fullscreen;
 	}
 
 	bool Preferences::getStereo() const
 	{
 		return stereo;
 	}
+	void Preferences::setStereo(bool stereo)
+	{
+		this->stereo = stereo;
+	}
 	int Preferences::getFrequency() const
 	{
 		return frequency;
 	}
+	void Preferences::setFrequency(int frequency)
+	{
+		this->frequency = frequency;
+	}
 	int Preferences::getBitrate() const
 	{
 		return bitrate;
+	}
+	void Preferences::setBitrate(int bitrate)
+	{
+		this->bitrate = bitrate;
 	}
 	Preferences::Preferences()
 	{

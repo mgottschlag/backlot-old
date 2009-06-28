@@ -83,12 +83,13 @@ namespace backlot
 			template <typename T> void setVariable(std::string name, T value)
 			{
 				luabind::globals(state)[name.c_str()] = value;
-			}
+			};
 
 			void addCoreFunctions();
 			#ifdef CLIENT
 			void addMenuFunctions();
 			void addClientFunctions();
+			void addDialogFunctions();
 			#endif
 			#ifdef SERVER
 			void addServerFunctions();
