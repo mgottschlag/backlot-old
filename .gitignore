@@ -10,3 +10,4 @@ Makefile
 /server.exe
 /backlot.exe
 /tests/buffertest
+/tests/referencecounting
