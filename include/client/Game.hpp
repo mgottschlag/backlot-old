@@ -52,6 +52,9 @@ namespace backlot
 
 			void injectUpdates(BufferPointer buffer);
 
+			void setInputTarget(EntityPointer entity);
+			EntityPointer getInputTarget();
+
 			void update();
 		private:
 			Game();
@@ -60,6 +63,7 @@ namespace backlot
 			std::string mapname;
 
 			EntityPointer entities[65535];
+			WeakPointer<Entity> inputentity;
 
 			unsigned int time;
 	};

@@ -130,6 +130,7 @@ namespace backlot
 				.def("set", &Vector2F::set)
 				.def("getLengthSquared", &Vector2F::getLengthSquared)
 				.def("getLength", &Vector2F::getLength)
+				.def("getRotation", &Vector2F::getRotation)
 				.def(luabind::self * float())
 				.def(luabind::self + Vector2F())
 				.def(luabind::self - Vector2F())
@@ -175,7 +176,8 @@ namespace backlot
 				.def("getVector2F", &Property::getVector2F)
 				.def("setVector2I", &Property::setVector2I)
 				.def("getVector2I", &Property::getVector2I)
-				.def("bit", &Property::bit)
+				.def("bit", (bool (Property::*)(int))&Property::bit)
+				.def("bit", (void (Property::*)(int, int))&Property::bit)
 				.def("set", &Property::set)
 				.def("write", &Property::write)
 				.def("read", &Property::read),
@@ -299,7 +301,7 @@ namespace backlot
 				[
 					luabind::def("get", &Game::get)
 				]
-				.def("getMap", &Client::getMap)
+				.def("setInputTarget", &Game::setInputTarget)
 		];
 	}
 	#endif

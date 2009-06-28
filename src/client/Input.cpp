@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Player.hpp"
 #include "Menu.hpp"
 #include "Graphics.hpp"
+#include "Game.hpp"
 
 #include <SDL/SDL.h>
 #include <math.h>
@@ -46,7 +47,6 @@ namespace backlot
 	{
 		// Handle SDL events
 		SDL_Event event;
-		bool keyschanged = false;
 		float rotation = 0;
 		bool rotationchanged = false;
 		bool shooting = false;
@@ -88,20 +88,16 @@ namespace backlot
 					{
 						// WSAD
 						case SDLK_w:
-							keyschanged = true;
-							currentkeys |= EKM_Up;
+							sendKey("up", 1);
 							break;
 						case SDLK_s:
-							keyschanged = true;
-							currentkeys |= EKM_Down;
+							sendKey("down", 1);
 							break;
 						case SDLK_a:
-							keyschanged = true;
-							currentkeys |= EKM_Left;
+							sendKey("left", 1);
 							break;
 						case SDLK_d:
-							keyschanged = true;
-							currentkeys |= EKM_Right;
+							sendKey("right", 1);
 							break;
 						case SDLK_ESCAPE:
 						{
@@ -119,20 +115,16 @@ namespace backlot
 					{
 						// WSAD
 						case SDLK_w:
-							keyschanged = true;
-							currentkeys &= ~EKM_Up;
+							sendKey("up", 0);
 							break;
 						case SDLK_s:
-							keyschanged = true;
-							currentkeys &= ~EKM_Down;
+							sendKey("down", 0);
 							break;
 						case SDLK_a:
-							keyschanged = true;
-							currentkeys &= ~EKM_Left;
+							sendKey("left", 0);
 							break;
 						case SDLK_d:
-							keyschanged = true;
-							currentkeys &= ~EKM_Right;
+							sendKey("right", 0);
 							break;
 						// Other keys
 						default:
@@ -144,9 +136,9 @@ namespace backlot
 					switch (event.button.button)
 					{
 						case SDL_BUTTON_LEFT:
-							keyschanged = true;
-							currentkeys |= EKM_Shoot;
+							shootonce = false;
 							shooting = true;
+							sendKey("shoot", 1);
 							break;
 						default:
 							break;
@@ -157,8 +149,12 @@ namespace backlot
 					switch (event.button.button)
 					{
 						case SDL_BUTTON_LEFT:
-							keyschanged = true;
-							currentkeys &= ~EKM_Shoot;
+							// Check whether the button was left up instantly
+							// and also shoot in this case
+							if (!shooting)
+								sendKey("shoot", 0);
+							else
+								shootonce = true;
 							break;
 						default:
 							break;
@@ -178,37 +174,28 @@ namespace backlot
 					break;
 			}
 		}
-		if (shooting && !(currentkeys & EKM_Shoot))
+		// Stop shooting if the button was only pressed shortly
+		if (!shooting && shootonce)
 		{
-			shootonce = true;
-		}
-		// Send input to player
-		PlayerPointer localplayer = Player::getLocalPlayer();
-		if (localplayer)
-		{
-			if (keyschanged || shootonce)
-			{
-				// Send keyboard info
-				if (shooting)
-					localplayer->sendKeys(currentkeys | EKM_Shoot);
-				else
-					localplayer->sendKeys(currentkeys);
-				if (shootonce)
-				{
-					shootonce = false;
-				}
-			}
-			if (rotationchanged)
-			{
-				// Send mouse info
-				localplayer->sendRotation(rotation);
-			}
+			sendKey("shoot", 0);
+			shootonce = false;
 		}
 		return true;
 	}
 
 	Input::Input()
 	{
-		currentkeys = 0;
+		shootonce = false;
+	}
+
+	void Input::sendKey(std::string key, int state)
+	{
+		EntityPointer entity = Game::get().getInputTarget();
+		if (entity.isNull())
+			return;
+		// Call script callback
+		ScriptPointer script = entity->getScript();
+		if (script->isFunction("on_keyboard_input"))
+			script->callFunction("on_keyboard_input", key, state);
 	}
 }

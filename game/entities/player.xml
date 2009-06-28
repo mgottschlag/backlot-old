@@ -2,12 +2,12 @@
 <entity size="0.6/0.6" origin="0.3/0.3" blocking="yes">
 	<properties>
 		<position type="vector2f" predict="1" />
-		<rotation type="float" predict="1" updatelocally="0" />
+		<rotation type="float" unlocked="yes" updatelocally="no" />
 		<team default="0" type="uint" size="4" />
 		<currentweapon default="-1" type="int" size="4" />
-		<keys default="0" type="uint" size="8" unlocked="1" />
+		<keys default="0" type="uint" size="8" unlocked="yes" updatelocally="no" />
 		<health default="100" type="uint" size="8" />
-		<mousepos default="0/0" type="vector2i" size="12" unlocked="1" />
+		<mousepos default="0/0" type="vector2i" size="12" unlocked="yes" updatelocally="no" />
 		<weapon0 type="entity" />
 		<weapon1 type="entity" />
 	</properties>
@@ -25,14 +25,13 @@
 				print("Entity: Client.");
 				if this:isLocal() then
 					print("Entity: local.");
-					--Game.get():setInputTarget(this);
+					Game.get():setInputTarget(this);
 				end
 			end
 			if Server ~= nil then
 			end
 		end
 		function on_changed(property)
-			print("Property changed.");
 			if property:getName() == "rotation" then
 				if Client ~= nil then
 					body:setRotation(0);
@@ -65,7 +64,7 @@
 				if Client ~= nil then
 					feet:setRotation(0);
 					feet:setPosition(-0.5, -0.5);
-					if xspeed ~= 0 and yspeed ~= 0 then
+					if xspeed ~= 0 or yspeed ~= 0 then
 						feet:setRotation(Vector2F(xspeed, yspeed):getRotation());
 					end
 				end
@@ -83,6 +82,21 @@
 		end
 		function on_set_weapon(weapon)
 			currentweapon:setInt(weapon);
+		end
+		function on_mouse_input(position)
+			mousepos:setVector2I(position)
+		end
+		function on_keyboard_input(key, state)
+			print("Keyboard input.")
+			if key == "up" then
+				keys:bit(1, state)
+			elseif key == "down" then
+				keys:bit(0, state)
+			elseif key == "left" then
+				keys:bit(3, state)
+			elseif key == "right" then
+				keys:bit(2, state)
+			end
 		end
 	]]>
 	</script>

@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _INPUT_HPP_
 
 #include <stdint.h>
+#include <string>
 
 namespace backlot
 {
@@ -36,7 +37,8 @@ namespace backlot
 		private:
 			Input();
 
-			uint16_t currentkeys;
+			void sendKey(std::string key, int state);
+
 			bool shootonce;
 	};
 }

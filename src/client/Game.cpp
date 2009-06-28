@@ -144,6 +144,15 @@ namespace backlot
 		Client::get().send(received);
 	}
 
+	void Game::setInputTarget(EntityPointer entity)
+	{
+		inputentity = entity;
+	}
+	EntityPointer Game::getInputTarget()
+	{
+		return inputentity.get();
+	}
+
 	void Game::update()
 	{
 		// Update entities
