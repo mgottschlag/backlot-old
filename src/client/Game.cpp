@@ -116,7 +116,6 @@ namespace backlot
 
 	void Game::injectUpdates(BufferPointer buffer)
 	{
-		std::cout << "Got updates." << std::endl;
 		// Get server time step to which this update belongs to
 		unsigned int updatetime = buffer->read32();
 		time = updatetime;
