@@ -99,11 +99,20 @@ namespace backlot
 			 * client.
 			 */
 			bool isEntityActive(int entity);
+			/**
+			 * Sets the client ID.
+			 */
+			void setID(int id);
+			/**
+			 * Returns the client ID.
+			 */
+			int getID();
 		private:
 			ENetPeer *peer;
 			ClientStatus status;
 			int lastreceived;
 			bool active[65535];
+			int id;
 	};
 }
 

@@ -302,7 +302,7 @@ namespace backlot
 			 */
 			T *get() const
 			{
-				return target;
+				return (T*)target;
 			}
 
 			WeakPointer &operator=(const WeakPointer &ptr)

@@ -64,4 +64,12 @@ namespace backlot
 	{
 		return active[entity];
 	}
+	void Client::setID(int id)
+	{
+		this->id = id;
+	}
+	int Client::getID()
+	{
+		return id;
+	}
 }

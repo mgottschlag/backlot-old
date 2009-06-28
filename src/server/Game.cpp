@@ -236,6 +236,10 @@ namespace backlot
 		msg->write8(EPT_InitialData);
 		// Add map name
 		msg->writeString(mapname);
+		// Client ID
+		int id = ++lastclientid;
+		msg->write16(id);
+		client->setID(id);
 		// Send packet
 		client->send(msg, true);
 		return true;
@@ -244,7 +248,7 @@ namespace backlot
 	{
 		std::cout << "New client." << std::endl;
 		// Add to client list
-		clients.insert(std::pair<int, Client*>(++lastclientid, client));
+		clients.insert(std::pair<int, Client*>(client->getID(), client));
 		// Send entities
 		for (int i = 0; i < 65535; i++)
 		{
