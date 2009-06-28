@@ -126,6 +126,8 @@ namespace backlot
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glLoadIdentity();
+		Vector2F entitypos = entity->getPosition();
+		glTranslatef(entitypos.x, entitypos.y, depth);
 		glTranslatef(position.x, position.y, depth);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

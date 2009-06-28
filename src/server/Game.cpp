@@ -298,20 +298,21 @@ namespace backlot
 
 	void Game::update()
 	{
+		// Increase tick counter
+		time++;
 		// Update entities
 		for (int i = 0; i < 65535; i++)
 		{
 			if (entities[i])
 				entities[i]->update();
 		}
-		// Increase tick counter
-		time++;
 		// Send updates to all clients
 		std::map<int, Client*>::iterator it = clients.begin();
 		while (it != clients.end())
 		{
 			Client *client = it->second;
 			int from = client->getAcknowledgedPacket();
+			std::cerr << "Time: " << from << " (currently: " << time << ")." << std::endl;
 			BufferPointer buffer = new Buffer();
 			buffer->write8(EPT_Update);
 			buffer->write32(time);
@@ -330,6 +331,7 @@ namespace backlot
 						// Activate object
 						// TODO
 					}
+					std::cerr << "Entity." << std::endl;
 					// Add update to the packet
 					if (entities[i]->hasChanged(from))
 					{

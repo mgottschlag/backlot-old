@@ -44,7 +44,11 @@ namespace backlot
 		applyUpdate(state);
 		// Attach properties to this entity
 		for (unsigned int i = 0; i < properties.size(); i++)
+		{
 			properties[i].setEntity(this);
+			if (properties[i].getName() == "position")
+				positionproperty = &properties[i];
+		}
 		// Create images
 		const std::vector<EntityImageInfo> &imageinfo = tpl->getImages();
 		for (unsigned int i = 0; i < imageinfo.size(); i++)
@@ -177,6 +181,13 @@ namespace backlot
 
 	void Entity::update()
 	{
+		// Move entity
+		if (positionproperty && speed != Vector2F(0, 0))
+		{
+			Vector2F position = positionproperty->getVector2F();
+			position += speed / 50;
+			positionproperty->setVector2F(position);
+		}
 	}
 
 	void Entity::onChange(Property *property)

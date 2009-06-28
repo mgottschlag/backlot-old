@@ -42,7 +42,11 @@ namespace backlot
 		applyUpdate(state);
 		// Attach properties to this entity
 		for (unsigned int i = 0; i < properties.size(); i++)
+		{
 			properties[i].setEntity(this);
+			if (properties[i].getName() == "position")
+				positionproperty = &properties[i];
+		}
 		// Create the script
 		script = new Script();
 		script->addCoreFunctions();
@@ -93,6 +97,7 @@ namespace backlot
 
 	void Entity::getUpdate(int time, BufferPointer buffer)
 	{
+		std::cerr << "Update from " << time << " to " << properties[0].getChangeTime() << "." << std::endl;
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
 			if (properties[i].getChangeTime() > time)
@@ -116,6 +121,7 @@ namespace backlot
 	{
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
+			std::cerr << "Update from " << time << " to " << properties[0].getChangeTime() << "?" << std::endl;
 			if (properties[i].getChangeTime() > time)
 			{
 				return true;
@@ -160,6 +166,13 @@ namespace backlot
 
 	void Entity::update()
 	{
+		// Move entity
+		if (positionproperty && speed != Vector2F(0, 0))
+		{
+			Vector2F position = positionproperty->getVector2F();
+			position += speed / 50;
+			positionproperty->setVector2F(position);
+		}
 	}
 
 	void Entity::onChange(Property *property)
