@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <entity size="0.6/0.6" origin="0.3/0.3" blocking="yes">
 	<properties>
-		<position type="vector2f" predict="1" />
+		<position type="vector2f" predict="yes" />
 		<rotation type="float" unlocked="yes" updatelocally="no" />
 		<team default="0" type="uint" size="4" />
 		<currentweapon default="-1" type="int" size="4" />

@@ -114,7 +114,6 @@ namespace backlot
 			if (property)
 			{
 				std::string propname = property->Value();
-				std::cout << "Property " << propname << "." << std::endl;
 				// Get property info
 				PropertyType type = EPT_Integer;
 				const char *typestr = property->Attribute("type");
@@ -142,10 +141,28 @@ namespace backlot
 				int size = 32;
 				if (property->Attribute("size"))
 					property->Attribute("size", &size);
+				// Flags
+				unsigned int flags = EPF_OwnerUpdates;
+				if (property->Attribute("predict"))
+				{
+					if (!strcmp(property->Attribute("predict"), "yes"))
+						flags |= EPF_Predict;
+				}
+				if (property->Attribute("unlocked"))
+				{
+					if (!strcmp(property->Attribute("unlocked"), "yes"))
+						flags |= EPF_Unlocked;
+				}
+				if (property->Attribute("updatelocally"))
+				{
+					if (strcmp(property->Attribute("updatelocally"), "yes"))
+						flags &= ~EPF_OwnerUpdates;
+				}
 				// Create property
 				this->properties.push_back(Property(propname, type));
 				Property &newprop = this->properties[this->properties.size() - 1];
 				newprop.setSize(size);
+				newprop.setFlags((PropertyFlags)flags);
 				if (property->Attribute("default"))
 					newprop.set(property->Attribute("default"));
 			}

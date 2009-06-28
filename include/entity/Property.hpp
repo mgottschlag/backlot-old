@@ -43,7 +43,8 @@ namespace backlot
 	{
 		EPF_None = 0x0,
 		EPF_Predict = 0x1,
-		EPF_OwnerUpdates = 0x2
+		EPF_OwnerUpdates = 0x2,
+		EPF_Unlocked = 0x4
 	};
 
 	class Property
