@@ -47,16 +47,14 @@ namespace backlot
 		const std::string& text, int x, int y)
 	{
 		const gcn::ClipRectangle &top = graphics->getCurrentClipArea();
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
+		font->renderRaw(text, Vector2I(x + top.xOffset, y + top.yOffset));
+		glDisable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 		gcn::Color color = graphics->getColor();
 		if (color.a == 255)
 			glDisable(GL_BLEND);
-		glColor4ub((unsigned char)color.r, (unsigned char)color.g,
-			(unsigned char)color.b, (unsigned char)color.a);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		font->render(text, Vector2I(x + top.xOffset, y + top.yOffset));
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-		glDisable(GL_TEXTURE_2D);
 	}
 }
