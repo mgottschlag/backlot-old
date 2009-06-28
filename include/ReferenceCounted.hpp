@@ -33,6 +33,66 @@ namespace backlot
 		typedef T type;
 	};
 
+	class ReferenceCounted;
+
+	/**
+	 * Class to derive other weak pointers from.
+	 */
+	class GenericWeakPointer
+	{
+		public:
+			/**
+			 * Constructor.
+			 */
+			GenericWeakPointer()
+			{
+				prev = 0;
+				next = 0;
+				target = 0;
+			}
+			/**
+			 * Destructor.
+			 */
+			virtual ~GenericWeakPointer()
+			{
+				attach(0);
+			}
+
+			/**
+			 * Invalidates the pointer. This usually happens when the object
+			 * it is pointing to gets deleted.
+			 */
+			void invalidate()
+			{
+				attach(0);
+			}
+
+			/**
+			 * Checks whether the pointer is invalid.
+			 */
+			bool isNull()
+			{
+				return target == 0;
+			}
+
+			operator bool() const
+			{
+				return target != 0;
+			}
+		protected:
+			/**
+			 * Attachs the pointer to an object and sets the value of the
+			 * pointer. It will then automatically get invalidated if the
+			 * object is deleted.
+			 */
+			inline void attach(ReferenceCounted *newtarget);
+
+			ReferenceCounted *target;
+		private:
+			GenericWeakPointer *next;
+			GenericWeakPointer *prev;
+	};
+
 	/**
 	 * Base class for all classes which use reference counting. Reference
 	 * counting makes sure that objects aren't deallocated as long as there are
@@ -47,8 +107,14 @@ namespace backlot
 			ReferenceCounted()
 			{
 				refcount = 0;
+				weakptr = 0;
 			}
-			virtual ~ReferenceCounted() {}
+			virtual ~ReferenceCounted()
+			{
+				// Reset weak pointers
+				while (weakptr)
+					weakptr->invalidate();
+			}
 
 			/**
 			 * Increments the reference count.
@@ -71,6 +137,10 @@ namespace backlot
 			 * Number of references to the object.
 			 */
 			mutable int refcount;
+
+			GenericWeakPointer *weakptr;
+
+			friend class GenericWeakPointer;
 	};
 
 	/**
@@ -151,6 +221,113 @@ namespace backlot
 			}
 		private:
 			T *target;
+	};
+
+	void GenericWeakPointer::attach(ReferenceCounted *newtarget)
+	{
+		// Remove the pointer from the old target first
+		if (target)
+		{
+			if (this == target->weakptr)
+			{
+				// We are in the beginning of the list
+				target->weakptr = next;
+				if (next)
+				{
+					next->prev = 0;
+				}
+			}
+			else
+			{
+				// We are somewhere in the double linked list
+				prev->next = next;
+				if (next)
+				{
+					next->prev = prev;
+				}
+			}
+		}
+		// Attach the weak pointer to the new one
+		if (newtarget)
+		{
+			// Set the new target
+			target = newtarget;
+			// Insert this pointer before the first pointer in the list
+			if (target->weakptr)
+				target->weakptr->prev = this;
+			next = target->weakptr;
+			prev = 0;
+			target->weakptr = this;
+		}
+		else
+		{
+			// Just zero everything
+			target = 0;
+			next = 0;
+			prev = 0;
+		}
+	}
+
+	/**
+	 * Weak pointer class for classes derived from ReferenceCounted.
+	 */
+	template<class T> class WeakPointer : public GenericWeakPointer
+	{
+		public:
+			/**
+			 * Constructor.
+			 * @param target Pointer to a reference counted object
+			 */
+			WeakPointer(T *target = 0) : GenericWeakPointer()
+			{
+				attach(target);
+			}
+			/**
+			 * Constructor.
+			 * @param target Pointer to a reference counted object
+			 */
+			WeakPointer(SharedPointer<T> target) : GenericWeakPointer()
+			{
+				attach(target.get());
+			}
+			/**
+			 * Destructor.
+			 */
+			~WeakPointer()
+			{
+			}
+
+			/**
+			 * Returns the raw pointer. This should usually not be used.
+			 */
+			T *get() const
+			{
+				return target;
+			}
+
+			WeakPointer &operator=(const WeakPointer &ptr)
+			{
+				attach(ptr.target);
+				return *this;
+			}
+			WeakPointer &operator=(const SharedPointer<T> &ptr)
+			{
+				attach(ptr.get());
+				return *this;
+			}
+			T *operator->() const
+			{
+				return target;
+			}
+			bool operator==(const WeakPointer &ptr) const
+			{
+				return target == ptr.target;
+			}
+			bool operator==(T *ptr) const
+			{
+				return target == ptr;
+			}
+		private:
 	};
 }
 
