@@ -300,6 +300,38 @@ namespace backlot
 		return time;
 	}
 
+	void Game::injectUpdates(Client *client, BufferPointer buffer)
+	{
+		// Get client time step to which this update belongs to
+		unsigned int updatetime = buffer->read32();
+		while (1)
+		{
+			// Get entity
+			int entityid = buffer->read16();
+			if (!entityid)
+				break;
+			entityid--;
+			if (entities[entityid].isNull())
+			{
+				std::cout << "Entity " << entityid << " not available." << std::endl;
+				return;
+			}
+			EntityPointer entity = entities[entityid];
+			if (entity->getOwner() != client->getID())
+				return;
+			// Apply update
+			std::cout << "Updating entity." << std::endl;
+			entity->applyUpdate(buffer);
+			break;
+		}
+		// Ack updates.
+		BufferPointer received = new Buffer();
+		received->write8(EPT_UpdateReceived);
+		received->write32(updatetime);
+		received->write16(time - updatetime);
+		client->send(received);
+	}
+
 	void Game::update()
 	{
 		// Increase tick counter
@@ -340,7 +372,7 @@ namespace backlot
 					if (entities[i]->hasChanged(from))
 					{
 						buffer->write16(i + 1);
-						entities[i]->getUpdate(from, buffer);
+						entities[i]->getUpdate(from, buffer, it->first);
 					}
 				}
 				else

@@ -41,9 +41,10 @@ namespace backlot
 			EntityTemplatePointer getTemplate();
 
 			void getState(BufferPointer buffer);
+			void setState(BufferPointer buffer);
 
 			void saveState();
-			void getUpdate(int time, BufferPointer buffer);
+			void getUpdate(int time, BufferPointer buffer, int client = 0);
 			void applyUpdate(BufferPointer buffer);
 			bool hasChanged(int time);
 

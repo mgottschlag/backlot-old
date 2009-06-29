@@ -111,8 +111,29 @@ namespace backlot
 		}
 	}
 
-	void Entity::getUpdate(BufferPointer state, BufferPointer buffer)
+	void Entity::getUpdate(int time, BufferPointer buffer)
 	{
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if (!isLocal() || ((properties[i].getFlags() & EPF_Unlocked) == 0))
+			{
+				// Potential update ignored because of property flags.
+				buffer->writeUnsignedInt(0, 1);
+				continue;
+			}
+			if (properties[i].getChangeTime() > time)
+			{
+				// Bit set: Property changed.
+				buffer->writeUnsignedInt(1, 1);
+				// Write the property to the stream.
+				properties[i].write(buffer);
+			}
+			else
+			{
+				// Bit not set: Property remained unchanged.
+				buffer->writeUnsignedInt(0, 1);
+			}
+		}
 	}
 	void Entity::applyUpdate(BufferPointer buffer)
 	{
@@ -127,9 +148,18 @@ namespace backlot
 			}
 		}
 	}
-	bool Entity::hasChanged(BufferPointer state)
+	bool Entity::hasChanged(int time)
 	{
-		return changed;
+		if (!isLocal())
+			return false;
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if ((properties[i].getFlags() & EPF_Unlocked) && properties[i].getChangeTime() > time)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void Entity::setOwner(int owner)

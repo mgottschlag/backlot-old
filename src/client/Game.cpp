@@ -163,8 +163,28 @@ namespace backlot
 		}
 		// Increase tick counter
 		time++;
+		// Send updates to the server
+		int from = Client::get().getAcknowledgedPacket();
+		BufferPointer buffer = new Buffer();
+		buffer->write8(EPT_Update);
+		buffer->write32(time);
+		// Check all entities
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i].isNull())
+				continue;
+			if (entities[i]->isLocal())
+			{
+				// Add update to the packet
+				if (entities[i]->hasChanged(from))
+				{
+					buffer->write16(i + 1);
+					entities[i]->getUpdate(from, buffer);
+				}
+			}
+		}
 		// Send updates
-		// TODO
+		Client::get().send(buffer);
 	}
 
 	Game::Game()

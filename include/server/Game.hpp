@@ -56,6 +56,8 @@ namespace backlot
 			 */
 			unsigned int getTime();
 
+			void injectUpdates(Client *client, BufferPointer buffer);
+
 			void update();
 		private:
 			Game();

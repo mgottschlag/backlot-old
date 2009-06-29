@@ -310,12 +310,19 @@ namespace backlot
 				setFloat(buffer->readFloat());
 				break;
 			case EPT_Vector2F:
-				setVector2F(Vector2F(buffer->readFloat(), buffer->readFloat()));
+			{
+				float x = buffer->readFloat();
+				float y = buffer->readFloat();
+				setVector2F(Vector2F(x, y));
 				break;
+			}
 			case EPT_Vector2I:
-				setVector2I(Vector2I(buffer->readInt(size),
-					buffer->readInt(size)));
+			{
+				int x = buffer->readInt(size);
+				int y = buffer->readInt(size);
+				setVector2I(Vector2I(x, y));
 				break;
+			}
 		}
 	}
 

@@ -128,6 +128,11 @@ namespace backlot
 						unsigned int time = msg->read32();
 						client->setAcknowledgedPacket(time);
 					}
+					else if (type == EPT_Update)
+					{
+						// Client update
+						Game::get().injectUpdates(client, msg);
+					}
 					else
 					{
 						// Invalid packet, disconnect client

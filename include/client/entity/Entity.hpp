@@ -44,9 +44,9 @@ namespace backlot
 			void getState(BufferPointer buffer);
 
 			void saveState();
-			void getUpdate(BufferPointer state, BufferPointer buffer);
+			void getUpdate(int time, BufferPointer buffer);
 			void applyUpdate(BufferPointer buffer);
-			bool hasChanged(BufferPointer state);
+			bool hasChanged(int time);
 
 			void setOwner(int owner);
 			int getOwner();

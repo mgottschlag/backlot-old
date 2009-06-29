@@ -40,6 +40,15 @@ namespace backlot
 			bool init(std::string address);
 			bool destroy();
 
+			/**
+			 * Sets the time of the last packet which the server definately got.
+			 */
+			void setAcknowledgedPacket(int time);
+			/**
+			 * Returns the time of the last received packet on the server.
+			 */
+			int getAcknowledgedPacket();
+
 			bool update();
 
 			void send(BufferPointer buffer, bool reliable = false);
@@ -52,6 +61,8 @@ namespace backlot
 
 			ENetHost *host;
 			ENetPeer *peer;
+
+			int lastpacket;
 
 			std::vector<PlayerPointer> players;
 	};

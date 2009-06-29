@@ -179,6 +179,15 @@ namespace backlot
 		return false;
 	}
 
+	void Client::setAcknowledgedPacket(int time)
+	{
+		lastpacket = time;
+	}
+	int Client::getAcknowledgedPacket()
+	{
+		return lastpacket;
+	}
+
 	bool Client::update()
 	{
 		// Receive packets
@@ -225,6 +234,13 @@ namespace backlot
 					{
 						Game::get().injectUpdates(msg);
 					}
+					else if (type == EPT_UpdateReceived)
+					{
+						// Get time info from the server
+						unsigned int time = msg->read32();
+						//unsigned int rtt = msg->read16();
+						setAcknowledgedPacket(time);
+					}
 					else
 					{
 						std::cerr << "Unknown packet received." << std::endl;
@@ -245,6 +261,7 @@ namespace backlot
 
 	Client::Client()
 	{
+		lastpacket = 0;
 	}
 
 	void Client::send(BufferPointer buffer, bool reliable)

@@ -39,7 +39,7 @@ namespace backlot
 		// Get a copy of the properties and their default values
 		properties = tpl->getProperties();
 		// Apply state
-		applyUpdate(state);
+		setState(state);
 		// Attach properties to this entity
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
@@ -94,12 +94,30 @@ namespace backlot
 			}
 		}
 	}
-
-	void Entity::getUpdate(int time, BufferPointer buffer)
+	void Entity::setState(BufferPointer buffer)
 	{
-		std::cerr << "Update from " << time << " to " << properties[0].getChangeTime() << "." << std::endl;
+		if (buffer.isNull())
+			return;
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
+			int changed = buffer->readUnsignedInt(1);
+			if (changed)
+				properties[i].read(buffer);
+		}
+	}
+
+	void Entity::getUpdate(int time, BufferPointer buffer, int client)
+	{
+		std::cerr << "Update from " << time << " to " << properties[0].getChangeTime() << "." << std::endl;
+		bool local = client == getOwner();
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if (local && ((properties[i].getFlags() & EPF_OwnerUpdates) == 0))
+			{
+				// Potential update ignored because of property flags.
+				buffer->writeUnsignedInt(0, 1);
+				continue;
+			}
 			if (properties[i].getChangeTime() > time)
 			{
 				// Bit set: Property changed.
@@ -116,6 +134,15 @@ namespace backlot
 	}
 	void Entity::applyUpdate(BufferPointer buffer)
 	{
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			int changed = buffer->readUnsignedInt(1);
+			if (changed && (properties[i].getFlags() & EPF_Unlocked))
+			{
+				std::cout << i << " changed." << std::endl;
+				properties[i].read(buffer);
+			}
+		}
 	}
 	bool Entity::hasChanged(int time)
 	{
