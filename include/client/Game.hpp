@@ -52,6 +52,9 @@ namespace backlot
 
 			void injectUpdates(BufferPointer buffer);
 
+			void setAcknowledgedPacket(int time);
+			void setLag(unsigned int lag);
+
 			void setInputTarget(EntityPointer entity);
 			EntityPointer getInputTarget();
 
@@ -66,6 +69,7 @@ namespace backlot
 			WeakPointer<Entity> inputentity;
 
 			unsigned int time;
+			unsigned int lag;
 	};
 }
 

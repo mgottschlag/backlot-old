@@ -108,7 +108,6 @@ namespace backlot
 
 	void Entity::getUpdate(int time, BufferPointer buffer, int client)
 	{
-		std::cerr << "Update from " << time << " to " << properties[0].getChangeTime() << "." << std::endl;
 		bool local = client == getOwner();
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
@@ -139,7 +138,6 @@ namespace backlot
 			int changed = buffer->readUnsignedInt(1);
 			if (changed && (properties[i].getFlags() & EPF_Unlocked))
 			{
-				std::cout << i << " changed." << std::endl;
 				properties[i].read(buffer);
 			}
 		}
@@ -148,7 +146,6 @@ namespace backlot
 	{
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
-			std::cerr << "Update from " << time << " to " << properties[0].getChangeTime() << "?" << std::endl;
 			if (properties[i].getChangeTime() > time)
 			{
 				return true;

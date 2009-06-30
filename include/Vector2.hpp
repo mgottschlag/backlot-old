@@ -128,6 +128,12 @@ namespace backlot
 				y += v.y;
 				return *this;
 			}
+			template<typename T2> Vector2<T> &operator-=(const Vector2<T2> &v)
+			{
+				x -= v.x;
+				y -= v.y;
+				return *this;
+			}
 			template<typename T2> bool operator==(const Vector2<T2> &v) const
 			{
 				return x == v.x && y == v.y;

@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "entity/Entity.hpp"
 #include "Game.hpp"
+#include "Engine.hpp"
 
 #include <iostream>
 
@@ -41,7 +42,7 @@ namespace backlot
 		// Get a copy of the properties and their default values
 		properties = tpl->getProperties();
 		// Apply state
-		applyUpdate(state);
+		setState(state);
 		// Attach properties to this entity
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
@@ -110,6 +111,17 @@ namespace backlot
 			}
 		}
 	}
+	void Entity::setState(BufferPointer buffer)
+	{
+		if (buffer.isNull())
+			return;
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			int changed = buffer->readUnsignedInt(1);
+			if (changed)
+				properties[i].read(buffer);
+		}
+	}
 
 	void Entity::getUpdate(int time, BufferPointer buffer)
 	{
@@ -135,17 +147,56 @@ namespace backlot
 			}
 		}
 	}
-	void Entity::applyUpdate(BufferPointer buffer)
+	void Entity::applyUpdate(BufferPointer buffer, int timedifference)
 	{
-		std::cout << "Updating entity." << std::endl;
+		// Update all properties.
+		bool positionchanged = false;
 		for (unsigned int i = 0; i < properties.size(); i++)
 		{
 			int changed = buffer->readUnsignedInt(1);
 			if (changed)
 			{
-				std::cout << i << " changed." << std::endl;
 				properties[i].read(buffer);
+				if (&properties[i] == positionproperty)
+					positionchanged = true;
 			}
+		}
+		// Client side prediction
+		if (!isLocal() || timedifference <= 0 || !positionchanged)
+			return;
+		int originaltime = Game::get().getTime() - timedifference;
+		std::deque<SpeedInfo>::reverse_iterator speedinfo = recentspeeds.rbegin();
+		while (speedinfo != recentspeeds.rend())
+		{
+			// Check speedinfo range
+			int start = speedinfo->time;
+			if (start < originaltime)
+				start = originaltime;
+			std::deque<SpeedInfo>::reverse_iterator next = speedinfo;
+			next++;
+			int end = 0;
+			if (next != recentspeeds.rend())
+			{
+				end = next->time;
+			}
+			else
+			{
+				end = Game::get().getTime();
+			}
+			if (end >= start)
+			{
+				if (positionproperty && speedinfo->speed != Vector2F(0, 0))
+				{
+					Vector2F position = positionproperty->getVector2F();
+					// Apply speed
+					for (int i = start; i < end; i++)
+					{
+						position += speedinfo->speed / 50;
+					}
+					positionproperty->setVector2F(position);
+				}
+			}
+			speedinfo++;
 		}
 	}
 	bool Entity::hasChanged(int time)
@@ -188,7 +239,22 @@ namespace backlot
 	}
 	void Entity::setSpeed(Vector2F speed, bool ignoreobstacles)
 	{
+		if (this->speed == speed)
+			return;
+		// Set speed
 		this->speed = speed;
+		// Insert speed into the recent speeds list
+		int time = Game::get().getTime();
+		std::deque<SpeedInfo>::iterator first = recentspeeds.begin();
+		if (first != recentspeeds.end() && first->time == time)
+		{
+			first->speed = speed;
+			return;
+		}
+		SpeedInfo newentry;
+		newentry.time = time;
+		newentry.speed = speed;
+		recentspeeds.push_front(newentry);
 	}
 	Vector2F Entity::getSpeed()
 	{
@@ -223,6 +289,24 @@ namespace backlot
 	ScriptPointer Entity::getScript()
 	{
 		return script;
+	}
+
+	void Entity::dropPredictionData(int time)
+	{
+		if (recentspeeds.size() == 0)
+			return;
+		// Delete all speed infos which are not used any more
+		while (recentspeeds.rbegin()->time <= time)
+		{
+			// Also check for speed infos which started earlier but last longer
+			std::deque<SpeedInfo>::reverse_iterator next = recentspeeds.rbegin();
+			next++;
+			if (next == recentspeeds.rend())
+				break;
+			if (next->time > time)
+				break;
+			recentspeeds.pop_back();
+		}
 	}
 
 	void Entity::onChange(Property *property)

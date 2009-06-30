@@ -29,9 +29,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "EntityImage.hpp"
 
 #include <vector>
+#include <deque>
 
 namespace backlot
 {
+	struct SpeedInfo
+	{
+		int time;
+		Vector2F speed;
+	};
+
 	class Entity : public ReferenceCounted
 	{
 		public:
@@ -42,10 +49,11 @@ namespace backlot
 			EntityTemplatePointer getTemplate();
 
 			void getState(BufferPointer buffer);
+			void setState(BufferPointer buffer);
 
 			void saveState();
 			void getUpdate(int time, BufferPointer buffer);
-			void applyUpdate(BufferPointer buffer);
+			void applyUpdate(BufferPointer buffer, int timedifference);
 			bool hasChanged(int time);
 
 			void setOwner(int owner);
@@ -66,6 +74,8 @@ namespace backlot
 
 			ScriptPointer getScript();
 
+			void dropPredictionData(int time);
+
 			void onChange(Property *property);
 		private:
 			EntityTemplatePointer tpl;
@@ -75,6 +85,7 @@ namespace backlot
 			std::vector<EntityImagePointer> images;
 			Property *positionproperty;
 			Vector2F speed;
+			std::deque<SpeedInfo> recentspeeds;
 
 			bool changed;
 

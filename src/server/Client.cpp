@@ -27,6 +27,7 @@ namespace backlot
 	{
 		status = ECS_Connecting;
 		lastreceived = 0;
+		lag = 0;
 	}
 	Client::~Client()
 	{
@@ -55,6 +56,14 @@ namespace backlot
 	int Client::getAcknowledgedPacket()
 	{
 		return lastreceived;
+	}
+	void Client::setLag(int lag)
+	{
+		this->lag = lag;
+	}
+	int Client::getLag()
+	{
+		return lag;
 	}
 	void Client::setEntityActive(int entity, bool active)
 	{

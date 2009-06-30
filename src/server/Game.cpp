@@ -304,6 +304,7 @@ namespace backlot
 	{
 		// Get client time step to which this update belongs to
 		unsigned int updatetime = buffer->read32();
+		std::cout << "Client update: " << updatetime << std::endl;
 		while (1)
 		{
 			// Get entity
@@ -330,6 +331,7 @@ namespace backlot
 		received->write32(updatetime);
 		received->write16(time - updatetime);
 		client->send(received);
+		client->setLag(time - updatetime);
 	}
 
 	void Game::update()
@@ -352,6 +354,7 @@ namespace backlot
 			BufferPointer buffer = new Buffer();
 			buffer->write8(EPT_Update);
 			buffer->write32(time);
+			buffer->write32(client->getLag());
 			// Check all entities
 			for (int i = 0; i < 65535; i++)
 			{
@@ -367,7 +370,6 @@ namespace backlot
 						// Activate object
 						// TODO
 					}
-					std::cerr << "Entity." << std::endl;
 					// Add update to the packet
 					if (entities[i]->hasChanged(from))
 					{

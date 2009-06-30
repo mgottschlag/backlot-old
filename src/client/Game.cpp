@@ -46,6 +46,7 @@ namespace backlot
 		for (int i = 0; i < 65535; i++)
 			entities[i] = 0;
 		time = 0;
+		lag = 0;
 		return true;
 	}
 	bool Game::destroy()
@@ -118,6 +119,7 @@ namespace backlot
 	{
 		// Get server time step to which this update belongs to
 		unsigned int updatetime = buffer->read32();
+		lag = buffer->read32();
 		time = updatetime;
 		while (1)
 		{
@@ -133,8 +135,7 @@ namespace backlot
 			}
 			EntityPointer entity = entities[entityid];
 			// Apply update
-			std::cout << "Updating entity." << std::endl;
-			entity->applyUpdate(buffer);
+			entity->applyUpdate(buffer, lag);
 			break;
 		}
 		// Ack updates.
@@ -142,6 +143,20 @@ namespace backlot
 		received->write8(EPT_UpdateReceived);
 		received->write32(updatetime);
 		Client::get().send(received);
+	}
+
+	void Game::setAcknowledgedPacket(int time)
+	{
+		// Clean up prediction data
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i])
+				entities[i]->dropPredictionData(time);
+		}
+	}
+	void Game::setLag(unsigned int lag)
+	{
+		//this->lag = lag;
 	}
 
 	void Game::setInputTarget(EntityPointer entity)
@@ -168,6 +183,7 @@ namespace backlot
 		BufferPointer buffer = new Buffer();
 		buffer->write8(EPT_Update);
 		buffer->write32(time);
+		unsigned int updatecount = 0;
 		// Check all entities
 		for (int i = 0; i < 65535; i++)
 		{
@@ -178,13 +194,15 @@ namespace backlot
 				// Add update to the packet
 				if (entities[i]->hasChanged(from))
 				{
+					updatecount++;
 					buffer->write16(i + 1);
 					entities[i]->getUpdate(from, buffer);
 				}
 			}
 		}
 		// Send updates
-		Client::get().send(buffer);
+		if (updatecount > 0)
+			Client::get().send(buffer);
 	}
 
 	Game::Game()

@@ -182,6 +182,7 @@ namespace backlot
 	void Client::setAcknowledgedPacket(int time)
 	{
 		lastpacket = time;
+		Game::get().setAcknowledgedPacket(time);
 	}
 	int Client::getAcknowledgedPacket()
 	{
@@ -238,8 +239,10 @@ namespace backlot
 					{
 						// Get time info from the server
 						unsigned int time = msg->read32();
+						std::cout << time << " acked." << std::endl;
 						//unsigned int rtt = msg->read16();
 						setAcknowledgedPacket(time);
+						Game::get().setLag(Game::get().getTime() - time);
 					}
 					else
 					{

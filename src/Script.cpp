@@ -180,7 +180,8 @@ namespace backlot
 				.def("bit", (void (Property::*)(int, int))&Property::bit)
 				.def("set", &Property::set)
 				.def("write", &Property::write)
-				.def("read", &Property::read),
+				.def("read", &Property::read)
+				.def("getChangeTime", &Property::getChangeTime),
 			// Preferences class
 			luabind::class_<Preferences>("Preferences")
 				.scope

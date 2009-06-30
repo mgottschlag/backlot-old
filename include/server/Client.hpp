@@ -90,6 +90,14 @@ namespace backlot
 			 */
 			int getAcknowledgedPacket();
 			/**
+			 * Sets the time of thje last packet received from the client.
+			 */
+			void setLag(int lag);
+			/**
+			 * Returns the time of thje last packet received from the client.
+			 */
+			int getLag();
+			/**
 			 * Tracks whether entity updates for this entity are sent to
 			 * this client.
 			 */
@@ -111,6 +119,7 @@ namespace backlot
 			ENetPeer *peer;
 			ClientStatus status;
 			int lastreceived;
+			int lag;
 			bool active[65535];
 			int id;
 	};
