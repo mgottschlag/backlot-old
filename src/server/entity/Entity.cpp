@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "entity/Entity.hpp"
+#include "Server.hpp"
 
 #include <iostream>
 
@@ -195,7 +196,11 @@ namespace backlot
 		{
 			Vector2F position = positionproperty->getVector2F();
 			position += speed / 50;
-			positionproperty->setVector2F(position);
+			if (Server::get().getMap()->isAccessible(RectangleF(position.x - 0.35,
+				position.y - 0.35, 0.7, 0.7)))
+			{
+				positionproperty->setVector2F(position);
+			}
 		}
 	}
 

@@ -193,7 +193,11 @@ namespace backlot
 					{
 						position += speedinfo->speed / 50;
 					}
-					positionproperty->setVector2F(position);
+					if (Client::get().getMap()->isAccessible(RectangleF(position.x - 0.35,
+						position.y - 0.35, 0.7, 0.7)))
+					{
+						positionproperty->setVector2F(position);
+					}
 				}
 			}
 			speedinfo++;
@@ -282,7 +286,11 @@ namespace backlot
 		{
 			Vector2F position = positionproperty->getVector2F();
 			position += speed / 50;
-			positionproperty->setVector2F(position);
+			if (Client::get().getMap()->isAccessible(RectangleF(position.x - 0.35,
+				position.y - 0.35, 0.7, 0.7)))
+			{
+				positionproperty->setVector2F(position);
+			}
 		}
 	}
 
