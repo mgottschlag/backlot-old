@@ -180,6 +180,18 @@ namespace backlot
 			sendKey("shoot", 0);
 			shootonce = false;
 		}
+		// Send new rotation.
+		if (rotationchanged)
+		{
+			EntityPointer entity = Game::get().getInputTarget();
+			if (entity)
+			{
+				// Call script callback
+				ScriptPointer script = entity->getScript();
+				if (script->isFunction("on_mouse_input"))
+					script->callFunction("on_mouse_input", rotation * 180 / 3.1415);
+			}
+		}
 		return true;
 	}
 

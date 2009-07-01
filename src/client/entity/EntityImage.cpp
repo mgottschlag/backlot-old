@@ -111,6 +111,11 @@ namespace backlot
 
 	void EntityImage::rotate(float rotation, Vector2F center)
 	{
+		this->rotation = rotation;
+		// Center
+		Vector2F oldpos = position;
+		oldpos.rotate(rotation);
+		position = oldpos;
 	}
 	void EntityImage::rotate(float rotation, float centerx, float centery)
 	{
@@ -129,6 +134,7 @@ namespace backlot
 		Vector2F entitypos = entity->getPosition();
 		glTranslatef(entitypos.x, entitypos.y, depth);
 		glTranslatef(position.x, position.y, depth);
+		glRotatef(rotation, 0, 0, 1);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		if (texture)

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <entity size="0.6/0.6" origin="0.3/0.3" blocking="yes">
 	<properties>
-		<position type="vector2f" predict="yes" />
+		<position default="1/1" type="vector2f" predict="yes" />
 		<rotation type="float" unlocked="yes" updatelocally="no" />
 		<team default="0" type="uint" size="4" />
 		<currentweapon default="-1" type="int" size="4" />
 		<keys default="0" type="uint" size="8" unlocked="yes" updatelocally="no" />
 		<health default="100" type="uint" size="8" />
-		<mousepos default="0/0" type="vector2i" size="12" unlocked="yes" updatelocally="no" />
 		<weapon0 type="entity" />
 		<weapon1 type="entity" />
 	</properties>
@@ -36,10 +35,10 @@
 				if Client ~= nil then
 					body:setRotation(0);
 					body:setPosition(-0.5, -0.5);
-					body:rotate(property:getFloat(), 0.5, 0.5);
+					body:rotate(property:getFloat() + 180, 0.5, 0.5);
 					weapon:setRotation(0);
 					weapon:setPosition(-0.5, -0.5);
-					weapon:rotate(property:getFloat(), 0.5, 0.5);
+					weapon:rotate(property:getFloat() + 180, 0.5, 0.5);
 				end
 			end
 			-- Movement
@@ -65,7 +64,7 @@
 					feet:setRotation(0);
 					feet:setPosition(-0.5, -0.5);
 					if xspeed ~= 0 or yspeed ~= 0 then
-						feet:setRotation(Vector2F(xspeed, yspeed):getRotation());
+						feet:rotate(Vector2F(xspeed, yspeed):getRotation(), 0.5, 0.5);
 					end
 				end
 				if Server ~= nil then
@@ -83,8 +82,8 @@
 		function on_set_weapon(weapon)
 			currentweapon:setInt(weapon);
 		end
-		function on_mouse_input(position)
-			mousepos:setVector2I(position)
+		function on_mouse_input(rotangle)
+			rotation:setFloat(rotangle)
 		end
 		function on_keyboard_input(key, state)
 			print("Keyboard input.")
