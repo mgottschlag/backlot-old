@@ -177,12 +177,19 @@ namespace backlot
 				.def("getVector2F", &Property::getVector2F)
 				.def("setVector2I", &Property::setVector2I)
 				.def("getVector2I", &Property::getVector2I)
+				.def("setBool", &Property::setBool)
+				.def("getBool", &Property::getBool)
 				.def("bit", (bool (Property::*)(int))&Property::bit)
 				.def("bit", (void (Property::*)(int, int))&Property::bit)
 				.def("set", &Property::set)
 				.def("write", &Property::write)
 				.def("read", &Property::read)
 				.def("getChangeTime", &Property::getChangeTime),
+			// Script
+			luabind::class_<Script, ReferenceCounted, SharedPointer<Script> >("Script")
+				.def("isFunction", &Script::isFunction)
+				.def("callFunction", (void (Script::*)(std::string))&Script::callFunction)
+				.def("callFunction", (void (Script::*)(std::string, int))&Script::callFunction<int>),
 			// Preferences class
 			luabind::class_<Preferences>("Preferences")
 				.scope
@@ -280,7 +287,9 @@ namespace backlot
 				.def("setPosition", &Entity::setPosition)
 				.def("getPosition", &Entity::getPosition)
 				.def("setSpeed", &Entity::setSpeed)
-				.def("getSpeed", &Entity::getSpeed),
+				.def("getSpeed", &Entity::getSpeed)
+				.def("getScript", &Entity::getScript)
+				.def("getID", &Entity::getID),
 			// EntityImage
 			luabind::class_<EntityImage, ReferenceCounted, SharedPointer<EntityImage> >("EntityImage")
 				.def("load", &EntityImage::load)
@@ -329,7 +338,9 @@ namespace backlot
 				.def("setPosition", &Entity::setPosition)
 				.def("getPosition", &Entity::getPosition)
 				.def("setSpeed", &Entity::setSpeed)
-				.def("getSpeed", &Entity::getSpeed),
+				.def("getSpeed", &Entity::getSpeed)
+				.def("getScript", &Entity::getScript)
+				.def("getID", &Entity::getID),
 			// Server class
 			luabind::class_<Server>("Server")
 				.scope

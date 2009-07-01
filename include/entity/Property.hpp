@@ -81,6 +81,8 @@ namespace backlot
 			Vector2F getVector2F();
 			void setVector2I(const Vector2I &data);
 			Vector2I getVector2I();
+			void setBool(bool data);
+			bool getBool();
 
 			bool bit(int index);
 			void bit(int index, int value);

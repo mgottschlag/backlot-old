@@ -225,6 +225,14 @@ namespace backlot
 			return Vector2I();
 		}
 	}
+	void Property::setBool(bool data)
+	{
+		bit(0, data);
+	}
+	bool Property::getBool()
+	{
+		return bit(0);
+	}
 
 	bool Property::bit(int index)
 	{
