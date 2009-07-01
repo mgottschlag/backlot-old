@@ -30,6 +30,7 @@ namespace backlot
 	{
 		owner = 0;
 		positionproperty = 0;
+		id = 0;
 	}
 	Entity::~Entity()
 	{
@@ -162,6 +163,15 @@ namespace backlot
 	int Entity::getOwner()
 	{
 		return owner;
+	}
+
+	void Entity::setID(int id)
+	{
+		this->id = id;
+	}
+	int Entity::getID()
+	{
+		return id;
 	}
 
 	void Entity::setPosition(const Vector2F &position)

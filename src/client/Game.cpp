@@ -67,6 +67,7 @@ namespace backlot
 		}
 		// Create entity
 		EntityPointer entity = new Entity();
+		entity->setID(id);
 		entity->setOwner(owner);
 		entity->create(tpl, state);
 		// Insert entity into list

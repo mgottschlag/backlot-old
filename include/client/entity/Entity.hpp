@@ -62,6 +62,9 @@ namespace backlot
 			int getOwner();
 			bool isLocal();
 
+			void setID(int id);
+			int getID();
+
 			void setPosition(const Vector2F &position);
 			Vector2F getPosition();
 			void setSpeed(Vector2F speed, bool ignoreobstacles);
@@ -93,6 +96,7 @@ namespace backlot
 			bool changed;
 
 			int owner;
+			int id;
 
 			bool active;
 	};

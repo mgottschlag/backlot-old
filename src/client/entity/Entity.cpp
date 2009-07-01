@@ -32,6 +32,7 @@ namespace backlot
 		owner = 0;
 		active = true;
 		positionproperty = 0;
+		id = 0;
 	}
 	Entity::~Entity()
 	{
@@ -253,6 +254,15 @@ namespace backlot
 	bool Entity::isLocal()
 	{
 		return getOwner() == Game::get().getClientID();
+	}
+
+	void Entity::setID(int id)
+	{
+		this->id = id;
+	}
+	int Entity::getID()
+	{
+		return id;
 	}
 
 	void Entity::setPosition(const Vector2F &position)

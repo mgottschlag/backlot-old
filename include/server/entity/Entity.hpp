@@ -51,6 +51,9 @@ namespace backlot
 			void setOwner(int owner);
 			int getOwner();
 
+			void setID(int id);
+			int getID();
+
 			void setPosition(const Vector2F &position);
 			Vector2F getPosition();
 			void setSpeed(const Vector2F &speed, bool ignoreobstacles);
@@ -74,6 +77,7 @@ namespace backlot
 			bool changed;
 
 			int owner;
+			int id;
 	};
 
 	typedef SharedPointer<Entity> EntityPointer;
