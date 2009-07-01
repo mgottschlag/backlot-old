@@ -81,10 +81,19 @@ namespace backlot
 			if (entities[i] == entity)
 			{
 				// Delete entity
+				entities[i]->destroyScript();
 				entities[i] = 0;
 				break;
 			}
 		}
+	}
+	void Game::removeEntity(unsigned int id)
+	{
+		if (id >= 65535)
+			return;
+		// Delete entity
+		entities[id]->destroyScript();
+		entities[id] = 0;
 	}
 	EntityPointer Game::getEntity(int id)
 	{

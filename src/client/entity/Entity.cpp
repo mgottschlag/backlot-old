@@ -108,6 +108,10 @@ namespace backlot
 		}
 		return true;
 	}
+	void Entity::destroyScript()
+	{
+		script = 0;
+	}
 	EntityTemplatePointer Entity::getTemplate()
 	{
 		return tpl;

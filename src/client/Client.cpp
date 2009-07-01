@@ -228,8 +228,7 @@ namespace backlot
 					{
 						std::cout << "Entity deleted." << std::endl;
 						int id = msg->read16();
-						EntityPointer entity = Game::get().getEntity(id);
-						Game::get().removeEntity(entity);
+						Game::get().removeEntity(id);
 					}
 					else if (type == EPT_Update)
 					{

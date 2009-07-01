@@ -40,6 +40,7 @@ namespace backlot
 			EntityPointer addEntity(std::string type, int owner, int id,
 				BufferPointer state = 0);
 			void removeEntity(EntityPointer entity);
+			void removeEntity(unsigned int id);
 			EntityPointer getEntity(int id);
 			std::vector<EntityPointer> getEntities(std::string type);
 
