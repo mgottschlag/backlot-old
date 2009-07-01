@@ -306,6 +306,14 @@ namespace backlot
 				.def("isVisible", &EntityImage::isVisible)
 				.def("rotate", (void (EntityImage::*)(float, Vector2F))&EntityImage::rotate)
 				.def("rotate", (void (EntityImage::*)(float, float, float))&EntityImage::rotate),
+			// Texture
+			luabind::class_<Texture, ReferenceCounted, SharedPointer<Texture> >("Texture")
+				.scope
+				[
+					luabind::def("get", (TexturePointer (*)(int))&Texture::get),
+					luabind::def("get", (TexturePointer (*)(std::string, bool))&Texture::get)
+				]
+				.def("getID", &Texture::getID),
 			// Animation
 			luabind::class_<Animation, ReferenceCounted, SharedPointer<Animation> >("Animation")
 				.def("start", &Animation::start)

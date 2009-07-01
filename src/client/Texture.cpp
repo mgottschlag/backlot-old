@@ -56,9 +56,51 @@ namespace backlot
 	Texture::~Texture()
 	{
 		glDeleteTextures(1, &texture);
+		// Deregister texture
+		if (id)
+		{
+			std::map<int, Texture*>::iterator it = textures.find(id);
+			if (it != textures.end())
+			{
+				textures.erase(it);
+			}
+		}
+		if (path != "")
+		{
+			std::map<std::string, Texture*>::iterator it = texturepaths.find(path);
+			if (it != texturepaths.end())
+			{
+				texturepaths.erase(it);
+			}
+		}
 	}
 
-	bool Texture::load(std::string path)
+	SharedPointer<Texture> Texture::get(std::string path, bool singleuse)
+	{
+		// Look for already loaded texture
+		if (!singleuse)
+		{
+			std::map<std::string, Texture*>::iterator it = texturepaths.find(path);
+			if (it != texturepaths.end())
+				return it->second;
+		}
+		// Load texture
+		TexturePointer texture = new Texture();
+		if (!texture->load(path, !singleuse))
+			return 0;
+		return texture;;
+	}
+	SharedPointer<Texture> Texture::get(int id)
+	{
+		// Look for already loaded texture
+		std::map<int, Texture*>::iterator it = textures.find(id);
+		if (it != textures.end())
+		{
+			return it->second;
+		}
+		return 0;
+	}
+	bool Texture::load(std::string path, bool registertexture)
 	{
 		// Load image
 		path = Engine::get().getGameDirectory() + "/" + path;
@@ -82,6 +124,19 @@ namespace backlot
 		size = Vector2I(surface->w, surface->h);
 		// Delete image
 		SDL_FreeSurface(surface);
+		// Register texture
+		if (registertexture)
+		{
+			this->path = path;
+			id = ++lasttextureid;
+			texturepaths.insert(std::pair<std::string, Texture*>(path, this));
+			textures.insert(std::pair<int, Texture*>(id, this));
+		}
+		else
+		{
+			this->path = "";
+			id = 0;
+		}
 		return true;
 	}
 
@@ -114,8 +169,16 @@ namespace backlot
 		return size;
 	}
 
+	int Texture::getID()
+	{
+		return id;
+	}
 	void Texture::bind()
 	{
 		glBindTexture(GL_TEXTURE_2D, texture);
 	}
+
+	std::map<int, Texture*> Texture::textures;
+	std::map<std::string, Texture*> Texture::texturepaths;
+	unsigned int Texture::lasttextureid = 0;
 }
