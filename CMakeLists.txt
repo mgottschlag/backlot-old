@@ -53,6 +53,7 @@ Menu.cpp
 Font.cpp
 GuichanFont.cpp
 Dialog.cpp
+ListModel.cpp
 entity/Entity.cpp
 Game.cpp
 entity/EntityImage.cpp

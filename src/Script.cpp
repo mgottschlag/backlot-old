@@ -29,6 +29,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Client.hpp"
 #include <guichan/widgets/checkbox.hpp>
 #include <guichan/widgets/textfield.hpp>
+#include <guichan/widgets/dropdown.hpp>
 #endif
 #ifdef SERVER
 #include "Server.hpp"
@@ -189,7 +190,10 @@ namespace backlot
 					luabind::def("get", &Preferences::get)
 				]
 				.def("getResolution", &Preferences::getResolution)
+				.def("setResolution", &Preferences::setResolution)
+				.def("getXResolution", &Preferences::getXResolution)
 				.def("setXResolution", &Preferences::setXResolution)
+				.def("getYResolution", &Preferences::getYResolution)
 				.def("setYResolution", &Preferences::setYResolution)
 				.def("getFullscreen", &Preferences::getFullscreen)
 				.def("setFullscreen", &Preferences::setFullscreen)
@@ -259,7 +263,11 @@ namespace backlot
 			// CheckBox
 			luabind::class_<gcn::CheckBox>("CheckBox")
 				.def("isSelected", &gcn::CheckBox::isSelected)
-				.def("setSelected",  &gcn::CheckBox::setSelected)
+				.def("setSelected",  &gcn::CheckBox::setSelected),
+			// Drop down menus
+			luabind::class_<gcn::DropDown>("DropDown")
+				.def("getSelected", &gcn::DropDown::getSelected)
+				.def("setSelected", &gcn::DropDown::setSelected)
 		];
 	}
 	void Script::addClientFunctions()

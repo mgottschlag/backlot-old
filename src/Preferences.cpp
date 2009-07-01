@@ -173,9 +173,17 @@ namespace backlot
 	{
 		screenresolution = resolution;
 	}
+	int Preferences::getXResolution()
+	{
+		return screenresolution.x;
+	}
 	void Preferences::setXResolution(int x)
 	{
 		screenresolution.x = x;
+	}
+	int Preferences::getYResolution()
+	{
+		return screenresolution.y;
 	}
 	void Preferences::setYResolution(int y)
 	{

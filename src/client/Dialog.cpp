@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Font.hpp"
 #include "GuichanFont.hpp"
 #include "Debug.hpp"
+#include "ListModel.hpp"
 
 #include "support/tinyxml.h"
 
@@ -36,6 +37,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <guichan/widgets/textfield.hpp>
 #include <guichan/widgets/label.hpp>
 #include <guichan/widgets/checkbox.hpp>
+#include <guichan/widgets/dropdown.hpp>
 #include <guichan/keylistener.hpp>
 
 namespace backlot
@@ -352,6 +354,45 @@ namespace backlot
 			}
 			checkboxnode = xml->IterateChildren("checkbox", checkboxnode);
 		}
+		// Drop down menus
+		TiXmlNode *dropdownnode = xml->FirstChild("dropdown");
+		if (dropdownnode)
+		{
+			TiXmlElement *dropdowndata = dropdownnode->ToElement();
+			// Check attributes
+			if (!dropdowndata->Attribute("size") || !dropdowndata->Attribute("position"))
+			{
+				std::cerr << "Drop down size or position missing." << std::endl;
+				return false;
+			}
+			// Parse the elements for the drop down menu
+			TiXmlNode *elementnode = dropdownnode->FirstChild("element");
+			TiXmlElement *elementdata;
+			ListModel *listmodel = new ListModel();
+			while (elementnode)
+			{
+				elementdata = elementnode->ToElement();
+				if (elementdata->Attribute("text"))
+					listmodel->addElement(elementdata->Attribute("text"));
+				else
+				{
+					std::cerr << "Element text missing." << std::endl;
+					return false;
+				}
+				elementnode = dropdownnode->IterateChildren("element", elementnode);
+			}
+			// Create dorp down menu
+			Vector2I size = dropdowndata->Attribute("size");
+			Vector2I position = dropdowndata->Attribute("position");
+			gcn::DropDown *dropdown = new gcn::DropDown(listmodel);
+			dropdown->setDimension(gcn::Rectangle(position.x, position.y,
+				size.x, size.y));
+			parent->add(dropdown);
+			// Add script
+			if (dropdowndata->Attribute("name"))
+				script->setVariable(dropdowndata->Attribute("name"), dropdown);
+		}
+		dropdownnode = xml->IterateChildren("dropdown", dropdownnode);
 
 		return true;
 	}

@@ -49,21 +49,31 @@ namespace backlot
 			
 			void setPath(std::string newpath);
 			/**
-			 * Returns the screenresolutions.
+			 * Returns the screen resolutions.
 			 * @return A Vector2I with the width (x) and height (y) of the screen.
 			 */
 			const Vector2I &getResolution() const;
 			/**
-			 * Sets the screenresolutions.
+			 * Sets the screen resolutions.
 			 * @param resolution A Vector2I with the width(x) and height(y)
 			 * of the screen.
 			 */
 			void setResolution(Vector2I resolution);
 			/**
+			 * Returns the x screen resolution.
+			 * @return The x resolution.
+			 */
+			int getXResolution();
+			/**
 			 * Set the x resolution of the screen.
 			 * @param x The new x resolution.
 			 */
 			void setXResolution(int x);
+			/**
+			 * Returns the y screen resolution.
+			 * @return The y resolution.
+			 */
+			int getYResolution();
 			/**
 			 * Set the y resolution of the screen.
 			 * @param y The new y resolution.

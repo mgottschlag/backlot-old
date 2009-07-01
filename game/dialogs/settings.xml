@@ -5,11 +5,13 @@
 		<tab index="0" label="Game">
 		</tab>
 		<tab index="1" label="Graphics"> -->
-			<label position="10/20" size="50/20" text="Graphics" />
-			<label position="10/40" size="110/20" text="X-Resolution:" />
-			<label position="10/60" size="110/20" text="Y-Resolution:" />
-			<textfield name="xrestext" position="130/40" size="100/20" />
-			<textfield name="yrestext" position="130/60" size="100/20" />
+			<label position="10/20" size="100/20" text="Graphics" />
+			<label position="10/40" size="100/20" text="Resolution:" />
+			<dropdown name="resolutionmenu" position="110/40" size="150/20" >
+					<element text="640x480" />
+					<element text="800x600" />
+					<element text="1024x768" />
+			</dropdown>
 			<checkbox name="fullscreen" position="10/80" size="150/20" label="Fullscreen" />
 		<!--</tab>
 		<tab index="2" label="Sound">-->
@@ -27,7 +29,6 @@
 	function on_button(index)
 		if index == 0 then
 			menu.hide_dialog("settings");
-			print(xrestext:getText())
 		elseif index == 1 then
 			apply()
 		end
@@ -38,17 +39,31 @@
 	end
 	
 	function update()
-		xrestext:setText(tostring(Preferences.get():getResolution().x))
-		yrestext:setText(tostring(Preferences.get():getResolution().y))
+		resolution = Vector2I(Preferences.get():getResolution())
+		if resolution.x == 800 and resolution.y == 600 then
+			resolutionmenu:setSelected(1)
+		elseif resolution.x == 1024 and resolution.y == 768 then
+			resolutionmenu:setSelected(2)
+		else
+			resolutionmenu:setSelected(0)
+		end
+
 		fullscreen:setSelected(Preferences.get():getFullscreen())
 		stereo:setSelected(Preferences.get():getStereo())
 	end
 	
 	function apply()
-		Preferences.get():setXResolution(tonumber(xrestext:getText()))
-		Preferences.get():setYResolution(tonumber(yrestext:getText()))
+		resolutionnumber = resolutionmenu:getSelected()
+		if resolutionnumber == 1 then
+			Preferences.get():setResolution(Vector2I(800, 600))
+		elseif resolutionnumber == 2 then
+			Preferences.get():setResolution(Vector2I(1024, 768))
+		else
+			Preferences.get():setResolution(Vector2I(640, 480))
+		end
 		Preferences.get():setFullscreen(fullscreen:isSelected())
 		Preferences.get():setStereo(stereo:isSelected())
+		
 	end
 	]]>
 	</script>
