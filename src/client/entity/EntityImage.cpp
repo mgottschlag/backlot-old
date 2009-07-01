@@ -122,6 +122,15 @@ namespace backlot
 		rotate(rotation, Vector2F(centerx, centery));
 	}
 
+	void EntityImage::setAnimation(AnimationPointer animation)
+	{
+		this->animation = animation;
+	}
+	AnimationPointer EntityImage::getAnimation()
+	{
+		return animation;
+	}
+
 	void EntityImage::render()
 	{
 		// Check whether the image can be rendered
@@ -132,26 +141,35 @@ namespace backlot
 		glPushMatrix();
 		glLoadIdentity();
 		Vector2F entitypos = entity->getPosition();
-		glTranslatef(entitypos.x, entitypos.y, depth);
+		glTranslatef(entitypos.x, entitypos.y, 0);
 		glTranslatef(position.x, position.y, depth);
 		glRotatef(rotation, 0, 0, 1);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		if (texture)
 			texture->bind();
-		glEnable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0);
-			glVertex2f(0, 0);
-			glTexCoord2f(1.0, 0.0);
-			glVertex2f(size.x, 0);
-			glTexCoord2f(1.0, 1.0);
-			glVertex2f(size.x, size.y);
-			glTexCoord2f(0.0, 1.0);
-			glVertex2f(0, size.y);
-		glEnd();
+		if (animation)
+		{
+			glScalef(0.5, 0.5, 1);
+			glTranslatef(1, 1, 0);
+			animation->draw();
+		}
+		else
+		{
+			glEnable(GL_TEXTURE_2D);
+			glBegin(GL_QUADS);
+				glTexCoord2f(0.0, 0.0);
+				glVertex2f(0, 0);
+				glTexCoord2f(1.0, 0.0);
+				glVertex2f(size.x, 0);
+				glTexCoord2f(1.0, 1.0);
+				glVertex2f(size.x, size.y);
+				glTexCoord2f(0.0, 1.0);
+				glVertex2f(0, size.y);
+			glEnd();
+			glDisable(GL_TEXTURE_2D);
+		}
 		glDisable(GL_BLEND);
-		glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
 	}
 	void EntityImage::renderAll()

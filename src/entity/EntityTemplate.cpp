@@ -228,9 +228,57 @@ namespace backlot
 					image.rotate = strcmp(imagedata->Attribute("rotate"), "no");
 				else
 					image.rotate = false;
+				image.animation = false;
 				images.push_back(image);
 			}
 			imagenode = node->IterateChildren("image", imagenode);
+		}
+		// Load animations
+		TiXmlNode *animationnode = root->FirstChild("animation");
+		while (animationnode)
+		{
+			TiXmlElement *animdata = animationnode->ToElement();
+			if (animdata)
+			{
+				// Image name
+				if (!animdata->Attribute("image"))
+				{
+					std::cerr << "Animation without image!" << std::endl;
+					return false;
+				}
+				std::string animimage = animdata->Attribute("image");
+				EntityImageInfo *imageinfo = 0;
+				for (unsigned int i = 0; i < images.size(); i++)
+				{
+					if (images[i].name == animimage)
+					{
+						imageinfo = &images[i];
+						break;
+					}
+				}
+				if (!imageinfo)
+				{
+					std::cerr << "Image \"" << animimage << "\" not found." << std::endl;
+					return false;
+				}
+				imageinfo->animation = true;
+				// Animation information
+				if (animdata->Attribute("name"))
+					imageinfo->animname = animdata->Attribute("name");
+				double period = 1.0;
+				animdata->Attribute("period", &period);
+				imageinfo->animationperiod = period;
+				imageinfo->animationrunning = true;
+				if (animdata->Attribute("stopped"))
+					imageinfo->animationrunning = strcmp(animdata->Attribute("stopped"), "yes");
+				if (!animdata->Attribute("size"))
+				{
+					std::cerr << "Animation without size!" << std::endl;
+					return false;
+				}
+				imageinfo->animationsize = animdata->Attribute("size");
+			}
+			animationnode = node->IterateChildren("animation", animationnode);
 		}
 		#endif
 		// Add to list

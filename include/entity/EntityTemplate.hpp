@@ -43,6 +43,11 @@ namespace backlot
 		Vector2F size;
 		float depth;
 		bool rotate;
+		bool animation;
+		Vector2I animationsize;
+		float animationperiod;
+		bool animationrunning;
+		std::string animname;
 	};
 	#endif
 

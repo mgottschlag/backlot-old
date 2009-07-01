@@ -289,6 +289,11 @@ namespace backlot
 				.def("isVisible", &EntityImage::isVisible)
 				.def("rotate", (void (EntityImage::*)(float, Vector2F))&EntityImage::rotate)
 				.def("rotate", (void (EntityImage::*)(float, float, float))&EntityImage::rotate),
+			// Animation
+			luabind::class_<Animation, ReferenceCounted, SharedPointer<Animation> >("Animation")
+				.def("start", &Animation::start)
+				.def("stop", &Animation::stop)
+				.def("isPlaying", &Animation::isPlaying),
 			// Client class
 			luabind::class_<Client>("Client")
 				.scope

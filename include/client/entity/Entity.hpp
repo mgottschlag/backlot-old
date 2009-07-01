@@ -27,6 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Script.hpp"
 #include "entity/EntityTemplate.hpp"
 #include "EntityImage.hpp"
+#include "Animation.hpp"
 
 #include <vector>
 #include <deque>
@@ -83,6 +84,7 @@ namespace backlot
 			ScriptPointer script;
 			std::vector<Property> properties;
 			std::vector<EntityImagePointer> images;
+			std::vector<AnimationPointer> animations;
 			Property *positionproperty;
 			Vector2F speed;
 			std::deque<SpeedInfo> recentspeeds;

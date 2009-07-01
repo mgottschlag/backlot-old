@@ -11,9 +11,9 @@
 		<weapon1 type="entity" />
 	</properties>
 
-	<image name="feet" src="sprites/feet.png" position="-0.5/-0.5" rotate="no" />
-	<animation name="feetanim" image="feet" size="4/2" status="stopped" />
-	<image name="body" src="sprites/player.png" position="-0.5/-0.5" rotate="no" />
+	<image name="feet" src="sprites/feet.png" position="-0.5/-0.5" rotate="no" depth="1.5" />
+	<animation name="feetanim" image="feet" size="4/2" stopped="yes" depth="0.5" period="1000" />
+	<image name="body" src="sprites/player.png" position="-0.5/-0.5" rotate="no" depth="1.5" />
 	<image name="weapon" position="-0.5/-0.5" rotate="no" />
 
 	<script>
@@ -64,7 +64,14 @@
 					feet:setRotation(0);
 					feet:setPosition(-0.5, -0.5);
 					if xspeed ~= 0 or yspeed ~= 0 then
-						feet:rotate(Vector2F(xspeed, yspeed):getRotation(), 0.5, 0.5);
+						if not feetanim:isPlaying() then
+							feetanim:start();
+						end
+						feet:rotate(Vector2F(yspeed, -xspeed):getRotation(), 0.5, 0.5);
+					else
+						if feetanim:isPlaying() then
+							feetanim:stop();
+						end
 					end
 				end
 				if Server ~= nil then

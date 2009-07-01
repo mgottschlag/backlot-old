@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ReferenceCounted.hpp"
 #include "Texture.hpp"
 #include "Vector2.hpp"
+#include "Animation.hpp"
 
 #include <list>
 
@@ -60,11 +61,15 @@ namespace backlot
 			void rotate(float rotation, Vector2F center);
 			void rotate(float rotation, float centerx, float centery);
 
+			void setAnimation(AnimationPointer animation);
+			AnimationPointer getAnimation();
+
 			void render();
 			static void renderAll();
 		private:
 			Entity *entity;
 			TexturePointer texture;
+			AnimationPointer animation;
 
 			Vector2F position;
 			Vector2F size;
