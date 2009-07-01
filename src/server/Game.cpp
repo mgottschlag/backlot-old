@@ -282,6 +282,7 @@ namespace backlot
 				clients.erase(it);
 				break;
 			}
+			it++;
 		}
 		if (clientid == -1)
 			return;
