@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <string>
 #include <cstdlib>
+#include <cmath>
 
 namespace backlot
 {
@@ -182,6 +183,18 @@ namespace backlot
 			float getRotation()
 			{
 				return atan2(y, x) * 180 / 3.1415;
+			}
+
+			/**
+			 * Rotates the vector around (0, 0).
+			 */
+			void rotate(float angle)
+			{
+				angle *= 3.1415 / 180;
+				T newx = (T)((float)x * cos(angle) - (float)y * sin(angle));
+				T newy = (T)((float)x * sin(angle) + (float)y * cos(angle));
+				x = newx;
+				y = newy;
 			}
 
 			/**
