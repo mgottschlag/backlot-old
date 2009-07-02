@@ -30,10 +30,25 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	/**
+	 * Texture filter mode. This mode sets how a texture is inter/extrapolated
+	 * if it is shown at a larger/smaller size.
+	 */
 	enum TextureFilter
 	{
+		/**
+		 * Nearest texel filterint. No interpolation takes place, the nearest
+		 * pixel is used.
+		 */
 		ETF_Nearest,
+		/**
+		 * Linear interpolation between the neighbour pixels.
+		 */
 		ETF_Linear,
+		/**
+		 * Like ETF_Linear, but uses a mip map for textures which are shown at
+		 * a much smaller size.
+		 */
 		ETF_LinearMipMap
 	};
 	/**

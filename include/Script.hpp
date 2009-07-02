@@ -33,15 +33,36 @@ extern "C"
 
 namespace backlot
 {
+	/**
+	 * Lua script. Parts of the engine are exported into the lua VM, note
+	 * however that you have to pass reference counted objects as shared
+	 * pointers or the script will crash.
+	 */
 	class Script: public ReferenceCounted
 	{
 		public:
+			/**
+			 * Constructor.
+			 */
 			Script();
+			/**
+			 * Destructor.
+			 */
 			~Script();
 
+			/**
+			 * Executes a string containing lua code within the Lua VM.
+			 */
 			bool runString(std::string data);
 
+			/**
+			 * Returns true if a function with the given name exists in the
+			 * global scope.
+			 */
 			bool isFunction(std::string name);
+			/**
+			 * Calls the function with the given name without any parameters.
+			 */
 			void callFunction(std::string name);
 
 			// Functions without return value
@@ -80,6 +101,10 @@ namespace backlot
 				return luabind::call_function<R>(state, name.c_str(), arg1, arg2, arg3);
 			};
 
+			/**
+			 * Sets a global variable to the given value. This can be any core
+			 * type or any registered class.
+			 */
 			template <typename T> void setVariable(std::string name, T value)
 			{
 				luabind::globals(state)[name.c_str()] = value;
