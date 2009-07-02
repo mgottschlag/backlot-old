@@ -135,8 +135,7 @@ namespace backlot
 			/**
 			 * Computes the intersections with a line. If start or end are
 			 * within the rectangle, they are counted as intersections.
-			 * @param start Start of the line.
-			 * @param end End of the line.
+			 * @param line Line to be used for the intersection check.
 			 * @param intersection1 First intersection with the rectangle
 			 * (nearer to start than intersection2).
 			 * @param intersection2 Second intersection with the rectangle.

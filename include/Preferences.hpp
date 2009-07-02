@@ -38,11 +38,11 @@ namespace backlot
 			
 			~Preferences();
 			
-			/*
+			/**
 			 * Loads the preferences from game/config.xml.
 			 */
 			bool load();
-			/*
+			/**
 			 * Save the preferences to game/config.xml.
 			 */
 			bool save();
@@ -105,7 +105,7 @@ namespace backlot
 			
 			/**
 			 * If the sound is stereo or not.
-			 * @retrun True if stereo, false if mono.
+			 * @return True if stereo, false if mono.
 			 */
 			bool getStereo() const;
 			/**
