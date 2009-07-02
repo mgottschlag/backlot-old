@@ -65,7 +65,7 @@ namespace backlot
 			// Functions with return value
 			template <typename R> R callFunction(std::string name)
 			{
-				return luabind::call_function<R>(state, name);
+				return luabind::call_function<R>(state, name.c_str());
 			};
 			template <typename R, typename A> R callFunction(std::string name, A arg1)
 			{

@@ -189,7 +189,8 @@ namespace backlot
 			luabind::class_<Script, ReferenceCounted, SharedPointer<Script> >("Script")
 				.def("isFunction", &Script::isFunction)
 				.def("callFunction", (void (Script::*)(std::string))&Script::callFunction)
-				.def("callFunction", (void (Script::*)(std::string, int))&Script::callFunction<int>),
+				.def("callFunction", (void (Script::*)(std::string, int))&Script::callFunction<int>)
+				.def("callFunctionInt", (int (Script::*)(std::string))&Script::callFunction<int>),
 			// Preferences class
 			luabind::class_<Preferences>("Preferences")
 				.scope
@@ -333,6 +334,7 @@ namespace backlot
 					luabind::def("get", &Game::get)
 				]
 				.def("setInputTarget", &Game::setInputTarget)
+				.def("getEntity", &Game::getEntity)
 		];
 	}
 	#endif
@@ -365,6 +367,7 @@ namespace backlot
 				.def("update", &Game::update)
 				.def("addEntity", &Game::addEntity)
 				.def("removeEntity", &Game::removeEntity)
+				.def("getEntity", &Game::getEntity)
 		];
 	}
 	#endif

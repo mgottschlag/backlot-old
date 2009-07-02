@@ -146,7 +146,6 @@ namespace backlot
 			EntityPointer entity = entities[entityid];
 			// Apply update
 			entity->applyUpdate(buffer, lag);
-			break;
 		}
 		// Ack updates.
 		BufferPointer received = new Buffer();

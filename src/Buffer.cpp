@@ -124,6 +124,11 @@ namespace backlot
 	}
 	uint8_t Buffer::read8()
 	{
+		if (position + 8 > size * 8)
+		{
+			position = size * 8;
+			return 0;
+		}
 		if (position % 8)
 		{
 			uint8_t byte = readByte();
@@ -135,10 +140,6 @@ namespace backlot
 		else
 		{
 			// We are on an even position
-			if (position / 8 == size)
-			{
-				return 0;
-			}
 			uint8_t value = *(uint8_t*)(data + position / 8);
 			position += 8;
 			return value;
@@ -177,6 +178,11 @@ namespace backlot
 	}
 	uint16_t Buffer::read16()
 	{
+		if (position + 16 > size * 8)
+		{
+			position = size * 8;
+			return 0;
+		}
 		if (position % 8)
 		{
 			uint16_t value = readByte() << 8;
@@ -192,10 +198,6 @@ namespace backlot
 		else
 		{
 			// We are on an even position
-			if (position / 8 + 2 > size)
-			{
-				return 0;
-			}
 			uint16_t value = *(uint16_t*)(data + position / 8);
 			position += 16;
 			return ntohs(value);
@@ -235,6 +237,11 @@ namespace backlot
 	}
 	uint32_t Buffer::read32()
 	{
+		if (position + 32 > size * 8)
+		{
+			position = size * 8;
+			return 0;
+		}
 		if (position % 8)
 		{
 			uint32_t value = 0;
@@ -250,10 +257,6 @@ namespace backlot
 		else
 		{
 			// We are on an even position
-			if (position / 8 + 4 > size)
-			{
-				return 0;
-			}
 			uint32_t value = *(uint32_t*)(data + position / 8);
 			position += 32;
 			return ntohl(value);
@@ -294,6 +297,11 @@ namespace backlot
 	}
 	uint64_t Buffer::read64()
 	{
+		if (position + 64 > size * 8)
+		{
+			position = size * 8;
+			return 0;
+		}
 		if (position % 8)
 		{
 			uint32_t value = 0;
@@ -310,10 +318,6 @@ namespace backlot
 		{
 			// We are on an even position
 			// TODO: Byte ordering
-			if (position / 8 + 8 > size)
-			{
-				return 0;
-			}
 			uint64_t value = *(uint64_t*)(data + position / 8);
 			position += 64;
 			return value;
