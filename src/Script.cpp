@@ -294,6 +294,7 @@ namespace backlot
 			// EntityImage
 			luabind::class_<EntityImage, ReferenceCounted, SharedPointer<EntityImage> >("EntityImage")
 				.def("load", &EntityImage::load)
+				.def("setTexture", &EntityImage::setTexture)
 				.def("setPosition", (void (EntityImage::*)(Vector2F))&EntityImage::setPosition)
 				.def("setPosition", (void (EntityImage::*)(float, float))&EntityImage::setPosition)
 				.def("getPosition", &EntityImage::getPosition)

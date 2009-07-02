@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<entity size="1.0/1.0" origin="0.5/0.5">
+	<properties>
+		<lifted default="0" type="int" size="1" />
+	</properties>
+
+	<image name="weapon" src="sprites/plasmagunside.png" position="-0.5/-0.5" visible="no" rotate="no" depth="1.5" />
+
+	<script>
+	<![CDATA[
+		function shoot(player)
+		end
+		function pickup(player)
+			lifted:setBool(true);
+		end
+		function putdown(player)
+			lifted:setBool(false);
+		end
+		function on_changed(property)
+			if property:getName() == "lifted" then
+				weapon:setVisible(not lifted:getBool())
+			end
+		end
+		function get_player_texture()
+			return texture:getID()
+		end
+
+		-- Load texture
+		if Client ~= nil then
+			texture = Texture.get("sprites/plasmagun.png", false)
+		end
+	]]>
+	</script>
+</entity>

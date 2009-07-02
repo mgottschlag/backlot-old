@@ -6,7 +6,9 @@
 	<script>
 	<![CDATA[
 	function on_new_client(client)
-		Game.get():addEntity("player", client);
+		local weapon = Game.get():addEntity("plasmagun", client)
+		local player = Game.get():addEntity("player", client)
+		player:getScript():callFunction("on_set_weapon", weapon:getID())
 	end
 	]]>
 	</script>
