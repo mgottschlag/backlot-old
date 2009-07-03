@@ -327,6 +327,9 @@ namespace backlot
 				positionproperty->setVector2F(position);
 			}
 		}
+		// Call frame callback
+		if (script->isFunction("on_update"))
+			script->callFunction("on_update");
 	}
 
 	ScriptPointer Entity::getScript()
