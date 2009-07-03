@@ -356,7 +356,7 @@ namespace backlot
 		}
 		// Drop down menus
 		TiXmlNode *dropdownnode = xml->FirstChild("dropdown");
-		if (dropdownnode)
+		while (dropdownnode)
 		{
 			TiXmlElement *dropdowndata = dropdownnode->ToElement();
 			// Check attributes
@@ -391,8 +391,8 @@ namespace backlot
 			// Add script
 			if (dropdowndata->Attribute("name"))
 				script->setVariable(dropdowndata->Attribute("name"), dropdown);
+			dropdownnode = xml->IterateChildren("dropdown", dropdownnode);
 		}
-		dropdownnode = xml->IterateChildren("dropdown", dropdownnode);
 
 		return true;
 	}
