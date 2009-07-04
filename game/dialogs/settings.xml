@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <dialog size="400/300" title="Settings">
-<label position="10/0" size="250/20" text="Restart to apply changes!" />
+	<label position="10/0" size="250/20" text="Restart to apply changes!" />
 	<!--<tabcontrol position="0/0" size="390/250">
 		<tab index="0" label="Game">
 		</tab>
@@ -17,20 +17,25 @@
 		<tab index="2" label="Sound">-->
 			<label position="10/110" size="50/20" text="Sound" />
 			<checkbox name="stereo" position="10/130" size="150/20" label="Stereo" />
+			<label position="10/150" size="100/20" text="Frequency:" />
+			<dropdown name="frequencymenu" position="110/150" size="150/20" >
+				<element text="22050" />
+			</dropdown>
 		<!--</tab>
 	</tabcontrol>-->
 	<button id="0" position="320/260" size="60/20" label="Close" />
-	<button id="1" position="250/260" size="60/20" label="Apply" />
+	<button id="1" position="185/260" size="60/20" label="Apply" />
+	<button id="2" position="250/260" size="65/20" label="Restore" />
 
 	<script>
 	<![CDATA[
-	print(Preferences);
-	
 	function on_button(index)
 		if index == 0 then
 			menu.hide_dialog("settings");
 		elseif index == 1 then
 			apply()
+		elseif index == 2 then
+			update()
 		end
 	end
 	
@@ -50,6 +55,13 @@
 
 		fullscreen:setSelected(Preferences.get():getFullscreen())
 		stereo:setSelected(Preferences.get():getStereo())
+		
+		frequecy = Preferences.get():getFrequency()
+		if frequency == 22050 then
+			frequencymenu:setSelected(0)
+		else
+			frequencymenu:setSelected(0)
+		end
 	end
 	
 	function apply()
@@ -64,6 +76,12 @@
 		Preferences.get():setFullscreen(fullscreen:isSelected())
 		Preferences.get():setStereo(stereo:isSelected())
 		
+		frequencynumber = frequencymenu:getSelected()
+		if frequencynumber == 0 then
+			Preferences.get():setFrequency(22050)
+		else
+			Preferences.get():setFrequency(22050)
+		end
 	end
 	]]>
 	</script>

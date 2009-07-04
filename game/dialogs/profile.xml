@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dialog size="400/300" title="Change profile">
+	<label position="10/10" size="100/20" text="Name:" />
+	<textfield name="playername" position="110/10" size="100/20" />
+	<button id="0" position="320/260" size="60/20" label="Close" />
+	<button id="1" position="250/260" size="60/20" label="Apply" />
+	<script>
+	<![CDATA[
+	function on_button(index)
+		if index == 0 then
+			menu.hide_dialog("profile")
+		end
+	end
+	
+	function on_show()
+		update()
+	end
+	
+	function update()
+	end
+	]]>
+	</script>
+</dialog>
