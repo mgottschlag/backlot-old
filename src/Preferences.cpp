@@ -226,11 +226,4 @@ namespace backlot
 	{
 		return bitrate;
 	}
-	void Preferences::setBitrate(int bitrate)
-	{
-		this->bitrate = bitrate;
-	}
-	Preferences::Preferences()
-	{
-	}
 }

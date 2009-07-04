@@ -124,16 +124,6 @@ namespace backlot
 			 * @param frequency The new frequency.
 			 */
 			void setFrequency(int frequency);
-			/**
-			 * Returns the sound bitrate used by SDL_Mixer.
-			 * @return The sound bitrate.
-			 */
-			int getBitrate() const;
-			/**
-			 * Sets the sound bitrate used by SDL_Mixer.
-			 * @param bitrate The new sound bitrate.
-			 */
-			void setBitrate(int bitrate);
 		private:
 			/**
 			 * The private constructor.

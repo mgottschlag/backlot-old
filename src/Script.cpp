@@ -211,8 +211,6 @@ namespace backlot
 				.def("setStereo", &Preferences::setStereo)
 				.def("getFrequency", &Preferences::getFrequency)
 				.def("setFrequency", &Preferences::setFrequency)
-				.def("getBitrate", &Preferences::getBitrate)
-				.def("setBitrate", &Preferences::setBitrate)
 		];
 	}
 	#ifdef CLIENT
