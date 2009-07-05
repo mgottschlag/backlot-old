@@ -97,8 +97,7 @@ namespace backlot
 			return false;
 		}
 		if (!Audio::get().init(Preferences::get().getFrequency(),
-			Preferences::get().getStereo(),
-			Preferences::get().getBitrate()))
+			Preferences::get().getStereo()))
 		{
 			std::cerr << "Could not initialize sound." << std::endl;
 			return false;

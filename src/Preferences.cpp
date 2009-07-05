@@ -222,8 +222,8 @@ namespace backlot
 	{
 		this->frequency = frequency;
 	}
-	int Preferences::getBitrate() const
+	
+	Preferences::Preferences()
 	{
-		return bitrate;
 	}
 }
