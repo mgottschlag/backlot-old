@@ -67,6 +67,7 @@ Server.cpp
 Client.cpp
 Game.cpp
 entity/Entity.cpp
+entity/EntityState.cpp
 )
 
 add_subdirectory(src/client)

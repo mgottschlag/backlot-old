@@ -104,7 +104,9 @@ namespace backlot
 		{
 			int changed = buffer->readUnsignedInt(1);
 			if (changed)
+			{
 				properties[i].read(buffer);
+			}
 		}
 	}
 
@@ -192,6 +194,17 @@ namespace backlot
 	Vector2F Entity::getSpeed()
 	{
 		return speed;
+	}
+
+	Property *Entity::getProperty(std::string name)
+	{
+		// TODO: This is slow.
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if (properties[i].getName() == name)
+				return &properties[i];
+		}
+		return 0;
 	}
 
 	bool Entity::isVisible(Entity *from)

@@ -25,6 +25,22 @@
 			return texture:getID()
 		end
 
+		function shoot(player)
+			print("Shooting!")
+			-- Get initial bullet state
+			local playerentity = Game.get():getEntity(player)
+			local bulletpos = playerentity:getPosition()
+			local rotation = playerentity:getProperty("rotation"):getFloat()
+			local speed = Vector2F(0, -1) * 5
+			speed:rotate(rotation)
+			-- Create bullet
+			local tpl = EntityTemplate.get("bullet")
+			local bulletstate = EntityState.create(tpl)
+			bulletstate:getProperty("start"):setVector2F(bulletpos)
+			bulletstate:getProperty("speed"):setVector2F(speed)
+			local newbullet = Game.get():addEntity("bullet", 0, bulletstate:get())
+		end
+
 		-- Load texture
 		if Client ~= nil then
 			texture = Texture.get("sprites/plasmagun.png", false)

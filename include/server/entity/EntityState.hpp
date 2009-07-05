@@ -19,70 +19,29 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _ENTITY_HPP_
-#define _ENTITY_HPP_
+#ifndef _ENTITYSTATE_HPP_
+#define _ENTITYSTATE_HPP_
 
-#include "ReferenceCounted.hpp"
-#include "Buffer.hpp"
-#include "Script.hpp"
 #include "entity/EntityTemplate.hpp"
-
-#include <vector>
 
 namespace backlot
 {
-	class Entity : public ReferenceCounted
+	class EntityState : public ReferenceCounted
 	{
 		public:
-			Entity();
-			~Entity();
-
-			bool create(EntityTemplatePointer tpl, BufferPointer state = 0);
-			EntityTemplatePointer getTemplate();
-
-			void getState(BufferPointer buffer);
-			void setState(BufferPointer buffer);
-
-			void saveState();
-			void getUpdate(int time, BufferPointer buffer, int client = 0);
-			void applyUpdate(BufferPointer buffer);
-			bool hasChanged(int time);
-
-			void setOwner(int owner);
-			int getOwner();
-
-			void setID(int id);
-			int getID();
-
-			void setPosition(const Vector2F &position);
-			Vector2F getPosition();
-			void setSpeed(const Vector2F &speed, bool ignoreobstacles);
-			Vector2F getSpeed();
+			static SharedPointer<EntityState> create(EntityTemplatePointer tpl);
+			EntityState(EntityTemplatePointer tpl);
+			~EntityState();
 
 			Property *getProperty(std::string name);
 
-			bool isVisible(Entity *from);
-
-			void update();
-
-			ScriptPointer getScript();
-
-			void onChange(Property *property);
+			BufferPointer get();
 		private:
 			EntityTemplatePointer tpl;
-
-			ScriptPointer script;
 			std::vector<Property> properties;
-			Property *positionproperty;
-			Vector2F speed;
-
-			bool changed;
-
-			int owner;
-			int id;
 	};
 
-	typedef SharedPointer<Entity> EntityPointer;
+	typedef SharedPointer<EntityState> EntityStatePointer;
 }
 
 #endif

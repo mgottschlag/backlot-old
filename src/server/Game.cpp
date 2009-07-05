@@ -142,6 +142,11 @@ namespace backlot
 
 	EntityPointer Game::addEntity(std::string type, int owner)
 	{
+		return addEntityWithState(type, owner, 0);
+	}
+	EntityPointer Game::addEntityWithState(std::string type, int owner,
+		BufferPointer state)
+	{
 		std::cout << "addEntity" << std::endl;
 		// Get entity template
 		EntityTemplatePointer tpl = EntityTemplate::get(type);
@@ -171,7 +176,7 @@ namespace backlot
 		EntityPointer entity = new Entity();
 		entity->setID(newindex);
 		entity->setOwner(owner);
-		entity->create(tpl);
+		entity->create(tpl, state);
 		// Set owner
 		// TODO
 		// Insert entity into list

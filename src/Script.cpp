@@ -33,6 +33,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 #ifdef SERVER
 #include "Server.hpp"
+#include "entity/EntityState.hpp"
 #endif
 
 #include <iostream>
@@ -132,6 +133,7 @@ namespace backlot
 				.def("getLengthSquared", &Vector2F::getLengthSquared)
 				.def("getLength", &Vector2F::getLength)
 				.def("getRotation", &Vector2F::getRotation)
+				.def("rotate", &Vector2F::rotate)
 				.def(luabind::self * float())
 				.def(luabind::self + Vector2F())
 				.def(luabind::self - Vector2F())
@@ -152,6 +154,7 @@ namespace backlot
 				.def("getLengthSquared", &Vector2I::getLengthSquared)
 				.def("getLength", &Vector2I::getLength)
 				.def("getRotation", &Vector2I::getRotation)
+				.def("rotate", &Vector2I::rotate)
 				.def(luabind::self * float())
 				.def(luabind::self + Vector2F())
 				.def(luabind::self - Vector2F())
@@ -161,6 +164,8 @@ namespace backlot
 				.def(luabind::self == Vector2I())
 				.def_readwrite("x", &Vector2I::x)
 				.def_readwrite("y", &Vector2I::y),
+			// Buffer
+			luabind::class_<Buffer, ReferenceCounted, SharedPointer<Buffer> >("Buffer"),
 			// Property class
 			luabind::class_<Property>("Property")
 				.def("getName", &Property::getName)
@@ -179,17 +184,25 @@ namespace backlot
 				.def("getVector2I", &Property::getVector2I)
 				.def("setBool", &Property::setBool)
 				.def("getBool", &Property::getBool)
-				.def("bit", (bool (Property::*)(int))&Property::bit)
+				.def("bit", (bool (Property::*)(int) const)&Property::bit)
 				.def("bit", (void (Property::*)(int, int))&Property::bit)
 				.def("set", &Property::set)
 				.def("write", &Property::write)
 				.def("read", &Property::read)
 				.def("getChangeTime", &Property::getChangeTime),
+			// EntityTemplate
+			luabind::class_<EntityTemplate, ReferenceCounted, SharedPointer<EntityTemplate> >("EntityTemplate")
+				.scope
+				[
+					luabind::def("get", &EntityTemplate::get)
+				],
 			// Script
 			luabind::class_<Script, ReferenceCounted, SharedPointer<Script> >("Script")
 				.def("isFunction", &Script::isFunction)
 				.def("callFunction", (void (Script::*)(std::string))&Script::callFunction)
 				.def("callFunction", (void (Script::*)(std::string, int))&Script::callFunction<int>)
+				.def("callFunction", (void (Script::*)(std::string, Vector2F))&Script::callFunction<Vector2F>)
+				.def("callFunction", (void (Script::*)(std::string, Vector2I))&Script::callFunction<Vector2I>)
 				.def("callFunctionInt", (int (Script::*)(std::string))&Script::callFunction<int>),
 			// Preferences class
 			luabind::class_<Preferences>("Preferences")
@@ -287,6 +300,7 @@ namespace backlot
 				.def("getPosition", &Entity::getPosition)
 				.def("setSpeed", &Entity::setSpeed)
 				.def("getSpeed", &Entity::getSpeed)
+				.def("getProperty", &Entity::getProperty)
 				.def("getScript", &Entity::getScript)
 				.def("getID", &Entity::getID),
 			// EntityImage
@@ -342,22 +356,31 @@ namespace backlot
 	{
 		luabind::module(state)
 		[
-			// Entitiy class
+			// Entity
 			luabind::class_<Entity, ReferenceCounted, SharedPointer<Entity> >("Entity")
 				.def("setPosition", &Entity::setPosition)
 				.def("getPosition", &Entity::getPosition)
 				.def("setSpeed", &Entity::setSpeed)
 				.def("getSpeed", &Entity::getSpeed)
+				.def("getProperty", &Entity::getProperty)
 				.def("getScript", &Entity::getScript)
 				.def("getID", &Entity::getID),
-			// Server class
+			// EntityState
+			luabind::class_<EntityState, ReferenceCounted, SharedPointer<EntityState> >("EntityState")
+				.scope
+				[
+					luabind::def("create", &EntityState::create)
+				]
+				.def("getProperty", &EntityState::getProperty)
+				.def("get", &EntityState::get),
+			// Server
 			luabind::class_<Server>("Server")
 				.scope
 				[
 					luabind::def("get", &Server::get)
 				]
 				.def("getMap", &Server::getMap),
-			// Game class
+			// Game
 			luabind::class_<Game>("Game")
 				.scope
 				[
@@ -365,6 +388,7 @@ namespace backlot
 				]
 				.def("update", &Game::update)
 				.def("addEntity", &Game::addEntity)
+				.def("addEntity", &Game::addEntityWithState)
 				.def("removeEntity", &Game::removeEntity)
 				.def("getEntity", &Game::getEntity)
 		];

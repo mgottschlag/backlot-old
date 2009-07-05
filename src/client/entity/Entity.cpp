@@ -126,7 +126,7 @@ namespace backlot
 			if (properties[i] != tplproperties[i])
 			{
 				// Bit set: Property changed.
-				buffer->writeUnsignedInt(0, 1);
+				buffer->writeUnsignedInt(1, 1);
 				// Write the property to the stream.
 				properties[i].write(buffer);
 			}
@@ -298,6 +298,17 @@ namespace backlot
 	Vector2F Entity::getSpeed()
 	{
 		return speed;
+	}
+
+	Property *Entity::getProperty(std::string name)
+	{
+		// TODO: This is slow.
+		for (unsigned int i = 0; i < properties.size(); i++)
+		{
+			if (properties[i].getName() == name)
+				return &properties[i];
+		}
+		return 0;
 	}
 
 	bool Entity::isVisible(Entity *from)

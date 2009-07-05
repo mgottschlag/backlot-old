@@ -43,6 +43,8 @@ namespace backlot
 			float getPlayerSpeed();
 
 			EntityPointer addEntity(std::string type, int owner = 0);
+			EntityPointer addEntityWithState(std::string type, int owner,
+				BufferPointer state);
 			void removeEntity(EntityPointer entity);
 			EntityPointer getEntity(int id);
 			std::vector<EntityPointer> getEntities(std::string type);

@@ -70,6 +70,8 @@ namespace backlot
 			void setSpeed(Vector2F speed, bool ignoreobstacles);
 			Vector2F getSpeed();
 
+			Property *getProperty(std::string name);
+
 			bool isVisible(Entity *from);
 
 			void setActive(bool active);
