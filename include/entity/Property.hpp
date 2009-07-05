@@ -125,7 +125,7 @@ namespace backlot
 			/**
 			 * Returns the property name.
 			 */
-			std::string getName();
+			std::string getName() const;
 			/**
 			 * Sets the property type.
 			 */
@@ -133,7 +133,7 @@ namespace backlot
 			/**
 			 * Returns the property type.
 			 */
-			PropertyType getType();
+			PropertyType getType() const;
 			/**
 			 * Sets the property flags.
 			 */
@@ -141,7 +141,7 @@ namespace backlot
 			/**
 			 * Returns the property flags.
 			 */
-			PropertyFlags getFlags();
+			PropertyFlags getFlags() const;
 
 			/**
 			 * Sets the number of bits transmitted for integers and integer
@@ -151,7 +151,7 @@ namespace backlot
 			/**
 			 * Returns the number of bits transmitted for integer values.
 			 */
-			unsigned int getSize();
+			unsigned int getSize() const;
 
 			/**
 			 * Sets the entity which owns this property and gets change
@@ -161,7 +161,7 @@ namespace backlot
 			/**
 			 * Returns the owner of this property.
 			 */
-			Entity *getEntity();
+			Entity *getEntity() const;
 			/**
 			 * Sets whether the entity wants to receive change callbacks.
 			 */
@@ -169,7 +169,7 @@ namespace backlot
 			/**
 			 * Returns whether the entity wants to receive change callbacks.
 			 */
-			bool getCallbacks();
+			bool getCallbacks() const;
 
 			/**
 			 * Sets the value of an integer property.
@@ -178,7 +178,7 @@ namespace backlot
 			/**
 			 * Returns the value of an integer property.
 			 */
-			int getInt();
+			int getInt() const;
 			/**
 			 * Sets the value of an unsigned integer property.
 			 */
@@ -186,7 +186,7 @@ namespace backlot
 			/**
 			 * Returns the value of an unsigned integer property.
 			 */
-			unsigned int getUnsignedInt();
+			unsigned int getUnsignedInt() const;
 			/**
 			 * Sets the value of a float property.
 			 */
@@ -194,7 +194,7 @@ namespace backlot
 			/**
 			 * Returns the value of a float property.
 			 */
-			float getFloat();
+			float getFloat() const;
 			/**
 			 * Sets the value of a float vector property.
 			 */
@@ -202,7 +202,7 @@ namespace backlot
 			/**
 			 * Returns the value of a float vector property.
 			 */
-			Vector2F getVector2F();
+			Vector2F getVector2F() const;
 			/**
 			 * Sets the value of an integer vector property.
 			 */
@@ -210,7 +210,7 @@ namespace backlot
 			/**
 			 * Returns the value of an integer vector property.
 			 */
-			Vector2I getVector2I();
+			Vector2I getVector2I() const;
 			/**
 			 * Sets the value of a boolean property.
 			 */
@@ -218,14 +218,14 @@ namespace backlot
 			/**
 			 * Returns the value of a boolean property.
 			 */
-			bool getBool();
+			bool getBool() const;
 
 			/**
-			 * Sets a single bit of an integer property.
-			 */
-			bool bit(int index);
-			/**
 			 * Returns a single bit of an integer property.
+			 */
+			bool bit(int index) const;
+			/**
+			 * Sets a single bit of an integer property.
 			 */
 			void bit(int index, int value);
 
@@ -238,7 +238,7 @@ namespace backlot
 			/**
 			 * Writes the property to a buffer.
 			 */
-			void write(const BufferPointer &buffer);
+			void write(const BufferPointer &buffer) const;
 			/**
 			 * Reads the property from a buffer, flags it as changed and
 			 * possibly causes a change callback.
@@ -248,7 +248,7 @@ namespace backlot
 			/**
 			 * Returns the time of the last change.
 			 */
-			int getChangeTime();
+			int getChangeTime() const;
 
 			Property &operator=(const Property &property);
 			bool operator==(const Property &property);

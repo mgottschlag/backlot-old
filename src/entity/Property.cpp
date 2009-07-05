@@ -66,7 +66,7 @@ namespace backlot
 	{
 		this->name = name;
 	}
-	std::string Property::getName()
+	std::string Property::getName() const
 	{
 		return name;
 	}
@@ -74,7 +74,7 @@ namespace backlot
 	{
 		this->type = type;
 	}
-	PropertyType Property::getType()
+	PropertyType Property::getType() const
 	{
 		return type;
 	}
@@ -82,7 +82,7 @@ namespace backlot
 	{
 		this->flags = flags;
 	}
-	PropertyFlags Property::getFlags()
+	PropertyFlags Property::getFlags() const
 	{
 		return flags;
 	}
@@ -91,7 +91,7 @@ namespace backlot
 	{
 		this->size = size;
 	}
-	unsigned int Property::getSize()
+	unsigned int Property::getSize() const
 	{
 		return size;
 	}
@@ -100,7 +100,7 @@ namespace backlot
 	{
 		this->entity = entity;
 	}
-	Entity *Property::getEntity()
+	Entity *Property::getEntity() const
 	{
 		return entity;
 	}
@@ -108,7 +108,7 @@ namespace backlot
 	{
 		this->callbacks = callbacks;
 	}
-	bool Property::getCallbacks()
+	bool Property::getCallbacks() const
 	{
 		return callbacks;
 	}
@@ -123,7 +123,7 @@ namespace backlot
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
 	}
-	int Property::getInt()
+	int Property::getInt() const
 	{
 		if (type == EPT_Integer)
 		{
@@ -145,7 +145,7 @@ namespace backlot
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
 	}
-	unsigned int Property::getUnsignedInt()
+	unsigned int Property::getUnsignedInt() const
 	{
 		if (type == EPT_Integer)
 		{
@@ -167,7 +167,7 @@ namespace backlot
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
 	}
-	float Property::getFloat()
+	float Property::getFloat() const
 	{
 		if (type == EPT_Float)
 		{
@@ -190,7 +190,7 @@ namespace backlot
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
 	}
-	Vector2F Property::getVector2F()
+	Vector2F Property::getVector2F() const
 	{
 		if (type == EPT_Vector2F)
 		{
@@ -213,7 +213,7 @@ namespace backlot
 		else
 			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
 	}
-	Vector2I Property::getVector2I()
+	Vector2I Property::getVector2I() const
 	{
 		if (type == EPT_Vector2I)
 		{
@@ -229,12 +229,12 @@ namespace backlot
 	{
 		bit(0, data);
 	}
-	bool Property::getBool()
+	bool Property::getBool() const
 	{
 		return bit(0);
 	}
 
-	bool Property::bit(int index)
+	bool Property::bit(int index) const
 	{
 		if (type == EPT_Integer)
 		{
@@ -280,7 +280,7 @@ namespace backlot
 		onChange();
 	}
 
-	void Property::write(const BufferPointer &buffer)
+	void Property::write(const BufferPointer &buffer) const
 	{
 		switch (type)
 		{
@@ -334,7 +334,7 @@ namespace backlot
 		}
 	}
 
-	int Property::getChangeTime()
+	int Property::getChangeTime() const
 	{
 		return changetime;
 	}
