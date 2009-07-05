@@ -178,6 +178,11 @@ namespace backlot
 			 * Appends one buffer to the other.
 			 */
 			Buffer &operator+=(const Buffer &buf);
+
+			/**
+			 * Dumps the buffer to stdout.
+			 */
+			void dump();
 		private:
 			/**
 			 * Writes one byte to the buffer, does not change the current
