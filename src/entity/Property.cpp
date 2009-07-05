@@ -36,7 +36,7 @@ namespace backlot
 		memset(data, 0, 8);
 		entity = 0;
 		callbacks = true;
-		changetime = Game::get().getTime();
+		changetime = 0;
 	}
 	Property::Property(std::string name, PropertyType type,
 		PropertyFlags flags) : name(name), type(type), flags(flags)
@@ -45,7 +45,7 @@ namespace backlot
 		memset(data, 0, 8);
 		entity = 0;
 		callbacks = true;
-		changetime = Game::get().getTime();
+		changetime = 0;
 	}
 	Property::Property(const Property &property)
 	{
@@ -56,7 +56,7 @@ namespace backlot
 		memcpy(data, property.data, 8);
 		entity = 0;
 		callbacks = true;
-		changetime = Game::get().getTime();
+		changetime = 0;
 	}
 	Property::~Property()
 	{
