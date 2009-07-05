@@ -108,29 +108,49 @@ namespace backlot
 		{
 			mainmenu->setActive(true);
 		}
-		// TODO
-		if (args.size() == 0)
+		
+		
+		std::string serveraddress = "localhost:27272";
+		bool startserver = true;
+		bool connect = true;
+		
+		for (int i = 0; i < int(args.size()); i++)
 		{
-			// Start server
+			std::string option = args[i];
+			if (((option == "--noserver") || (option == "-ns")))
+			{
+				startserver = false;
+			}
+			if (((option == "--noconnect") || (option == "-nc")))
+			{
+				connect =  false;
+				startserver = false;
+			}
+			if (((option == "--serveraddress") || (option == "-s")))
+			{
+				i++;
+				serveraddress = args[i];
+				startserver = false;
+				connect = true;
+			}
+		}
+		
+		if (startserver)
+		{
 			if (!Server::get().init(27272, "test"))
 			{
 				return false;
 			}
-			// Start client
-			if (!Client::get().init("localhost:27272"))
-			{
-				return false;
-			}
 		}
-		else
+		
+		if (connect)
 		{
-			// Start client
-			if (!Client::get().init(args[0]))
+			if (!Client::get().init(serveraddress))
 			{
 				return false;
 			}
 		}
-
+		
 		// Main loop
 		lastframe = getTime();
 		while (!stopping)
@@ -139,8 +159,15 @@ namespace backlot
 			if (!Input::get().update())
 				stopping = true;
 			// Game logic
-			Server::get().update();
-			Client::get().update();
+			if (startserver)
+			{
+				Server::get().update();
+			}
+			
+			if (connect)
+			{
+				Client::get().update();
+			}
 			// Render everything
 			if (!Graphics::get().render())
 				stopping = true;
@@ -150,9 +177,10 @@ namespace backlot
 			if (currenttime < lastframe)
 				usleep(lastframe - currenttime);
 		}
-
+		
+		if (connect)
 		Client::get().destroy();
-		if (args.size() == 0)
+		if (startserver)
 			Server::get().destroy();
 		// Shut down engine
 		Dialog::unloadAll();
