@@ -136,6 +136,11 @@ namespace backlot
 		return true;
 	}
 
+	CameraPointer Graphics::getCamera()
+	{
+		return camera;
+	}
+
 	bool Graphics::render()
 	{
 		// FPS counter

@@ -46,6 +46,8 @@ namespace backlot
 			bool init(int width, int height, int bpp, bool fullscreen);
 			bool destroy();
 
+			CameraPointer getCamera();
+
 			bool render();
 
 			gcn::Container *getGuichanContainer()

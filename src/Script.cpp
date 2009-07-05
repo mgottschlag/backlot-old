@@ -27,6 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifdef CLIENT
 #include "Dialog.hpp"
 #include "Client.hpp"
+#include "Graphics.hpp"
 #include <guichan/widgets/checkbox.hpp>
 #include <guichan/widgets/textfield.hpp>
 #include <guichan/widgets/dropdown.hpp>
@@ -333,6 +334,17 @@ namespace backlot
 				.def("start", &Animation::start)
 				.def("stop", &Animation::stop)
 				.def("isPlaying", &Animation::isPlaying),
+			// Camera
+			luabind::class_<Camera, ReferenceCounted, SharedPointer<Camera> >("Camera")
+				.def("getPosition", &Camera::getPosition)
+				.def("setPosition", &Camera::setPosition),
+			// Graphics
+			luabind::class_<Graphics>("Graphics")
+				.scope
+				[
+					luabind::def("get", &Graphics::get)
+				]
+				.def("getCamera", &Graphics::getCamera),
 			// Client class
 			luabind::class_<Client>("Client")
 				.scope

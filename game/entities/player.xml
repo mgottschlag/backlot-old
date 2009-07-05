@@ -31,6 +31,13 @@
 			end
 		end
 		function on_changed(property)
+			if property:getName() == "position" then
+				if Client ~= nil and this:isLocal() then
+					-- Center player on the screen
+					local camera = Graphics.get():getCamera()
+					camera:setPosition(property:getVector2F())
+				end
+			end
 			if property:getName() == "rotation" then
 				if Client ~= nil then
 					body:setRotation(0);
