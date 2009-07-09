@@ -2,6 +2,7 @@
 <entity size="0.2/0.2" origin="0.1/0.1">
 	<properties>
 		<weapon default="65535" type="uint" size="16" />
+		<player default="65535" type="uint" size="16" />
 		<start default="0/0" type="vector2f" />
 		<speed default="0/0" type="vector2f" />
 	</properties>

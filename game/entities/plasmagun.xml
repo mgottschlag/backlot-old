@@ -8,6 +8,14 @@
 
 	<script>
 	<![CDATA[
+		-- Current player
+		playershooting = 0
+		-- Time since last shot
+		time = 500
+		-- If true, the weapon is currently shooting
+		shooting = false
+
+
 		function shoot(player)
 		end
 		function pickup(player)
@@ -25,10 +33,17 @@
 			return texture:getID()
 		end
 
-		function shoot(player)
-			print("Shooting!")
+		function start_shooting(player)
+			shooting = true
+			playershooting = player
+		end
+		function stop_shooting()
+			shooting = false
+		end
+
+		function shoot()
 			-- Get initial bullet state
-			local playerentity = Game.get():getEntity(player)
+			local playerentity = Game.get():getEntity(playershooting)
 			local bulletpos = playerentity:getPosition()
 			local rotation = playerentity:getProperty("rotation"):getFloat()
 			local speed = Vector2F(0, -1) * 5
@@ -38,7 +53,17 @@
 			local bulletstate = EntityState.create(tpl)
 			bulletstate:getProperty("start"):setVector2F(bulletpos)
 			bulletstate:getProperty("speed"):setVector2F(speed)
+			bulletstate:getProperty("weapon"):setUnsignedInt(this:getID())
+			bulletstate:getProperty("player"):setUnsignedInt(playershooting)
 			local newbullet = Game.get():addEntity("bullet", 0, bulletstate:get())
+		end
+
+		function on_update()
+			time = time + 20
+			if Server ~= nil and time >= 500 and shooting then
+				shoot()
+				time = 0
+			end
 		end
 
 		-- Load texture

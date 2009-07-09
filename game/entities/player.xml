@@ -84,11 +84,11 @@
 				if Server ~= nil then
 					-- Shooting
 					if keys:bit(4) == true then
-						if Server ~= nil then
-							-- TODO: Check weapon state.
-							weaponentity = Game.get():getEntity(currentweapon:getInt())
-							weaponentity:getScript():callFunction("shoot", this:getID())
-						end
+						local weaponentity = Game.get():getEntity(currentweapon:getInt())
+						weaponentity:getScript():callFunction("start_shooting", this:getID())
+					else
+						local weaponentity = Game.get():getEntity(currentweapon:getInt())
+						weaponentity:getScript():callFunction("stop_shooting")
 					end
 				end
 			end
