@@ -16,8 +16,18 @@
 			print(property:getName().." changed.")
 		end
 		function on_update()
+			local oldpos = start:getVector2F() + speed:getVector2F() * (time / 50)
 			time = time + 1;
-			position = start:getVector2F() + speed:getVector2F() * (time / 50)
+			local newpos = start:getVector2F() + speed:getVector2F() * (time / 50)
+			-- Collision checking
+			local collision = Game.get():getCollision(oldpos, newpos)
+			if collision.collision then
+				-- Register bullet for deletion
+				if Server ~= nil then
+				end
+			end
+			-- Set new position
+			position = newpos
 			if Client ~= nil then
 				bulletimage:setPosition(position)
 			end

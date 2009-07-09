@@ -26,8 +26,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "entity/Entity.hpp"
 #include "Client.hpp"
 
+#include <queue>
+
 namespace backlot
 {
+	struct CollisionInfo
+	{
+		bool collision;
+		bool entitycollision;
+		EntityPointer entity;
+		Vector2F point;
+	};
+
 	class Game
 	{
 		public:
@@ -48,6 +58,7 @@ namespace backlot
 			void removeEntity(EntityPointer entity);
 			EntityPointer getEntity(int id);
 			std::vector<EntityPointer> getEntities(std::string type);
+			void registerForDeletion(int id);
 
 			bool onClientConnecting(Client *client);
 			void addClient(Client *client);
@@ -59,6 +70,8 @@ namespace backlot
 			unsigned int getTime();
 
 			void injectUpdates(Client *client, BufferPointer buffer);
+
+			CollisionInfo getCollision(Vector2F from, Vector2F to);
 
 			void update();
 		private:
@@ -73,6 +86,7 @@ namespace backlot
 
 			EntityPointer entities[65535];
 			int nextentity;
+			std::queue<int> deletionqueue;
 
 			std::map<int, Client*> clients;
 			int lastclientid;

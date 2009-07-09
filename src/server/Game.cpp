@@ -234,6 +234,10 @@ namespace backlot
 		}
 		return std::vector<EntityPointer>();
 	}
+	void Game::registerForDeletion(int id)
+	{
+		deletionqueue.push(id);
+	}
 
 	bool Game::onClientConnecting(Client *client)
 	{
@@ -341,6 +345,21 @@ namespace backlot
 		client->setLag(time - updatetime);
 	}
 
+	CollisionInfo Game::getCollision(Vector2F from, Vector2F to)
+	{
+		CollisionInfo collision;
+		collision.collision = false;
+		collision.entitycollision = false;
+		collision.entity = 0;
+		collision.point = Vector2F();
+		// Check map collision
+		if (Server::get().getMap()->isAccessible(from, to, &collision.point))
+		{
+			collision.collision = true;
+		}
+		return collision;
+	}
+
 	void Game::update()
 	{
 		// Increase tick counter
@@ -350,6 +369,13 @@ namespace backlot
 		{
 			if (entities[i])
 				entities[i]->update();
+		}
+		// Delete entities in the deletion queue
+		while (deletionqueue.size() > 0)
+		{
+			int id = deletionqueue.front();
+			deletionqueue.pop();
+			removeEntity(getEntity(id));
 		}
 		// Send updates to all clients
 		std::map<int, Client*>::iterator it = clients.begin();

@@ -28,6 +28,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	struct CollisionInfo
+	{
+		bool collision;
+		bool entitycollision;
+		EntityPointer entity;
+		Vector2F point;
+	};
+
 	class Game
 	{
 		public:
@@ -58,6 +66,8 @@ namespace backlot
 
 			void setInputTarget(EntityPointer entity);
 			EntityPointer getInputTarget();
+
+			CollisionInfo getCollision(Vector2F from, Vector2F to);
 
 			void update();
 		private:

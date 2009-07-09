@@ -197,6 +197,13 @@ namespace backlot
 				[
 					luabind::def("get", &EntityTemplate::get)
 				],
+			// CollisionInfo
+			luabind::class_<CollisionInfo>("CollisionInfo")
+				.def(luabind::constructor<>())
+				.def_readwrite("collision", &CollisionInfo::collision)
+				.def_readwrite("entitycollision", &CollisionInfo::entitycollision)
+				.def_readwrite("entity", &CollisionInfo::entity)
+				.def_readwrite("point", &CollisionInfo::point),
 			// Script
 			luabind::class_<Script, ReferenceCounted, SharedPointer<Script> >("Script")
 				.def("isFunction", &Script::isFunction)
@@ -360,6 +367,7 @@ namespace backlot
 				]
 				.def("setInputTarget", &Game::setInputTarget)
 				.def("getEntity", &Game::getEntity)
+				.def("getCollision", &Game::getCollision)
 		];
 	}
 	#endif
@@ -403,6 +411,7 @@ namespace backlot
 				.def("addEntity", &Game::addEntityWithState)
 				.def("removeEntity", &Game::removeEntity)
 				.def("getEntity", &Game::getEntity)
+				.def("getCollision", &Game::getCollision)
 		];
 	}
 	#endif

@@ -177,6 +177,18 @@ namespace backlot
 		return inputentity.get();
 	}
 
+	CollisionInfo Game::getCollision(Vector2F from, Vector2F to)
+	{
+		CollisionInfo collision;
+		collision.collision = false;
+		// Check map collision
+		if (Client::get().getMap()->isAccessible(from, to, &collision.point))
+		{
+			collision.collision = true;
+		}
+		return collision;
+	}
+
 	void Game::update()
 	{
 		// Update entities

@@ -46,10 +46,17 @@ int main(int argc, char **argv)
 	}
 	catch (luabind::error &e)
 	{
-        lua_State *state = e.state();
+		lua_State *state = e.state();
 		std::cerr << "Script exception: " << e.what() << std::endl;
-		std::cerr <<  lua_tostring(state, -1) << std::endl;
+		if (lua_isstring(state, -1))
+		{
+			std::cerr << lua_tostring(state, -1) << std::endl;
+		}
+		else
+		{
+			std::cerr << "No valid error message!" << std::endl;
+		}
 		return -1;
-    }
+	}
 	return 0;
 }

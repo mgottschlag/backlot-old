@@ -456,7 +456,7 @@ namespace backlot
 					intersection2))
 				{
 					*collision = Vector2F(hitx, hity);
-					std::cerr << "Error: Wrong intersection detection." << std::endl;
+					std::cerr << "Error: Wrong intersection detection (" << hitx << "/" << hity << ")." << std::endl;
 					return false;
 				}
 				*collision = intersection1;
