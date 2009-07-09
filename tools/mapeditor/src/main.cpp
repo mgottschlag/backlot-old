@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "EditorWindow.hpp"
 #include "Game.hpp"
+#include "TileSet.hpp"
 
 #include <QApplication>
 #include <QFileDialog>
@@ -47,6 +48,7 @@ int main(int argc, char **argv)
 			"passed to the program.");
 		return -1;
 	}
+	TileSet::loadAll();
 
 	EditorWindow window;
 	window.show();

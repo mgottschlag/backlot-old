@@ -19,29 +19,53 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _GAME_HPP_
-#define _GAME_HPP_
+#include "TileSet.hpp"
+#include "Game.hpp"
 
-#include <string>
-#include <vector>
+#include <iostream>
 
-class Game
+TileSet::~TileSet()
 {
-	public:
-		static Game &get();
+}
 
-		bool init(std::string path);
-		std::string getPath();
+TileSet *TileSet::get(std::string name)
+{
+}
+Tile *TileSet::getTile(std::string name)
+{
+}
+void TileSet::loadAll()
+{
+	std::vector<std::string> tilesetnames = Game::get().getTileSets();
+	for (unsigned int i = 0; i < tilesetnames.size(); i++)
+	{
+		std::cout << "Loading tile set \"" << tilesetnames[i] << "\"." << std::endl;
+		// Load tile set
+		TileSet *tileset = new TileSet();
+		if (!tileset->load(tilesetnames[i]))
+		{
+			std::cout << "Could not load tile set!" << std::endl;
+			delete tileset;
+			continue;
+		}
+		// Add to tile set list
+		tilesets.insert(std::pair<std::string, TileSet*>(tilesetnames[i], tileset));
+	}
+}
+std::vector<std::string> TileSet::getTileSets()
+{
+}
+std::vector<std::string> TileSet::getTiles()
+{
+}
 
-		std::vector<std::string> getMaps();
-		std::vector<std::string> getTileSets();
-	private:
-		Game();
+TileSet::TileSet()
+{
+}
 
-		std::vector<std::string> getDirectoryList(std::string directory,
-			std::string extension);
+bool TileSet::load(std::string name)
+{
+	return true;
+}
 
-		std::string path;
-};
-
-#endif
+std::map<std::string, TileSet*> TileSet::tilesets;

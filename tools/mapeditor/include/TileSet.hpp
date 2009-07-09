@@ -19,29 +19,32 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _GAME_HPP_
-#define _GAME_HPP_
+#ifndef _TILESET_HPP_
+#define _TILESET_HPP_
 
 #include <string>
 #include <vector>
+#include <map>
 
-class Game
+class Tile;
+
+class TileSet
 {
 	public:
-		static Game &get();
+		~TileSet();
 
-		bool init(std::string path);
-		std::string getPath();
-
-		std::vector<std::string> getMaps();
+		static TileSet *get(std::string name);
+		static Tile *getTile(std::string name);
+		static void loadAll();
 		std::vector<std::string> getTileSets();
+		std::vector<std::string> getTiles();
+
 	private:
-		Game();
+		TileSet();
 
-		std::vector<std::string> getDirectoryList(std::string directory,
-			std::string extension);
+		bool load(std::string name);
 
-		std::string path;
+		static std::map<std::string, TileSet*> tilesets;
 };
 
 #endif

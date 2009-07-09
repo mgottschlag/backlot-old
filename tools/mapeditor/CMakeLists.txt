@@ -15,6 +15,7 @@ set(SRC
 	src/TilePreview.cpp
 	src/Map.cpp
 	src/Game.cpp
+	src/TileSet.cpp
 )
 
 set(MOC_H
