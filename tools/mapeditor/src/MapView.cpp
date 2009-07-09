@@ -37,6 +37,7 @@ void MapView::paintGL()
 }
 void MapView::resizeGL(int width, int height)
 {
+	glViewport(0, 0, width, height);
 }
 void MapView::mousePressEvent(QMouseEvent *event)
 {

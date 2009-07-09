@@ -19,36 +19,26 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "EditorWindow.hpp"
-#include "Game.hpp"
+#ifndef _GAME_HPP_
+#define _GAME_HPP_
 
-#include <QApplication>
-#include <QFileDialog>
-#include <QMessageBox>
+#include <string>
+#include <vector>
 
-int main(int argc, char **argv)
+class Game
 {
-	QApplication app(argc, argv);
-	// Initialize game data
-	std::string gamedirectory = "";
-	if (argc == 2)
-	{
-		gamedirectory = argv[1];
-	}
-	else
-	{
-		gamedirectory = QFileDialog::getExistingDirectory(0,
-			"Choose a game directory", ".").toAscii().constData();
-	}
-	if ((gamedirectory == "") || !Game::get().init(gamedirectory))
-	{
-		QMessageBox::critical(0, "No valid game directory available.",
-			"Could not open the game data because no valid game directory was "
-			"passed to the program.");
-		return -1;
-	}
+	public:
+		static Game &get();
 
-	EditorWindow window;
-	window.show();
-	return app.exec();
-}
+		bool init(std::string path);
+		std::string getPath();
+
+		std::vector<std::string> getMaps();
+		std::vector<std::string> getTileSets();
+	private:
+		Game();
+
+		std::string path;
+};
+
+#endif

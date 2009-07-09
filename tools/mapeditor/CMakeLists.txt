@@ -13,12 +13,15 @@ set(SRC
 	src/EditorWindow.cpp
 	src/MapView.cpp
 	src/TilePreview.cpp
+	src/Map.cpp
+	src/Game.cpp
 )
 
 set(MOC_H
 	include/EditorWindow.hpp
 	include/MapView.hpp
 	include/TilePreview.hpp
+	include/Map.hpp
 )
 
 #qt4_automoc(${SRC})
