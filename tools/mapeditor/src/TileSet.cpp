@@ -30,9 +30,26 @@ TileSet::~TileSet()
 
 TileSet *TileSet::get(std::string name)
 {
+	std::map<std::string, TileSet*>::iterator it = tilesets.find(name);
+	if (it == tilesets.end())
+		return 0;
+	return it->second;
 }
 Tile *TileSet::getTile(std::string name)
 {
+	// Split name
+	std::string tilesetname = name.substr(0, name.find("."));
+	std::string tilename = name.substr(name.find(".") + 1);
+	// Get tile set
+	TileSet *tileset = get(tilesetname);
+	if (!tileset)
+		return 0;
+	// Get tile
+	std::map<std::string, Tile*> &tiles = tileset->getTileInfo();
+	std::map<std::string, Tile*>::iterator it = tiles.find(name);
+	if (it == tiles.end())
+		return 0;
+	return it->second;
 }
 void TileSet::loadAll()
 {
@@ -54,9 +71,38 @@ void TileSet::loadAll()
 }
 std::vector<std::string> TileSet::getTileSets()
 {
+	std::vector<std::string> tilesetnames;
+	std::map<std::string, TileSet*>::iterator it = tilesets.begin();
+	while (it != tilesets.end())
+	{
+		tilesetnames.push_back(it->first);
+		it++;
+	}
+	return tilesetnames;
 }
 std::vector<std::string> TileSet::getTiles()
 {
+	std::vector<std::string> tilenames;
+	// Loop through all tile sets
+	std::map<std::string, TileSet*>::iterator it = tilesets.begin();
+	while (it != tilesets.end())
+	{
+		// Loop through all tileset
+		std::map<std::string, Tile*> &tiles = it->second->getTileInfo();
+		std::map<std::string, Tile*>::iterator it2 = tiles.begin();
+		while (it2 != tiles.end())
+		{
+			// Add the tile name to the list
+			tilenames.push_back(it->first + "." + it2->first);
+			it++;
+		}
+		it++;
+	}
+	return tilenames;
+}
+std::map<std::string, Tile*> &TileSet::getTileInfo()
+{
+	return tiles;
 }
 
 TileSet::TileSet()

@@ -36,13 +36,16 @@ class TileSet
 		static TileSet *get(std::string name);
 		static Tile *getTile(std::string name);
 		static void loadAll();
-		std::vector<std::string> getTileSets();
-		std::vector<std::string> getTiles();
+		static std::vector<std::string> getTileSets();
+		static std::vector<std::string> getTiles();
+		std::map<std::string, Tile*> &getTileInfo();
 
 	private:
 		TileSet();
 
 		bool load(std::string name);
+
+		std::map<std::string, Tile*> tiles;
 
 		static std::map<std::string, TileSet*> tilesets;
 };

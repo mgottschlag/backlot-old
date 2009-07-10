@@ -24,6 +24,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QObject>
 
+class Tile;
+
 class Map : public QObject
 {
 	Q_OBJECT
@@ -33,13 +35,21 @@ class Map : public QObject
 
 		bool create(std::string name);
 		bool load(std::string name);
+		bool close();
 		bool isLoaded();
-		bool save(std::string name);
+		bool save(std::string name = "");
 		std::string getName();
 
 		bool compile(std::string name);
+
+		void render();
 	private:
 		Map();
+
+		std::string name;
+		int width;
+		int height;
+		Tile *tiles;
 };
 
 #endif

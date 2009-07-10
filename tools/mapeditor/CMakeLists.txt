@@ -3,7 +3,10 @@ project(mapeditor)
 
 cmake_minimum_required(VERSION 2.4.0)
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter")
+
 find_package(Qt4 REQUIRED)
+
 
 set(QT_USE_OPENGL TRUE)
 include(${QT_USE_FILE})
@@ -16,6 +19,7 @@ set(SRC
 	src/Map.cpp
 	src/Game.cpp
 	src/TileSet.cpp
+	src/Tile.cpp
 )
 
 set(MOC_H

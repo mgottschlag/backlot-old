@@ -19,23 +19,25 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _TILE_HPP_
-#define _TILE_HPP_
+#include "Tile.hpp"
+#include "TileSet.hpp"
 
-class TiXmlElement;
 
-class Tile
+Tile::Tile(TileSet *tileset) : tileset(tileset)
 {
-	public:
-		Tile(TileSet *tileset);
-		~Tile();
+}
+Tile::~Tile()
+{
+}
 
-		bool load(TiXmlElement *xml);
+bool Tile::load(TiXmlElement *xml)
+{
+	return false;
+}
 
-		void render(int x, int y);
-		void renderShadows(int x, int y);
-	private:
-		TileSet *tileset;
-};
-
-#endif
+void Tile::render(int x, int y)
+{
+}
+void Tile::renderShadows(int x, int y)
+{
+}

@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Map.hpp"
+#include "Tile.hpp"
 
 Map &Map::get()
 {
@@ -29,15 +30,33 @@ Map &Map::get()
 
 bool Map::create(std::string name)
 {
-	return false;
+	// Close old map
+	if (isLoaded())
+		close();
+	// Create empty map
+	this->name = name;
+	width = 128;
+	height = 128;
+	return true;
 }
 bool Map::load(std::string name)
 {
+	// Close old map
+	if (isLoaded())
+		close();
+	// Load map
+	// TODO
 	return false;
+}
+bool Map::close()
+{
+	delete[] tiles;
+	name = "";
+	return true;
 }
 bool Map::isLoaded()
 {
-	return false;
+	return name != "";
 }
 bool Map::save(std::string name)
 {
@@ -45,12 +64,21 @@ bool Map::save(std::string name)
 }
 std::string Map::getName()
 {
+	return name;
 }
 
 bool Map::compile(std::string name)
+{
+	return false;
+}
+
+void Map::render()
 {
 }
 
 Map::Map()
 {
+	width = 0;
+	height = 0;
+	tiles = 0;
 }
