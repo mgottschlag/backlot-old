@@ -22,6 +22,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Tile.hpp"
 #include "TileSet.hpp"
 
+#include "tinyxml.h"
+
+#include <iostream>
 
 Tile::Tile(TileSet *tileset) : tileset(tileset)
 {
@@ -32,7 +35,33 @@ Tile::~Tile()
 
 bool Tile::load(TiXmlElement *xml)
 {
+	// Read attributes
+	if (!xml->Attribute("name"))
+	{
+		std::cerr << "Tile: No name given." << std::endl;
+		return false;
+	}
+	std::string name = xml->Attribute("name");
+	if (!xml->Attribute("size") || !xml->Attribute("height"))
+	{
+		std::cerr << name << ": size or height missing." << std::endl;
+		return false;
+	}
+	size = xml->Attribute("size");
+	height = atof(xml->Attribute("height"));
+	// Load quads
+	// TODO
+	std::cout << tileset->getName() << "." << name << " loaded." << std::endl;
 	return false;
+}
+
+const Vector2F &Tile::getSize()
+{
+	return size;
+}
+float Tile::getHeight()
+{
+	return height;
 }
 
 void Tile::render(int x, int y)

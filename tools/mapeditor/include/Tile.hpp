@@ -22,6 +22,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _TILE_HPP_
 #define _TILE_HPP_
 
+#include "Vector2.hpp"
+using namespace backlot;
+
+class TileSet;
 class TiXmlElement;
 
 class Tile
@@ -32,10 +36,16 @@ class Tile
 
 		bool load(TiXmlElement *xml);
 
+		const Vector2F &getSize();
+		float getHeight();
+
 		void render(int x, int y);
 		void renderShadows(int x, int y);
 	private:
 		TileSet *tileset;
+
+		Vector2F size;
+		float height;
 };
 
 #endif

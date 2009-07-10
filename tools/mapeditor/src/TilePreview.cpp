@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "TilePreview.hpp"
+#include "TileSet.hpp"
 
 TilePreview::TilePreview(QWidget *parent) : QGLWidget(parent)
 {
@@ -29,6 +30,7 @@ void TilePreview::initializeGL()
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	TileSet::loadPreviewTextures();
 }
 void TilePreview::paintGL()
 {

@@ -40,12 +40,24 @@ class TileSet
 		static std::vector<std::string> getTiles();
 		std::map<std::string, Tile*> &getTileInfo();
 
+		static void loadTextures();
+		static void loadPreviewTextures();
+		unsigned int getTexture();
+		unsigned int getPreviewTexture();
+
+		std::string getName();
+
 	private:
 		TileSet();
 
 		bool load(std::string name);
 
+		static unsigned int loadTexture(std::string name);
+
+		std::string name;
 		std::map<std::string, Tile*> tiles;
+		unsigned int texture;
+		unsigned int prevtexture;
 
 		static std::map<std::string, TileSet*> tilesets;
 };

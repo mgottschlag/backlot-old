@@ -20,6 +20,10 @@ set(SRC
 	src/Game.cpp
 	src/TileSet.cpp
 	src/Tile.cpp
+	../../src/support/tinystr.cpp
+	../../src/support/tinyxml.cpp
+	../../src/support/tinyxmlerror.cpp
+	../../src/support/tinyxmlparser.cpp
 )
 
 set(MOC_H
@@ -38,7 +42,7 @@ set(UIS
 
 QT4_WRAP_UI(UIS_H ${UIS})
 
-include_directories(include ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
+include_directories(include ../../include/support ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
 
 add_executable(mapeditor ${SRC} ${UIS_H} ${MOC_SRC})
 target_link_libraries(mapeditor ${QT_LIBRARIES} ${QT_QTOPENGL_LIBRARIES})

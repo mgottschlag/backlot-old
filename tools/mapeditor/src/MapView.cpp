@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "MapView.hpp"
+#include "TileSet.hpp"
 
 MapView::MapView(QWidget *parent) : QGLWidget(parent)
 {
@@ -29,6 +30,7 @@ void MapView::initializeGL()
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	TileSet::loadTextures();
 }
 void MapView::paintGL()
 {

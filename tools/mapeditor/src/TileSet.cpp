@@ -21,8 +21,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "TileSet.hpp"
 #include "Game.hpp"
+#include "Tile.hpp"
+
+#include "tinyxml.h"
 
 #include <iostream>
+#include <QImage>
+#include <QGLWidget>
 
 TileSet::~TileSet()
 {
@@ -105,13 +110,98 @@ std::map<std::string, Tile*> &TileSet::getTileInfo()
 	return tiles;
 }
 
+void TileSet::loadTextures()
+{
+	std::vector<std::string> tilenames;
+	// Loop through all tile sets
+	std::map<std::string, TileSet*>::iterator it = tilesets.begin();
+	while (it != tilesets.end())
+	{
+		it->second->prevtexture = loadTexture(it->first);
+		it++;
+	}
+}
+void TileSet::loadPreviewTextures()
+{
+	std::vector<std::string> tilenames;
+	// Loop through all tile sets
+	std::map<std::string, TileSet*>::iterator it = tilesets.begin();
+	while (it != tilesets.end())
+	{
+		it->second->texture = loadTexture(it->first);
+		it++;
+	}
+}
+unsigned int TileSet::getTexture()
+{
+	return texture;
+}
+unsigned int TileSet::getPreviewTexture()
+{
+	return prevtexture;
+}
+
+std::string TileSet::getName()
+{
+	return name;
+}
+
 TileSet::TileSet()
 {
 }
 
 bool TileSet::load(std::string name)
 {
+	std::string filename = Game::get().getPath() + "/tilesets/" + name + ".xml";
+	this->name = name;
+	// Open XML file
+	TiXmlDocument xml(filename.c_str());
+	if (!xml.LoadFile() || xml.Error())
+	{
+		std::cerr << "Could not load XML file " << name << ".xml: " << xml.ErrorDesc() << std::endl;
+		return false;
+	}
+	TiXmlNode *node = xml.FirstChild("tileset");
+	if (!node)
+	{
+		std::cerr << "Parser error: <tileset> not found." << std::endl;
+		return false;
+	}
+	TiXmlElement *root = node->ToElement();
+	// Load tiles
+	TiXmlNode *tilenode = root->FirstChild("tile");
+	while (tilenode)
+	{
+		TiXmlElement *tile = tilenode->ToElement();
+		if (tile)
+		{
+			Tile *newtile = new Tile(this);
+			if (newtile->load(tile))
+			{
+				tiles.insert(std::pair<std::string, Tile*>(tile->Attribute("name"), newtile));
+			}
+		}
+		tilenode = node->IterateChildren("tile", tilenode);
+	}
 	return true;
+}
+
+unsigned int TileSet::loadTexture(std::string name)
+{
+	// Load the image
+	std::string filename = Game::get().getPath() + "/tilesets/" + name + ".png";
+	QImage orig;
+	orig.load(filename.c_str());
+	QImage converted = QGLWidget::convertToGLFormat(orig);
+	// Create a texture
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, converted.width(), converted.height(), 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, converted.bits());
+	return texture;
 }
 
 std::map<std::string, TileSet*> TileSet::tilesets;
