@@ -21,8 +21,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "EditorWindow.hpp"
 #include "Map.hpp"
+#include "TileSet.hpp"
 
 #include <QMessageBox>
+#include <iostream>
 
 EditorWindow::EditorWindow() : QMainWindow(), newmap(this), editgroup(this)
 {
@@ -41,12 +43,21 @@ EditorWindow::EditorWindow() : QMainWindow(), newmap(this), editgroup(this)
 	QObject::connect(ui.ActionMiniMap, SIGNAL(toggled(bool)), ui.levelview, SLOT(showMiniMap(bool)));
 	ui.ActionMiniMap->setChecked(true);
 	QObject::connect(ui.resize, SIGNAL(clicked()), this, SLOT(resize()));
+	QObject::connect(ui.tilelist, SIGNAL(clicked(QModelIndex)), this, SLOT(selectTile(QModelIndex)));
 	// Create edit input group
 	editgroup.addAction(ui.ActionDraw);
 	editgroup.addAction(ui.ActionErase);
 	editgroup.addAction(ui.ActionSelect);
 	editgroup.setExclusive(true);
 	ui.ActionSelect->setChecked(true);
+	QObject::connect(&editgroup, SIGNAL(triggered(QAction*)), this, SLOT(setAction(QAction*)));
+	// Fill tile list
+	std::vector<std::string> tilenames = TileSet::getTiles();
+	for (unsigned int i = 0; i < tilenames.size(); i++)
+	{
+		tilelist.appendRow(new QStandardItem(tilenames[i].c_str()));
+	}
+	ui.tilelist->setModel(&tilelist);
 }
 
 void EditorWindow::newMap()
@@ -106,6 +117,31 @@ void EditorWindow::resize()
 	Map::get().setWidth(ui.width->value());
 	Map::get().setHeight(ui.height->value());
 	ui.levelview->repaint();
+}
+void EditorWindow::selectTile(const QModelIndex &index)
+{
+	// Get tile
+	QStandardItem *item = tilelist.itemFromIndex(index);
+	std::string tilename = item->text().toAscii().constData();
+	// Set tile as the current tile for editing
+	ui.levelview->setTile(TileSet::getTile(tilename));
+	// Update preview
+	// TODO
+}
+void EditorWindow::setAction(QAction *action)
+{
+	if (action == ui.ActionDraw)
+	{
+		ui.levelview->setUserAction(EUA_DrawTile);
+	}
+	else if (action == ui.ActionErase)
+	{
+		ui.levelview->setUserAction(EUA_EraseTile);
+	}
+	else
+	{
+		ui.levelview->setUserAction(EUA_None);
+	}
 }
 
 void EditorWindow::closeEvent(QCloseEvent *event)

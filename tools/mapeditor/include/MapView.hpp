@@ -24,12 +24,24 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QGLWidget>
 
+class Tile;
+
+enum UserAction
+{
+	EUA_None,
+	EUA_DrawTile,
+	EUA_EraseTile
+};
+
 class MapView : public QGLWidget
 {
 	Q_OBJECT
 
 	public:
 		MapView(QWidget *parent = 0);
+
+		void setTile(Tile *tile);
+		void setUserAction(UserAction action);
 
 	public slots:
 		void showGrid(bool grid);
@@ -49,6 +61,8 @@ class MapView : public QGLWidget
 		float camerax;
 		float cameray;
 		bool moving;
+		Tile *currenttile;
+		UserAction action;
 };
 
 #endif

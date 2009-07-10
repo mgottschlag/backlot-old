@@ -10,16 +10,16 @@
 		<!-- container -->
 		<quad height="2" offset="0/0" texture="0/64/32/64" />
 		<!-- shadow -->
-		<quad height="1" offset="-32/-32" texture="32/128/32/32" rotated="2" />
-		<quad height="1" offset="0/-32" texture="0/128/32/32" rotated="2" />
-		<quad height="1" offset="32/-32" texture="32/128/32/32" rotated="3" />
-		<quad height="1" offset="-32/0" texture="0/128/32/32" rotated="1" />
-		<quad height="1" offset="-32/32" texture="0/128/32/32" rotated="1" />
-		<quad height="1" offset="32/0" texture="0/128/32/32" rotated="3" />
-		<quad height="1" offset="32/32" texture="0/128/32/32" rotated="3" />
-		<quad height="1" offset="-32/64" texture="32/128/32/32" rotated="1" />
-		<quad height="1" offset="0/64" texture="0/128/32/32" />
-		<quad height="1" offset="32/64" texture="32/128/32/32" />
+		<quad height="1" offset="-32/-32" texture="32/128/32/32" rotated="2" type="shadow" />
+		<quad height="1" offset="0/-32" texture="0/128/32/32" rotated="2" type="shadow" />
+		<quad height="1" offset="32/-32" texture="32/128/32/32" rotated="3" type="shadow" />
+		<quad height="1" offset="-32/0" texture="0/128/32/32" rotated="1" type="shadow" />
+		<quad height="1" offset="-32/32" texture="0/128/32/32" rotated="1" type="shadow" />
+		<quad height="1" offset="32/0" texture="0/128/32/32" rotated="3" type="shadow" />
+		<quad height="1" offset="32/32" texture="0/128/32/32" rotated="3" type="shadow" />
+		<quad height="1" offset="-32/64" texture="32/128/32/32" rotated="1" type="shadow" />
+		<quad height="1" offset="0/64" texture="0/128/32/32" type="shadow" />
+		<quad height="1" offset="32/64" texture="32/128/32/32" type="shadow" />
 	</tile>
 	<tile name="container_single" size="32/32" height="2">
 		<quad height="2" offset="0/0" texture="0/64/32/32" />

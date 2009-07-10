@@ -30,7 +30,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="settings">
        <property name="geometry">
@@ -194,7 +194,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QTreeView" name="tilelist"/>
+         <widget class="QTreeView" name="tilelist">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

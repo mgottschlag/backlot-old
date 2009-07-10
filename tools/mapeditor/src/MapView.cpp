@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "MapView.hpp"
 #include "TileSet.hpp"
 #include "Map.hpp"
+#include "Tile.hpp"
 
 #include <QMouseEvent>
 #include <iostream>
@@ -35,6 +36,19 @@ MapView::MapView(QWidget *parent) : QGLWidget(parent)
 	mousex = 0;
 	mousey = 0;
 	moving = false;
+	currenttile = 0;
+	action = EUA_None;
+	setMouseTracking(true);
+}
+
+void MapView::setTile(Tile *tile)
+{
+	std::cout << "Tile: " << tile << std::endl;
+	currenttile = tile;
+}
+void MapView::setUserAction(UserAction action)
+{
+	this->action = action;
 }
 
 void MapView::showGrid(bool grid)
@@ -57,6 +71,9 @@ void MapView::initializeGL()
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glMatrixMode(GL_TEXTURE);
+	glScalef(1.0, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
 	TileSet::loadTextures();
 }
 void MapView::paintGL()
@@ -101,6 +118,21 @@ void MapView::paintGL()
 			glVertex2f(width, y);
 		}
 		glEnd();
+	}
+	// Draw cursor
+	if (action == EUA_DrawTile)
+	{
+		int x = (float)mousex / 32 + camerax;
+		int y = (float)mousey / 32 + cameray;
+		if (x >= 0 && x < width
+			&& y >= 0 && y < height)
+		{
+			if (currenttile)
+			{
+				currenttile->render(x, y);
+				currenttile->renderShadows(x, y);
+			}
+		}
 	}
 	// Draw mini map
 	if (minimap)
@@ -179,8 +211,8 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 		camerax -= (float)diffx / 32;
 		int diffy = event->y() - mousey;
 		cameray -= (float)diffy / 32;
-		mousex = event->x();
-		mousey = event->y();
-		repaint();
 	}
+	mousex = event->x();
+	mousey = event->y();
+	repaint();
 }

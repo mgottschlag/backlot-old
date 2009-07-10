@@ -51,7 +51,7 @@ Tile *TileSet::getTile(std::string name)
 		return 0;
 	// Get tile
 	std::map<std::string, Tile*> &tiles = tileset->getTileInfo();
-	std::map<std::string, Tile*>::iterator it = tiles.find(name);
+	std::map<std::string, Tile*>::iterator it = tiles.find(tilename);
 	if (it == tiles.end())
 		return 0;
 	return it->second;
@@ -99,7 +99,7 @@ std::vector<std::string> TileSet::getTiles()
 		{
 			// Add the tile name to the list
 			tilenames.push_back(it->first + "." + it2->first);
-			it++;
+			it2++;
 		}
 		it++;
 	}

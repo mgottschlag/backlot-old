@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tinyxml.h"
 
 #include <iostream>
+#include <GL/gl.h>
 
 Tile::Tile(TileSet *tileset) : tileset(tileset)
 {
@@ -96,7 +97,7 @@ bool Tile::load(TiXmlElement *xml)
 		quadnode = xml->IterateChildren("quad", quadnode);
 	}
 	std::cout << tileset->getName() << "." << name << " loaded." << std::endl;
-	return false;
+	return true;
 }
 
 const Vector2F &Tile::getSize()
@@ -110,6 +111,33 @@ float Tile::getHeight()
 
 void Tile::render(int x, int y)
 {
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	glBindTexture(GL_TEXTURE_2D, tileset->getTexture());
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	for (unsigned int i = 0; i < quads.size(); i++)
+	{
+		float height = quads[i].height;
+		Vector2F offset = quads[i].offset;
+		RectangleI texture = quads[i].texture;
+		float texx = (float)texture.x / tileset->getTextureSize().x;
+		float texy = (float)texture.y / tileset->getTextureSize().y;
+		float texwidth = (float)texture.width / tileset->getTextureSize().x;
+		float texheight = (float)texture.height / tileset->getTextureSize().y;
+		glBegin(GL_QUADS);
+			glTexCoord2f(texx, texy);
+			glVertex3f(offset.x, offset.y, height);
+			glTexCoord2f(texx, texy + texheight);
+			glVertex3f(offset.x, offset.y + (float)texture.height / 32, height);
+			glTexCoord2f(texx + texwidth, texy + texheight);
+			glVertex3f(offset.x + (float)texture.width / 32, offset.y + (float)texture.height / 32, height);
+			glTexCoord2f(texx + texwidth, texy);
+			glVertex3f(offset.x + (float)texture.width / 32, offset.y, height);
+		glEnd();
+	}
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 }
 void Tile::renderShadows(int x, int y)
 {

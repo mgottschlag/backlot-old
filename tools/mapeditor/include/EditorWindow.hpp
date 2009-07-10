@@ -25,6 +25,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ui_MainWindow.h"
 #include "NewMapDialog.hpp"
 
+#include <QStandardItemModel>
+
 class EditorWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -39,6 +41,8 @@ class EditorWindow : public QMainWindow
 		void compile();
 		void about();
 		void resize();
+		void selectTile(const QModelIndex &index);
+		void setAction(QAction *action);
 
 	protected:
 		void closeEvent(QCloseEvent *event);
@@ -46,6 +50,7 @@ class EditorWindow : public QMainWindow
 		Ui::MainWindow ui;
 		NewMapDialog newmap;
 		QActionGroup editgroup;
+		QStandardItemModel tilelist;
 };
 
 #endif
