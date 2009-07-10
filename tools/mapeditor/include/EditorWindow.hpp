@@ -38,6 +38,7 @@ class EditorWindow : public QMainWindow
 		void saveAs();
 		void compile();
 		void about();
+		void resize();
 
 	protected:
 		void closeEvent(QCloseEvent *event);

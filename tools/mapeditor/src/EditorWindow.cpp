@@ -40,6 +40,7 @@ EditorWindow::EditorWindow() : QMainWindow(), newmap(this), editgroup(this)
 	ui.ActionGrid->setChecked(true);
 	QObject::connect(ui.ActionMiniMap, SIGNAL(toggled(bool)), ui.levelview, SLOT(showMiniMap(bool)));
 	ui.ActionMiniMap->setChecked(true);
+	QObject::connect(ui.resize, SIGNAL(clicked()), this, SLOT(resize()));
 	// Create edit input group
 	editgroup.addAction(ui.ActionDraw);
 	editgroup.addAction(ui.ActionErase);
@@ -68,6 +69,8 @@ void EditorWindow::newMap()
 	Map::get().create(mapname);
 	Map::get().setWidth(width);
 	Map::get().setHeight(height);
+	ui.width->setValue(width);
+	ui.height->setValue(height);
 	setWindowTitle((std::string("Backlot Map Editor - ") + mapname).c_str());
 	// Reset camera position
 	// TODO
@@ -95,6 +98,14 @@ void EditorWindow::compile()
 void EditorWindow::about()
 {
 	QMessageBox::about(this, "Backlot Map Editor", "Backlot Map Editor");
+}
+void EditorWindow::resize()
+{
+	if (!Map::get().isLoaded())
+		return;
+	Map::get().setWidth(ui.width->value());
+	Map::get().setHeight(ui.height->value());
+	ui.levelview->repaint();
 }
 
 void EditorWindow::closeEvent(QCloseEvent *event)

@@ -109,6 +109,10 @@ void MapView::paintGL()
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, this->width(), this->height(), 0, -128, 127);
+		if (width > height)
+			glScalef(1.0, (float)height / width, 1.0);
+		else
+			glScalef((float)width / height, 1.0, 1.0);
 		glMatrixMode(GL_MODELVIEW);
 		// Background
 		glColor4f(0.1, 0.1, 0.1, 1.0);
