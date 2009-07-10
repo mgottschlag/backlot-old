@@ -98,11 +98,12 @@ namespace backlot
 		while (tilenode)
 		{
 			TiXmlElement *tile = tilenode->ToElement();
-			if (!tile)
-				continue;
-			if (!loadTile(tile))
+			if (tile)
 			{
-				return false;
+				if (!loadTile(tile))
+				{
+					return false;
+				}
 			}
 			tilenode = node->IterateChildren("tile", tilenode);
 		}
@@ -158,7 +159,10 @@ namespace backlot
 		{
 			TiXmlElement *quad = quadnode->ToElement();
 			if (!quad)
+			{
+				quadnode = xml->IterateChildren("quad", quadnode);
 				continue;
+			}
 			// Quad attributes
 			if (!quad->Attribute("layer") || !quad->Attribute("texture"))
 			{
