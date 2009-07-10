@@ -117,7 +117,7 @@ void TileSet::loadTextures()
 	std::map<std::string, TileSet*>::iterator it = tilesets.begin();
 	while (it != tilesets.end())
 	{
-		it->second->prevtexture = loadTexture(it->first);
+		it->second->prevtexture = loadTexture(it->first, &it->second->texturesize);
 		it++;
 	}
 }
@@ -139,6 +139,10 @@ unsigned int TileSet::getTexture()
 unsigned int TileSet::getPreviewTexture()
 {
 	return prevtexture;
+}
+Vector2I TileSet::getTextureSize()
+{
+	return texturesize;
 }
 
 std::string TileSet::getName()
@@ -186,13 +190,19 @@ bool TileSet::load(std::string name)
 	return true;
 }
 
-unsigned int TileSet::loadTexture(std::string name)
+unsigned int TileSet::loadTexture(std::string name, Vector2I *size)
 {
 	// Load the image
 	std::string filename = Game::get().getPath() + "/tilesets/" + name + ".png";
 	QImage orig;
 	orig.load(filename.c_str());
 	QImage converted = QGLWidget::convertToGLFormat(orig);
+	// Return the size
+	if (size)
+	{
+		size->x = orig.width();
+		size->y = orig.height();
+	}
 	// Create a texture
 	unsigned int texture;
 	glGenTextures(1, &texture);

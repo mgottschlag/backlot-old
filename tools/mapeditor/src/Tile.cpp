@@ -50,7 +50,51 @@ bool Tile::load(TiXmlElement *xml)
 	size = xml->Attribute("size");
 	height = atof(xml->Attribute("height"));
 	// Load quads
-	// TODO
+	TiXmlNode *quadnode = xml->FirstChild("quad");
+	while (quadnode)
+	{
+		TiXmlElement *quad = quadnode->ToElement();
+		if (!quad)
+		{
+			quadnode = xml->IterateChildren("quad", quadnode);
+			continue;
+		}
+		// Quad attributes
+		if (!quad->Attribute("height") || !quad->Attribute("texture"))
+		{
+			std::cerr << "Missing quad height or texture." << std::endl;
+			return false;
+		}
+		float height = atoi(quad->Attribute("height"));
+		RectangleI texturerect = quad->Attribute("texture");
+
+		Vector2I offset;
+		if (quad->Attribute("offset"))
+		{
+			offset = quad->Attribute("offset");
+		}
+		int rotated = 0;
+		if (quad->Attribute("rotated"))
+		{
+			rotated = atoi(quad->Attribute("rotated"));
+		}
+		bool shadow = false;
+		if (quad->Attribute("type"))
+		{
+			shadow = !strcmp(quad->Attribute("type"), "shadow");
+		}
+		// Add quad to tile
+		Quad quadinfo;
+		quadinfo.height = height;
+		quadinfo.texture = texturerect;
+		quadinfo.offset = offset;
+		quadinfo.rotated = rotated;
+		if (shadow)
+			shadowquads.push_back(quadinfo);
+		else
+			quads.push_back(quadinfo);
+		quadnode = xml->IterateChildren("quad", quadnode);
+	}
 	std::cout << tileset->getName() << "." << name << " loaded." << std::endl;
 	return false;
 }

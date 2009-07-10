@@ -23,10 +23,21 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _TILE_HPP_
 
 #include "Vector2.hpp"
+#include "Rectangle.hpp"
 using namespace backlot;
+
+#include <vector>
 
 class TileSet;
 class TiXmlElement;
+
+struct Quad
+{
+	float height;
+	int rotated;
+	Vector2I offset;
+	RectangleI texture;
+};
 
 class Tile
 {
@@ -46,6 +57,8 @@ class Tile
 
 		Vector2F size;
 		float height;
+		std::vector<Quad> quads;
+		std::vector<Quad> shadowquads;
 };
 
 #endif

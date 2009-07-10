@@ -22,6 +22,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _TILESET_HPP_
 #define _TILESET_HPP_
 
+#include "Vector2.hpp"
+using namespace backlot;
+
 #include <string>
 #include <vector>
 #include <map>
@@ -44,6 +47,7 @@ class TileSet
 		static void loadPreviewTextures();
 		unsigned int getTexture();
 		unsigned int getPreviewTexture();
+		Vector2I getTextureSize();
 
 		std::string getName();
 
@@ -52,12 +56,13 @@ class TileSet
 
 		bool load(std::string name);
 
-		static unsigned int loadTexture(std::string name);
+		static unsigned int loadTexture(std::string name, Vector2I *size = 0);
 
 		std::string name;
 		std::map<std::string, Tile*> tiles;
 		unsigned int texture;
 		unsigned int prevtexture;
+		Vector2I texturesize;
 
 		static std::map<std::string, TileSet*> tilesets;
 };
