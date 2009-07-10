@@ -30,12 +30,25 @@ class MapView : public QGLWidget
 
 	public:
 		MapView(QWidget *parent = 0);
+
+	public slots:
+		void showGrid(bool grid);
+		void showMiniMap(bool minimap);
 	protected:
 		void initializeGL();
 		void paintGL();
 		void resizeGL(int width, int height);
 		void mousePressEvent(QMouseEvent *event);
+		void mouseReleaseEvent(QMouseEvent *event);
 		void mouseMoveEvent(QMouseEvent *event);
+	private:
+		bool grid;
+		bool minimap;
+		int mousex;
+		int mousey;
+		float camerax;
+		float cameray;
+		bool moving;
 };
 
 #endif

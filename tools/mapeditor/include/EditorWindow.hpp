@@ -44,6 +44,7 @@ class EditorWindow : public QMainWindow
 	private:
 		Ui::MainWindow ui;
 		NewMapDialog newmap;
+		QActionGroup editgroup;
 };
 
 #endif

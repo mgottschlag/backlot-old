@@ -24,10 +24,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QMessageBox>
 
-EditorWindow::EditorWindow() : QMainWindow(), newmap(this)
+EditorWindow::EditorWindow() : QMainWindow(), newmap(this), editgroup(this)
 {
 	ui.setupUi(this);
 
+	// Set up input
 	QObject::connect(ui.ActionNew, SIGNAL(activated()), &newmap, SLOT(exec()));
 	QObject::connect(ui.ActionOpen, SIGNAL(activated()), this, SLOT(open()));
 	QObject::connect(ui.ActionSave, SIGNAL(activated()), this, SLOT(save()));
@@ -35,6 +36,16 @@ EditorWindow::EditorWindow() : QMainWindow(), newmap(this)
 	QObject::connect(ui.ActionCompile, SIGNAL(activated()), this, SLOT(compile()));
 	QObject::connect(ui.ActionAbout, SIGNAL(activated()), this, SLOT(about()));
 	QObject::connect(&newmap, SIGNAL(accepted()), this, SLOT(newMap()));
+	QObject::connect(ui.ActionGrid, SIGNAL(toggled(bool)), ui.levelview, SLOT(showGrid(bool)));
+	ui.ActionGrid->setChecked(true);
+	QObject::connect(ui.ActionMiniMap, SIGNAL(toggled(bool)), ui.levelview, SLOT(showMiniMap(bool)));
+	ui.ActionMiniMap->setChecked(true);
+	// Create edit input group
+	editgroup.addAction(ui.ActionDraw);
+	editgroup.addAction(ui.ActionErase);
+	editgroup.addAction(ui.ActionSelect);
+	editgroup.setExclusive(true);
+	ui.ActionSelect->setChecked(true);
 }
 
 void EditorWindow::newMap()
@@ -57,18 +68,29 @@ void EditorWindow::newMap()
 	Map::get().create(mapname);
 	Map::get().setWidth(width);
 	Map::get().setHeight(height);
+	setWindowTitle((std::string("Backlot Map Editor - ") + mapname).c_str());
+	// Reset camera position
+	// TODO
+	// Repaint
+	ui.levelview->repaint();
 }
 void EditorWindow::open()
 {
+	QMessageBox::information(this, "Unimplemented", "Currently unimplemented.");
 }
 void EditorWindow::save()
 {
+	// Save map
+	if (Map::get().isLoaded())
+		Map::get().save();
 }
 void EditorWindow::saveAs()
 {
+	QMessageBox::information(this, "Unimplemented", "Currently unimplemented.");
 }
 void EditorWindow::compile()
 {
+	QMessageBox::information(this, "Unimplemented", "Currently unimplemented.");
 }
 void EditorWindow::about()
 {
