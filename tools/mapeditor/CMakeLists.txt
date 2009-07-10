@@ -20,6 +20,7 @@ set(SRC
 	src/Game.cpp
 	src/TileSet.cpp
 	src/Tile.cpp
+	src/NewMapDialog.cpp
 	../../src/support/tinystr.cpp
 	../../src/support/tinyxml.cpp
 	../../src/support/tinyxmlerror.cpp
@@ -31,18 +32,25 @@ set(MOC_H
 	include/MapView.hpp
 	include/TilePreview.hpp
 	include/Map.hpp
+	include/NewMapDialog.hpp
 )
 
-#qt4_automoc(${SRC})
 QT4_WRAP_CPP(MOC_SRC ${MOC_H})
 
+set(QRC
+	MapEditor.qrc
+)
+
+QT4_ADD_RESOURCES(QRC_SRC ${QRC})
+
 set(UIS
-	MainWindow.ui
+	ui/MainWindow.ui
+	ui/NewDialog.ui
 )
 
 QT4_WRAP_UI(UIS_H ${UIS})
 
 include_directories(include ../../include/support ${CMAKE_CURRENT_BINARY_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
 
-add_executable(mapeditor ${SRC} ${UIS_H} ${MOC_SRC})
+add_executable(mapeditor ${SRC} ${UIS_H} ${MOC_SRC} ${QRC_SRC})
 target_link_libraries(mapeditor ${QT_LIBRARIES} ${QT_QTOPENGL_LIBRARIES})

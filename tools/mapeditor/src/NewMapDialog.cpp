@@ -19,42 +19,11 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MAP_HPP_
-#define _MAP_HPP_
+#include "NewMapDialog.hpp"
 
-#include <QObject>
+#include <QMessageBox>
 
-class Tile;
-
-class Map : public QObject
+NewMapDialog::NewMapDialog(QWidget *parent) : QDialog(parent)
 {
-	Q_OBJECT
-
-	public:
-		static Map &get();
-
-		bool create(std::string name);
-		bool load(std::string name);
-		bool close();
-		bool isLoaded();
-		bool save(std::string name = "");
-		std::string getName();
-
-		bool compile(std::string name);
-
-		void setWidth(int width);
-		int getWidth();
-		void setHeight(int height);
-		int getHeight();
-
-		void render();
-	private:
-		Map();
-
-		std::string name;
-		int width;
-		int height;
-		Tile **tiles;
-};
-
-#endif
+	ui.setupUi(this);
+}

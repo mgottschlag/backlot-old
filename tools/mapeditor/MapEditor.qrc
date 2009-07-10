@@ -1,0 +1,14 @@
+<RCC>
+  <qresource prefix="icons" >
+    <file>icons/application-exit.png</file>
+    <file>icons/document-export.png</file>
+    <file>icons/document-new.png</file>
+    <file>icons/document-open.png</file>
+    <file>icons/document-save-as.png</file>
+    <file>icons/document-save.png</file>
+    <file>icons/draw-eraser.png</file>
+    <file>icons/draw-freehand.png</file>
+    <file>icons/help-about.png</file>
+    <file>icons/select-rectangular.png</file>
+  </qresource>
+</RCC>

@@ -1,3 +1,4 @@
 /include/moc_*.cxx
-/ui_MainWindow.h
+/ui_*.h
 /mapeditor
+/qrc_*.cxx

@@ -29,6 +29,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 int main(int argc, char **argv)
 {
+	Q_INIT_RESOURCE(MapEditor);
 	QApplication app(argc, argv);
 	// Initialize game data
 	std::string gamedirectory = "";

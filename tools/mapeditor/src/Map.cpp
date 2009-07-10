@@ -35,8 +35,10 @@ bool Map::create(std::string name)
 		close();
 	// Create empty map
 	this->name = name;
-	width = 128;
-	height = 128;
+	width = 1;
+	height = 1;
+	tiles = new Tile*[width * height];
+	tiles[0] = 0;
 	return true;
 }
 bool Map::load(std::string name)
@@ -70,6 +72,66 @@ std::string Map::getName()
 bool Map::compile(std::string name)
 {
 	return false;
+}
+
+void Map::setWidth(int width)
+{
+	Tile **newtiles = new Tile*[width * height];
+	int minwidth = width;
+	if (this->width < width)
+		minwidth = this->width;
+	for (int y = 0; y < height; y++)
+	{
+		// Copy old tiles
+		for (int x = 0; x < minwidth; x++)
+		{
+			newtiles[y * width + x] = tiles[y * this->width + x];
+		}
+		// Set new tiles to 0
+		for (int x = this->width; x < width; x++)
+		{
+			newtiles[y * width + x] = 0;
+		}
+	}
+	// Delete old tiles
+	delete[] tiles;
+	tiles = newtiles;
+	this->width = width;
+}
+int Map::getWidth()
+{
+	return width;
+}
+void Map::setHeight(int height)
+{
+	Tile **newtiles = new Tile*[width * height];
+	int minheight = height;
+	if (this->height < height)
+		minheight = this->height;
+	for (int y = 0; y < minheight; y++)
+	{
+		// Copy old tiles
+		for (int x = 0; x < width; x++)
+		{
+			newtiles[y * width + x] = tiles[y * width + x];
+		}
+	}
+	for (int y = this->height; y < height; y++)
+	{
+		// Set new tiles to 0
+		for (int x = 0; x < width; x++)
+		{
+			newtiles[y * width + x] = 0;
+		}
+	}
+	// Delete old tiles
+	delete[] tiles;
+	tiles = newtiles;
+	this->height = height;
+}
+int Map::getHeight()
+{
+	return height;
 }
 
 void Map::render()

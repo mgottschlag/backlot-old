@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _EDITORWINDOW_HPP_
 
 #include "ui_MainWindow.h"
+#include "NewMapDialog.hpp"
 
 class EditorWindow : public QMainWindow
 {
@@ -30,10 +31,19 @@ class EditorWindow : public QMainWindow
 	public:
 		EditorWindow();
 
+	public slots:
+		void newMap();
+		void open();
+		void save();
+		void saveAs();
+		void compile();
+		void about();
+
 	protected:
 		void closeEvent(QCloseEvent *event);
 	private:
 		Ui::MainWindow ui;
+		NewMapDialog newmap;
 };
 
 #endif

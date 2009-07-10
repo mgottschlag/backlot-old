@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>534</width>
-    <height>518</height>
+    <width>702</width>
+    <height>548</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,15 +30,15 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="settings">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>203</width>
-         <height>270</height>
+         <width>200</width>
+         <height>272</height>
         </rect>
        </property>
        <attribute name="label">
@@ -116,8 +116,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>270</width>
-         <height>270</height>
+         <width>274</width>
+         <height>272</height>
         </rect>
        </property>
        <attribute name="label">
@@ -144,6 +144,14 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tiles">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>274</width>
+         <height>272</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string>Tiles</string>
        </attribute>
@@ -170,6 +178,14 @@
        </layout>
       </widget>
       <widget class="QWidget" name="transitions">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>274</width>
+         <height>272</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string>Transitions</string>
        </attribute>
@@ -180,6 +196,14 @@
        </layout>
       </widget>
       <widget class="QWidget" name="entities">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>274</width>
+         <height>272</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string>Entities</string>
        </attribute>
@@ -190,6 +214,14 @@
        </layout>
       </widget>
       <widget class="QWidget" name="entityproperties">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>274</width>
+         <height>272</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string>Entity properties</string>
        </attribute>
@@ -232,8 +264,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>534</width>
-     <height>21</height>
+     <width>702</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -243,6 +275,7 @@
     <addaction name="ActionNew"/>
     <addaction name="ActionOpen"/>
     <addaction name="ActionSave"/>
+    <addaction name="ActionSaveAs"/>
     <addaction name="separator"/>
     <addaction name="ActionCompile"/>
     <addaction name="separator"/>
@@ -286,6 +319,7 @@
    <addaction name="ActionNew"/>
    <addaction name="ActionOpen"/>
    <addaction name="ActionSave"/>
+   <addaction name="ActionSaveAs"/>
    <addaction name="separator"/>
    <addaction name="ActionCompile"/>
   </widget>
@@ -305,8 +339,8 @@
   </widget>
   <action name="ActionNew">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/document-new.png</normaloff>icons/document-new.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/document-new.png</normaloff>:/icons/icons/document-new.png</iconset>
    </property>
    <property name="text">
     <string>New map</string>
@@ -317,8 +351,8 @@
   </action>
   <action name="ActionOpen">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/document-open.png</normaloff>icons/document-open.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/document-open.png</normaloff>:/icons/icons/document-open.png</iconset>
    </property>
    <property name="text">
     <string>Open map</string>
@@ -326,8 +360,8 @@
   </action>
   <action name="ActionSave">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/document-save.png</normaloff>icons/document-save.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/document-save.png</normaloff>:/icons/icons/document-save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -335,8 +369,8 @@
   </action>
   <action name="ActionCompile">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/document-export.png</normaloff>icons/document-export.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/document-export.png</normaloff>:/icons/icons/document-export.png</iconset>
    </property>
    <property name="text">
     <string>Compile</string>
@@ -347,8 +381,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>icons/draw-eraser.png</normaloff>icons/draw-eraser.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/draw-eraser.png</normaloff>:/icons/icons/draw-eraser.png</iconset>
    </property>
    <property name="text">
     <string>Erase</string>
@@ -359,8 +393,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>icons/draw-freehand.png</normaloff>icons/draw-freehand.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/draw-freehand.png</normaloff>:/icons/icons/draw-freehand.png</iconset>
    </property>
    <property name="text">
     <string>Draw</string>
@@ -368,8 +402,8 @@
   </action>
   <action name="ActionSaveAs">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/document-save-as.png</normaloff>icons/document-save-as.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/document-save-as.png</normaloff>:/icons/icons/document-save-as.png</iconset>
    </property>
    <property name="text">
     <string>SaveAs</string>
@@ -380,8 +414,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>icons/select-rectangular.png</normaloff>icons/select-rectangular.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/select-rectangular.png</normaloff>:/icons/icons/select-rectangular.png</iconset>
    </property>
    <property name="text">
     <string>Select</string>
@@ -389,8 +423,8 @@
   </action>
   <action name="ActionExit">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/application-exit.png</normaloff>icons/application-exit.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/application-exit.png</normaloff>:/icons/icons/application-exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -406,8 +440,8 @@
   </action>
   <action name="ActionAbout">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/help-about.png</normaloff>icons/help-about.png</iconset>
+    <iconset resource="../MapEditor.qrc">
+     <normaloff>:/icons/icons/help-about.png</normaloff>:/icons/icons/help-about.png</iconset>
    </property>
    <property name="text">
     <string>About</string>
@@ -429,7 +463,24 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="MapEditor.qrc"/>
+  <include location="../MapEditor.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>ActionExit</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>266</x>
+     <y>258</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
