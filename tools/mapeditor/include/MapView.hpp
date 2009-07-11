@@ -54,6 +54,7 @@ class MapView : public QGLWidget
 		void mouseReleaseEvent(QMouseEvent *event);
 		void mouseMoveEvent(QMouseEvent *event);
 	private:
+		void performAction();
 		bool grid;
 		bool minimap;
 		int mousex;
@@ -63,6 +64,7 @@ class MapView : public QGLWidget
 		bool moving;
 		Tile *currenttile;
 		UserAction action;
+		bool painting;
 };
 
 #endif

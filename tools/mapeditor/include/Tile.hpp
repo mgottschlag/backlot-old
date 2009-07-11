@@ -53,6 +53,8 @@ class Tile
 		void render(int x, int y);
 		void renderShadows(int x, int y);
 	private:
+		void drawQuad(Quad &quad);
+
 		TileSet *tileset;
 
 		Vector2F size;

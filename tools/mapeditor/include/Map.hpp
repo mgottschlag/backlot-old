@@ -47,6 +47,8 @@ class Map : public QObject
 		void setHeight(int height);
 		int getHeight();
 
+		void setTile(int x, int y, Tile *tile);
+
 		void render();
 	private:
 		Map();

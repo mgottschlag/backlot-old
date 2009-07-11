@@ -22,6 +22,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Map.hpp"
 #include "Tile.hpp"
 
+#include <iostream>
+
 Map &Map::get()
 {
 	static Map map;
@@ -134,8 +136,35 @@ int Map::getHeight()
 	return height;
 }
 
+void Map::setTile(int x, int y, Tile *tile)
+{
+	if (x < 0 || y < 0
+		|| x >= width || y >= height)
+		return;
+	tiles[y * width + x] = tile;
+	// TODO: Remove overlapping tiles
+}
+
 void Map::render()
 {
+	// Render normal quads
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (tiles[y * width + x])
+				tiles[y * width + x]->render(x, y);
+		}
+	}
+	// Render shadows
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (tiles[y * width + x])
+				tiles[y * width + x]->renderShadows(x, y);
+		}
+	}
 }
 
 Map::Map()

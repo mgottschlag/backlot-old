@@ -38,12 +38,12 @@ MapView::MapView(QWidget *parent) : QGLWidget(parent)
 	moving = false;
 	currenttile = 0;
 	action = EUA_None;
+	painting = false;
 	setMouseTracking(true);
 }
 
 void MapView::setTile(Tile *tile)
 {
-	std::cout << "Tile: " << tile << std::endl;
 	currenttile = tile;
 }
 void MapView::setUserAction(UserAction action)
@@ -70,6 +70,7 @@ void MapView::initializeGL()
 {
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_CULL_FACE);
 	glMatrixMode(GL_TEXTURE);
 	glScalef(1.0, -1.0, 1.0);
@@ -101,7 +102,7 @@ void MapView::paintGL()
 	glTranslatef(-camerax, -cameray, 0);
 	glMatrixMode(GL_MODELVIEW);
 	// Draw map
-	// TODO
+	Map::get().render();
 	// Draw grid
 	if (grid)
 	{
@@ -109,13 +110,13 @@ void MapView::paintGL()
 		glBegin(GL_LINES);
 		for (int x = 0; x <= width; x++)
 		{
-			glVertex2f(x, 0);
-			glVertex2f(x, height);
+			glVertex3f(x, 0, 100);
+			glVertex3f(x, height, 100);
 		}
 		for (int y = 0; y <= height; y++)
 		{
-			glVertex2f(0, y);
-			glVertex2f(width, y);
+			glVertex3f(0, y, 100);
+			glVertex3f(width, y, 100);
 		}
 		glEnd();
 	}
@@ -129,6 +130,7 @@ void MapView::paintGL()
 		{
 			if (currenttile)
 			{
+				glClear(GL_DEPTH_BUFFER_BIT);
 				currenttile->render(x, y);
 				currenttile->renderShadows(x, y);
 			}
@@ -191,6 +193,15 @@ void MapView::mousePressEvent(QMouseEvent *event)
 		mousex = event->x();
 		mousey = event->y();
 	}
+	else if (event->button() == Qt::LeftButton)
+	{
+		// Start moving
+		painting = true;
+		mousex = event->x();
+		mousey = event->y();
+		performAction();
+		repaint();
+	}
 }
 void MapView::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -198,6 +209,13 @@ void MapView::mouseReleaseEvent(QMouseEvent *event)
 	{
 		// Stop moving
 		moving = false;
+		mousex = event->x();
+		mousey = event->y();
+	}
+	else if (event->button() == Qt::LeftButton)
+	{
+		// Start moving
+		painting = false;
 		mousex = event->x();
 		mousey = event->y();
 	}
@@ -214,5 +232,36 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 	}
 	mousex = event->x();
 	mousey = event->y();
+	if (painting)
+		performAction();
 	repaint();
+}
+
+void MapView::performAction()
+{
+	// Get map position
+	if (!Map::get().isLoaded())
+		return;
+	int width = Map::get().getWidth();
+	int height = Map::get().getHeight();
+	int x = (float)mousex / 32 + camerax;
+	int y = (float)mousey / 32 + cameray;
+	if (x >= 0 && x < width
+		&& y >= 0 && y < height)
+	{
+		// Perform user action
+		switch (action)
+		{
+			case EUA_None:
+				break;
+			case EUA_DrawTile:
+				if (currenttile)
+					Map::get().setTile(x, y, currenttile);
+				break;
+			case EUA_EraseTile:
+				if (currenttile)
+					Map::get().setTile(x, y, 0);
+				break;
+		};
+	}
 }

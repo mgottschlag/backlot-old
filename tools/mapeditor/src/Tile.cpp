@@ -49,6 +49,7 @@ bool Tile::load(TiXmlElement *xml)
 		return false;
 	}
 	size = xml->Attribute("size");
+	size /= 32;
 	height = atof(xml->Attribute("height"));
 	// Load quads
 	TiXmlNode *quadnode = xml->FirstChild("quad");
@@ -74,6 +75,7 @@ bool Tile::load(TiXmlElement *xml)
 		{
 			offset = quad->Attribute("offset");
 		}
+		offset /= 32;
 		int rotated = 0;
 		if (quad->Attribute("rotated"))
 		{
@@ -116,16 +118,47 @@ void Tile::render(int x, int y)
 	glBindTexture(GL_TEXTURE_2D, tileset->getTexture());
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glBegin(GL_QUADS);
 	for (unsigned int i = 0; i < quads.size(); i++)
 	{
-		float height = quads[i].height;
-		Vector2F offset = quads[i].offset;
-		RectangleI texture = quads[i].texture;
-		float texx = (float)texture.x / tileset->getTextureSize().x;
-		float texy = (float)texture.y / tileset->getTextureSize().y;
-		float texwidth = (float)texture.width / tileset->getTextureSize().x;
-		float texheight = (float)texture.height / tileset->getTextureSize().y;
+		drawQuad(quads[i]);
+	}
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+}
+void Tile::renderShadows(int x, int y)
+{
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	glBindTexture(GL_TEXTURE_2D, tileset->getTexture());
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+	glEnable(GL_BLEND);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 		glBegin(GL_QUADS);
+	for (unsigned int i = 0; i < shadowquads.size(); i++)
+	{
+		drawQuad(shadowquads[i]);
+	}
+	glEnd();
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+}
+
+void Tile::drawQuad(Quad &quad)
+{
+	float height = quad.height;
+	Vector2F offset = quad.offset;
+	RectangleI texture = quad.texture;
+	float texx = (float)texture.x / tileset->getTextureSize().x;
+	float texy = (float)texture.y / tileset->getTextureSize().y;
+	float texwidth = (float)texture.width / tileset->getTextureSize().x;
+	float texheight = (float)texture.height / tileset->getTextureSize().y;
+	switch (quad.rotated)
+	{
+		case 0:
 			glTexCoord2f(texx, texy);
 			glVertex3f(offset.x, offset.y, height);
 			glTexCoord2f(texx, texy + texheight);
@@ -134,11 +167,36 @@ void Tile::render(int x, int y)
 			glVertex3f(offset.x + (float)texture.width / 32, offset.y + (float)texture.height / 32, height);
 			glTexCoord2f(texx + texwidth, texy);
 			glVertex3f(offset.x + (float)texture.width / 32, offset.y, height);
-		glEnd();
+			break;
+		case 1:
+			glTexCoord2f(texx, texy + texheight);
+			glVertex3f(offset.x, offset.y, height);
+			glTexCoord2f(texx + texwidth, texy + texheight);
+			glVertex3f(offset.x, offset.y + (float)texture.width / 32, height);
+			glTexCoord2f(texx + texwidth, texy);
+			glVertex3f(offset.x + (float)texture.height / 32, offset.y + (float)texture.width / 32, height);
+			glTexCoord2f(texx, texy);
+			glVertex3f(offset.x + (float)texture.height / 32, offset.y, height);
+			break;
+		case 2:
+			glTexCoord2f(texx + texwidth, texy + texheight);
+			glVertex3f(offset.x, offset.y, height);
+			glTexCoord2f(texx + texwidth, texy);
+			glVertex3f(offset.x, offset.y + (float)texture.height / 32, height);
+			glTexCoord2f(texx, texy);
+			glVertex3f(offset.x + (float)texture.width / 32, offset.y + (float)texture.height / 32, height);
+			glTexCoord2f(texx, texy + texheight);
+			glVertex3f(offset.x + (float)texture.width / 32, offset.y, height);
+			break;
+		case 3:
+			glTexCoord2f(texx + texwidth, texy);
+			glVertex3f(offset.x, offset.y, height);
+			glTexCoord2f(texx, texy);
+			glVertex3f(offset.x, offset.y + (float)texture.width / 32, height);
+			glTexCoord2f(texx, texy + texheight);
+			glVertex3f(offset.x + (float)texture.height / 32, offset.y + (float)texture.width / 32, height);
+			glTexCoord2f(texx + texwidth, texy + texheight);
+			glVertex3f(offset.x + (float)texture.height / 32, offset.y, height);
+			break;
 	}
-	glDisable(GL_TEXTURE_2D);
-	glPopMatrix();
-}
-void Tile::renderShadows(int x, int y)
-{
 }
