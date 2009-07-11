@@ -42,7 +42,7 @@ class Map : public QObject
 		bool save(std::string name = "");
 		std::string getName();
 
-		bool compile(std::string name);
+		bool compile(std::string name = "");
 
 		void setWidth(int width);
 		int getWidth();

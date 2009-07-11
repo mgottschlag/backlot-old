@@ -22,6 +22,7 @@ set(SRC
 	src/Tile.cpp
 	src/NewMapDialog.cpp
 	src/OpenMapDialog.cpp
+	src/QuadList.cpp
 	../../src/support/tinystr.cpp
 	../../src/support/tinyxml.cpp
 	../../src/support/tinyxmlerror.cpp

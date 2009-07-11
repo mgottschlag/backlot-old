@@ -120,6 +120,15 @@ float Tile::getHeight()
 	return height;
 }
 
+const std::vector<Quad> &Tile::getQuads()
+{
+	return quads;
+}
+const std::vector<Quad> &Tile::getShadowQuads()
+{
+	return shadowquads;
+}
+
 void Tile::render(int x, int y)
 {
 	glPushMatrix();

@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Tile.hpp"
 #include "TileSet.hpp"
 #include "Game.hpp"
+#include "QuadList.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -207,7 +208,88 @@ std::string Map::getName()
 
 bool Map::compile(std::string name)
 {
-	return false;
+	if (!isLoaded())
+		return false;
+	if (name == "")
+		name = this->name;
+	// Open file
+	QFile file((Game::get().getPath() + "/maps/" + name + ".blc").c_str());
+	if (!file.open(QIODevice::WriteOnly))
+		return false;
+	QDataStream out(&file);
+	// Write header
+	out << MAP_FORMAT_VERSION;
+	out << width;
+	out << height;
+	// Write accessibility info
+	// TODO
+	// Collect tile sets used
+	std::vector<TileSet*> tilesets;
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (tiles[y * width + x])
+			{
+				TileSet *tileset = tiles[y * width + x]->getTileSet();
+				bool found = false;
+				for (unsigned int i = 0; i < tilesets.size(); i++)
+				{
+					if (tilesets[i] == tileset)
+					{
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+					tilesets.push_back(tileset);
+			}
+		}
+	}
+	// Create primary quad lists
+	std::vector<QuadList*> primlists(tilesets.size() * 2, 0);
+	for (unsigned int i = 0; i < tilesets.size(); i++)
+	{
+		primlists[i * 2] = new QuadList(tilesets[i], false);
+		primlists[i * 2 + 1] = new QuadList(tilesets[i], true);
+	}
+	// Add tiles
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			Tile *tile = tiles[y * width + x];
+			if (tile)
+			{
+				TileSet *tileset = tile->getTileSet();
+				for (unsigned int i = 0; i < tilesets.size(); i++)
+				{
+					if (tilesets[i] == tileset)
+					{
+						primlists[i * 2]->addQuads(tile->getQuads(), x, y);
+						primlists[i * 2 + 1]->addQuads(tile->getShadowQuads(), x, y);
+						break;
+					}
+				}
+			}
+		}
+	}
+	RectangleF rect = primlists[0]->getBoundingRect();
+	std::cout << "Bounding rectangle: " << rect.x << "/" << rect.y << ": " << rect.width << "/" << rect.height << std::endl;
+	// Split lists
+	std::vector<std::vector<QuadList*> > lists(tilesets.size() * 2, std::vector<QuadList*>());
+	for (unsigned int i = 0; i < primlists.size(); i++)
+	{
+		lists[i] = primlists[i]->split();
+	}
+	// Write lists
+	// TODO
+	// Clean up
+	for (unsigned int i = 0; i < tilesets.size() * 2; i++)
+	{
+		delete primlists[i];
+	}
+	return true;
 }
 
 void Map::setWidth(int width)

@@ -121,7 +121,9 @@ void EditorWindow::saveAs()
 }
 void EditorWindow::compile()
 {
-	QMessageBox::information(this, "Unimplemented", "Currently unimplemented.");
+	if (Map::get().isLoaded())
+		if (!Map::get().compile())
+			QMessageBox::critical(this, "Error", "Map could not be compiled.");
 }
 void EditorWindow::about()
 {

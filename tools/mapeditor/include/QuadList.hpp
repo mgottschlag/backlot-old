@@ -19,55 +19,43 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _TILE_HPP_
-#define _TILE_HPP_
-
-#include "Vector2.hpp"
-#include "Rectangle.hpp"
-using namespace backlot;
+#ifndef _QUADLIST_HPP_
+#define _QUADLIST_HPP_
 
 #include <vector>
 
+#include "Rectangle.hpp"
+using namespace backlot;
+
 class TileSet;
-class TiXmlElement;
+class Quad;
 
-struct Quad
-{
-	float height;
-	int rotated;
-	Vector2I offset;
-	RectangleI texture;
-};
-
-class Tile
+class QuadList
 {
 	public:
-		Tile(TileSet *tileset);
-		~Tile();
+		QuadList(TileSet *tileset, bool shadow);
+		~QuadList();
 
-		bool load(TiXmlElement *xml);
+		void addQuads(const std::vector<Quad> &quads, int x, int y);
+		void addQuad(const Quad &quad, int x, int y);
+		void addQuad(float *quadvertices, float *quadtexcoords);
 
-		std::string getName();
-		TileSet *getTileSet();
+		std::vector<QuadList*> split();
 
-		const Vector2F &getSize();
-		float getHeight();
+		int getVertexCount();
+		float *getVertices();
+		float *getTextureCoords();
 
-		const std::vector<Quad> &getQuads();
-		const std::vector<Quad> &getShadowQuads();
+		RectangleF getBoundingRect();
 
-		void render(int x, int y);
-		void renderShadows(int x, int y);
 	private:
-		void drawQuad(Quad &quad);
-
 		TileSet *tileset;
-		std::string name;
+		bool shadow;
 
-		Vector2F size;
-		float height;
-		std::vector<Quad> quads;
-		std::vector<Quad> shadowquads;
+		unsigned int vertexcount;
+		float *vertices;
+		float *texcoords;
+		RectangleF boundingrect;
 };
 
 #endif
