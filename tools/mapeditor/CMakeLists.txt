@@ -21,6 +21,7 @@ set(SRC
 	src/TileSet.cpp
 	src/Tile.cpp
 	src/NewMapDialog.cpp
+	src/OpenMapDialog.cpp
 	../../src/support/tinystr.cpp
 	../../src/support/tinyxml.cpp
 	../../src/support/tinyxmlerror.cpp
@@ -33,6 +34,7 @@ set(MOC_H
 	include/TilePreview.hpp
 	include/Map.hpp
 	include/NewMapDialog.hpp
+	include/OpenMapDialog.hpp
 )
 
 QT4_WRAP_CPP(MOC_SRC ${MOC_H})
@@ -46,6 +48,7 @@ QT4_ADD_RESOURCES(QRC_SRC ${QRC})
 set(UIS
 	ui/MainWindow.ui
 	ui/NewDialog.ui
+	ui/OpenDialog.ui
 )
 
 QT4_WRAP_UI(UIS_H ${UIS})

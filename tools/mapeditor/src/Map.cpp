@@ -21,8 +21,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Map.hpp"
 #include "Tile.hpp"
+#include "TileSet.hpp"
+#include "Game.hpp"
 
 #include <iostream>
+#include <fstream>
+#include <QFile>
+#include <QDataStream>
 
 Map &Map::get()
 {
@@ -48,13 +53,71 @@ bool Map::load(std::string name)
 	// Close old map
 	if (isLoaded())
 		close();
-	// Load map
+	// Open file
+	QFile file((Game::get().getPath() + "/maps/" + name + ".blm").c_str());
+	if (!file.open(QIODevice::ReadOnly))
+		return false;
+	QDataStream in(&file);
+	// Read header
+	unsigned int version;
+	in >> version;
+	if (version != MAP_FORMAT_VERSION)
+		return false;
+	in >> width;
+	in >> height;
+	// Read list of used tiles
+	unsigned int tilecount;
+	in >> tilecount;
+	std::vector<Tile*> usedtiles;
+	for (unsigned int i = 0; i < tilecount; i++)
+	{
+		char *tilename;
+		in >> tilename;
+		if (tilename)
+		{
+			Tile *tile = TileSet::getTile(tilename);
+			if (!tile)
+				return false;
+			usedtiles.push_back(TileSet::getTile(tilename));
+		}
+		else
+			return false;
+	}
+	// Allocate tile info
+	tiles = new Tile*[width * height];
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			tiles[y * width + x] = 0;
+		}
+	}
+	// Read tiles
+	unsigned int validtiles;
+	in >> validtiles;
+	for (unsigned int i = 0; i < validtiles; i++)
+	{
+		int x;
+		int y;
+		unsigned int tileindex;
+		in >> x >> y >> tileindex;
+		if (tileindex >= usedtiles.size())
+			continue;
+		if (x < 0 || y < 0 || x >= width || y >= height)
+			continue;
+		tiles[y * width + x] = usedtiles[tileindex];
+	}
+	// Read additional info
 	// TODO
-	return false;
+	// Read entities
+	// TODO
+	this->name = name;
+	return true;
 }
 bool Map::close()
 {
-	delete[] tiles;
+	if (tiles)
+		delete[] tiles;
 	name = "";
 	return true;
 }
@@ -64,7 +127,78 @@ bool Map::isLoaded()
 }
 bool Map::save(std::string name)
 {
-	return false;
+	if (!isLoaded())
+		return false;
+	if (name == "")
+		name = this->name;
+	else
+		this->name = name;
+	// Open file
+	QFile file((Game::get().getPath() + "/maps/" + name + ".blm").c_str());
+	if (!file.open(QIODevice::WriteOnly))
+		return false;
+	QDataStream out(&file);
+	// Write header
+	out << MAP_FORMAT_VERSION;
+	out << width;
+	out << height;
+	// Collect used tiles
+	std::vector<Tile*> usedtiles;
+	unsigned int validtiles = 0;
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (tiles[y * width + x])
+			{
+				validtiles++;
+				Tile *tile = tiles[y * width + x];
+				bool found = false;
+				for (unsigned int i = 0; i < usedtiles.size(); i++)
+				{
+					if (usedtiles[i] == tile)
+					{
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+					usedtiles.push_back(tile);
+			}
+		}
+	}
+	// Write information about used tiles
+	unsigned int tilecount = usedtiles.size();
+	out << tilecount;
+	for (unsigned int i = 0; i < usedtiles.size(); i++)
+	{
+		TileSet *tileset = usedtiles[i]->getTileSet();
+		std::string name = tileset->getName() + "." + usedtiles[i]->getName();
+		out << name.c_str();
+	}
+	// Write tiles
+	out << validtiles;
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (tiles[y * width + x])
+			{
+				for (unsigned int i = 0; i < usedtiles.size(); i++)
+				{
+					if (usedtiles[i] == tiles[y * width + x])
+					{
+						out << x << y << i;
+					}
+				}
+			}
+		}
+	}
+	// Write additional info
+	// TODO
+	// Write entities
+	// TODO
+	return true;
 }
 std::string Map::getName()
 {

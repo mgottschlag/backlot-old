@@ -42,7 +42,7 @@ bool Tile::load(TiXmlElement *xml)
 		std::cerr << "Tile: No name given." << std::endl;
 		return false;
 	}
-	std::string name = xml->Attribute("name");
+	name = xml->Attribute("name");
 	if (!xml->Attribute("size") || !xml->Attribute("height"))
 	{
 		std::cerr << name << ": size or height missing." << std::endl;
@@ -100,6 +100,15 @@ bool Tile::load(TiXmlElement *xml)
 	}
 	std::cout << tileset->getName() << "." << name << " loaded." << std::endl;
 	return true;
+}
+
+std::string Tile::getName()
+{
+	return name;
+}
+TileSet *Tile::getTileSet()
+{
+	return tileset;
 }
 
 const Vector2F &Tile::getSize()

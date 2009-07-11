@@ -52,8 +52,14 @@ std::string Game::getPath()
 
 std::vector<std::string> Game::getMaps()
 {
-	// TODO
-	return std::vector<std::string>();
+	// Get file list
+	std::vector<std::string> tilesets = getDirectoryList("maps", ".blm");
+	// Strip away extensions
+	for (unsigned int i = 0; i < tilesets.size(); i++)
+	{
+		tilesets[i] = tilesets[i].substr(0, tilesets[i].size() - 4);
+	}
+	return tilesets;
 }
 std::vector<std::string> Game::getTileSets()
 {

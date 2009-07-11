@@ -26,6 +26,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 class Tile;
 
+static const unsigned int MAP_FORMAT_VERSION = 1;
+
 class Map : public QObject
 {
 	Q_OBJECT

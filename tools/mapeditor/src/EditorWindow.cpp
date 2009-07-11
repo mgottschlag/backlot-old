@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "EditorWindow.hpp"
 #include "Map.hpp"
 #include "TileSet.hpp"
+#include "Game.hpp"
 
 #include <QMessageBox>
 #include <iostream>
@@ -32,12 +33,13 @@ EditorWindow::EditorWindow() : QMainWindow(), newmap(this), editgroup(this)
 
 	// Set up input
 	QObject::connect(ui.ActionNew, SIGNAL(activated()), &newmap, SLOT(exec()));
-	QObject::connect(ui.ActionOpen, SIGNAL(activated()), this, SLOT(open()));
+	QObject::connect(ui.ActionOpen, SIGNAL(activated()), this, SLOT(openDialog()));
 	QObject::connect(ui.ActionSave, SIGNAL(activated()), this, SLOT(save()));
 	QObject::connect(ui.ActionSaveAs, SIGNAL(activated()), this, SLOT(saveAs()));
 	QObject::connect(ui.ActionCompile, SIGNAL(activated()), this, SLOT(compile()));
 	QObject::connect(ui.ActionAbout, SIGNAL(activated()), this, SLOT(about()));
 	QObject::connect(&newmap, SIGNAL(accepted()), this, SLOT(newMap()));
+	QObject::connect(&openmap, SIGNAL(accepted()), this, SLOT(open()));
 	QObject::connect(ui.ActionGrid, SIGNAL(toggled(bool)), ui.levelview, SLOT(showGrid(bool)));
 	ui.ActionGrid->setChecked(true);
 	QObject::connect(ui.ActionMiniMap, SIGNAL(toggled(bool)), ui.levelview, SLOT(showMiniMap(bool)));
@@ -88,15 +90,30 @@ void EditorWindow::newMap()
 	// Repaint
 	ui.levelview->repaint();
 }
+void EditorWindow::openDialog()
+{
+	openmap.setupList(Game::get().getMaps());
+	openmap.exec();
+}
 void EditorWindow::open()
 {
-	QMessageBox::information(this, "Unimplemented", "Currently unimplemented.");
+	std::string mapname = openmap.getSelected();
+	if (mapname == "")
+	{
+		QMessageBox::critical(this, "Error", "No map selected.");
+		return;
+	}
+	if (!Map::get().load(mapname))
+	{
+		QMessageBox::critical(this, "Error", "Map could not be loaded.");
+	}
 }
 void EditorWindow::save()
 {
 	// Save map
 	if (Map::get().isLoaded())
-		Map::get().save();
+		if (!Map::get().save())
+			QMessageBox::critical(this, "Error", "Map could not be saved.");
 }
 void EditorWindow::saveAs()
 {

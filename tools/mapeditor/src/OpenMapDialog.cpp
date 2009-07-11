@@ -19,41 +19,33 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _EDITORWINDOW_HPP_
-#define _EDITORWINDOW_HPP_
-
-#include "ui_MainWindow.h"
-#include "NewMapDialog.hpp"
 #include "OpenMapDialog.hpp"
 
-#include <QStandardItemModel>
+#include <QMessageBox>
 
-class EditorWindow : public QMainWindow
+OpenMapDialog::OpenMapDialog(QWidget *parent) : QDialog(parent)
 {
-	Q_OBJECT
-	public:
-		EditorWindow();
+	ui.setupUi(this);
+	QObject::connect(ui.maplist, SIGNAL(clicked(QModelIndex)), this, SLOT(select(QModelIndex)));
+}
 
-	public slots:
-		void newMap();
-		void openDialog();
-		void open();
-		void save();
-		void saveAs();
-		void compile();
-		void about();
-		void resize();
-		void selectTile(const QModelIndex &index);
-		void setAction(QAction *action);
+void OpenMapDialog::setupList(std::vector<std::string> maps)
+{
+	maplist.clear();
+	for (unsigned int i = 0; i < maps.size(); i++)
+	{
+		maplist.appendRow(new QStandardItem(maps[i].c_str()));
+	}
+	ui.maplist->setModel(&maplist);
+	selected = "";
+}
+std::string OpenMapDialog::getSelected()
+{
+	return selected;
+}
 
-	protected:
-		void closeEvent(QCloseEvent *event);
-	private:
-		Ui::MainWindow ui;
-		NewMapDialog newmap;
-		OpenMapDialog openmap;
-		QActionGroup editgroup;
-		QStandardItemModel tilelist;
-};
-
-#endif
+void OpenMapDialog::select(const QModelIndex &index)
+{
+	QStandardItem *item = maplist.itemFromIndex(index);
+	selected = item->text().toAscii().constData();
+}

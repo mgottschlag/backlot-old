@@ -47,6 +47,9 @@ class Tile
 
 		bool load(TiXmlElement *xml);
 
+		std::string getName();
+		TileSet *getTileSet();
+
 		const Vector2F &getSize();
 		float getHeight();
 
@@ -56,6 +59,7 @@ class Tile
 		void drawQuad(Quad &quad);
 
 		TileSet *tileset;
+		std::string name;
 
 		Vector2F size;
 		float height;

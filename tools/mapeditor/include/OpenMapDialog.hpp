@@ -19,41 +19,28 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _EDITORWINDOW_HPP_
-#define _EDITORWINDOW_HPP_
+#ifndef _OPENMAPDIALOG_HPP_
+#define _OPENMAPDIALOG_HPP_
 
-#include "ui_MainWindow.h"
-#include "NewMapDialog.hpp"
-#include "OpenMapDialog.hpp"
+#include "ui_OpenDialog.h"
 
 #include <QStandardItemModel>
 
-class EditorWindow : public QMainWindow
+class OpenMapDialog : public QDialog
 {
 	Q_OBJECT
 	public:
-		EditorWindow();
+		OpenMapDialog(QWidget *parent = 0);
+
+		void setupList(std::vector<std::string> maps);
+		std::string getSelected();
+
+		std::string selected;
+		Ui::OpenMapDialog ui;
+		QStandardItemModel maplist;
 
 	public slots:
-		void newMap();
-		void openDialog();
-		void open();
-		void save();
-		void saveAs();
-		void compile();
-		void about();
-		void resize();
-		void selectTile(const QModelIndex &index);
-		void setAction(QAction *action);
-
-	protected:
-		void closeEvent(QCloseEvent *event);
-	private:
-		Ui::MainWindow ui;
-		NewMapDialog newmap;
-		OpenMapDialog openmap;
-		QActionGroup editgroup;
-		QStandardItemModel tilelist;
+		void select(const QModelIndex &index);
 };
 
 #endif
