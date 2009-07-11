@@ -228,6 +228,48 @@ namespace backlot
 			}
 
 			/**
+			 * Enlarges the rectangle so that the point fits into it.
+			 */
+			void insertPoint(const Vector2<T> &point)
+			{
+				if (x > point.x)
+				{
+					width += x - point.x;
+					x = point.x;
+				}
+				if (y > point.y)
+				{
+					height += y - point.y;
+					y = point.y;
+				}
+				if (x + width < point.x)
+				{
+					width = point.x - x;
+				}
+				if (y + height < point.y)
+				{
+					height = point.y - y;
+				}
+			}
+			/**
+			 * Enlarges the rectangle so that the rectangle fits into it.
+			 */
+			void insertRectangle(const Rectangle<T> &rect)
+			{
+				// Insert two points which cover the whole rectangle
+				insertPoint(Vector2<T>(rect.x, rect.y));
+				insertPoint(Vector2<T>(rect.x + width, rect.y + height));
+			}
+			/**
+			 * Checks whether the point is within the rectangle.
+			 */
+			bool contains(const Vector2<T> point)
+			{
+				return point.x >= x && point.y >= y && point.x < x + width
+					&& point.y < y + height;
+			}
+
+			/**
 			 * X coordinate of the upper left point of the rectangle.
 			 */
 			T x;
