@@ -44,10 +44,10 @@ class Map : public QObject
 
 		bool compile(std::string name = "");
 
-		void setWidth(int width);
-		int getWidth();
-		void setHeight(int height);
-		int getHeight();
+		void setWidth(unsigned int width);
+		unsigned int getWidth();
+		void setHeight(unsigned int height);
+		unsigned int getHeight();
 
 		void setTile(int x, int y, Tile *tile);
 
@@ -56,8 +56,8 @@ class Map : public QObject
 		Map();
 
 		std::string name;
-		int width;
-		int height;
+		unsigned int width;
+		unsigned int height;
 		Tile **tiles;
 };
 

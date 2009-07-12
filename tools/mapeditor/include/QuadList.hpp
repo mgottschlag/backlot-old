@@ -40,6 +40,9 @@ class QuadList
 		void addQuad(const Quad &quad, int x, int y);
 		void addQuad(float *quadvertices, float *quadtexcoords);
 
+		TileSet *getTileSet();
+		bool isShadow();
+
 		std::vector<QuadList*> split();
 
 		int getVertexCount();

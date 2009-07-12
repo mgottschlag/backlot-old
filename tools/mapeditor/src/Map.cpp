@@ -86,9 +86,9 @@ bool Map::load(std::string name)
 	}
 	// Allocate tile info
 	tiles = new Tile*[width * height];
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			tiles[y * width + x] = 0;
 		}
@@ -98,13 +98,13 @@ bool Map::load(std::string name)
 	in >> validtiles;
 	for (unsigned int i = 0; i < validtiles; i++)
 	{
-		int x;
-		int y;
+		unsigned int x;
+		unsigned int y;
 		unsigned int tileindex;
 		in >> x >> y >> tileindex;
 		if (tileindex >= usedtiles.size())
 			continue;
-		if (x < 0 || y < 0 || x >= width || y >= height)
+		if (x >= width || y >= height)
 			continue;
 		tiles[y * width + x] = usedtiles[tileindex];
 	}
@@ -146,9 +146,9 @@ bool Map::save(std::string name)
 	// Collect used tiles
 	std::vector<Tile*> usedtiles;
 	unsigned int validtiles = 0;
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			if (tiles[y * width + x])
 			{
@@ -179,9 +179,9 @@ bool Map::save(std::string name)
 	}
 	// Write tiles
 	out << validtiles;
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			if (tiles[y * width + x])
 			{
@@ -221,13 +221,44 @@ bool Map::compile(std::string name)
 	out << MAP_FORMAT_VERSION;
 	out << width;
 	out << height;
+	// Write RLE height info
+	unsigned short runlength = 1;
+	float currentheight = 1000;
+	if (tiles[0])
+		currentheight = tiles[0]->getHeight();
+	for (unsigned int i = 1; i < width * height; i++)
+	{
+		float currentheight2 = 1000;
+		if (tiles[i])
+			currentheight2 = tiles[i]->getHeight();
+		if (currentheight2 != currentheight || runlength == 65535)
+		{
+			// Write chunk of data
+			out << runlength;
+			out << currentheight;
+			runlength = 0;
+			currentheight = currentheight2;
+		}
+		else
+		{
+			runlength++;
+		}
+	}
+	if (runlength != 0)
+	{
+		// Write chunk of data
+		out << runlength;
+		out << currentheight;
+	}
 	// Write accessibility info
+	// TODO
+	// Write entities
 	// TODO
 	// Collect tile sets used
 	std::vector<TileSet*> tilesets;
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			if (tiles[y * width + x])
 			{
@@ -254,9 +285,9 @@ bool Map::compile(std::string name)
 		primlists[i * 2 + 1] = new QuadList(tilesets[i], true);
 	}
 	// Add tiles
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			Tile *tile = tiles[y * width + x];
 			if (tile)
@@ -275,7 +306,6 @@ bool Map::compile(std::string name)
 		}
 	}
 	RectangleF rect = primlists[0]->getBoundingRect();
-	std::cout << "Bounding rectangle: " << rect.x << "/" << rect.y << ": " << rect.width << "/" << rect.height << std::endl;
 	// Split lists
 	std::vector<std::vector<QuadList*> > lists(tilesets.size() * 2, std::vector<QuadList*>());
 	for (unsigned int i = 0; i < primlists.size(); i++)
@@ -283,7 +313,26 @@ bool Map::compile(std::string name)
 		lists[i] = primlists[i]->split();
 	}
 	// Write lists
-	// TODO
+	out << (unsigned int)lists.size();
+	for (unsigned int i = 0; i < lists.size(); i++)
+	{
+		out << primlists[i]->getTileSet()->getName().c_str();
+		out << primlists[i]->isShadow();
+		out << (unsigned int)lists[i].size();
+		for (unsigned int j = 0; j < lists[i].size(); j++)
+		{
+			RectangleF rect = lists[i][j]->getBoundingRect();
+			out << rect.x << rect.y << rect.width << rect.height;
+			unsigned int vertexcount = lists[i][j]->getVertexCount();
+			out << vertexcount;
+			float *vertices = lists[i][j]->getVertices();
+			float *texcoords = lists[i][j]->getTextureCoords();
+			for (unsigned int k = 0; k < vertexcount; k++)
+				out << vertices[k * 3] << vertices[k * 3 + 1] << vertices[k * 3 + 2];
+			for (unsigned int k = 0; k < vertexcount; k++)
+				out << texcoords[k * 2] << texcoords[k * 2 + 1];
+		}
+	}
 	// Clean up
 	for (unsigned int i = 0; i < tilesets.size() * 2; i++)
 	{
@@ -292,21 +341,21 @@ bool Map::compile(std::string name)
 	return true;
 }
 
-void Map::setWidth(int width)
+void Map::setWidth(unsigned int width)
 {
 	Tile **newtiles = new Tile*[width * height];
-	int minwidth = width;
+	unsigned int minwidth = width;
 	if (this->width < width)
 		minwidth = this->width;
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
 		// Copy old tiles
-		for (int x = 0; x < minwidth; x++)
+		for (unsigned int x = 0; x < minwidth; x++)
 		{
 			newtiles[y * width + x] = tiles[y * this->width + x];
 		}
 		// Set new tiles to 0
-		for (int x = this->width; x < width; x++)
+		for (unsigned int x = this->width; x < width; x++)
 		{
 			newtiles[y * width + x] = 0;
 		}
@@ -316,28 +365,28 @@ void Map::setWidth(int width)
 	tiles = newtiles;
 	this->width = width;
 }
-int Map::getWidth()
+unsigned int Map::getWidth()
 {
 	return width;
 }
-void Map::setHeight(int height)
+void Map::setHeight(unsigned int height)
 {
 	Tile **newtiles = new Tile*[width * height];
-	int minheight = height;
+	unsigned int minheight = height;
 	if (this->height < height)
 		minheight = this->height;
-	for (int y = 0; y < minheight; y++)
+	for (unsigned int y = 0; y < minheight; y++)
 	{
 		// Copy old tiles
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			newtiles[y * width + x] = tiles[y * width + x];
 		}
 	}
-	for (int y = this->height; y < height; y++)
+	for (unsigned int y = this->height; y < height; y++)
 	{
 		// Set new tiles to 0
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			newtiles[y * width + x] = 0;
 		}
@@ -347,7 +396,7 @@ void Map::setHeight(int height)
 	tiles = newtiles;
 	this->height = height;
 }
-int Map::getHeight()
+unsigned int Map::getHeight()
 {
 	return height;
 }
@@ -355,7 +404,7 @@ int Map::getHeight()
 void Map::setTile(int x, int y, Tile *tile)
 {
 	if (x < 0 || y < 0
-		|| x >= width || y >= height)
+		|| x >= (int)width || y >= (int)height)
 		return;
 	tiles[y * width + x] = tile;
 	// TODO: Remove overlapping tiles
@@ -364,18 +413,18 @@ void Map::setTile(int x, int y, Tile *tile)
 void Map::render()
 {
 	// Render normal quads
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			if (tiles[y * width + x])
 				tiles[y * width + x]->render(x, y);
 		}
 	}
 	// Render shadows
-	for (int y = 0; y < height; y++)
+	for (unsigned int y = 0; y < height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (unsigned int x = 0; x < width; x++)
 		{
 			if (tiles[y * width + x])
 				tiles[y * width + x]->renderShadows(x, y);

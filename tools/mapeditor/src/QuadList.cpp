@@ -161,6 +161,15 @@ void QuadList::addQuad(float *quadvertices, float *quadtexcoords)
 	boundingrect.insertPoint(Vector2F(newvertices[9], newvertices[10]));
 }
 
+TileSet *QuadList::getTileSet()
+{
+	return tileset;
+}
+bool QuadList::isShadow()
+{
+	return shadow;
+}
+
 std::vector<QuadList*> QuadList::split()
 {
 	std::vector<QuadList*> lists;
