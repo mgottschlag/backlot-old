@@ -47,14 +47,6 @@ namespace backlot
 			std::cerr << "Could not load map." << std::endl;
 			return false;
 		}
-		if (!map->isCompiled())
-		{
-			if (!map->compile())
-			{
-				std::cerr << "Could not compile map." << std::endl;
-				return false;
-			}
-		}
 		std::cout << "Map is ready." << std::endl;
 		// Load game mode
 		Game::get().load(mapname, "ffa");

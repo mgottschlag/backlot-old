@@ -28,10 +28,18 @@ namespace backlot
 {
 	QuadBatch::QuadBatch() : ReferenceCounted()
 	{
-		dirty = false;
 		vertexdata = 0;
+		quadcount = 0;
 		if (GLEW_ARB_vertex_buffer_object)
 			glGenBuffersARB(1, &vbo);
+	}
+	QuadBatch::QuadBatch(unsigned int quadcount, float *vertexdata)
+	{
+		this->vertexdata = 0;
+		this->quadcount = 0;
+		if (GLEW_ARB_vertex_buffer_object)
+			glGenBuffersARB(1, &vbo);
+		set(quadcount, vertexdata);
 	}
 	QuadBatch::~QuadBatch()
 	{
@@ -41,125 +49,31 @@ namespace backlot
 			delete[] vertexdata;
 	}
 
-	void QuadBatch::addQuad(const Quad &quad)
+	void QuadBatch::set(unsigned int quadcount, float *vertexdata)
 	{
-		quads.push_back(quad);
-		setDirty(true);
-	}
-	void QuadBatch::removeQuad(int index)
-	{
-		quads.erase(quads.begin() + index);
-		setDirty(true);
-	}
-	std::vector<Quad> &QuadBatch::getQuads()
-	{
-		return quads;
-	}
-
-	unsigned int QuadBatch::getSize()
-	{
-		return quads.size();
-	}
-
-	void QuadBatch::setDirty(bool dirty)
-	{
-		this->dirty = dirty;
-	}
-	bool QuadBatch::isDirty()
-	{
-		return dirty;
-	}
-	void QuadBatch::rebuild()
-	{
-		if (vertexdata)
+		// Delete old data
+		if (this->vertexdata)
 		{
-			delete[] vertexdata;
-			vertexdata = 0;
+			delete[] this->vertexdata;
+			this->vertexdata = 0;
 		}
-		// Compact vertex data
-		vertexdata = new float[getSize() * 4 * sizeof(float) * 5];
-		// Positions
-		for (unsigned int i = 0; i < getSize(); i++)
-		{
-			Vector2F position = quads[i].position;
-			Vector2F size = quads[i].size;
-			float z = quads[i].depth;
-
-			vertexdata[i * 12 + 2] = z;
-			vertexdata[i * 12 + 3 + 2] = z;
-			vertexdata[i * 12 + 6 + 2] = z;
-			vertexdata[i * 12 + 9 + 2] = z;
-			switch (quads[i].rotated)
-			{
-				case 0:
-					vertexdata[i * 12] = position.x;
-					vertexdata[i * 12 + 1] = position.y;
-					vertexdata[i * 12 + 3] = position.x + size.x;
-					vertexdata[i * 12 + 3 + 1] = position.y;
-					vertexdata[i * 12 + 6] = position.x + size.x;
-					vertexdata[i * 12 + 6 + 1] = position.y + size.y;
-					vertexdata[i * 12 + 9] = position.x;
-					vertexdata[i * 12 + 9 + 1] = position.y + size.y;
-					break;
-				case 1:
-					vertexdata[i * 12] = position.x + size.x;
-					vertexdata[i * 12 + 1] = position.y;
-					vertexdata[i * 12 + 3] = position.x + size.x;
-					vertexdata[i * 12 + 3 + 1] = position.y + size.y;
-					vertexdata[i * 12 + 6] = position.x;
-					vertexdata[i * 12 + 6 + 1] = position.y + size.y;
-					vertexdata[i * 12 + 9] = position.x;
-					vertexdata[i * 12 + 9 + 1] = position.y;
-					break;
-				case 2:
-					vertexdata[i * 12] = position.x + size.x;
-					vertexdata[i * 12 + 1] = position.y + size.y;
-					vertexdata[i * 12 + 3] = position.x;
-					vertexdata[i * 12 + 3 + 1] = position.y + size.y;
-					vertexdata[i * 12 + 6] = position.x;
-					vertexdata[i * 12 + 6 + 1] = position.y;
-					vertexdata[i * 12 + 9] = position.x + size.x;
-					vertexdata[i * 12 + 9 + 1] = position.y;
-					break;
-				case 3:
-					vertexdata[i * 12] = position.x;
-					vertexdata[i * 12 + 1] = position.y + size.y;
-					vertexdata[i * 12 + 3] = position.x;
-					vertexdata[i * 12 + 3 + 1] = position.y;
-					vertexdata[i * 12 + 6] = position.x + size.x;
-					vertexdata[i * 12 + 6 + 1] = position.y;
-					vertexdata[i * 12 + 9] = position.x + size.x;
-					vertexdata[i * 12 + 9 + 1] = position.y + size.y;
-					break;
-			}
-		}
-		// Texture coordinates
-		for (unsigned int i = 0; i < getSize(); i++)
-		{
-			RectangleF rect = quads[i].texturecoords;
-			vertexdata[getSize() * 12 + i * 8] = rect.x;
-			vertexdata[getSize() * 12 + i * 8 + 1] = rect.y;
-
-			vertexdata[getSize() * 12 + i * 8 + 2] = rect.x + rect.width;
-			vertexdata[getSize() * 12 + i * 8 + 2 + 1] = rect.y;
-
-			vertexdata[getSize() * 12 + i * 8 + 4] = rect.x + rect.width;
-			vertexdata[getSize() * 12 + i * 8 + 4 + 1] = rect.y + rect.height;
-
-			vertexdata[getSize() * 12 + i * 8 + 6] = rect.x;
-			vertexdata[getSize() * 12 + i * 8 + 6 + 1] = rect.y + rect.height;
-		}
+		this->vertexdata = vertexdata;
+		this->quadcount = quadcount;
 		// Create VBO
 		if (GLEW_ARB_vertex_buffer_object)
 		{
 			glBindBufferARB(GL_ARRAY_BUFFER, vbo);
 			glBufferDataARB(GL_ARRAY_BUFFER, getSize() * 4 * sizeof(float) * 5, vertexdata, GL_STATIC_DRAW);
-			delete[] vertexdata;
-			vertexdata = 0;
 			glBindBufferARB(GL_ARRAY_BUFFER, 0);
+			// We don't need the data any more
+			delete[] this->vertexdata;
+			this->vertexdata = 0;
 		}
-		// Batch data is up-to-date
-		dirty = false;
+	}
+
+	unsigned int QuadBatch::getSize()
+	{
+		return quadcount;
 	}
 
 	void QuadBatch::render()

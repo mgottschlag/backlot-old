@@ -128,16 +128,6 @@ namespace backlot
 			std::cerr << "Could not load map." << std::endl;
 			return false;
 		}
-		if (!map->isCompiled())
-		{
-			if (!map->compile())
-			{
-				enet_peer_reset(peer);
-				enet_host_destroy(host);
-				std::cerr << "Could not compile map." << std::endl;
-				return false;
-			}
-		}
 		std::cout << "Map is ready." << std::endl;
 		map->setVisible(true);
 		// Send message back to the server

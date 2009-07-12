@@ -31,7 +31,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace backlot
 {
 	/**
-	 * Batch of rendering geometry. Maps directly to an OpenGL VBO/IBO.
+	 * Batch of rendering geometry. Maps directly to an OpenGL VBO.
 	 */
 	class QuadBatch : public ReferenceCounted
 	{
@@ -41,44 +41,25 @@ namespace backlot
 			 */
 			QuadBatch();
 			/**
+			 * Constructor. Automatically fills the quad batch.
+			 */
+			QuadBatch(unsigned int quadcount, float *vertexdata);
+			/**
 			 * Destructor.
 			 */
 			~QuadBatch();
 
 			/**
-			 * Adds a quad to the batch.
+			 * Refills the quad batch. vertexdata holds a pointer to five floats
+			 * per vertex, with 4 subsequent vertices forming a quad. First, 3
+			 * floats per vertex contain the position, then 2 floats per vertex
+			 * contain the texture coords (no interleaving used!).
 			 */
-			void addQuad(const Quad &quad);
-			/**
-			 * Removes a quad from the batch. This is quite slow.
-			 */
-			void removeQuad(int index);
-			/**
-			 * Returns a reference to the batch. Can be used to manipulate or
-			 * save the data.
-			 */
-			std::vector<Quad> &getQuads();
-
+			void set(unsigned int quadcount, float *vertexdata);
 			/**
 			 * Returns the number of quads in the batch.
 			 */
 			unsigned int getSize();
-
-			/**
-			 * Sets whether the batch needs to be uploaded to the GPU again.
-			 * The uploading itself is not done automatically but rather has to
-			 * be done by calling rebuild() when you are finished with
-			 * manipulating the batch.
-			 */
-			void setDirty(bool dirty);
-			/**
-			 * Returns whether the batch needs to be uploaded to the GPU again.
-			 */
-			bool isDirty();
-			/**
-			 * Updates the batch on the GPU.
-			 */
-			void rebuild();
 
 			/**
 			 * Renders the batch with the current transformation/material
@@ -87,14 +68,6 @@ namespace backlot
 			void render();
 		private:
 			/**
-			 * Dynamic array holding all quads in the batch.
-			 */
-			std::vector<Quad> quads;
-			/**
-			 * Set to true if the batch needs to be uploaded.
-			 */
-			bool dirty;
-			/**
 			 * Vertex buffer object.
 			 */
 			unsigned int vbo;
@@ -102,6 +75,10 @@ namespace backlot
 			 * Vertex data. Used for drawing if VBOs are not available.
 			 */
 			float *vertexdata;
+			/**
+			 * Number of quads in the batch.
+			 */
+			unsigned int quadcount;
 	};
 
 	typedef SharedPointer<QuadBatch> QuadBatchPointer;

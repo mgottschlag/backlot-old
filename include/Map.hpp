@@ -36,14 +36,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
-	struct TileInfo
+	static const unsigned int MAP_FORMAT_VERSION = 1;
+
+	#ifdef CLIENT
+	struct MapLayer
 	{
-		Tile *tiledef;
-		Vector2I position;
+		TexturePointer texture;
+		bool shadow;
+		std::vector<QuadBatchPointer> batches;
 	};
+	#endif
 	/**
-	 * Map data. Maps are loaded in an XML format and then compiled into an
-	 * optimized format suited for rendering and game logic.
+	 * Map data. This class only can load precompiled maps. On the server and
+	 * the client different parts of the file are loaded.
 	 */
 	class Map : public ReferenceCounted
 	{
@@ -67,16 +72,6 @@ namespace backlot
 			 * Loads a map file.
 			 */
 			bool load(std::string name);
-
-			/**
-			 * Compiles the map.
-			 */
-			bool compile();
-			/**
-			 * Returns true if the map has already been compiled and is ready
-			 * for the game.
-			 */
-			bool isCompiled();
 
 			/**
 			 * Returns true if the whole area is accessible.
@@ -108,38 +103,11 @@ namespace backlot
 			void render();
 			#endif
 		private:
-			/**
-			 * Optimizes the information needed for pathfinding and game logic.
-			 */
-			void createAccessibilityMap();
-			#ifdef CLIENT
-			/**
-			 * Returns the maximum number of tile layers
-			 */
-			void getLayerCount();
-			/**
-			 * Collects all the needed textures from the tile sets.
-			 */
-			void collectTextures();
-			#endif
-
 			std::string name;
-			std::map<std::string, TileSetPointer> tilesets;
-			std::map<int, Tile*> tiledefs;
-			std::list<TileInfo> tiles;
 			Vector2I size;
-
-			bool compiled;
-			char *accessible;
+			float *heightmap;
 			#ifdef CLIENT
-			int groundlayers;
-			int shadowlayers;
-			int highlayers;
-			std::vector<TexturePointer> textures;
-			QuadBatchPointer *batches;
-			int batchcountx;
-			int batchcounty;
-
+			std::vector<MapLayer> layers;
 			static Map *visible;
 			#endif
 
