@@ -237,7 +237,7 @@ bool Map::compile(std::string name)
 			// Write chunk of data
 			file.write((const char*)&runlength, 2);
 			file.write((const char*)&currentheight, 4);
-			runlength = 0;
+			runlength = 1;
 			currentheight = currentheight2;
 		}
 		else

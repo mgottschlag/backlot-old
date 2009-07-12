@@ -74,12 +74,12 @@ void QuadList::addQuad(const Quad &quad, int x, int y)
 	float tc[8];
 	tc[0] = texx;
 	tc[1] = texy;
-	tc[2] = texx;
-	tc[3] = texy + texheight;
-	tc[2] = texx + texwidth;
-	tc[3] = texy + texheight;
 	tc[2] = texx + texwidth;
 	tc[3] = texy;
+	tc[4] = texx + texwidth;
+	tc[5] = texy + texheight;
+	tc[6] = texx;
+	tc[7] = texy + texheight;
 	// Rotate
 	for (unsigned int i = 0; i < 4; i++)
 	{
@@ -89,25 +89,25 @@ void QuadList::addQuad(const Quad &quad, int x, int y)
 	// Fill in vertex data
 	newvertices[0] = offset.x;
 	newvertices[1] = offset.y;
-	newvertices[3] = offset.x;
+	newvertices[4] = offset.y;
 	switch (quad.rotated)
 	{
 		case 0:
 		case 2:
-			newvertices[4] = offset.y + (float)texture.height / 32;
+			newvertices[3] = offset.x + (float)texture.width / 32;
 			newvertices[6] = offset.x + (float)texture.width / 32;
 			newvertices[7] = offset.y + (float)texture.height / 32;
-			newvertices[9] = offset.x + (float)texture.width / 32;
+			newvertices[10] = offset.y + (float)texture.height / 32;
 			break;
 		case 1:
 		case 3:
-			newvertices[4] = offset.y + (float)texture.width / 32;
+			newvertices[3] = offset.x + (float)texture.height / 32;
 			newvertices[6] = offset.x + (float)texture.height / 32;
 			newvertices[7] = offset.y + (float)texture.width / 32;
-			newvertices[9] = offset.x + (float)texture.height / 32;
+			newvertices[10] = offset.y + (float)texture.width / 32;
 			break;
 	}
-	newvertices[10] = offset.y;
+	newvertices[9] = offset.x;
 	for (unsigned int i = 0; i < 4; i++)
 	{
 		newvertices[i * 3] += x;
