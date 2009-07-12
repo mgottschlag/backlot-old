@@ -213,14 +213,15 @@ bool Map::compile(std::string name)
 	if (name == "")
 		name = this->name;
 	// Open file
-	QFile file((Game::get().getPath() + "/maps/" + name + ".blc").c_str());
-	if (!file.open(QIODevice::WriteOnly))
+	std::ofstream file((Game::get().getPath() + "/maps/" + name + ".blc").c_str(),
+		std::ofstream::out | std::ofstream::binary);
+	if (!file)
 		return false;
-	QDataStream out(&file);
 	// Write header
-	out << MAP_FORMAT_VERSION;
-	out << width;
-	out << height;
+	unsigned int version = MAP_FORMAT_VERSION;
+	file.write((const char*)&version, 4);
+	file.write((const char*)&width, 4);
+	file.write((const char*)&height, 4);
 	// Write RLE height info
 	unsigned short runlength = 1;
 	float currentheight = 1000;
@@ -234,8 +235,8 @@ bool Map::compile(std::string name)
 		if (currentheight2 != currentheight || runlength == 65535)
 		{
 			// Write chunk of data
-			out << runlength;
-			out << currentheight;
+			file.write((const char*)&runlength, 2);
+			file.write((const char*)&currentheight, 4);
 			runlength = 0;
 			currentheight = currentheight2;
 		}
@@ -247,8 +248,8 @@ bool Map::compile(std::string name)
 	if (runlength != 0)
 	{
 		// Write chunk of data
-		out << runlength;
-		out << currentheight;
+		file.write((const char*)&runlength, 2);
+		file.write((const char*)&currentheight, 4);
 	}
 	// Write accessibility info
 	// TODO
@@ -313,24 +314,30 @@ bool Map::compile(std::string name)
 		lists[i] = primlists[i]->split();
 	}
 	// Write lists
-	out << (unsigned int)lists.size();
+	unsigned int size = lists.size();
+	file.write((const char*)&size, 4);
 	for (unsigned int i = 0; i < lists.size(); i++)
 	{
-		out << primlists[i]->getTileSet()->getName().c_str();
-		out << primlists[i]->isShadow();
-		out << (unsigned int)lists[i].size();
+		unsigned short length = primlists[i]->getTileSet()->getName().size();
+		file.write((const char*)&length, 2);
+		file.write(primlists[i]->getTileSet()->getName().c_str(), length);
+		unsigned char shadow = primlists[i]->isShadow();
+		file.write((const char*)&shadow, 1);
+		size = lists[i].size();
+		file.write((const char*)&size, 4);
 		for (unsigned int j = 0; j < lists[i].size(); j++)
 		{
 			RectangleF rect = lists[i][j]->getBoundingRect();
-			out << rect.x << rect.y << rect.width << rect.height;
+			file.write((const char*)&rect.x, 4);
+			file.write((const char*)&rect.y, 4);
+			file.write((const char*)&rect.width, 4);
+			file.write((const char*)&rect.height, 4);
 			unsigned int vertexcount = lists[i][j]->getVertexCount();
-			out << vertexcount;
+			file.write((const char*)&vertexcount, 4);
 			float *vertices = lists[i][j]->getVertices();
 			float *texcoords = lists[i][j]->getTextureCoords();
-			for (unsigned int k = 0; k < vertexcount; k++)
-				out << vertices[k * 3] << vertices[k * 3 + 1] << vertices[k * 3 + 2];
-			for (unsigned int k = 0; k < vertexcount; k++)
-				out << texcoords[k * 2] << texcoords[k * 2 + 1];
+			file.write((const char*)vertices, vertexcount * 12);
+			file.write((const char*)texcoords, vertexcount * 8);
 		}
 	}
 	// Clean up
