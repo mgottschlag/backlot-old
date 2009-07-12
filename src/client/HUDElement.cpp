@@ -21,7 +21,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "HUDElement.hpp"
 #include "Preferences.hpp"
-#include "Player.hpp"
 
 #include <GL/gl.h>
 #include <iostream>
@@ -171,7 +170,7 @@ namespace backlot
 		glDisable(GL_BLEND);
 		glColor3f(1.0, 1.0, 1.0);
 
-		PlayerPointer localplayer = Player::getLocalPlayer();
+		/*PlayerPointer localplayer = Player::getLocalPlayer();
 
 		if (localplayer.isNull() == false)
 		{
@@ -200,7 +199,7 @@ namespace backlot
 						(position.y * resolution.y) + fontoffset.y), fontsize, fontcolor);
 				}
 			}
-		}
+		}*/
 
 		// Render the image
 		if (image)

@@ -24,7 +24,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "NetworkData.hpp"
 #include "Buffer.hpp"
-#include "Bullet.hpp"
 #include "Effect.hpp"
 #include "Game.hpp"
 
@@ -175,7 +174,6 @@ namespace backlot
 			enet_peer_reset(peer);
 		enet_host_destroy(host);
 		map = 0;
-		Bullet::clearBullets();
 		return false;
 	}
 

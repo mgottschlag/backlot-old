@@ -22,7 +22,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Input.hpp"
 #include "NetworkData.hpp"
 #include "Preferences.hpp"
-#include "Player.hpp"
 #include "Menu.hpp"
 #include "Graphics.hpp"
 #include "Game.hpp"

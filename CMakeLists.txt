@@ -46,9 +46,6 @@ QuadBatch.cpp
 Camera.cpp
 HUD.cpp
 HUDElement.cpp
-Player.cpp
-Weapon.cpp
-Bullet.cpp
 Menu.cpp
 Font.cpp
 GuichanFont.cpp

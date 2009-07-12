@@ -24,7 +24,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Map.hpp"
 #include "Buffer.hpp"
-#include "Player.hpp"
 
 #include <enet/enet.h>
 #include <vector>
@@ -63,8 +62,6 @@ namespace backlot
 			ENetPeer *peer;
 
 			int lastpacket;
-
-			std::vector<PlayerPointer> players;
 	};
 }
 
