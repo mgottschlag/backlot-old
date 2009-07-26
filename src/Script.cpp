@@ -165,6 +165,20 @@ namespace backlot
 				.def(luabind::self == Vector2I())
 				.def_readwrite("x", &Vector2I::x)
 				.def_readwrite("y", &Vector2I::y),
+			// RectangleF
+			luabind::class_<RectangleF>("RectangleF")
+				.def(luabind::constructor<>())
+				.def(luabind::constructor<const char *>())
+				.def(luabind::constructor<float, float, float, float>())
+				.def(luabind::constructor<const Vector2F &, const Vector2F &>())
+				.def("contains", &RectangleF::contains)
+				.def("overlapsWith", &RectangleF::overlapsWith)
+				.def("insertPoint", &RectangleF::insertPoint)
+				.def("insertRectangle", &RectangleF::insertRectangle)
+				.def_readwrite("x", &RectangleF::x)
+				.def_readwrite("y", &RectangleF::y)
+				.def_readwrite("width", &RectangleF::width)
+				.def_readwrite("height", &RectangleF::height),
 			// Buffer
 			luabind::class_<Buffer, ReferenceCounted, SharedPointer<Buffer> >("Buffer"),
 			// Property class
@@ -197,6 +211,12 @@ namespace backlot
 				[
 					luabind::def("get", &EntityTemplate::get)
 				],
+			luabind::class_<EntityList, ReferenceCounted, SharedPointer<EntityList> >("EntityList")
+				.def(luabind::constructor<>())
+				.def("addEntity", &EntityList::addEntity)
+				.def("removeEntity", &EntityList::removeEntity)
+				.def("getSize", &EntityList::getSize)
+				.def("getEntity", &EntityList::getEntity),
 			// CollisionInfo
 			luabind::class_<CollisionInfo>("CollisionInfo")
 				.def(luabind::constructor<>())
@@ -310,6 +330,7 @@ namespace backlot
 				.def("getSpeed", &Entity::getSpeed)
 				.def("getProperty", &Entity::getProperty)
 				.def("getScript", &Entity::getScript)
+				.def("getRectangle", &Entity::getRectangle)
 				.def("getID", &Entity::getID),
 			// EntityImage
 			luabind::class_<EntityImage, ReferenceCounted, SharedPointer<EntityImage> >("EntityImage")
@@ -368,6 +389,9 @@ namespace backlot
 				.def("setInputTarget", &Game::setInputTarget)
 				.def("getEntity", &Game::getEntity)
 				.def("getCollision", &Game::getCollision)
+				.def("getEntities", (EntityListPointer (Game::*)(std::string))&Game::getEntities)
+				.def("getEntities", (EntityListPointer (Game::*)(RectangleF, std::string))&Game::getEntities)
+				.def("getEntities", (EntityListPointer (Game::*)(RectangleF))&Game::getEntities)
 		];
 	}
 	#endif
@@ -384,6 +408,7 @@ namespace backlot
 				.def("getSpeed", &Entity::getSpeed)
 				.def("getProperty", &Entity::getProperty)
 				.def("getScript", &Entity::getScript)
+				.def("getRectangle", &Entity::getRectangle)
 				.def("getID", &Entity::getID),
 			// EntityState
 			luabind::class_<EntityState, ReferenceCounted, SharedPointer<EntityState> >("EntityState")
@@ -413,6 +438,9 @@ namespace backlot
 				.def("getEntity", &Game::getEntity)
 				.def("getCollision", &Game::getCollision)
 				.def("registerForDeletion", &Game::registerForDeletion)
+				.def("getEntities", (EntityListPointer (Game::*)(std::string))&Game::getEntities)
+				.def("getEntities", (EntityListPointer (Game::*)(RectangleF, std::string))&Game::getEntities)
+				.def("getEntities", (EntityListPointer (Game::*)(RectangleF))&Game::getEntities)
 		];
 	}
 	#endif
