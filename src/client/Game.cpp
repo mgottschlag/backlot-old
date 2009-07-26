@@ -102,18 +102,6 @@ namespace backlot
 			return 0;
 		return entities[id];
 	}
-	std::vector<EntityPointer> Game::getEntities(std::string type)
-	{
-		std::vector<EntityPointer> entitylist;
-		for (int i = 0; i < 65535; i++)
-		{
-			if (entities[i] && entities[i]->getTemplate()->getName() == type)
-			{
-				entitylist.push_back(entities[i]);
-			}
-		}
-		return std::vector<EntityPointer>();
-	}
 
 	int Game::getClientID()
 	{
@@ -189,6 +177,40 @@ namespace backlot
 			collision.collision = true;
 		}
 		return collision;
+	}
+	EntityListPointer Game::getEntities(RectangleF area, std::string type)
+	{
+		EntityListPointer list = new EntityList();
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i] && entities[i]->isMovable())
+			{
+				// Check type if necessary
+				if (type != "" &&  entities[i]->getTemplate()->getName() != type)
+					continue;
+				// Check bounding rectangle
+				RectangleF br = entities[i]->getRectangle();
+				if (br.overlapsWith(area))
+					list->addEntity(entities[i]);
+			}
+		}
+		return list;
+	}
+	EntityListPointer Game::getEntities(RectangleF area)
+	{
+		return getEntities(area, "");
+	}
+	EntityListPointer Game::getEntities(std::string type)
+	{
+		EntityListPointer list = new EntityList();
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i] && entities[i]->getTemplate()->getName() == type)
+			{
+				list->addEntity(entities[i]);
+			}
+		}
+		return list;
 	}
 
 	void Game::update()

@@ -28,6 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "entity/EntityTemplate.hpp"
 #include "EntityImage.hpp"
 #include "Animation.hpp"
+#include "Rectangle.hpp"
 
 #include <vector>
 #include <deque>
@@ -65,10 +66,12 @@ namespace backlot
 			void setID(int id);
 			int getID();
 
+			bool isMovable();
 			void setPosition(const Vector2F &position);
 			Vector2F getPosition();
 			void setSpeed(Vector2F speed, bool ignoreobstacles);
 			Vector2F getSpeed();
+			RectangleF getRectangle();
 
 			Property *getProperty(std::string name);
 

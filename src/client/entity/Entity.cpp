@@ -270,6 +270,10 @@ namespace backlot
 		return id;
 	}
 
+	bool Entity::isMovable()
+	{
+		return positionproperty;
+	}
 	void Entity::setPosition(const Vector2F &position)
 	{
 		if (positionproperty)
@@ -303,6 +307,10 @@ namespace backlot
 	Vector2F Entity::getSpeed()
 	{
 		return speed;
+	}
+	RectangleF Entity::getRectangle()
+	{
+		return RectangleF(getPosition() - tpl->getOrigin(), tpl->getSize());
 	}
 
 	Property *Entity::getProperty(std::string name)

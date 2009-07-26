@@ -24,7 +24,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Script.hpp"
 #include "entity/Entity.hpp"
+#include "entity/EntityList.hpp"
 #include "Client.hpp"
+#include "Rectangle.hpp"
 
 #include <queue>
 
@@ -57,7 +59,6 @@ namespace backlot
 				BufferPointer state);
 			void removeEntity(EntityPointer entity);
 			EntityPointer getEntity(int id);
-			std::vector<EntityPointer> getEntities(std::string type);
 			void registerForDeletion(int id);
 
 			bool onClientConnecting(Client *client);
@@ -73,6 +74,9 @@ namespace backlot
 
 			CollisionInfo getCollision(Vector2F from, Vector2F to,
 				float maxheight);
+			EntityListPointer getEntities(RectangleF area, std::string type);
+			EntityListPointer getEntities(RectangleF area);
+			EntityListPointer getEntities(std::string type);
 
 			void update();
 		private:
