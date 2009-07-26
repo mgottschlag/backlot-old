@@ -25,7 +25,8 @@
 				-- Register bullet for deletion
 				if Server ~= nil then
 					Game.get():registerForDeletion(this:getID())
-					-- TODO: Do damage
+					-- Do damage
+					explosion()
 				end
 			end
 			-- Set new position
@@ -37,7 +38,7 @@
 			local rect = this:getRectangle();
 			rect.x = rect.x + position.x
 			rect.y = rect.y + position.y
-			local entitylist = Game.get():getEntities(rect, "player");
+			local entitylist = Game.get():getEntities(rect, "player")
 			if entitylist:getSize() > 0 then
 				-- Don't hit yourself
 				local playerentity = Game.get():getEntity(player:getInt())
@@ -47,8 +48,27 @@
 					if Server ~= nil then
 						Game.get():registerForDeletion(this:getID())
 					end
-					-- TODO: Do damage
+					-- Do damage
+					otherplayer:getScript():callFunction("do_damage", this:getID(), 20)
+					explosion()
 				end
+			end
+		end
+
+		function explosion()
+			if Server ~= nil then
+				local damagerect = RectangleF(position.x - 1, position.y - 1,
+					2, 2)
+				local entitylist = Game.get():getEntities(damagerect, "player")
+				-- Loop through all entities hit and apply damage
+				for i = 0, entitylist:getSize() - 1, 1 do
+					local otherplayer = entitylist:getEntity(i)
+					-- TODO: Calculate damage based on the distance
+					otherplayer:getScript():callFunction("do_damage", this:getID(), 20)
+				end
+			end
+			if Client ~= nil then
+				-- TODO: Draw explosion
 			end
 		end
 	]]>

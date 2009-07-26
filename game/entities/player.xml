@@ -15,9 +15,14 @@
 	<animation name="feetanim" image="feet" size="4/2" stopped="yes" depth="0.5" period="1000" />
 	<image name="body" src="sprites/player.png" position="-0.5/-0.5" rotate="no" depth="1.5" />
 	<image name="weapon" position="-0.5/-0.5" rotate="no" depth="1.6" />
+	<image name="gibs" src="sprites/gibs.png" position="-0.5/-0.5" rotate="no" depth="1.6" />
 
 	<script>
 	<![CDATA[
+		if Client ~= nil then
+			gibs:setVisible(false)
+		end
+
 		function on_loaded()
 			print("Entity loaded.");
 			if Client ~= nil then
@@ -66,6 +71,9 @@
 					xspeed = xspeed - 1;
 				end
 				-- Set movement
+				if health:getInt() == 0 then
+					return
+				end
 				this:setSpeed(Vector2F(xspeed, yspeed), false);
 				if Client ~= nil then
 					feet:setRotation(0);
@@ -108,6 +116,22 @@
 					print("Texture. "..textureid)
 				end
 			end
+			if property:getName() == "health" then
+				if health:getInt() == 0 then
+					-- Die
+					this:setSpeed(Vector2F(0, 0), false);
+					if Client ~= nil then
+						gibs:setVisible(true)
+						body:setVisible(false)
+						feet:setVisible(false)
+						weapon:setVisible(false)
+					end
+				end
+				local weaponentity = Game.get():getEntity(currentweapon:getInt())
+				if weaponentity.__ok then
+					weaponentity:getScript():callFunction("stop_shooting")
+				end
+			end
 		end
 		function on_set_weapon(weapon)
 			print("on_set_weapon")
@@ -129,6 +153,17 @@
 			elseif key == "shoot" then
 				keys:bit(4, state)
 			end
+		end
+
+		function do_damage(bulletid, damage)
+			print("Damage done: "..damage)
+			-- Change health points
+			local hp = health:getInt()
+			hp = hp - damage;
+			if hp < 0 then
+				hp = 0
+			end
+			health:setInt(hp)
 		end
 	]]>
 	</script>
