@@ -85,10 +85,14 @@
 					-- Shooting
 					if keys:bit(4) == true then
 						local weaponentity = Game.get():getEntity(currentweapon:getInt())
-						weaponentity:getScript():callFunction("start_shooting", this:getID())
+						if weaponentity.__ok then
+							weaponentity:getScript():callFunction("start_shooting", this:getID())
+						end
 					else
 						local weaponentity = Game.get():getEntity(currentweapon:getInt())
-						weaponentity:getScript():callFunction("stop_shooting")
+						if weaponentity.__ok then
+							weaponentity:getScript():callFunction("stop_shooting")
+						end
 					end
 				end
 			end

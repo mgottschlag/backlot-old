@@ -25,12 +25,30 @@
 				-- Register bullet for deletion
 				if Server ~= nil then
 					Game.get():registerForDeletion(this:getID())
+					-- TODO: Do damage
 				end
 			end
 			-- Set new position
 			position = newpos
 			if Client ~= nil then
 				bulletimage:setPosition(position)
+			end
+			-- Check for entity hits
+			local rect = this:getRectangle();
+			rect.x = rect.x + position.x
+			rect.y = rect.y + position.y
+			local entitylist = Game.get():getEntities(rect, "player");
+			if entitylist:getSize() > 0 then
+				-- Don't hit yourself
+				local playerentity = Game.get():getEntity(player:getInt())
+				entitylist:removeEntity(playerentity)
+				if entitylist:getSize() > 0 then
+					print("Player hit!")
+					if Server ~= nil then
+						Game.get():registerForDeletion(this:getID())
+					end
+					-- TODO: Do damage
+				end
 			end
 		end
 	]]>
