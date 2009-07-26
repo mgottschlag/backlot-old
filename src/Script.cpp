@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "entity/Property.hpp"
 #include "Game.hpp"
 #include "Preferences.hpp"
+#include "Timer.hpp"
 #ifdef CLIENT
 #include "Dialog.hpp"
 #include "Client.hpp"
@@ -233,6 +234,17 @@ namespace backlot
 				.def("callFunction", (void (Script::*)(std::string, Vector2F))&Script::callFunction<Vector2F>)
 				.def("callFunction", (void (Script::*)(std::string, Vector2I))&Script::callFunction<Vector2I>)
 				.def("callFunctionInt", (int (Script::*)(std::string))&Script::callFunction<int>),
+			// Timer
+			luabind::class_<Timer, ReferenceCounted, SharedPointer<Timer> >("Timer")
+				.def(luabind::constructor<>())
+				.def("setInterval", &Timer::setInterval)
+				.def("setPeriodic", &Timer::setPeriodic)
+				.def("setTime", &Timer::setTime)
+				.def("getTime", &Timer::getTime)
+				.def("start", &Timer::start)
+				.def("stop", &Timer::stop)
+				.def("reset", &Timer::reset)
+				.def("setCallback", &Timer::setCallback),
 			// Preferences class
 			luabind::class_<Preferences>("Preferences")
 				.scope

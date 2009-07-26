@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "NetworkData.hpp"
 #include "Server.hpp"
-
+#include "Timer.hpp"
 #include "support/tinyxml.h"
 
 #include <iostream>
@@ -401,6 +401,8 @@ namespace backlot
 			deletionqueue.pop();
 			removeEntity(getEntity(id));
 		}
+		// Timer callbacks
+		Timer::callCallbacks();
 		// Send updates to all clients
 		std::map<int, Client*>::iterator it = clients.begin();
 		while (it != clients.end())

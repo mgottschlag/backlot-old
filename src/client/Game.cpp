@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "NetworkData.hpp"
 #include "Server.hpp"
+#include "Timer.hpp"
 
 #include "support/tinyxml.h"
 
@@ -221,6 +222,8 @@ namespace backlot
 			if (entities[i])
 				entities[i]->update();
 		}
+		// Timer callbacks
+		Timer::callCallbacks();
 		// Increase tick counter
 		time++;
 		// Send updates to the server

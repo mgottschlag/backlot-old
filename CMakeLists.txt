@@ -20,6 +20,7 @@ set(SRC_SHARED
 ../TileSet.cpp
 ../Buffer.cpp
 ../Script.cpp
+../Timer.cpp
 ../entity/EntityTemplate.cpp
 ../entity/EntityList.cpp
 ../entity/Property.cpp
