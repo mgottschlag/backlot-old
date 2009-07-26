@@ -21,6 +21,7 @@ set(SRC_SHARED
 ../Buffer.cpp
 ../Script.cpp
 ../entity/EntityTemplate.cpp
+../entity/EntityList.cpp
 ../entity/Property.cpp
 ../support/tinystr.cpp
 ../support/tinyxml.cpp
