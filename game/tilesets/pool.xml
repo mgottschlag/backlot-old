@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tileset basesize="32">
+	<attribute name="speed" type="float" />
+	<attribute name="sound" type="int" size="4" />
+	<!-- normal floor tiles -->
+	<tile name="floorblue" size="32/32" height="0">
+		<quad height="1" offset="0/0" texture="0/0/32/32" />
+	</tile>
+	<tile name="floorred" size="32/32" height="0">
+		<quad height="1" offset="0/0" texture="32/0/32/32" />
+	</tile>
+	<tile name="floorgrey" size="32/32" height="0">
+		<quad height="1" offset="0/0" texture="64/0/32/32" />
+	</tile>
+	<!-- pool -->
+	<tile name="pool" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+	</tile>
+	<tile name="pooltopleft" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="0/32/32/32" type="shadow" />
+		<quad height="0" offset="0/0" texture="0/64/32/32" type="shadow" />
+	</tile>
+	<tile name="pooltop" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="32/32/32/32" type="shadow" />
+		<quad height="0" offset="0/0" texture="32/64/32/32" type="shadow" />
+	</tile>
+	<tile name="poolleft" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="32/32/32/32" rotated="3" type="shadow" />
+		<quad height="0" offset="0/0" texture="0/96/32/32" type="shadow" />
+	</tile>
+	<tile name="poolbottomleft" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="0/32/32/32" rotated="3" type="shadow" />
+		<quad height="0" offset="0/0" texture="0/96/32/32" type="shadow" />
+	</tile>
+	<tile name="pooltopright" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="0/32/32/32" rotated="1" type="shadow" />
+		<quad height="0" offset="0/0" texture="32/64/32/32" type="shadow" />
+	</tile>
+	<tile name="poolright" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="32/32/32/32" rotated="1" type="shadow" />
+	</tile>
+	<tile name="poolbottom" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="32/32/32/32" rotated="2" type="shadow" />
+	</tile>
+	<tile name="poolbottomright" size="32/32" height="-0.4">
+		<quad height="0" offset="0/0" texture="96/0/32/32" />
+		<quad height="0" offset="0/0" texture="0/32/32/32" rotated="2" type="shadow" />
+	</tile>
+	<!-- walls -->
+	<tile name="wall" size="32/32" height="2">
+		<quad height="2" offset="0/0" texture="128/0/32/32" />
+	</tile>
+	<tile name="wallsingle" size="32/32" height="2">
+		<quad height="2" offset="0/0" texture="128/0/32/32" />
+
+		<quad height="1" offset="32/0" texture="0/160/32/32" type="shadow" />
+		<quad height="1" offset="0/32" texture="0/160/32/32" rotated="1" type="shadow" />
+		<quad height="1" offset="-32/0" texture="0/160/32/32" rotated="2" type="shadow" />
+		<quad height="1" offset="0/-32" texture="0/160/32/32" rotated="3" type="shadow" />
+
+		<quad height="1" offset="32/32" texture="0/192/32/32" type="shadow" />
+		<quad height="1" offset="-32/32" texture="0/192/32/32" rotated="1" type="shadow" />
+		<quad height="1" offset="-32/-32" texture="0/192/32/32" rotated="2" type="shadow" />
+		<quad height="1" offset="32/-32" texture="0/192/32/32" rotated="3" type="shadow" />
+
+		<quad height="1" offset="32/32" texture="128/32/32/32" type="shadow" />
+		<quad height="1" offset="32/0" texture="96/64/32/32" type="shadow" />
+		<quad height="1" offset="0/32" texture="64/96/32/32" type="shadow" />
+	</tile>
+</tileset>
