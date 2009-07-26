@@ -71,7 +71,8 @@ namespace backlot
 
 			void injectUpdates(Client *client, BufferPointer buffer);
 
-			CollisionInfo getCollision(Vector2F from, Vector2F to);
+			CollisionInfo getCollision(Vector2F from, Vector2F to,
+				float maxheight);
 
 			void update();
 		private:

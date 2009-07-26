@@ -74,13 +74,23 @@ namespace backlot
 			bool load(std::string name);
 
 			/**
-			 * Returns true if the whole area is accessible.
+			 * Returns the height at the given position.
 			 */
-			bool isAccessible(RectangleF area);
+			float getHeight(Vector2F position);
+			/**
+			 * Returns the maximum height in the area.
+			 */
+			float getMaximumHeight(RectangleF area);
+			/**
+			 * Returns the minimum height in the area.
+			 */
+			float getMinimumHeight(RectangleF area);
+
 			/**
 			 * Returns true if the area along the line is accessible.
 			 */
-			bool isAccessible(Vector2F start, Vector2F end, Vector2F *collision = 0);
+			bool isAccessible(Vector2F start, Vector2F end, float maxheight,
+				Vector2F *collision = 0);
 
 			#ifdef CLIENT
 			/**

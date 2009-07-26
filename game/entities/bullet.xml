@@ -20,10 +20,11 @@
 			time = time + 1;
 			local newpos = start:getVector2F() + speed:getVector2F() * (time / 50)
 			-- Collision checking
-			local collision = Game.get():getCollision(oldpos, newpos)
+			local collision = Game.get():getCollision(oldpos, newpos, 1)
 			if collision.collision then
 				-- Register bullet for deletion
 				if Server ~= nil then
+					Game.get():registerForDeletion(this:getID())
 				end
 			end
 			-- Set new position

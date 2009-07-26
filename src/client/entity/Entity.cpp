@@ -214,16 +214,21 @@ namespace backlot
 				if (positionproperty && speedinfo->speed != Vector2F(0, 0))
 				{
 					Vector2F position = positionproperty->getVector2F();
+					MapPointer map = Client::get().getMap();
 					// Apply speed
 					for (int i = start; i < end; i++)
 					{
+						float currentheight = map->getHeight(position);
+						position += speedinfo->speed / 50;
+						RectangleF area(position.x - 0.35, position.y - 0.35, 0.7, 0.7);
+						float maxheight = map->getMaximumHeight(area);
+						if (maxheight >= currentheight + 0.5)
+						{
+							position -= speedinfo->speed / 50;
+						}
 						position += speedinfo->speed / 50;
 					}
-					if (Client::get().getMap()->isAccessible(RectangleF(position.x - 0.35,
-						position.y - 0.35, 0.7, 0.7)))
-					{
-						positionproperty->setVector2F(position);
-					}
+					positionproperty->setVector2F(position);
 				}
 			}
 			speedinfo++;
@@ -331,9 +336,12 @@ namespace backlot
 		if (positionproperty && speed != Vector2F(0, 0))
 		{
 			Vector2F position = positionproperty->getVector2F();
+			MapPointer map = Client::get().getMap();
+			float currentheight = map->getHeight(position);
 			position += speed / 50;
-			if (Client::get().getMap()->isAccessible(RectangleF(position.x - 0.35,
-				position.y - 0.35, 0.7, 0.7)))
+			RectangleF area(position.x - 0.35, position.y - 0.35, 0.7, 0.7);
+			float maxheight = map->getMaximumHeight(area);
+			if (maxheight <= currentheight + 0.5)
 			{
 				positionproperty->setVector2F(position);
 			}

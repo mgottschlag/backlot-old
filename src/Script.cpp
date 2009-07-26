@@ -412,6 +412,7 @@ namespace backlot
 				.def("removeEntity", &Game::removeEntity)
 				.def("getEntity", &Game::getEntity)
 				.def("getCollision", &Game::getCollision)
+				.def("registerForDeletion", &Game::registerForDeletion)
 		];
 	}
 	#endif

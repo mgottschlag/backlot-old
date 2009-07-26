@@ -345,7 +345,8 @@ namespace backlot
 		client->setLag(time - updatetime);
 	}
 
-	CollisionInfo Game::getCollision(Vector2F from, Vector2F to)
+	CollisionInfo Game::getCollision(Vector2F from, Vector2F to,
+		float maxheight)
 	{
 		CollisionInfo collision;
 		collision.collision = false;
@@ -353,7 +354,8 @@ namespace backlot
 		collision.entity = 0;
 		collision.point = Vector2F();
 		// Check map collision
-		if (Server::get().getMap()->isAccessible(from, to, &collision.point))
+		if (!Server::get().getMap()->isAccessible(from, to, maxheight,
+			&collision.point))
 		{
 			collision.collision = true;
 		}

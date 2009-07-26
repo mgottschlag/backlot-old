@@ -67,7 +67,8 @@ namespace backlot
 			void setInputTarget(EntityPointer entity);
 			EntityPointer getInputTarget();
 
-			CollisionInfo getCollision(Vector2F from, Vector2F to);
+			CollisionInfo getCollision(Vector2F from, Vector2F to,
+				float maxheight);
 
 			void update();
 		private:

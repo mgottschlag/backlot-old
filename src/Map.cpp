@@ -166,13 +166,116 @@ namespace backlot
 		return true;
 	}
 
-	bool Map::isAccessible(RectangleF area)
+	float Map::getHeight(Vector2F position)
 	{
-		return true;
+		if (position.x < 0 || position.y < 0)
+			return 1000;
+		if (position.x >= size.x || position.y >= size.y)
+			return 1000;
+		return heightmap[(int)position.x + (int)position.y * size.x];
 	}
-	bool Map::isAccessible(Vector2F start, Vector2F end, Vector2F *collision)
+	float Map::getMaximumHeight(RectangleF area)
 	{
-		return true;
+		// Align area to integer boundaries
+		Vector2I min(floor(area.x), floor(area.y));
+		Vector2I max(ceil(area.x + area.width), ceil(area.y + area.height));
+		// Loop through all squares
+		float maxheight = -1000;
+		for (int y = min.y; y < max.y; y++)
+		{
+			for (int x = min.x; x < max.x; x++)
+			{
+				float height = getHeight(Vector2F(x, y));
+				if (height > maxheight)
+					maxheight = height;
+			}
+		}
+		return maxheight;
+	}
+	float Map::getMinimumHeight(RectangleF area)
+	{
+		// Align area to integer boundaries
+		Vector2I min((int)area.x, (int)area.y);
+		Vector2I max(ceil(area.x + area.width), ceil(area.y + area.height));
+		// Loop through all squares
+		float minheight = 1000;
+		for (int y = min.y; y < max.y; y++)
+		{
+			for (int x = min.x; x < max.x; x++)
+			{
+				float height = getHeight(Vector2F(x, y));
+				if (height < minheight)
+					minheight = height;
+			}
+		}
+		return minheight;
+	}
+
+	bool Map::isAccessible(Vector2F start, Vector2F end, float maxheight,
+		Vector2F *collision)
+	{
+		// Special cases
+		if (start.x == end.x)
+		{
+			// TODO
+			return true;
+		}
+		if (start.y == end.y)
+		{
+			// TODO
+			return true;
+		}
+		// Go through the grid along the vector
+		int startx = start.x;
+		int starty = start.y;
+		int dirx = (end.x > start.x) ? 1 : -1;
+		int diry = (end.y > start.y) ? 1 : -1;
+		int nextx = (dirx == 1) ? floor(start.x + 1.001) : ceil(start.x - 1.001);
+		int nexty = (diry == 1) ? floor(start.y + 1.001) : ceil(start.y - 1.001);
+		float nextx_y = start.y + (start.x - nextx) / (end.x - start.x) * (end.y - start.y);
+		float nexty_x = start.x + (start.y - nexty) / (end.y - start.y) * (end.x - start.x);
+		float tmaxxsquared = (start.x - nextx) * (start.x - nextx) + (start.y - nextx_y) * (start.y - nextx_y);
+		float tmaxysquared = (start.y - nexty) * (start.y - nexty) + (start.x - nexty_x) * (start.x - nexty_x);
+		float lengthsquared = (end - start).getLengthSquared();
+		if (tmaxxsquared >= lengthsquared && tmaxysquared >= lengthsquared)
+		{
+			// End reached
+			return true;
+		}
+		if (tmaxxsquared < tmaxysquared)
+		{
+			int nextx = startx + dirx;
+			float nextheight = getHeight(Vector2F(nextx, starty));
+			if (nextheight > maxheight)
+			{
+				// Collision
+				// TODO: Collision info
+				return false;
+			}
+			else
+			{
+				// Continue search
+				// TODO: Can be optimized.
+				return isAccessible(Vector2F((float)nextx, nextx_y), end, maxheight, collision);
+			}
+		}
+		else
+		{
+			int nexty = starty + diry;
+			float nextheight = getHeight(Vector2F(startx, nexty));
+			if (nextheight > maxheight)
+			{
+				// Collision
+				// TODO: Collision info
+				return false;
+			}
+			else
+			{
+				// Continue search
+				// TODO: Can be optimized.
+				return isAccessible(Vector2F(nexty_x, (float)nexty), end, maxheight, collision);
+			}
+		}
 	}
 
 	#ifdef CLIENT
