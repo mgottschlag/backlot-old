@@ -59,6 +59,16 @@ namespace backlot
 			/**
 			 * Constructor.
 			 */
+			Rectangle(const Vector2F &position, const Vector2F &size)
+			{
+				this->x = position.x;
+				this->y = position.y;
+				this->width = size.x;
+				this->height = size.y;
+			}
+			/**
+			 * Constructor.
+			 */
 			Rectangle(const Rectangle& r)
 			{
 				x = r.x;
@@ -263,10 +273,35 @@ namespace backlot
 			/**
 			 * Checks whether the point is within the rectangle.
 			 */
-			bool contains(const Vector2<T> point)
+			bool contains(const Vector2<T> &point) const
 			{
 				return point.x >= x && point.y >= y && point.x < x + width
 					&& point.y < y + height;
+			}
+			/**
+			 * Checks whether the rectangles overlap.
+			 */
+			bool overlapsWith(const Rectangle<T> &rect) const
+			{
+				// One of the corners of rect is in this rectangle?
+				if (contains(Vector2<T>(rect.x, rect.y)))
+					return true;
+				if (contains(Vector2<T>(rect.x + rect.width, rect.y)))
+					return true;
+				if (contains(Vector2<T>(rect.x, rect.y + rect.height)))
+					return true;
+				if (contains(Vector2<T>(rect.x + rect.width, rect.y + rect.height)))
+					return true;
+				// One of the corners of this rectangle is in rect?
+				if (rect.contains(Vector2<T>(x, y)))
+					return true;
+				if (rect.contains(Vector2<T>(x + width, y)))
+					return true;
+				if (rect.contains(Vector2<T>(x, y + height)))
+					return true;
+				if (rect.contains(Vector2<T>(x + width, y + height)))
+					return true;
+				return false;
 			}
 
 			/**
