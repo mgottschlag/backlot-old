@@ -229,6 +229,7 @@ namespace backlot
 				.def("isFunction", &Script::isFunction)
 				.def("callFunction", (void (Script::*)(std::string))&Script::callFunction)
 				.def("callFunction", (void (Script::*)(std::string, int))&Script::callFunction<int>)
+				.def("callFunction", (void (Script::*)(std::string, int, int))&Script::callFunction<int, int>)
 				.def("callFunction", (void (Script::*)(std::string, Vector2F))&Script::callFunction<Vector2F>)
 				.def("callFunction", (void (Script::*)(std::string, Vector2I))&Script::callFunction<Vector2I>)
 				.def("callFunctionInt", (int (Script::*)(std::string))&Script::callFunction<int>),
