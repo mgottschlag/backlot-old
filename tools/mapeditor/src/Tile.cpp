@@ -67,7 +67,7 @@ bool Tile::load(TiXmlElement *xml)
 			std::cerr << "Missing quad height or texture." << std::endl;
 			return false;
 		}
-		float height = atoi(quad->Attribute("height"));
+		float height = atof(quad->Attribute("height"));
 		RectangleI texturerect = quad->Attribute("texture");
 
 		Vector2I offset;

@@ -37,8 +37,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>200</width>
-         <height>272</height>
+         <width>171</width>
+         <height>214</height>
         </rect>
        </property>
        <attribute name="label">
@@ -137,8 +137,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>274</width>
-         <height>272</height>
+         <width>103</width>
+         <height>167</height>
         </rect>
        </property>
        <attribute name="label">
@@ -210,8 +210,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>274</width>
-         <height>272</height>
+         <width>101</width>
+         <height>101</height>
         </rect>
        </property>
        <attribute name="label">
@@ -228,8 +228,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>274</width>
-         <height>272</height>
+         <width>101</width>
+         <height>101</height>
         </rect>
        </property>
        <attribute name="label">
@@ -246,8 +246,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>274</width>
-         <height>272</height>
+         <width>131</width>
+         <height>155</height>
         </rect>
        </property>
        <attribute name="label">
@@ -377,6 +377,9 @@
    <property name="toolTip">
     <string>New map</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="ActionOpen">
    <property name="icon">
@@ -385,6 +388,9 @@
    </property>
    <property name="text">
     <string>Open map</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="ActionSave">
@@ -395,6 +401,9 @@
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="ActionCompile">
    <property name="icon">
@@ -403,6 +412,9 @@
    </property>
    <property name="text">
     <string>Compile</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="ActionErase">
@@ -416,6 +428,9 @@
    <property name="text">
     <string>Erase</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
   </action>
   <action name="ActionDraw">
    <property name="checkable">
@@ -427,6 +442,9 @@
    </property>
    <property name="text">
     <string>Draw</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
    </property>
   </action>
   <action name="ActionSaveAs">
@@ -448,6 +466,9 @@
    </property>
    <property name="text">
     <string>Select</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
   <action name="ActionExit">
