@@ -226,7 +226,6 @@ namespace backlot
 						{
 							position -= speedinfo->speed / 50;
 						}
-						position += speedinfo->speed / 50;
 					}
 					positionproperty->setVector2F(position);
 				}
