@@ -126,10 +126,23 @@
 						feet:setVisible(false)
 						weapon:setVisible(false)
 					end
-				end
-				local weaponentity = Game.get():getEntity(currentweapon:getInt())
-				if weaponentity.__ok then
-					weaponentity:getScript():callFunction("stop_shooting")
+					if Server ~= nil then
+						respawntimer = Timer();
+						respawntimer:setInterval(1000)
+						respawntimer:setCallback(this:getScript(), "respawn")
+						respawntimer:start()
+					end
+					local weaponentity = Game.get():getEntity(currentweapon:getInt())
+					if weaponentity.__ok then
+						weaponentity:getScript():callFunction("stop_shooting")
+					end
+				else
+					if Client ~= nil then
+						gibs:setVisible(false)
+						body:setVisible(true)
+						feet:setVisible(true)
+						weapon:setVisible(true)
+					end
 				end
 			end
 		end
@@ -164,6 +177,13 @@
 				hp = 0
 			end
 			health:setInt(hp)
+		end
+
+		function respawn()
+			respawntimer = nil
+			print("Respawning.")
+			health:setInt(100)
+			position:setVector2F(Vector2F(2, 2))
 		end
 	]]>
 	</script>
