@@ -195,7 +195,7 @@ namespace backlot
 	float Map::getMinimumHeight(RectangleF area)
 	{
 		// Align area to integer boundaries
-		Vector2I min((int)area.x, (int)area.y);
+		Vector2I min(floor(area.x), floor(area.y));
 		Vector2I max(ceil(area.x + area.width), ceil(area.y + area.height));
 		// Loop through all squares
 		float minheight = 1000;
