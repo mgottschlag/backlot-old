@@ -49,7 +49,7 @@
 						Game.get():registerForDeletion(this:getID())
 					end
 					-- Do damage
-					otherplayer:getScript():callFunction("do_damage", this:getID(), 20)
+					entitylist:getEntity(0):getScript():callFunction("do_damage", this:getID(), 20)
 					explosion()
 				end
 			end
