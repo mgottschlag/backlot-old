@@ -111,22 +111,18 @@ namespace backlot
 		
 		
 		std::string serveraddress = "localhost:27272";
-		bool startserver = true;
-		bool connect = true;
+		bool startserver = false;
+		bool connect = false;
 		
 		for (int i = 0; i < int(args.size()); i++)
 		{
 			std::string option = args[i];
-			if (((option == "--noserver") || (option == "-ns")))
+			if (((option == "--host") || (option == "-h")))
 			{
-				startserver = false;
+				startserver = true;
+				connect = true;
 			}
-			if (((option == "--noconnect") || (option == "-nc")))
-			{
-				connect =  false;
-				startserver = false;
-			}
-			if (((option == "--serveraddress") || (option == "-s")))
+			if (((option == "--join") || (option == "-j")))
 			{
 				i++;
 				serveraddress = args[i];
@@ -159,15 +155,8 @@ namespace backlot
 			if (!Input::get().update())
 				stopping = true;
 			// Game logic
-			if (startserver)
-			{
-				Server::get().update();
-			}
-			
-			if (connect)
-			{
-				Client::get().update();
-			}
+			Server::get().update();
+			Client::get().update();
 			// Render everything
 			if (!Graphics::get().render())
 				stopping = true;
@@ -178,10 +167,8 @@ namespace backlot
 				usleep(lastframe - currenttime);
 		}
 		
-		if (connect)
 		Client::get().destroy();
-		if (startserver)
-			Server::get().destroy();
+		Server::get().destroy();
 		// Shut down engine
 		Dialog::unloadAll();
 		Audio::get().destroy();
