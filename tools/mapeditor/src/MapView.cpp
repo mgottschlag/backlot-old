@@ -37,8 +37,11 @@ MapView::MapView(QWidget *parent) : QGLWidget(parent)
 	mousey = 0;
 	moving = false;
 	currenttile = 0;
+	currententity = "";
+	mode = EDM_None;
 	action = EUA_None;
 	painting = false;
+	entitytexture = 0;
 	setMouseTracking(true);
 }
 
@@ -46,9 +49,18 @@ void MapView::setTile(Tile *tile)
 {
 	currenttile = tile;
 }
+void MapView::setEntity(std::string entity)
+{
+	std::cout << "Selected entity " << entity << "." << std::endl;
+	currententity = entity;
+}
 void MapView::setUserAction(UserAction action)
 {
 	this->action = action;
+}
+void MapView::setDrawMode(DrawMode mode)
+{
+	this->mode = mode;
 }
 
 void MapView::showGrid(bool grid)
@@ -76,6 +88,8 @@ void MapView::initializeGL()
 	glScalef(1.0, -1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	TileSet::loadTextures();
+	// Load entity texture
+	entitytexture = bindTexture(QImage(":/icons/icons/entity.png"));
 }
 void MapView::paintGL()
 {
@@ -121,7 +135,7 @@ void MapView::paintGL()
 		glEnd();
 	}
 	// Draw cursor
-	if (action == EUA_DrawTile)
+	if (action == EUA_Draw && mode == EDM_Tile)
 	{
 		int x = (float)mousex / 32 + camerax;
 		int y = (float)mousey / 32 + cameray;
@@ -133,6 +147,19 @@ void MapView::paintGL()
 				glClear(GL_DEPTH_BUFFER_BIT);
 				currenttile->render(x, y);
 				currenttile->renderShadows(x, y);
+			}
+		}
+	}
+	else if (action == EUA_Draw && mode == EDM_Tile)
+	{
+		int x = (float)mousex / 32 + camerax;
+		int y = (float)mousey / 32 + cameray;
+		if (x >= 0 && x < width
+			&& y >= 0 && y < height)
+		{
+			if (currententity != "")
+			{
+				// TODO
 			}
 		}
 	}
@@ -166,6 +193,8 @@ void MapView::paintGL()
 			glVertex2f(150 - borderx, 150 - bordery);
 			glVertex2f(150 - borderx, bordery);
 		glEnd();
+		// Map entities
+		// TODO
 		// Camera
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		float x = (camerax + 5) / (width + 10) * 150;
@@ -196,7 +225,11 @@ void MapView::mousePressEvent(QMouseEvent *event)
 	else if (event->button() == Qt::LeftButton)
 	{
 		// Start moving
-		painting = true;
+		if (mode == EDM_Tile)
+		{
+			// Don't draw more than one entity
+			painting = true;
+		}
 		mousex = event->x();
 		mousey = event->y();
 		performAction();
@@ -254,13 +287,27 @@ void MapView::performAction()
 		{
 			case EUA_None:
 				break;
-			case EUA_DrawTile:
-				if (currenttile)
-					Map::get().setTile(x, y, currenttile);
+			case EUA_Draw:
+				if (mode == EDM_Tile)
+				{
+					if (currenttile)
+						Map::get().setTile(x, y, currenttile);
+				}
+				else if (mode == EDM_Entity)
+				{
+					// TODO
+				}
 				break;
-			case EUA_EraseTile:
-				if (currenttile)
-					Map::get().setTile(x, y, 0);
+			case EUA_Erase:
+				if (mode == EDM_Tile)
+				{
+					if (currenttile)
+						Map::get().setTile(x, y, 0);
+				}
+				else if (mode == EDM_Entity)
+				{
+					// TODO
+				}
 				break;
 		};
 	}

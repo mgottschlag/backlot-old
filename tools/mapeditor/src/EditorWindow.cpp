@@ -46,6 +46,8 @@ EditorWindow::EditorWindow() : QMainWindow(), newmap(this), editgroup(this)
 	ui.ActionMiniMap->setChecked(true);
 	QObject::connect(ui.resize, SIGNAL(clicked()), this, SLOT(resize()));
 	QObject::connect(ui.tilelist, SIGNAL(clicked(QModelIndex)), this, SLOT(selectTile(QModelIndex)));
+	QObject::connect(ui.entitylist, SIGNAL(clicked(QModelIndex)), this, SLOT(selectEntity(QModelIndex)));
+	QObject::connect(ui.toolbox, SIGNAL(currentChanged(int)), this, SLOT(selectPanel(int)));
 	// Create edit input group
 	editgroup.addAction(ui.ActionDraw);
 	editgroup.addAction(ui.ActionErase);
@@ -60,6 +62,13 @@ EditorWindow::EditorWindow() : QMainWindow(), newmap(this), editgroup(this)
 		tilelist.appendRow(new QStandardItem(tilenames[i].c_str()));
 	}
 	ui.tilelist->setModel(&tilelist);
+	// Fill entity list
+	std::vector<std::string> entitynames = Game::get().getEntities();
+	for (unsigned int i = 0; i < entitynames.size(); i++)
+	{
+		entitylist.appendRow(new QStandardItem(entitynames[i].c_str()));
+	}
+	ui.entitylist->setModel(&entitylist);
 }
 
 void EditorWindow::newMap()
@@ -147,19 +156,46 @@ void EditorWindow::selectTile(const QModelIndex &index)
 	// Update preview
 	// TODO
 }
+void EditorWindow::selectEntity(const QModelIndex &index)
+{
+	// Get entity
+	QStandardItem *item = entitylist.itemFromIndex(index);
+	std::string entity = item->text().toAscii().constData();
+	// Set entity as the current entity for editing
+	ui.levelview->setEntity(entity);
+}
 void EditorWindow::setAction(QAction *action)
 {
 	if (action == ui.ActionDraw)
 	{
-		ui.levelview->setUserAction(EUA_DrawTile);
+		ui.levelview->setUserAction(EUA_Draw);
 	}
 	else if (action == ui.ActionErase)
 	{
-		ui.levelview->setUserAction(EUA_EraseTile);
+		ui.levelview->setUserAction(EUA_Erase);
 	}
 	else
 	{
 		ui.levelview->setUserAction(EUA_None);
+	}
+}
+void EditorWindow::selectPanel(int index)
+{
+	if (ui.toolbox->widget(index) == ui.tiles)
+	{
+		std::cout << "Tile panel." << std::endl;
+		// Set edit mode
+		ui.levelview->setDrawMode(EDM_Tile);
+	}
+	else if (ui.toolbox->widget(index) == ui.entities)
+	{
+		std::cout << "Entity panel." << std::endl;
+		ui.levelview->setDrawMode(EDM_Entity);
+	}
+	else
+	{
+		// Disable editing
+		ui.levelview->setDrawMode(EDM_None);
 	}
 }
 

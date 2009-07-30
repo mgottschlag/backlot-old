@@ -30,15 +30,15 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="settings">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>171</width>
-         <height>214</height>
+         <width>200</width>
+         <height>272</height>
         </rect>
        </property>
        <attribute name="label">
@@ -137,8 +137,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>103</width>
-         <height>167</height>
+         <width>274</width>
+         <height>272</height>
         </rect>
        </property>
        <attribute name="label">
@@ -210,8 +210,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>101</width>
-         <height>101</height>
+         <width>274</width>
+         <height>272</height>
         </rect>
        </property>
        <attribute name="label">
@@ -228,8 +228,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>101</width>
-         <height>101</height>
+         <width>274</width>
+         <height>272</height>
         </rect>
        </property>
        <attribute name="label">
@@ -237,7 +237,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QListView" name="listView"/>
+         <widget class="QListView" name="entitylist"/>
         </item>
        </layout>
       </widget>
@@ -246,8 +246,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>131</width>
-         <height>155</height>
+         <width>274</width>
+         <height>272</height>
         </rect>
        </property>
        <attribute name="label">

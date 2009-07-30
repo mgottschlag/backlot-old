@@ -29,8 +29,15 @@ class Tile;
 enum UserAction
 {
 	EUA_None,
-	EUA_DrawTile,
-	EUA_EraseTile
+	EUA_Draw,
+	EUA_Erase
+};
+
+enum DrawMode
+{
+	EDM_None,
+	EDM_Tile,
+	EDM_Entity
 };
 
 class MapView : public QGLWidget
@@ -41,7 +48,9 @@ class MapView : public QGLWidget
 		MapView(QWidget *parent = 0);
 
 		void setTile(Tile *tile);
+		void setEntity(std::string entity);
 		void setUserAction(UserAction action);
+		void setDrawMode(DrawMode mode);
 
 	public slots:
 		void showGrid(bool grid);
@@ -63,8 +72,11 @@ class MapView : public QGLWidget
 		float cameray;
 		bool moving;
 		Tile *currenttile;
+		std::string currententity;
 		UserAction action;
+		DrawMode mode;
 		bool painting;
+		unsigned int entitytexture;
 };
 
 #endif

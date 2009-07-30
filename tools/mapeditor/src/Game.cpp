@@ -72,6 +72,17 @@ std::vector<std::string> Game::getTileSets()
 	}
 	return tilesets;
 }
+std::vector<std::string> Game::getEntities()
+{
+	// Get file list
+	std::vector<std::string> entities = getDirectoryList("entities", ".xml");
+	// Strip away extensions
+	for (unsigned int i = 0; i < entities.size(); i++)
+	{
+		entities[i] = entities[i].substr(0, entities[i].size() - 4);
+	}
+	return entities;
+}
 
 Game::Game()
 {

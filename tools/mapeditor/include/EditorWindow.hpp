@@ -44,7 +44,9 @@ class EditorWindow : public QMainWindow
 		void about();
 		void resize();
 		void selectTile(const QModelIndex &index);
+		void selectEntity(const QModelIndex &index);
 		void setAction(QAction *action);
+		void selectPanel(int index);
 
 	protected:
 		void closeEvent(QCloseEvent *event);
@@ -54,6 +56,7 @@ class EditorWindow : public QMainWindow
 		OpenMapDialog openmap;
 		QActionGroup editgroup;
 		QStandardItemModel tilelist;
+		QStandardItemModel entitylist;
 };
 
 #endif

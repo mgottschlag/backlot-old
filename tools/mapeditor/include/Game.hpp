@@ -35,6 +35,7 @@ class Game
 
 		std::vector<std::string> getMaps();
 		std::vector<std::string> getTileSets();
+		std::vector<std::string> getEntities();
 	private:
 		Game();
 

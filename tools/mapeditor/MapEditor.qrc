@@ -10,5 +10,6 @@
     <file>icons/draw-freehand.png</file>
     <file>icons/help-about.png</file>
     <file>icons/select-rectangular.png</file>
+    <file>icons/entity.png</file>
   </qresource>
 </RCC>
