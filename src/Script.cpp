@@ -28,6 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifdef CLIENT
 #include "Dialog.hpp"
 #include "Client.hpp"
+#include "Server.hpp"
 #include "Graphics.hpp"
 #include <guichan/widgets/checkbox.hpp>
 #include <guichan/widgets/textfield.hpp>
@@ -386,12 +387,22 @@ namespace backlot
 					luabind::def("get", &Graphics::get)
 				]
 				.def("getCamera", &Graphics::getCamera),
+			// Server class
+			luabind::class_<Server>("ServerControl")
+				.scope
+				[
+					luabind::def("get", &Server::get)
+				]
+				.def("init", &Server::init)
+				.def("destroy", &Server::destroy),
 			// Client class
 			luabind::class_<Client>("Client")
 				.scope
 				[
 					luabind::def("get", &Client::get)
 				]
+				.def("init", &Client::init)
+				.def("destroy", &Client::destroy)
 				.def("getMap", &Client::getMap),
 			// Game class
 			luabind::class_<Game>("Game")

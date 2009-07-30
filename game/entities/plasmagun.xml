@@ -15,9 +15,6 @@
 		-- If true, the weapon is currently shooting
 		shooting = false
 
-
-		function shoot(player)
-		end
 		function pickup(player)
 			lifted:setBool(true);
 		end

@@ -52,7 +52,14 @@ namespace backlot
 	}
 	bool Game::destroy()
 	{
-		return false;
+		// Remove entities
+		for (int i = 0; i < 65535; i++)
+		{
+			if (entities[i])
+				entities[i]->destroyScript();
+			entities[i] = 0;
+		}
+		return true;
 	}
 
 	EntityPointer Game::addEntity(std::string type, int owner, int id,

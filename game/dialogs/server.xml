@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dialog size="200/200" title="Host server">
+	<label position="10/20" size="100/20" text="Map:" />
+	<textfield name="map" position="10/40" size="180/20" />
+
+	<button id="0" position="10/160" size="80/20" label="Host" />
+	<button id="1" position="110/160" size="80/20" label="Cancel" />
+
+	<script>
+	<![CDATA[
+	function on_button(index)
+		if index == 0 then
+			menu.hide_dialog("server");
+			-- Close existing game
+			Client.get():destroy()
+			ServerControl.get():destroy()
+			-- Start new game
+			if ServerControl.get():init(27272, map:getText(), 8) == false then
+				print("Could not create server.")
+				return
+			end
+			if Client.get():init("localhost:27272") == false then
+				print("Could not connect to the server.")
+				ServerControl.get():destroy()
+				return
+			end
+		elseif index == 1 then
+			menu.hide_dialog("server");
+		end
+	end
+
+	function on_show()
+	end
+	]]>
+	</script>
+</dialog>

@@ -138,6 +138,8 @@ namespace backlot
 	}
 	bool Client::destroy()
 	{
+		if (!map)
+			return true;
 		// Disconnect properly
 		ENetEvent event;
 		enet_peer_disconnect(peer, 0);
@@ -159,12 +161,14 @@ namespace backlot
 			if (disconnected)
 				break;
 		}
+		// Remove entities
+		Game::get().destroy();
 		// Destroy socket
 		if (!disconnected)
 			enet_peer_reset(peer);
 		enet_host_destroy(host);
 		map = 0;
-		return false;
+		return true;
 	}
 
 	void Client::setAcknowledgedPacket(int time)
@@ -179,6 +183,8 @@ namespace backlot
 
 	bool Client::update()
 	{
+		if (!map)
+			return true;
 		// Receive packets
 		ENetEvent event;
 		while (enet_host_service(host, &event, 0) > 0)

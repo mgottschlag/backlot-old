@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dialog size="200/200" title="Join server">
+	<label position="10/20" size="100/20" text="Server (without port):" />
+	<textfield name="servername" position="10/40" size="180/20" />
+
+	<button id="0" position="10/160" size="80/20" label="Join" />
+	<button id="1" position="110/160" size="80/20" label="Cancel" />
+
+	<script>
+	<![CDATA[
+	function on_button(index)
+		if index == 0 then
+			menu.hide_dialog("join");
+			-- Close existing game
+			Client.get():destroy()
+			ServerControl.get():destroy()
+			-- Join game
+			if Client.get():init(servername:getText()..":27272") == false then
+				print("Could not connect to the server.")
+				ServerControl.get():destroy()
+				return
+			end
+		elseif index == 1 then
+			menu.hide_dialog("join");
+		end
+	end
+
+	function on_show()
+	end
+	]]>
+	</script>
+</dialog>

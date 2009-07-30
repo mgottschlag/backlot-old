@@ -192,16 +192,22 @@ namespace backlot
 	bool Server::destroy()
 	{
 		#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+		if (!process)
+			return true;
 		TerminateProcess(process, 0);
 		CloseHandle(process);
+		process = 0;
 		#else
+		if (pid == -1)
+			return true;
 		// TODO: We're a little rough here
 		kill(pid, SIGKILL);
 		fclose(infile);
 		close(in);
 		close(out);
+		pid = -1;
 		#endif
-		return false;
+		return true;
 	}
 
 	bool Server::update()
@@ -211,5 +217,10 @@ namespace backlot
 
 	Server::Server()
 	{
+		#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(_WIN32)
+		process = 0;
+		#else
+		pid = -1;
+		#endif
 	}
 }

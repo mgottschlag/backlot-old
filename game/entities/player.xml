@@ -107,7 +107,7 @@
 			if property:getName() == "currentweapon" then
 				print("Weapon changed. "..currentweapon:getInt())
 				weaponentity = Game.get():getEntity(currentweapon:getInt())
-				if Client ~= nil then
+				if weaponentity.__ok and Client ~= nil then
 					-- TODO: Change HUD
 					-- Change weapon texture
 					local textureid = weaponentity:getScript():callFunctionInt("get_player_texture")
