@@ -58,10 +58,10 @@ namespace backlot
 			std::cerr << "Could not create server socket." << std::endl;
 			return false;
 		}
-		// Load map entities
-		Server::get().getMap()->loadEntities();
 		// Load game mode
 		Game::get().load(mapname, "ffa");
+		// Load map entities
+		Server::get().getMap()->loadEntities();
 		return true;
 	}
 	bool Server::destroy()
