@@ -117,7 +117,7 @@ void TileSet::loadTextures()
 	std::map<std::string, TileSet*>::iterator it = tilesets.begin();
 	while (it != tilesets.end())
 	{
-		it->second->prevtexture = loadTexture(it->first, &it->second->texturesize);
+		it->second->texture = loadTexture(it->first, &it->second->texturesize);
 		it++;
 	}
 }
@@ -128,7 +128,7 @@ void TileSet::loadPreviewTextures()
 	std::map<std::string, TileSet*>::iterator it = tilesets.begin();
 	while (it != tilesets.end())
 	{
-		it->second->texture = loadTexture(it->first);
+		it->second->prevtexture = loadTexture(it->first);
 		it++;
 	}
 }
