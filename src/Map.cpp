@@ -120,7 +120,21 @@ namespace backlot
 		// Read accessibility info
 		// TODO
 		// Read entities
-		// TODO
+		unsigned int entitycount = 0;
+		for (unsigned int i = 0; i < entitycount; i++)
+		{
+			unsigned short namelength = 0;
+			file.read((char*)&namelength, 2);
+			char *namedata = new char[namelength + 1];
+			file.read(namedata, namelength);
+			namedata[namelength] = 0;
+			std::string entityname = namedata;
+			delete[] namedata;
+			float x;
+			float y;
+			file.read((char*)&x, 4);
+			file.read((char*)&y, 4);
+		}
 		#ifdef CLIENT
 		// Read graphics
 		unsigned int materialcount = 0;
