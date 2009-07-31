@@ -183,7 +183,16 @@
 			respawntimer = nil
 			print("Respawning.")
 			health:setInt(100)
-			position:setVector2F(Vector2F(2, 2))
+			-- Get spawn point
+			local spawnpoints = Game.get():getEntities("spawnpoint")
+			if spawnpoints:getSize() == 0 then
+				print("Warning: No spawn point set!")
+				position:setVector2F(Vector2F(2, 2))
+				return
+			end
+			local index = math.random(spawnpoints:getSize()) - 1
+			local spawnpoint = spawnpoints:getEntity(index)
+			position:setVector2F(spawnpoint:getPosition())
 		end
 	]]>
 	</script>
