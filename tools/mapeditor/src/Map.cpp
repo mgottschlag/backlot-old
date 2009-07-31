@@ -85,6 +85,7 @@ bool Map::load(std::string name)
 		}
 		else
 			return false;
+		delete[] tilename;
 	}
 	// Allocate tile info
 	tiles = new Tile*[width * height];
@@ -113,7 +114,29 @@ bool Map::load(std::string name)
 	// Read additional info
 	// TODO
 	// Read entities
-	// TODO
+	unsigned int entitycount;
+	in >> entitycount;
+	std::cout << "Entities: " << entitycount << std::endl;
+	for (unsigned int i = 0; i < entitycount; i++)
+	{
+		char *entityname;
+		in >> entityname;
+		if (entityname)
+		{
+			std::cout << "Entity." << std::endl;
+			float x, y;
+			in >> x >> y;
+			addEntity(entityname, x, y);
+			// Properties
+			unsigned int propertycount;
+			in >> propertycount;
+			// TODO: Read properties
+		}
+		else
+			return false;
+		delete[] entityname;
+	}
+
 	this->name = name;
 	return true;
 }
@@ -200,7 +223,18 @@ bool Map::save(std::string name)
 	// Write additional info
 	// TODO
 	// Write entities
-	// TODO
+	unsigned int entitycount = entities.size();
+	out << entitycount;
+	std::list<Entity*>::iterator it = entities.begin();
+	while (it != entities.end())
+	{
+		out << (*it)->getType().c_str();
+		out << (*it)->getPosition().x;
+		out << (*it)->getPosition().y;
+		// TODO: Write properties
+		out << (unsigned int)0;
+		it++;
+	}
 	return true;
 }
 std::string Map::getName()
@@ -256,7 +290,22 @@ bool Map::compile(std::string name)
 	// Write accessibility info
 	// TODO
 	// Write entities
-	// TODO
+	unsigned int entitycount = entities.size();
+	file.write((const char*)&entitycount, 4);
+	std::list<Entity*>::iterator it = entities.begin();
+	while (it != entities.end())
+	{
+		unsigned short length = (*it)->getType().size();
+		file.write((const char*)&length, 2);
+		file.write((*it)->getType().c_str(), length);
+		file.write((const char*)&(*it)->getPosition().x, 4);
+		file.write((const char*)&(*it)->getPosition().x, 4);
+		file.write((const char*)&(*it)->getPosition().y, 4);
+		// TODO: Write properties
+		unsigned int propertycount = 0;
+		file.write((const char*)&propertycount, 4);
+		it++;
+	}
 	// Collect tile sets used
 	std::vector<TileSet*> tilesets;
 	for (unsigned int y = 0; y < height; y++)
