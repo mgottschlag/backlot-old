@@ -21,6 +21,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Map.hpp"
 #include "Engine.hpp"
+#ifdef SERVER
+#include "Game.hpp"
+#endif
 
 #include <iostream>
 #include <fstream>
@@ -45,6 +48,10 @@ namespace backlot
 		{
 			maps.erase(it);
 		}
+		// Remove entity states
+		#ifdef SERVER
+		entities.clear();
+		#endif
 		// Destroy map
 		if (heightmap)
 			delete[] heightmap;
@@ -121,6 +128,8 @@ namespace backlot
 		// TODO
 		// Read entities
 		unsigned int entitycount = 0;
+		file.read((char*)&entitycount, 4);
+		std::cout << entitycount << " entities." << std::endl;
 		for (unsigned int i = 0; i < entitycount; i++)
 		{
 			unsigned short namelength = 0;
@@ -129,11 +138,31 @@ namespace backlot
 			file.read(namedata, namelength);
 			namedata[namelength] = 0;
 			std::string entityname = namedata;
+			std::cout << "Entity: \"" << entityname << "\"" << std::endl;
 			delete[] namedata;
 			float x;
 			float y;
 			file.read((char*)&x, 4);
 			file.read((char*)&y, 4);
+			#ifdef SERVER
+			// Get template
+			EntityTemplatePointer tpl = EntityTemplate::get(entityname);
+			if (!tpl)
+			{
+				std::cout << "Invalid entity type in map: \"" << entityname
+					<< "\"" << std::endl;
+				return false;
+			}
+			EntityStatePointer state = new EntityState(tpl);
+			entities.push_back(state);
+			// Set position
+			Property *position = state->getProperty("position");
+			if (position)
+				position->setVector2F(Vector2F(x, y));
+			#endif
+			// TODO: Read properties
+			unsigned int propertycount = 0;
+			file.read((char*)&propertycount, 4);
 		}
 		#ifdef CLIENT
 		// Read graphics
@@ -342,6 +371,19 @@ namespace backlot
 		}
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
+	}
+	#endif
+
+	#ifdef SERVER
+	void Map::loadEntities()
+	{
+		std::list<EntityStatePointer>::iterator it = entities.begin();
+		while (it != entities.end())
+		{
+			Game::get().addEntityWithState((*it)->getTemplate()->getName(), 0,
+				(*it)->get());
+			it++;
+		}
 	}
 	#endif
 

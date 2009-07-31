@@ -41,6 +41,11 @@ namespace backlot
 	{
 	}
 
+	EntityTemplatePointer EntityState::getTemplate()
+	{
+		return tpl;
+	}
+
 	Property *EntityState::getProperty(std::string name)
 	{
 		// TODO: This is slow.

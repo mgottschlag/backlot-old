@@ -33,6 +33,8 @@ namespace backlot
 			EntityState(EntityTemplatePointer tpl);
 			~EntityState();
 
+			EntityTemplatePointer getTemplate();
+
 			Property *getProperty(std::string name);
 
 			BufferPointer get();

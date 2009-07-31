@@ -48,8 +48,6 @@ namespace backlot
 			return false;
 		}
 		std::cout << "Map is ready." << std::endl;
-		// Load game mode
-		Game::get().load(mapname, "ffa");
 		// Create network socket
 		ENetAddress address;
 		address.host = ENET_HOST_ANY;
@@ -60,6 +58,10 @@ namespace backlot
 			std::cerr << "Could not create server socket." << std::endl;
 			return false;
 		}
+		// Load map entities
+		Server::get().getMap()->loadEntities();
+		// Load game mode
+		Game::get().load(mapname, "ffa");
 		return true;
 	}
 	bool Server::destroy()

@@ -4,7 +4,7 @@
 		<position default="1/1" type="vector2f" predict="yes" />
 		<rotation type="float" unlocked="yes" updatelocally="no" />
 		<team default="0" type="uint" size="4" />
-		<currentweapon default="-1" type="int" size="4" />
+		<currentweapon default="65535" type="uint" size="16" />
 		<keys default="0" type="uint" size="8" unlocked="yes" updatelocally="no" />
 		<health default="100" type="uint" size="8" />
 		<weapon0 default="65535" type="uint" size="16" />

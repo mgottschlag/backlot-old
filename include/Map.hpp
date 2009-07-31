@@ -29,6 +29,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifdef CLIENT
 #include "QuadBatch.hpp"
 #endif
+#ifdef SERVER
+#include "entity/EntityState.hpp"
+#endif
 
 #include <string>
 #include <map>
@@ -112,6 +115,13 @@ namespace backlot
 			 */
 			void render();
 			#endif
+
+			#ifdef SERVER
+			/**
+			 * Adds the initial entities to the game.
+			 */
+			void loadEntities();
+			#endif
 		private:
 			std::string name;
 			Vector2I size;
@@ -119,6 +129,9 @@ namespace backlot
 			#ifdef CLIENT
 			std::vector<MapLayer> layers;
 			static Map *visible;
+			#endif
+			#ifdef SERVER
+			std::list<EntityStatePointer> entities;
 			#endif
 
 			static std::map<std::string, Map*> maps;
