@@ -299,7 +299,6 @@ bool Map::compile(std::string name)
 		file.write((const char*)&length, 2);
 		file.write((*it)->getType().c_str(), length);
 		file.write((const char*)&(*it)->getPosition().x, 4);
-		file.write((const char*)&(*it)->getPosition().x, 4);
 		file.write((const char*)&(*it)->getPosition().y, 4);
 		// TODO: Write properties
 		unsigned int propertycount = 0;
