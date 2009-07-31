@@ -24,11 +24,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "TileSet.hpp"
 #include "Game.hpp"
 #include "QuadList.hpp"
+#include "Rectangle.hpp"
 
 #include <iostream>
 #include <fstream>
 #include <QFile>
 #include <QDataStream>
+#include <GL/gl.h>
 
 Map &Map::get()
 {
@@ -417,6 +419,42 @@ void Map::setTile(int x, int y, Tile *tile)
 	// TODO: Remove overlapping tiles
 }
 
+Entity *Map::addEntity(std::string type, float x, float y)
+{
+	Entity *entity = new Entity(type, Vector2F(x, y));
+	entities.push_back(entity);
+	return entity;
+}
+Entity *Map::getEntity(float x, float y)
+{
+	std::list<Entity*>::iterator it = entities.begin();
+	while (it != entities.end())
+	{
+		// Check entity rectangle
+		RectangleF rect((*it)->getPosition().x - 0.5, (*it)->getPosition().y - 0.5,
+			1, 1);
+		if (rect.contains(Vector2F(x, y)))
+			return *it;
+		it++;
+	}
+	return 0;
+}
+void Map::removeEntity(Entity *entity)
+{
+	std::list<Entity*>::iterator it = entities.begin();
+	while (it != entities.end())
+	{
+		// Remove entity
+		if (*it == entity)
+		{
+			delete *it;
+			entities.erase(it);
+			return;
+		}
+		it++;
+	}
+}
+
 void Map::render()
 {
 	// Render normal quads
@@ -436,6 +474,26 @@ void Map::render()
 			if (tiles[y * width + x])
 				tiles[y * width + x]->renderShadows(x, y);
 		}
+	}
+}
+void Map::renderEntities()
+{
+	std::list<Entity*>::iterator it = entities.begin();
+	while (it != entities.end())
+	{
+		Vector2F pos = (*it)->getPosition();
+		// Draw entity symbol
+		glBegin(GL_QUADS);
+			glTexCoord2d(0, 0);
+			glVertex2f(pos.x - 0.5, pos.y - 0.5);
+			glTexCoord2d(0, 1);
+			glVertex2f(pos.x - 0.5, pos.y + 0.5);
+			glTexCoord2d(1, 1);
+			glVertex2f(pos.x + 0.5, pos.y + 0.5);
+			glTexCoord2d(1, 0);
+			glVertex2f(pos.x + 0.5, pos.y - 0.5);
+		glEnd();
+		it++;
 	}
 }
 

@@ -19,55 +19,27 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MAP_HPP_
-#define _MAP_HPP_
-
 #include "Entity.hpp"
 
-#include <QObject>
-#include <list>
-
-class Tile;
-
-static const unsigned int MAP_FORMAT_VERSION = 1;
-
-class Map : public QObject
+Entity::Entity(std::string type, Vector2F position)
 {
-	Q_OBJECT
+	this->type = type;
+	this->position = position;
+}
+Entity::~Entity()
+{
+}
 
-	public:
-		static Map &get();
+std::string Entity::getType()
+{
+	return type;
+}
 
-		bool create(std::string name);
-		bool load(std::string name);
-		bool close();
-		bool isLoaded();
-		bool save(std::string name = "");
-		std::string getName();
-
-		bool compile(std::string name = "");
-
-		void setWidth(unsigned int width);
-		unsigned int getWidth();
-		void setHeight(unsigned int height);
-		unsigned int getHeight();
-
-		void setTile(int x, int y, Tile *tile);
-
-		Entity *addEntity(std::string type, float x, float y);
-		Entity *getEntity(float x, float y);
-		void removeEntity(Entity *entity);
-
-		void render();
-		void renderEntities();
-	private:
-		Map();
-
-		std::string name;
-		unsigned int width;
-		unsigned int height;
-		Tile **tiles;
-		std::list<Entity*> entities;
-};
-
-#endif
+void Entity::setPosition(Vector2F position)
+{
+	this->position = position;
+}
+Vector2F Entity::getPosition()
+{
+	return position;
+}

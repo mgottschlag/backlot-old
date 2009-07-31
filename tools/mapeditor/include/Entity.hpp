@@ -19,55 +19,26 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MAP_HPP_
-#define _MAP_HPP_
+#ifndef _ENTITY_HPP_
+#define _ENTITY_HPP_
 
-#include "Entity.hpp"
+#include "Vector2.hpp"
+using namespace backlot;
 
-#include <QObject>
-#include <list>
-
-class Tile;
-
-static const unsigned int MAP_FORMAT_VERSION = 1;
-
-class Map : public QObject
+class Entity
 {
-	Q_OBJECT
-
 	public:
-		static Map &get();
+		Entity(std::string type, Vector2F position);
+		~Entity();
 
-		bool create(std::string name);
-		bool load(std::string name);
-		bool close();
-		bool isLoaded();
-		bool save(std::string name = "");
-		std::string getName();
+		std::string getType();
 
-		bool compile(std::string name = "");
-
-		void setWidth(unsigned int width);
-		unsigned int getWidth();
-		void setHeight(unsigned int height);
-		unsigned int getHeight();
-
-		void setTile(int x, int y, Tile *tile);
-
-		Entity *addEntity(std::string type, float x, float y);
-		Entity *getEntity(float x, float y);
-		void removeEntity(Entity *entity);
-
-		void render();
-		void renderEntities();
+		void setPosition(Vector2F position);
+		Vector2F getPosition();
 	private:
-		Map();
-
-		std::string name;
-		unsigned int width;
-		unsigned int height;
-		Tile **tiles;
-		std::list<Entity*> entities;
+		std::string type;
+		Vector2F position;
+		
 };
 
 #endif

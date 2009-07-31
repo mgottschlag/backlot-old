@@ -117,6 +117,15 @@ void MapView::paintGL()
 	glMatrixMode(GL_MODELVIEW);
 	// Draw map
 	Map::get().render();
+	// Draw entities
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glBindTexture(GL_TEXTURE_2D, entitytexture);
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	Map::get().renderEntities();
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 	// Draw grid
 	if (grid)
 	{
@@ -150,7 +159,7 @@ void MapView::paintGL()
 			}
 		}
 	}
-	else if (action == EUA_Draw && mode == EDM_Tile)
+	else if (action == EUA_Draw && mode == EDM_Entity)
 	{
 		int x = (float)mousex / 32 + camerax;
 		int y = (float)mousey / 32 + cameray;
@@ -159,7 +168,27 @@ void MapView::paintGL()
 		{
 			if (currententity != "")
 			{
-				// TODO
+				// Draw entity symbol
+				glClear(GL_DEPTH_BUFFER_BIT);
+				glBindTexture(GL_TEXTURE_2D, entitytexture);
+				glEnable(GL_TEXTURE_2D);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glEnable(GL_BLEND);
+				glPushMatrix();
+				glTranslatef(x, y, 0);
+				glBegin(GL_QUADS);
+					glTexCoord2d(0, 0);
+					glVertex2f(0, 0);
+					glTexCoord2d(0, 1);
+					glVertex2f(0, 1);
+					glTexCoord2d(1, 1);
+					glVertex2f(1, 1);
+					glTexCoord2d(1, 0);
+					glVertex2f(1, 0);
+				glEnd();
+				glPopMatrix();
+				glDisable(GL_TEXTURE_2D);
+				glDisable(GL_BLEND);
 			}
 		}
 	}
@@ -295,7 +324,8 @@ void MapView::performAction()
 				}
 				else if (mode == EDM_Entity)
 				{
-					// TODO
+					if (currententity != "")
+						Map::get().addEntity(currententity, 0.5 + x, 0.5 + y);
 				}
 				break;
 			case EUA_Erase:
@@ -306,7 +336,9 @@ void MapView::performAction()
 				}
 				else if (mode == EDM_Entity)
 				{
-					// TODO
+					Entity *entity = Map::get().getEntity(0.5 + x, 0.5 + y);
+					if (entity)
+						Map::get().removeEntity(entity);
 				}
 				break;
 		};

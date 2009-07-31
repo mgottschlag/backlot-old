@@ -23,6 +23,7 @@ set(SRC
 	src/NewMapDialog.cpp
 	src/OpenMapDialog.cpp
 	src/QuadList.cpp
+	src/Entity.cpp
 	../../src/support/tinystr.cpp
 	../../src/support/tinyxml.cpp
 	../../src/support/tinyxmlerror.cpp
