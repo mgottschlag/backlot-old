@@ -30,6 +30,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Client.hpp"
 #include "Menu.hpp"
 #include "Dialog.hpp"
+#include "SplashScreen.hpp"
 
 #include <SDL/SDL.h>
 #include <iostream>
@@ -102,14 +103,16 @@ namespace backlot
 			std::cerr << "Could not initialize sound." << std::endl;
 			return false;
 		}
+		// Show splash screens
+		SplashScreen::showAll();
 		// Show main menu
 		MenuPointer mainmenu = Menu::get("main");
 		if (mainmenu)
 		{
 			mainmenu->setActive(true);
 		}
-		
-		
+
+		// Start server or connect to one
 		std::string serveraddress = "localhost:27272";
 		bool startserver = false;
 		bool connect = false;
@@ -130,7 +133,6 @@ namespace backlot
 				connect = true;
 			}
 		}
-		
 		if (startserver)
 		{
 			if (!Server::get().init(27272, "test"))
@@ -138,7 +140,6 @@ namespace backlot
 				return false;
 			}
 		}
-		
 		if (connect)
 		{
 			if (!Client::get().init(serveraddress))
@@ -146,7 +147,7 @@ namespace backlot
 				return false;
 			}
 		}
-		
+
 		// Main loop
 		lastframe = getTime();
 		while (!stopping)

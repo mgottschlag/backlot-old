@@ -56,6 +56,7 @@ ListModel.cpp
 entity/Entity.cpp
 Game.cpp
 entity/EntityImage.cpp
+SplashScreen.cpp
 )
 
 set(SERVER_SRC
