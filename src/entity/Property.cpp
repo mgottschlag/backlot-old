@@ -57,6 +57,7 @@ namespace backlot
 		entity = 0;
 		callbacks = true;
 		changetime = 0;
+		stringdata = property.stringdata;
 	}
 	Property::~Property()
 	{
@@ -233,6 +234,28 @@ namespace backlot
 	{
 		return bit(0);
 	}
+	void Property::setString(std::string data)
+	{
+		if (type == EPT_String)
+		{
+			stringdata = data;
+			onChange();
+		}
+		else
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+	}
+	std::string Property::getString()
+	{
+		if (type == EPT_String)
+		{
+			return stringdata;
+		}
+		else
+		{
+			std::cerr << "Warning: Wrong property type (" << name << ")." << std::endl;
+			return "";
+		}
+	}
 
 	bool Property::bit(int index) const
 	{
@@ -276,6 +299,9 @@ namespace backlot
 			case EPT_Vector2I:
 				setVector2I(Vector2I(s));
 				break;
+			case EPT_String:
+				setString(s);
+				break;
 		}
 		onChange();
 	}
@@ -305,6 +331,9 @@ namespace backlot
 				buffer->writeInt(vector.y, size);
 				break;
 			}
+			case EPT_String:
+				buffer->writeString(stringdata);
+				break;
 		}
 	}
 	void Property::read(const BufferPointer &buffer)
@@ -331,6 +360,9 @@ namespace backlot
 				setVector2I(Vector2I(x, y));
 				break;
 			}
+			case EPT_String:
+				stringdata = buffer->readString();
+				break;
 		}
 	}
 
@@ -351,6 +383,7 @@ namespace backlot
 		}
 		else if (type == property.type)
 			memcpy(data, property.data, 8);
+		stringdata = property.stringdata;
 		onChange();
 		return *this;
 	}
@@ -364,6 +397,8 @@ namespace backlot
 		else if (type == EPT_Vector2I)
 			return ((int*)data)[0] == ((int*)property.data)[0]
 				&& ((int*)data)[1] == ((int*)property.data)[1];
+		else if (type == EPT_String)
+			return property.stringdata == stringdata;
 		else
 			return !memcmp(data, property.data, 4);
 	}

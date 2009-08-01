@@ -138,6 +138,10 @@ namespace backlot
 				{
 					type = EPT_Vector2F;
 				}
+				else if (!strcmp(typestr, "string"))
+				{
+					type = EPT_String;
+				}
 				int size = 32;
 				if (property->Attribute("size"))
 					property->Attribute("size", &size);

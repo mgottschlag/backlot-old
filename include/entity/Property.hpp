@@ -51,7 +51,11 @@ namespace backlot
 		/**
 		 * Integer vector. The size is variable and can be changed via setSize().
 		 */
-		EPT_Vector2I
+		EPT_Vector2I,
+		/**
+		 * String.
+		 */
+		EPT_String
 	};
 
 	/**
@@ -219,6 +223,14 @@ namespace backlot
 			 * Returns the value of a boolean property.
 			 */
 			bool getBool() const;
+			/**
+			 * Sets the value of a string property.
+			 */
+			void setString(std::string data);
+			/**
+			 * Returns the value of a string property.
+			 */
+			std::string getString();
 
 			/**
 			 * Returns a single bit of an integer property.
@@ -261,6 +273,7 @@ namespace backlot
 			PropertyFlags flags;
 			unsigned int size;
 			char data[8];
+			std::string stringdata;
 			Entity *entity;
 			bool callbacks;
 			int changetime;
