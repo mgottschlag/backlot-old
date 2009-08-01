@@ -269,12 +269,12 @@ namespace backlot
 			return true;
 		}
 		// Go through the grid along the vector
-		int startx = start.x;
-		int starty = start.y;
+		int startx = (int)start.x;
+		int starty = (int)start.y;
 		int dirx = (end.x > start.x) ? 1 : -1;
 		int diry = (end.y > start.y) ? 1 : -1;
-		int nextx = (dirx == 1) ? floor(start.x + 1.001) : ceil(start.x - 1.001);
-		int nexty = (diry == 1) ? floor(start.y + 1.001) : ceil(start.y - 1.001);
+		int nextx = (int)((dirx == 1) ? floor(start.x + 1.001) : ceil(start.x - 1.001));
+		int nexty = (int)((diry == 1) ? floor(start.y + 1.001) : ceil(start.y - 1.001));
 		float nextx_y = start.y + (start.x - nextx) / (end.x - start.x) * (end.y - start.y);
 		float nexty_x = start.x + (start.y - nexty) / (end.y - start.y) * (end.x - start.x);
 		float tmaxxsquared = (start.x - nextx) * (start.x - nextx) + (start.y - nextx_y) * (start.y - nextx_y);
