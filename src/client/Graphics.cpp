@@ -27,6 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "HUD.hpp"
 #include "Effect.hpp"
 #include "entity/EntityImage.hpp"
+#include "ScoreBoard.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -165,6 +166,7 @@ namespace backlot
 		EntityImage::renderAll();
 		Effect::renderAll();
 		HUD::get().render();
+		ScoreBoard::get().render();
 		// Render menu
 		MenuPointer menu = Menu::getActiveMenu();
 		if (!menu.isNull())

@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Menu.hpp"
 #include "Graphics.hpp"
 #include "Game.hpp"
+#include "ScoreBoard.hpp"
 
 #include <SDL/SDL.h>
 #include <math.h>
@@ -98,6 +99,9 @@ namespace backlot
 						case SDLK_d:
 							sendKey("right", 1);
 							break;
+						case SDLK_TAB:
+							ScoreBoard::get().setVisible(true);
+							break;
 						case SDLK_ESCAPE:
 						{
 							MenuPointer menu = Menu::get("main");
@@ -124,6 +128,9 @@ namespace backlot
 							break;
 						case SDLK_d:
 							sendKey("right", 0);
+							break;
+						case SDLK_TAB:
+							ScoreBoard::get().setVisible(false);
 							break;
 						// Other keys
 						default:

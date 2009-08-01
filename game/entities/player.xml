@@ -9,6 +9,8 @@
 		<health default="100" type="uint" size="8" />
 		<weapon0 default="65535" type="uint" size="16" />
 		<weapon1 default="65535" type="uint" size="16" />
+		<score default="0" type="uint" size="10" />
+		<name default="unknown" type="string" unlocked="yes" updatelocally="no" />
 	</properties>
 
 	<image name="feet" src="sprites/feet.png" position="-0.5/-0.5" rotate="no" depth="1.5" />
@@ -168,6 +170,8 @@
 			end
 		end
 
+		dead = false
+
 		function do_damage(bulletid, damage)
 			print("Damage done: "..damage)
 			-- Change health points
@@ -177,6 +181,19 @@
 				hp = 0
 			end
 			health:setInt(hp)
+			-- Score points?
+			if hp == 0 and dead == false then
+				dead = true
+				local bulletentity = Game.get():getEntity(bulletid)
+				local killerid = bulletentity:getProperty("player"):getInt()
+				local killer = Game.get():getEntity(killerid)
+				if killerid == this:getID() then
+					score:setInt(score:getInt() - 1)
+				else
+					local scoreprop = killer:getProperty("score")
+					scoreprop:setInt(scoreprop:getInt() + 1)
+				end
+			end
 		end
 
 		function respawn()
@@ -193,6 +210,7 @@
 			local index = math.random(spawnpoints:getSize()) - 1
 			local spawnpoint = spawnpoints:getEntity(index)
 			position:setVector2F(spawnpoint:getPosition())
+			dead = false;
 		end
 	]]>
 	</script>
