@@ -57,6 +57,7 @@ entity/Entity.cpp
 Game.cpp
 entity/EntityImage.cpp
 ScoreBoard.cpp
+SplashScreen.cpp
 )
 
 set(SERVER_SRC
