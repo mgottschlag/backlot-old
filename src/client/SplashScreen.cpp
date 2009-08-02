@@ -168,7 +168,7 @@ namespace backlot
 		// Swap buffers
 		SDL_GL_SwapBuffers();
 		// Wait
-		unsigned int usecs = time * 1000000;
+		unsigned int usecs = (unsigned int)(time * 1000000);
 		for (unsigned int i = 0; i < usecs / 100000; i++)
 		{
 			// Handle SDL events
