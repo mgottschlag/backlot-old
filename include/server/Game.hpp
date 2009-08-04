@@ -90,7 +90,7 @@ namespace backlot
 			std::string mapname;
 
 			EntityPointer entities[65535];
-			int nextentity;
+			int maxentityid;
 			std::queue<int> deletionqueue;
 
 			std::map<int, Client*> clients;

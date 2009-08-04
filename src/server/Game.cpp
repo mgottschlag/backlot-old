@@ -45,7 +45,7 @@ namespace backlot
 		this->mapname = mapname;
 		for (int i = 0; i < 65535; i++)
 			entities[i] = 0;
-		nextentity = 0;
+		maxentityid = 0;
 		// Open XML file
 		std::string filename = Engine::get().getGameDirectory() + "/modes/" + mode + ".xml";
 		TiXmlDocument xml(filename.c_str());
@@ -157,9 +157,8 @@ namespace backlot
 		}
 		// Get new entity id
 		int newindex = 65535;
-		for (int i = 0; i < 65535; i++)
+		for (int id = 0; id < 65535; id++)
 		{
-			int id = (nextentity + i) % 65535;
 			if (entities[id].isNull())
 			{
 				newindex = id;
@@ -171,7 +170,8 @@ namespace backlot
 			std::cerr << "Too many entities." << std::endl;
 			return 0;
 		}
-		nextentity = (newindex + 1) % 65535;
+		if (newindex > maxentityid)
+			maxentityid = newindex;
 		// Create entity
 		EntityPointer entity = new Entity();
 		entity->setID(newindex);
@@ -201,7 +201,7 @@ namespace backlot
 	void Game::removeEntity(EntityPointer entity)
 	{
 		// Look for entity to delete
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i] == entity)
 			{
@@ -248,7 +248,7 @@ namespace backlot
 		// Add to client list
 		clients.insert(std::pair<int, Client*>(client->getID(), client));
 		// Send entities
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i])
 			{
@@ -285,7 +285,7 @@ namespace backlot
 		if (clientid == -1)
 			return;
 		// Remove entities
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i] && entities[i]->getOwner() == clientid)
 			{
@@ -352,7 +352,7 @@ namespace backlot
 	EntityListPointer Game::getEntities(RectangleF area, std::string type)
 	{
 		EntityListPointer list = new EntityList();
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i] && entities[i]->isMovable())
 			{
@@ -374,7 +374,7 @@ namespace backlot
 	EntityListPointer Game::getEntities(std::string type)
 	{
 		EntityListPointer list = new EntityList();
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i] && entities[i]->getTemplate()->getName() == type)
 			{
@@ -389,7 +389,7 @@ namespace backlot
 		// Increase tick counter
 		time++;
 		// Update entities
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i])
 				entities[i]->update();
@@ -415,7 +415,7 @@ namespace backlot
 			buffer->write32(time);
 			buffer->write32(client->getLag());
 			// Check all entities
-			for (int i = 0; i < 65535; i++)
+			for (int i = 0; i < maxentityid + 1; i++)
 			{
 				if (entities[i].isNull())
 					continue;
