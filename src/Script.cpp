@@ -104,23 +104,8 @@ namespace backlot
 		lua_call(state, 0, 0);
 	}
 
-	static int core_exit(lua_State *state)
-	{
-		Engine::get().stop();
-		return 0;
-	}
 	void Script::addCoreFunctions()
 	{
-		// Create namespace
-		lua_newtable(state);
-		int space = lua_gettop(state);
-		// Push functions
-		lua_pushliteral(state, "exit");
-		lua_pushcfunction(state, core_exit);
-		lua_settable(state, space);
-		// Done
-		lua_setglobal(state, "core");
-
 		luabind::module(state)
 		[
 			// ReferenceCounted class
@@ -390,7 +375,14 @@ namespace backlot
 				.def("getCollision", &Game::getCollision)
 				.def("getEntities", (EntityListPointer (Game::*)(std::string))&Game::getEntities)
 				.def("getEntities", (EntityListPointer (Game::*)(RectangleF, std::string))&Game::getEntities)
-				.def("getEntities", (EntityListPointer (Game::*)(RectangleF))&Game::getEntities)
+				.def("getEntities", (EntityListPointer (Game::*)(RectangleF))&Game::getEntities),
+			// Engine
+			luabind::class_<Engine>("Engine")
+				.scope
+				[
+					luabind::def("get", &Engine::get)
+				]
+				.def("stop", &Engine::stop)
 		];
 	}
 	#endif
@@ -439,7 +431,14 @@ namespace backlot
 				.def("registerForDeletion", &Game::registerForDeletion)
 				.def("getEntities", (EntityListPointer (Game::*)(std::string))&Game::getEntities)
 				.def("getEntities", (EntityListPointer (Game::*)(RectangleF, std::string))&Game::getEntities)
-				.def("getEntities", (EntityListPointer (Game::*)(RectangleF))&Game::getEntities)
+				.def("getEntities", (EntityListPointer (Game::*)(RectangleF))&Game::getEntities),
+			// Engine
+			luabind::class_<Engine>("Engine")
+				.scope
+				[
+					luabind::def("get", &Engine::get)
+				]
+				.def("stop", &Engine::stop)
 		];
 	}
 	#endif

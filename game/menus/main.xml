@@ -20,7 +20,7 @@
 		elseif index == 4 then
 			Dialog.get("profile"):setVisible(true);
 		elseif index == 5 then
-			core.exit();
+			Engine.get():stop()
 		end
 	end
 	]]>
