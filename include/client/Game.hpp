@@ -28,6 +28,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Client.hpp"
 #include "Rectangle.hpp"
 
+#include <list>
+
 namespace backlot
 {
 	struct CollisionInfo
@@ -82,6 +84,8 @@ namespace backlot
 			std::string mapname;
 
 			EntityPointer entities[65535];
+			std::list<EntityPointer> localentities;
+			int maxentityid;
 			WeakPointer<Entity> inputentity;
 
 			unsigned int time;
