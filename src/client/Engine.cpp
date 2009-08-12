@@ -28,8 +28,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Music.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
-#include "Menu.hpp"
-#include "Dialog.hpp"
+#include "menu/Menu.hpp"
+#include "menu/Dialog.hpp"
 #include "SplashScreen.hpp"
 
 #include <SDL/SDL.h>

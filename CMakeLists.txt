@@ -48,11 +48,11 @@ QuadBatch.cpp
 Camera.cpp
 HUD.cpp
 HUDElement.cpp
-Menu.cpp
+menu/Menu.cpp
 Font.cpp
-GuichanFont.cpp
-Dialog.cpp
-ListModel.cpp
+menu/GuichanFont.cpp
+menu/Dialog.cpp
+menu/ListModel.cpp
 entity/Entity.cpp
 Game.cpp
 entity/EntityImage.cpp

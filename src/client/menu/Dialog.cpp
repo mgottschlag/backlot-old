@@ -19,13 +19,13 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Dialog.hpp"
+#include "menu/Dialog.hpp"
 #include "Engine.hpp"
 #include "Graphics.hpp"
 #include "Font.hpp"
-#include "GuichanFont.hpp"
+#include "menu/GuichanFont.hpp"
 #include "Debug.hpp"
-#include "ListModel.hpp"
+#include "menu/ListModel.hpp"
 
 #include "support/tinyxml.h"
 

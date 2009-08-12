@@ -26,7 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Preferences.hpp"
 #include "Timer.hpp"
 #ifdef CLIENT
-#include "Dialog.hpp"
+#include "menu/Dialog.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
 #include "Graphics.hpp"

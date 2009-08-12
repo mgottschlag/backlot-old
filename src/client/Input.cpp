@@ -22,7 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Input.hpp"
 #include "NetworkData.hpp"
 #include "Preferences.hpp"
-#include "Menu.hpp"
+#include "menu/Menu.hpp"
 #include "Graphics.hpp"
 #include "Game.hpp"
 
