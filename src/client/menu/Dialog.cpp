@@ -122,7 +122,6 @@ namespace backlot
 		// Load basic script functions
 		script = new Script();
 		script->addCoreFunctions();
-		script->addMenuFunctions();
 		script->addClientFunctions();
 		script->addDialogFunctions();
 		// Load widgets

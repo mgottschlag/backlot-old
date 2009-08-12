@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Preferences.hpp"
 #include "Timer.hpp"
 #ifdef CLIENT
+#include "menu/Menu.hpp"
 #include "menu/Dialog.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
@@ -269,49 +270,6 @@ namespace backlot
 		];
 	}
 	#ifdef CLIENT
-	static int menu_show_dialog(lua_State *state)
-	{
-		const char *name = luaL_checkstring(state, 1);
-		if (!name)
-		{
-			std::cerr << "Wrong use of \"show_dialog(name)\"" << std::endl;
-			return 0;
-		}
-		std::cout << "Showing dialog " << name << std::endl;
-		DialogPointer dialog = Dialog::get(name);
-		if (dialog)
-			dialog->setVisible(true);
-		return 0;
-	}
-	static int menu_hide_dialog(lua_State *state)
-	{
-		const char *name = luaL_checkstring(state, 1);
-		if (!name)
-		{
-			std::cerr << "Wrong use of \"hide_dialog(name)\"" << std::endl;
-			return 0;
-		}
-		std::cout << "Hiding dialog " << name << std::endl;
-		DialogPointer dialog = Dialog::get(name);
-		if (dialog)
-			dialog->setVisible(false);
-		return 0;
-	}
-	void Script::addMenuFunctions()
-	{
-		// Create namespace
-		lua_newtable(state);
-		int space = lua_gettop(state);
-		// Push functions
-		lua_pushliteral(state, "show_dialog");
-		lua_pushcfunction(state, menu_show_dialog);
-		lua_settable(state, space);
-		lua_pushliteral(state, "hide_dialog");
-		lua_pushcfunction(state, menu_hide_dialog);
-		lua_settable(state, space);
-		// Done
-		lua_setglobal(state, "menu");
-	}
 	void Script::addDialogFunctions()
 	{
 		luabind::module(state)
@@ -387,6 +345,23 @@ namespace backlot
 					luabind::def("get", &Graphics::get)
 				]
 				.def("getCamera", &Graphics::getCamera),
+			// Menu
+			luabind::class_<Menu, ReferenceCounted, SharedPointer<Menu> >("Menu")
+				.scope
+				[
+					luabind::def("get", &Menu::get)
+				]
+				.def("setActive", &Menu::setActive)
+				.def("isActive", &Menu::isActive)
+				.def("getActiveMenu", &Menu::getActiveMenu),
+			// Dialog
+			luabind::class_<Dialog, ReferenceCounted, SharedPointer<Dialog> >("Dialog")
+				.scope
+				[
+					luabind::def("get", &Dialog::get)
+				]
+				.def("setVisible", &Dialog::setVisible)
+				.def("isVisible", &Dialog::isVisible),
 			// Server class
 			luabind::class_<Server>("ServerControl")
 				.scope

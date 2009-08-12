@@ -8,7 +8,7 @@
 	<![CDATA[
 	function on_button(index)
 		if index == 0 then
-			menu.hide_dialog("profile")
+			Dialog.get("profile"):setVisible(false)
 		end
 	end
 	

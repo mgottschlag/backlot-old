@@ -156,7 +156,7 @@ namespace backlot
 		// Load script
 		script = new Script();
 		script->addCoreFunctions();
-		script->addMenuFunctions();
+		script->addClientFunctions();
 		TiXmlNode *scriptnode = root->FirstChild("script");
 		while (scriptnode)
 		{
