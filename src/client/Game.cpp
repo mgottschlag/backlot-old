@@ -234,15 +234,12 @@ namespace backlot
 
 	void Game::update()
 	{
-		uint64_t start = Engine::getTime();
 		// Update entities
 		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i])
 				entities[i]->update();
 		}
-		uint64_t end = Engine::getTime();
-		float updatetime = (float)(end - start) / 20000;
 		// Timer callbacks
 		Timer::callCallbacks();
 		// Increase tick counter
@@ -266,8 +263,6 @@ namespace backlot
 			}
 			it++;
 		}
-		end = Engine::getTime();
-		float sendtime = (float)(end - start) / 20000;
 		// Send updates
 		if (updatecount > 0)
 			Client::get().send(buffer);
