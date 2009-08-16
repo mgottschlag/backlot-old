@@ -26,23 +26,66 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace backlot
 {
+	/**
+	 * Class for static full screen splash screens at the beginning of the game.
+	 * Splash screens are defined in the game.xml file in the game directory.
+	 */
 	class SplashScreen
 	{
 		public:
+			/**
+			 * Loads and shows all splash screens. Actually this would be the
+			 * only function called from outside this class.
+			 */
 			static bool showAll();
 
+			/**
+			 * Constructor.
+			 */
 			SplashScreen();
+			/**
+			 * Destructor.
+			 */
 			~SplashScreen();
 
+			/**
+			 * Generates the splash screen from the given texture file.
+			 * @param texturepath Path to the texture file relative to the game
+			 * directory.
+			 * @param time Time in seconds for the splash screen to last.
+			 * @param input If set to true, the user can cancel the splash
+			 * screen with any key or mouse button.
+			 * @param index Sets the index of the splash screen. Screens with
+			 * a smaller index are called first.
+			 */
 			bool load(std::string texturepath, float time, bool input,
 				int index);
+			/**
+			 * Returns the index of the splash screen.
+			 */
 			int getIndex();
 
+			/**
+			 * Shows the splash screen, waits for either user input (if enabled)
+			 * or the timeout to occur and hides the splash screen again.
+			 */
 			bool show();
 		private:
+			/**
+			 * Background texture.
+			 */
 			TexturePointer texture;
+			/**
+			 * Time in seconds for the splash screen to be shown.
+			 */
 			float time;
+			/**
+			 * If set to true, the splash screen is cancellable.
+			 */
 			bool input;
+			/**
+			 * Index of the splash screen.
+			 */
 			int index;
 	};
 }
