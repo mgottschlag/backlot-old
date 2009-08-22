@@ -86,6 +86,12 @@ namespace backlot
 			}
 
 			/**
+			 * Computes the absolute screen position based on the current
+			 * screen size.
+			 */
+			Vector2I get() const;
+
+			/**
 			 * Relative part of the position (1.0 means screen width/height).
 			 */
 			Vector2F rel;
