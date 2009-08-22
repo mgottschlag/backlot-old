@@ -97,10 +97,6 @@ namespace backlot
 		{
 			menus.erase(it);
 		}
-		// Get font
-		font = Font::get("menu");
-		if (!font)
-			return false;
 		// Open XML file
 		std::string filename = Engine::get().getGameDirectory() + "/menus/" + name + ".xml";
 		TiXmlDocument xml(filename.c_str());
@@ -116,47 +112,17 @@ namespace backlot
 			return false;
 		}
 		TiXmlElement *root = node->ToElement();
-		// Get items
-		TiXmlNode *itemnode = root->FirstChild("item");
-		while (itemnode)
-		{
-			TiXmlElement *itemdata = itemnode->ToElement();
-			if (itemdata)
-			{
-				// Get item data
-				int position = 0;
-				if (itemdata->Attribute("position", &position) == 0)
-				{
-					std::cerr << "Missing menu item position." << std::endl;
-					return false;
-				}
-				const char *label = itemdata->Attribute("label");
-				if (!label)
-				{
-					std::cerr << "Missing menu item label." << std::endl;
-					return false;
-				}
-				// Add item
-				gcn::Button *button = new gcn::Button();
-				button->setCaption(label);
-				items.insert(items.begin() + position, button);
-			}
-			itemnode = node->IterateChildren("item", itemnode);
-		}
-		// Position widgets
-		Vector2I screensize = Preferences::get().getResolution();
-		int xpos = screensize.x - 200;
-		int ypos = screensize.y - 40 * items.size();
-		for (unsigned int i = 0; i < items.size(); i++)
-		{
-			items[i]->setDimension(gcn::Rectangle(xpos, ypos + i * 40, 180, 30));
-			Graphics::get().getGuichanContainer()->add(items[i]);
-			items[i]->addActionListener(listener);
-		}
+		// Load styles
+		if (!loadStyles(root))
+			return false;
+		// Load elements
+		this->root = new MenuElement();
+		this->root->load(root);
 		// Load script
 		script = new Script();
 		script->addCoreFunctions();
 		script->addClientFunctions();
+		// TODO: Register elements
 		TiXmlNode *scriptnode = root->FirstChild("script");
 		while (scriptnode)
 		{
@@ -178,7 +144,7 @@ namespace backlot
 			script->runString(code);
 			scriptnode = node->IterateChildren("script", scriptnode);
 		}
-		// Add to loaded maps
+		// Add to loaded menus
 		this->name = name;
 		menus.insert(std::pair<std::string, Menu*>(name, this));
 		return true;
@@ -191,16 +157,16 @@ namespace backlot
 			if (Menu::active && Menu::active != this)
 				Menu::active->setActive(false);
 			Menu::active = this;
-			// Show items
-			for (unsigned int i = 0; i < items.size(); i++)
-				items[i]->setVisible(true);
+			// Show elements
+			if (root)
+				root->setVisible(true);
 		}
 		else if (Menu::active == this)
 		{
 			Menu::active = 0;
-			// Hide items
-			for (unsigned int i = 0; i < items.size(); i++)
-				items[i]->setVisible(false);
+			// Hide elements
+			if (root)
+				root->setVisible(false);
 		}
 	}
 	bool Menu::isActive()
@@ -236,8 +202,6 @@ namespace backlot
 		glColor3f(1.0, 1.0, 1.0);
 		glDisable(GL_BLEND);
 
-		font->render("Press Escape to close menu.", Vector2I(0, 0));
-
 		glEnable(GL_DEPTH_TEST);
 		// Reenable camera
 		glMatrixMode(GL_PROJECTION);
@@ -246,7 +210,7 @@ namespace backlot
 
 	void Menu::buttonPressed(const gcn::ActionEvent &event)
 	{
-		// Look for menu item
+		/*// Look for menu item
 		for (unsigned int i = 0; i < items.size(); i++)
 		{
 			if (event.getSource() == items[i])
@@ -258,7 +222,32 @@ namespace backlot
 				}
 				break;
 			}
+		}*/
+	}
+	bool Menu::loadStyles(TiXmlElement *xml)
+	{
+		// Loop through all style elements
+		TiXmlNode *stylenode = xml->FirstChild("style");
+		while (stylenode)
+		{
+			TiXmlElement *styledata = stylenode->ToElement();
+			if (styledata)
+			{
+				// Load style
+				MenuStylePointer style = new MenuStyle();
+				if (style->load(styledata))
+				{
+					std::string stylename = style->getName();
+					styles.insert(std::pair<std::string, MenuStylePointer>(stylename, style));
+					if (stylename == "default" || !defaultstyle)
+					{
+						defaultstyle = style;
+					}
+				}
+			}
+			stylenode = xml->IterateChildren("style", stylenode);
 		}
+		return true;
 	}
 
 	Menu *Menu::active;

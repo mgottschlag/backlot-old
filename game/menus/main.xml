@@ -1,26 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<menu>
-	<item position="0" label="Singleplayer" />
-	<item position="1" label="Host game" />
-	<item position="2" label="Join game" />
-	<item position="3" label="Settings" />
-	<item position="4" label="Change profile" />
-	<item position="5" label="Exit" />
+<menu background="#FFFFFF" font="forsaken">
+	<style name="default">
+		<button type="simple" />
+		<color background="#FFFFFF" normal="#000000" active="#707070" pressed="#B0B0B0" />
+	</style>
+
+	<image image="backlotsmall.png">
+		<position relative="0/1" absolute="0/-32" />
+		<size relative="0/0" absolute="128/32" />
+	</image>
+
+	<imagebutton image="logo.png" id="6">
+		<position relative="0/0" absolute="0/0" />
+		<size relative="0/0" absolute="256/128" />
+	</imagebutton>
+
+	<button label="New game" id="0">
+		<position relative="1/1" absolute="-200/-240" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Load game" id="1">
+		<position relative="1/1" absolute="-200/-200" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Multiplayer" id="2">
+		<position relative="1/1" absolute="-200/-160" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Settings" id="3">
+		<position relative="1/1" absolute="-200/-120" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Change profile" id="4">
+		<position relative="1/1" absolute="-200/--80" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Exit" id="5">
+		<position relative="1/1" absolute="-200/-40" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+
 	<script>
 	<![CDATA[
 	function on_menu_item(index)
 		if index == 0 then
-			Dialog.get("singlerplayer"):setVisible(true);
 		elseif index == 1 then
-			Dialog.get("server"):setVisible(true);
 		elseif index == 2 then
-			Dialog.get("join"):setVisible(true);
 		elseif index == 3 then
 			Dialog.get("settings"):setVisible(true);
 		elseif index == 4 then
 			Dialog.get("profile"):setVisible(true);
 		elseif index == 5 then
 			Engine.get():stop()
+		elseif index == 6 then
 		end
 	end
 	]]>

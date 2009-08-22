@@ -25,6 +25,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ReferenceCounted.hpp"
 #include "Font.hpp"
 #include "Script.hpp"
+#include "menu/MenuStyle.hpp"
+#include "menu/MenuElement.hpp"
 
 #include <string>
 #include <map>
@@ -35,6 +37,8 @@ namespace gcn
 	class Button;
 	class ActionEvent;
 }
+
+class TiXmlElement;
 
 namespace backlot
 {
@@ -90,11 +94,18 @@ namespace backlot
 			 */
 			void buttonPressed(const gcn::ActionEvent &event);
 		private:
+
+			/**
+			 * Loads the style definitions from a menu file.
+			 */
+			bool loadStyles(TiXmlElement *xml);
+
 			std::string name;
+			MenuStylePointer defaultstyle;
+			std::map<std::string, MenuStylePointer> styles;
+			unsigned int bgcolor;
 
-			FontPointer font;
-
-			std::vector<gcn::Button*> items;
+			MenuElementPointer root;
 
 			ScriptPointer script;
 

@@ -53,10 +53,14 @@ Font.cpp
 menu/GuichanFont.cpp
 menu/Dialog.cpp
 menu/ListModel.cpp
+menu/SimpleButton.cpp
+menu/MenuStyle.cpp
+menu/MenuElement.cpp
 entity/Entity.cpp
 Game.cpp
 entity/EntityImage.cpp
 SplashScreen.cpp
+../support/ScreenPosition.cpp
 )
 
 set(SERVER_SRC
