@@ -54,7 +54,9 @@ namespace backlot
 			/**
 			 * Destructor.
 			 */
-			~ScreenPosition();
+			~ScreenPosition()
+			{
+			}
 
 			ScreenPosition operator+(const ScreenPosition &sp) const
 			{
