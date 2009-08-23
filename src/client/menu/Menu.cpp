@@ -113,6 +113,9 @@ namespace backlot
 		}
 		TiXmlElement *root = node->ToElement();
 		// Load styles
+		bgcolor = 0xFFFFFF;
+		if (root->Attribute("background"))
+			bgcolor = MenuStyle::toColor(root->Attribute("background"));
 		if (!loadStyles(root))
 			return false;
 		// Load elements
@@ -188,11 +191,9 @@ namespace backlot
 		glOrtho(0, size.x, size.y, 0, -1, 1);
 
 		// Render background
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_DST_COLOR, GL_ZERO);
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_DEPTH_TEST);
-		glColor3f(0.25, 0.25, 0.25);
+		glColor3ubv((GLubyte*)&bgcolor);
 		glBegin(GL_QUADS);
 			glVertex2f(0, 0);
 			glVertex2f(size.x, 0);
@@ -200,8 +201,6 @@ namespace backlot
 			glVertex2f(0, size.y);
 		glEnd();
 		glColor3f(1.0, 1.0, 1.0);
-		glDisable(GL_BLEND);
-
 		glEnable(GL_DEPTH_TEST);
 		// Reenable camera
 		glMatrixMode(GL_PROJECTION);

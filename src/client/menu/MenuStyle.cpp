@@ -94,6 +94,10 @@ namespace backlot
 	{
 		if (str.size() <= 1 || str[0] != '#')
 			return 0;
-		return strtoul(str.c_str(), 0, 16);
+		unsigned char color[4];
+		*(unsigned int*)color = strtoul(str.c_str() + 1, 0, 16);
+		return (color[0] << 16)
+			+ (color[1] << 8)
+			+ color[2];
 	}
 }
