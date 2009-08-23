@@ -56,6 +56,9 @@ menu/ListModel.cpp
 menu/SimpleButton.cpp
 menu/MenuStyle.cpp
 menu/MenuElement.cpp
+menu/MenuButton.cpp
+menu/MenuImage.cpp
+menu/MenuImageButton.cpp
 entity/Entity.cpp
 Game.cpp
 entity/EntityImage.cpp

@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _MENUIMAGEBUTTON_HPP_
 
 #include "menu/MenuElement.hpp"
+#include "Texture.hpp"
 
 namespace backlot
 {
@@ -31,6 +32,8 @@ namespace backlot
 		public:
 			MenuImageButton();
 			~MenuImageButton();
+
+			virtual void load(TiXmlElement *xml);
 
 			/**
 			 * Sets the texture to be displayed.
@@ -42,6 +45,8 @@ namespace backlot
 			TexturePointer getTexture();
 		private:
 	};
+
+	typedef SharedPointer<MenuImageButton> MenuImageButtonPointer;
 }
 
 #endif

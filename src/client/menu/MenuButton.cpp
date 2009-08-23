@@ -19,24 +19,23 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MENUBUTTON_HPP_
-#define _MENUBUTTON_HPP_
-
-#include "menu/MenuElement.hpp"
+#include "menu/MenuButton.hpp"
+#include "support/tinyxml.h"
 
 namespace backlot
 {
-	class MenuButton : public MenuElement
+	MenuButton::MenuButton() : MenuElement()
 	{
-		public:
-			MenuButton();
-			~MenuButton();
+	}
+	MenuButton::~MenuButton()
+	{
+	}
 
-			virtual void load(TiXmlElement *xml);
-		private:
-	};
-
-	typedef SharedPointer<MenuButton> MenuButtonPointer;
+	void MenuButton::load(TiXmlElement *xml)
+	{
+		// Load button
+		// TODO
+		// Load children
+		MenuElement::load(xml);
+	}
 }
-
-#endif

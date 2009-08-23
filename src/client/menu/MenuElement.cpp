@@ -20,13 +20,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "menu/MenuElement.hpp"
+#include "menu/MenuImage.hpp"
+#include "menu/MenuButton.hpp"
+#include "menu/MenuImageButton.hpp"
 #include "support/tinyxml.h"
 
 #include <guichan/widgets/container.hpp>
 
 namespace backlot
 {
-	MenuElement::MenuElement()
+	MenuElement::MenuElement() : ReferenceCounted()
 	{
 		id = 0;
 		widget = 0;
@@ -80,7 +83,42 @@ namespace backlot
 			sizenode = xml->IterateChildren("size", sizenode);
 		}
 		// Load children
-		// TODO
+		TiXmlNode *widgetnode = xml->FirstChild("button");
+		while (widgetnode)
+		{
+			TiXmlElement *widget = widgetnode->ToElement();
+			if (widget)
+			{
+				MenuButtonPointer image = new MenuButton();
+				image->load(widget);
+				image->setParent(this);
+			}
+			widgetnode = xml->IterateChildren("button", widgetnode);
+		}
+		widgetnode = xml->FirstChild("image");
+		while (widgetnode)
+		{
+			TiXmlElement *widget = widgetnode->ToElement();
+			if (widget)
+			{
+				MenuImagePointer image = new MenuImage();
+				image->load(widget);
+				image->setParent(this);
+			}
+			widgetnode = xml->IterateChildren("image", widgetnode);
+		}
+		widgetnode = xml->FirstChild("imagebutton");
+		while (widgetnode)
+		{
+			TiXmlElement *widget = widgetnode->ToElement();
+			if (widget)
+			{
+				MenuImageButtonPointer image = new MenuImageButton();
+				image->load(widget);
+				image->setParent(this);
+			}
+			widgetnode = xml->IterateChildren("imagebutton", widgetnode);
+		}
 	}
 
 	void MenuElement::setPosition(const ScreenPosition &position)

@@ -36,6 +36,8 @@ namespace backlot
 			MenuImage();
 			~MenuImage();
 
+			virtual void load(TiXmlElement *xml);
+
 			/**
 			 * Sets the texture to be displayed.
 			 */
@@ -46,6 +48,8 @@ namespace backlot
 			TexturePointer getTexture();
 		private:
 	};
+
+	typedef SharedPointer<MenuImage> MenuImagePointer;
 }
 
 #endif
