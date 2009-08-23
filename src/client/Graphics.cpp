@@ -34,7 +34,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <guichan.hpp>
 #include <guichan/opengl/openglgraphics.hpp>
 #include <guichan/opengl/openglimage.hpp>
-#include <guichan/sdl/sdlimageloader.hpp>
+#include <guichan/opengl/openglsdlimageloader.hpp>
 #include <guichan/sdl/sdlinput.hpp>
 
 namespace backlot
@@ -90,7 +90,7 @@ namespace backlot
 			std::cerr << "No VBO support available." << std::endl;
 		}
 		// Create menu system
-		imageloader = new gcn::SDLImageLoader();
+		imageloader = new gcn::OpenGLSDLImageLoader();
 		gcn::Image::setImageLoader(imageloader);
 		menugraphics = new gcn::OpenGLGraphics(width, height);
 		FontPointer menufont = Font::get("menu");
