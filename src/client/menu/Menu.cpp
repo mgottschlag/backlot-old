@@ -120,6 +120,7 @@ namespace backlot
 			return false;
 		// Load elements
 		this->root = new MenuElement();
+		this->root->setStyle(defaultstyle);
 		this->root->load(root);
 		// Load script
 		script = new Script();

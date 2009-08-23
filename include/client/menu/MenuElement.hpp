@@ -80,9 +80,16 @@ namespace backlot
 			 */
 			void setStyle(MenuStylePointer style);
 			/**
-			 * Returns the style definition of the element.
+			 * Returns the style definition of the element. If no style has been
+			 * set, the parent elements are searched for one.
 			 */
 			MenuStylePointer getStyle();
+
+			/**
+			 * Callback after the style of the element has changed. On a style
+			 * change, child elements without their own style are also updated.
+			 */
+			virtual void changedStyle();
 
 			/**
 			 * Sets the parent of the menu element.

@@ -20,14 +20,17 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "menu/MenuButton.hpp"
+#include "menu/SimpleButton.hpp"
 #include "support/tinyxml.h"
 
 #include <guichan/widgets/button.hpp>
+#include <guichan/widgets/container.hpp>
 
 namespace backlot
 {
 	MenuButton::MenuButton() : MenuElement()
 	{
+		buttonstyle = EBS_Normal;
 	}
 	MenuButton::~MenuButton()
 	{
@@ -42,5 +45,35 @@ namespace backlot
 			button->setCaption(xml->Attribute("label"));
 		// Load children
 		MenuElement::load(xml);
+	}
+
+	void MenuButton::changedStyle()
+	{
+		// Check whether button has to be recreated
+		MenuStylePointer style = getStyle();
+		if (style && buttonstyle != style->getButtonStyle())
+		{
+			std::string caption = ((gcn::Button*)widget)->getCaption();
+			container->remove(widget);
+			delete widget;
+			buttonstyle = style->getButtonStyle();
+			if (buttonstyle == EBS_Normal)
+			{
+				widget = new gcn::Button(caption);
+			}
+			else if (buttonstyle == EBS_Simple)
+			{
+				widget = new SimpleButton(caption);
+			}
+			container->add(widget);
+		}
+		// Set style
+		if (buttonstyle == EBS_Simple)
+		{
+			((SimpleButton*)widget)->setColor(style->getTextColor(),
+				style->getActiveColor(), style->getPressedColor());
+		}
+		// Update children
+		MenuElement::changedStyle();
 	}
 }

@@ -81,6 +81,23 @@ namespace backlot
 			ButtonStyle getButtonStyle();
 
 			/**
+			 * Returns the background color.
+			 */
+			unsigned int getBackgroundColor();
+			/**
+			 * Returns the text color.
+			 */
+			unsigned int getTextColor();
+			/**
+			 * Returns the color for currently activated elements.
+			 */
+			unsigned int getActiveColor();
+			/**
+			 * Returns the color for pressed-down buttons.
+			 */
+			unsigned int getPressedColor();
+
+			/**
 			 * Converts a RGB color in hexadecimal notation (#RRGGBB) into an
 			 * unsigned integer.
 			 */

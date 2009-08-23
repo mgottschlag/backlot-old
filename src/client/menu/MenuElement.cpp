@@ -123,6 +123,8 @@ namespace backlot
 			}
 			widgetnode = xml->IterateChildren("imagebutton", widgetnode);
 		}
+
+		changedStyle();
 	}
 
 	void MenuElement::setPosition(const ScreenPosition &position)
@@ -145,7 +147,6 @@ namespace backlot
 			container->setSize(pxsize.x, pxsize.y);
 		if (widget)
 			widget->setSize(pxsize.x, pxsize.y);
-		printf("Size: %d/%d\n", pxsize.x, pxsize.y);
 	}
 	ScreenPosition MenuElement::getSize()
 	{
@@ -154,12 +155,25 @@ namespace backlot
 
 	void MenuElement::setStyle(MenuStylePointer style)
 	{
+		if (this->style == style)
+			return;
 		this->style = style;
-		// TODO: Apply?
+		changedStyle();
 	}
 	MenuStylePointer MenuElement::getStyle()
 	{
+		if (!style && parent)
+			return parent->getStyle();
 		return style;
+	}
+
+	void MenuElement::changedStyle()
+	{
+		for (unsigned int i = 0; i < children.size(); i++)
+		{
+			if (!children[i]->style)
+				children[i]->changedStyle();
+		}
 	}
 
 	void MenuElement::setParent(SharedPointer<MenuElement> parent)

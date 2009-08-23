@@ -33,7 +33,10 @@ namespace backlot
 			~MenuButton();
 
 			virtual void load(TiXmlElement *xml);
+
+			virtual void changedStyle();
 		private:
+			ButtonStyle buttonstyle;
 	};
 
 	typedef SharedPointer<MenuButton> MenuButtonPointer;

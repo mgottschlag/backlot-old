@@ -90,6 +90,23 @@ namespace backlot
 		return buttonstyle;
 	}
 
+	unsigned int MenuStyle::getBackgroundColor()
+	{
+		return bgcolor;
+	}
+	unsigned int MenuStyle::getTextColor()
+	{
+		return textcolor;
+	}
+	unsigned int MenuStyle::getActiveColor()
+	{
+		return activecolor;
+	}
+	unsigned int MenuStyle::getPressedColor()
+	{
+		return pressedcolor;
+	}
+
 	unsigned int MenuStyle::toColor(std::string str)
 	{
 		if (str.size() <= 1 || str[0] != '#')
