@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "Preferences.hpp"
 #include "Graphics.hpp"
+#include "menu/InputReceiver.hpp"
 
 #include "support/tinyxml.h"
 
@@ -31,30 +32,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <iostream>
 #include <guichan/widgets/button.hpp>
 #include <guichan/widgets/container.hpp>
-#include <guichan/actionlistener.hpp>
 
 namespace backlot
 {
-	class MenuListener : public gcn::ActionListener
-	{
-		public:
-			MenuListener(Menu *menu)
-			{
-				this->menu = menu;
-			}
-
-			virtual void action(const gcn::ActionEvent &actionEvent)
-			{
-				menu->buttonPressed(actionEvent);
-			}
-		private:
-			Menu *menu;
-	};
-
 	Menu::Menu() : ReferenceCounted()
 	{
 		// Create input receiver
-		listener = new MenuListener(this);
+		input = new InputReceiver(this);
 	}
 
 	Menu::~Menu()
@@ -69,7 +53,7 @@ namespace backlot
 			menus.erase(it);
 		}
 		// Delete listener
-		delete listener;
+		delete input;
 	}
 
 	SharedPointer<Menu> Menu::get(std::string name)
@@ -121,7 +105,7 @@ namespace backlot
 		// Load elements
 		this->root = new MenuElement();
 		this->root->setStyle(defaultstyle);
-		this->root->load(root);
+		this->root->load(root, input);
 		// Load script
 		script = new Script();
 		script->addCoreFunctions();
@@ -208,21 +192,16 @@ namespace backlot
 		glPopMatrix();
 	}
 
-	void Menu::buttonPressed(const gcn::ActionEvent &event)
+	void Menu::injectAction(const gcn::ActionEvent &event)
 	{
-		/*// Look for menu item
-		for (unsigned int i = 0; i < items.size(); i++)
+		if (event.getId() != "")
 		{
-			if (event.getSource() == items[i])
+			// Call event handler
+			if (script->isFunction("on_menu_item"))
 			{
-				// Call event handler
-				if (script->isFunction("on_menu_item"))
-				{
-					script->callFunction("on_menu_item", (int)i);
-				}
-				break;
+				script->callFunction("on_menu_item", atoi(event.getId().c_str()));
 			}
-		}*/
+		}
 	}
 	bool Menu::loadStyles(TiXmlElement *xml)
 	{

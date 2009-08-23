@@ -36,7 +36,7 @@ namespace backlot
 			MenuImage();
 			~MenuImage();
 
-			virtual void load(TiXmlElement *xml);
+			virtual void load(TiXmlElement *xml, InputReceiver *input);
 
 			/**
 			 * Sets the texture to be displayed.

@@ -42,7 +42,7 @@ class TiXmlElement;
 
 namespace backlot
 {
-	class MenuListener;
+	class InputReceiver;
 
 	/**
 	 * Client menu.
@@ -92,7 +92,7 @@ namespace backlot
 			/**
 			 * Injects a GUI event.
 			 */
-			void buttonPressed(const gcn::ActionEvent &event);
+			void injectAction(const gcn::ActionEvent &event);
 		private:
 
 			/**
@@ -109,7 +109,7 @@ namespace backlot
 
 			ScriptPointer script;
 
-			MenuListener *listener;
+			InputReceiver *input;
 
 			static Menu *active;
 			static std::map<std::string, Menu*> menus;

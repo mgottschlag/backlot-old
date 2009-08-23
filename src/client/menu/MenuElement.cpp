@@ -40,7 +40,7 @@ namespace backlot
 	{
 	}
 
-	void MenuElement::load(TiXmlElement *xml)
+	void MenuElement::load(TiXmlElement *xml, InputReceiver *input)
 	{
 		// Create dummy widget if not already done
 		if (!container)
@@ -51,7 +51,10 @@ namespace backlot
 			container->add(widget);
 		// Load id
 		if (xml->Attribute("id"))
+		{
 			id = atoi(xml->Attribute("id"));
+			widget->setActionEventId(xml->Attribute("id"));
+		}
 		// Load position
 		TiXmlNode *positionnode = xml->FirstChild("position");
 		while (positionnode)
@@ -94,7 +97,7 @@ namespace backlot
 			if (widget)
 			{
 				MenuButtonPointer image = new MenuButton();
-				image->load(widget);
+				image->load(widget, input);
 				image->setParent(this);
 			}
 			widgetnode = xml->IterateChildren("button", widgetnode);
@@ -106,7 +109,7 @@ namespace backlot
 			if (widget)
 			{
 				MenuImagePointer image = new MenuImage();
-				image->load(widget);
+				image->load(widget, input);
 				image->setParent(this);
 			}
 			widgetnode = xml->IterateChildren("image", widgetnode);
@@ -118,7 +121,7 @@ namespace backlot
 			if (widget)
 			{
 				MenuImageButtonPointer image = new MenuImageButton();
-				image->load(widget);
+				image->load(widget, input);
 				image->setParent(this);
 			}
 			widgetnode = xml->IterateChildren("imagebutton", widgetnode);

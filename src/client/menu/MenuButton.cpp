@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "menu/MenuButton.hpp"
 #include "menu/SimpleButton.hpp"
+#include "menu/InputReceiver.hpp"
 #include "support/tinyxml.h"
 
 #include <guichan/widgets/button.hpp>
@@ -36,15 +37,18 @@ namespace backlot
 	{
 	}
 
-	void MenuButton::load(TiXmlElement *xml)
+	void MenuButton::load(TiXmlElement *xml, InputReceiver *input)
 	{
 		// Load button
 		gcn::Button *button = new gcn::Button();
 		widget = button;
 		if (xml->Attribute("label"))
 			button->setCaption(xml->Attribute("label"));
+		if (input)
+			button->addActionListener(input);
+		this->input = input;
 		// Load children
-		MenuElement::load(xml);
+		MenuElement::load(xml, input);
 	}
 
 	void MenuButton::changedStyle()
@@ -54,6 +58,7 @@ namespace backlot
 		if (style && buttonstyle != style->getButtonStyle())
 		{
 			std::string caption = ((gcn::Button*)widget)->getCaption();
+			std::string id = widget->getActionEventId();
 			container->remove(widget);
 			delete widget;
 			buttonstyle = style->getButtonStyle();
@@ -65,6 +70,9 @@ namespace backlot
 			{
 				widget = new SimpleButton(caption);
 			}
+			if (input)
+				((gcn::Button*)widget)->addActionListener(input);
+			widget->setActionEventId(id);
 			container->add(widget);
 		}
 		// Set style

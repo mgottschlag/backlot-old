@@ -36,6 +36,8 @@ namespace gcn
 
 namespace backlot
 {
+	class InputReceiver;
+
 	/**
 	 * Base class for all menu GUI elements. Menu elements are stored in a
 	 * hierarchial form in order to ensure correct drawing order at all times.
@@ -55,7 +57,7 @@ namespace backlot
 			/**
 			 * Loads the element from an xml file.
 			 */
-			virtual void load(TiXmlElement *xml);
+			virtual void load(TiXmlElement *xml, InputReceiver *input);
 
 			/**
 			 * Sets the position of the menu element.

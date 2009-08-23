@@ -19,34 +19,41 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MENUIMAGEBUTTON_HPP_
-#define _MENUIMAGEBUTTON_HPP_
+#ifndef _INPUTRECEIVER_HPP_
+#define _INPUTRECEIVER_HPP_
 
-#include "menu/MenuElement.hpp"
-#include "Texture.hpp"
+#include "menu/Menu.hpp"
+#include "menu/Dialog.hpp"
+
+#include <guichan/actionlistener.hpp>
 
 namespace backlot
 {
-	class MenuImageButton : public MenuElement
+	class InputReceiver : public gcn::ActionListener
 	{
 		public:
-			MenuImageButton();
-			~MenuImageButton();
+			InputReceiver(Menu *menu)
+			{
+				this->menu = menu;
+				dialog = 0;
+			}
+			InputReceiver(Dialog *menu)
+			{
+				this->dialog = dialog;
+				menu = 0;
+			}
 
-			virtual void load(TiXmlElement *xml, InputReceiver *input);
-
-			/**
-			 * Sets the texture to be displayed.
-			 */
-			void setTexture(TexturePointer texture);
-			/**
-			 * Returns the texture.
-			 */
-			TexturePointer getTexture();
+			virtual void action(const gcn::ActionEvent &actionEvent)
+			{
+				if (menu)
+					menu->injectAction(actionEvent);
+				if (dialog)
+					dialog->injectAction(actionEvent);
+			}
 		private:
+			Menu *menu;
+			Dialog *dialog;
 	};
-
-	typedef SharedPointer<MenuImageButton> MenuImageButtonPointer;
 }
 
 #endif

@@ -21,6 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "menu/MenuImageButton.hpp"
 #include "Engine.hpp"
+#include "menu/InputReceiver.hpp"
 #include "support/tinyxml.h"
 
 #include <guichan/widgets/imagebutton.hpp>
@@ -34,7 +35,7 @@ namespace backlot
 	{
 	}
 
-	void MenuImageButton::load(TiXmlElement *xml)
+	void MenuImageButton::load(TiXmlElement *xml, InputReceiver *input)
 	{
 		// Load image button
 		gcn::ImageButton *image;
@@ -47,8 +48,10 @@ namespace backlot
 		else
 			image = new gcn::ImageButton();
 		widget = image;
+		if (input)
+			image->addActionListener(input);
 		// Load children
-		MenuElement::load(xml);
+		MenuElement::load(xml, input);
 	}
 
 	void MenuImageButton::setTexture(TexturePointer texture)

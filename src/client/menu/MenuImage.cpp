@@ -34,7 +34,7 @@ namespace backlot
 	{
 	}
 
-	void MenuImage::load(TiXmlElement *xml)
+	void MenuImage::load(TiXmlElement *xml, InputReceiver *input)
 	{
 		// Load image
 		gcn::Icon *image;
@@ -48,7 +48,7 @@ namespace backlot
 			image = new gcn::Icon();
 		widget = image;
 		// Load children
-		MenuElement::load(xml);
+		MenuElement::load(xml, input);
 	}
 
 	void MenuImage::setTexture(TexturePointer texture)
