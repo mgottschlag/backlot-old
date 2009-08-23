@@ -20,7 +20,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "menu/MenuImageButton.hpp"
+#include "Engine.hpp"
 #include "support/tinyxml.h"
+
+#include <guichan/widgets/imagebutton.hpp>
 
 namespace backlot
 {
@@ -33,8 +36,17 @@ namespace backlot
 
 	void MenuImageButton::load(TiXmlElement *xml)
 	{
-		// Load image
-		// TODO
+		// Load image button
+		gcn::ImageButton *image;
+		if (xml->Attribute("image"))
+		{
+			std::string filename = Engine::get().getGameDirectory() + "/sprites/"
+				+ xml->Attribute("image");
+			image = new gcn::ImageButton(filename);
+		}
+		else
+			image = new gcn::ImageButton();
+		widget = image;
 		// Load children
 		MenuElement::load(xml);
 	}

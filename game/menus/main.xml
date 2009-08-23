@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<menu background="#FFFFFF" font="forsaken">
+<menu background="#FFFFFF" font="menu">
 	<style name="default">
 		<button type="simple" />
 		<color background="#FFFFFF" normal="#000000" active="#707070" pressed="#B0B0B0" />
@@ -12,27 +12,27 @@
 
 	<imagebutton image="logo.png" id="6">
 		<position relative="0/0" absolute="0/0" />
-		<size relative="0/0" absolute="256/128" />
+		<size relative="0/0" absolute="512/256" />
 	</imagebutton>
 
 	<button label="New game" id="0">
-		<position relative="1/1" absolute="-200/-240" />
+		<position relative="1/1" absolute="-200/-250" />
 		<size relative="0/0" absolute="200/30" />
 	</button>
 	<button label="Load game" id="1">
-		<position relative="1/1" absolute="-200/-200" />
+		<position relative="1/1" absolute="-200/-210" />
 		<size relative="0/0" absolute="200/30" />
 	</button>
 	<button label="Multiplayer" id="2">
-		<position relative="1/1" absolute="-200/-160" />
+		<position relative="1/1" absolute="-200/-170" />
 		<size relative="0/0" absolute="200/30" />
 	</button>
 	<button label="Settings" id="3">
-		<position relative="1/1" absolute="-200/-120" />
+		<position relative="1/1" absolute="-200/-125" />
 		<size relative="0/0" absolute="200/30" />
 	</button>
 	<button label="Change profile" id="4">
-		<position relative="1/1" absolute="-200/--80" />
+		<position relative="1/1" absolute="-200/-85" />
 		<size relative="0/0" absolute="200/30" />
 	</button>
 	<button label="Exit" id="5">
