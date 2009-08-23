@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "menu/MenuImage.hpp"
 #include "menu/MenuButton.hpp"
 #include "menu/MenuImageButton.hpp"
+#include "Graphics.hpp"
 #include "support/tinyxml.h"
 
 #include <guichan/widgets/container.hpp>
@@ -33,6 +34,7 @@ namespace backlot
 	{
 		id = 0;
 		widget = 0;
+		container = 0;
 	}
 	MenuElement::~MenuElement()
 	{
@@ -43,6 +45,8 @@ namespace backlot
 		// Create dummy widget if not already done
 		if (!container)
 			container = new gcn::Container;
+		Graphics::get().getGuichanContainer()->add(container);
+		container->setOpaque(false);
 		if (widget)
 			container->add(widget);
 		// Load id
@@ -136,6 +140,12 @@ namespace backlot
 	void MenuElement::setSize(const ScreenPosition &size)
 	{
 		this->size = size;
+		Vector2I pxsize = size.get();
+		if (container)
+			container->setSize(pxsize.x, pxsize.y);
+		if (widget)
+			widget->setSize(pxsize.x, pxsize.y);
+		printf("Size: %d/%d\n", pxsize.x, pxsize.y);
 	}
 	ScreenPosition MenuElement::getSize()
 	{
@@ -154,9 +164,20 @@ namespace backlot
 
 	void MenuElement::setParent(SharedPointer<MenuElement> parent)
 	{
+		if (this->parent.get() == parent.get())
+			return;
+		// Add widget to parent container
+		if (parent)
+		{
+			parent->container->add(container);
+		}
+		else
+		{
+			Graphics::get().getGuichanContainer()->add(container);
+		}
+		// Remove element from the old parent
 		if (this->parent)
 		{
-			// Remove element from the old parent
 			for (unsigned int i = 0; i < this->parent->children.size(); i++)
 			{
 				if (this->parent->children[i] == this)

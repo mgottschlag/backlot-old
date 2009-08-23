@@ -114,7 +114,7 @@ namespace backlot
 			 * Returns the ID of the element.
 			 */
 			unsigned int getID();
-		private:
+		protected:
 			ScreenPosition position;
 			ScreenPosition size;
 			MenuStylePointer style;

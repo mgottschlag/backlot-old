@@ -22,6 +22,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "menu/MenuButton.hpp"
 #include "support/tinyxml.h"
 
+#include <guichan/widgets/button.hpp>
+
 namespace backlot
 {
 	MenuButton::MenuButton() : MenuElement()
@@ -34,7 +36,10 @@ namespace backlot
 	void MenuButton::load(TiXmlElement *xml)
 	{
 		// Load button
-		// TODO
+		gcn::Button *button = new gcn::Button();
+		widget = button;
+		if (xml->Attribute("label"))
+			button->setCaption(xml->Attribute("label"));
 		// Load children
 		MenuElement::load(xml);
 	}
