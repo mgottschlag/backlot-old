@@ -223,7 +223,7 @@ namespace backlot
 			return;
 		this->visible = visible;
 		// Change visibility of this element
-		// TODO
+		container->setVisible(visible);
 		// Change visibility of all children
 		// TODO
 	}

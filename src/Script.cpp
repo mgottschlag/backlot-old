@@ -334,7 +334,8 @@ namespace backlot
 			luabind::class_<Menu, ReferenceCounted, SharedPointer<Menu> >("Menu")
 				.scope
 				[
-					luabind::def("get", &Menu::get)
+					luabind::def("get", &Menu::get),
+					luabind::def("getActiveMenu", &Menu::getActiveMenu)
 				]
 				.def("setActive", &Menu::setActive)
 				.def("isActive", &Menu::isActive)

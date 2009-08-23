@@ -145,6 +145,8 @@ function on_keyboard_input(key, state)
 		keys:bit(2, state)
 	elseif key == "shoot" then
 		keys:bit(4, state)
+	elseif key == "exit" then
+		Menu.get("pause"):setActive(true)
 	end
 end
 
