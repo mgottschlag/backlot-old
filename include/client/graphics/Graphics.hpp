@@ -22,7 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _GRAPHICS_HPP_
 #define _GRAPHICS_HPP_
 
-#include "Camera.hpp"
+#include "graphics/Camera.hpp"
 
 namespace gcn
 {

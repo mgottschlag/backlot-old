@@ -21,7 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Engine.hpp"
 #include "Preferences.hpp"
-#include "Graphics.hpp"
+#include "graphics/Graphics.hpp"
 #include "Input.hpp"
 #include "Audio.hpp"
 #include "Sound.hpp"

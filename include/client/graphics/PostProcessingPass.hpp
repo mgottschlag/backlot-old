@@ -19,34 +19,22 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MENUIMAGEBUTTON_HPP_
-#define _MENUIMAGEBUTTON_HPP_
+#ifndef _POSTPROCESSING_HPP_
+#define _POSTPROCESSING_HPP_
 
-#include "menu/MenuElement.hpp"
-#include "graphics/Texture.hpp"
+#include "ReferenceCounted.hpp"
+
+#include <string>
 
 namespace backlot
 {
-	class MenuImageButton : public MenuElement
+	class PostProcessingPass : public ReferenceCounted
 	{
 		public:
-			MenuImageButton();
-			~MenuImageButton();
-
-			virtual void load(TiXmlElement *xml, InputReceiver *input);
-
-			/**
-			 * Sets the texture to be displayed.
-			 */
-			void setTexture(TexturePointer texture);
-			/**
-			 * Returns the texture.
-			 */
-			TexturePointer getTexture();
+			PostProcessingPass();
+			~PostProcessingPass();
 		private:
 	};
-
-	typedef SharedPointer<MenuImageButton> MenuImageButtonPointer;
 }
 
 #endif

@@ -185,6 +185,7 @@ namespace backlot
 	{
 		if (!map)
 			return true;
+		uint64_t start = Engine::getTime();
 		// Receive packets
 		ENetEvent event;
 		while (enet_host_service(host, &event, 0) > 0)
@@ -250,6 +251,9 @@ namespace backlot
 					break;
 			}
 		}
+		uint64_t end = Engine::getTime();
+		float updatetime = (float)(end - start) / 20000;
+		std::cout << "Client:" << updatetime << std::endl;
 		// Game logic
 		Game::get().update();
 		return true;

@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "menu/MenuImage.hpp"
 #include "menu/MenuButton.hpp"
 #include "menu/MenuImageButton.hpp"
-#include "Graphics.hpp"
+#include "graphics/Graphics.hpp"
 #include "support/tinyxml.h"
 
 #include <guichan/widgets/container.hpp>

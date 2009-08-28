@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _HUD_HPP_
 
 #include "HUDElement.hpp"
-#include "Font.hpp"
+#include "graphics/Font.hpp"
 #include "Vector2.hpp"
 
 #include <vector>

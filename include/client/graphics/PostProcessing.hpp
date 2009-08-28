@@ -19,41 +19,31 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Camera.hpp"
-#include "Graphics.hpp"
-#include "Preferences.hpp"
+#ifndef _POSTPROCESSING_HPP_
+#define _POSTPROCESSING_HPP_
 
-#include <GL/gl.h>
+#include "ReferenceCounted.hpp"
+
+#include <string>
 
 namespace backlot
 {
-	Camera::Camera()
+	class PostProcessing : public ReferenceCounted
 	{
-	}
-	Camera::~Camera()
-	{
-	}
+		public:
+			PostProcessing();
+			~PostProcessing();
 
-	void Camera::setPosition(Vector2F position)
-	{
-		this->position = position;
-	}
-	Vector2F Camera::getPosition()
-	{
-		return position;
-	}
+			static SharedPointer<PostProcessing> get(std::string name);
+			static void add(SharedPointer<PostProcessing> effect,
+				std::string name);
+			bool load(std::string name);
 
-	void Camera::apply()
-	{
-		// Set orthogonal projection
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		Vector2I windowsize = Preferences::get().getResolution();
-		glOrtho(-(float)windowsize.x / 32 / 2, (float)windowsize.x / 32 / 2,
-			-(float)windowsize.y / 32 / 2, (float)windowsize.y / 32 / 2,
-			256, -256);
-		glScalef(1.0, -1.0, -1.0);
-		glTranslatef(-position.x, -position.y, 0);
-		glMatrixMode(GL_MODELVIEW);
-	}
+			static void init();
+			static void begin();
+			static void end();
+		private:
+	};
 }
+
+#endif

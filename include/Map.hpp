@@ -27,7 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Vector2.hpp"
 #include "Rectangle.hpp"
 #ifdef CLIENT
-#include "QuadBatch.hpp"
+#include "graphics/QuadBatch.hpp"
 #endif
 #ifdef SERVER
 #include "entity/EntityState.hpp"

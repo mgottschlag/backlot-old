@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Preferences.hpp"
 #include "Engine.hpp"
 #include "Preferences.hpp"
-#include "Graphics.hpp"
+#include "graphics/Graphics.hpp"
 #include "menu/InputReceiver.hpp"
 
 #include "support/tinyxml.h"

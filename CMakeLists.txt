@@ -34,9 +34,9 @@ set(CLIENT_SRC
 ${SRC_SHARED}
 main.cpp
 Engine.cpp
-Graphics.cpp
+graphics/Graphics.cpp
 Input.cpp
-Texture.cpp
+graphics/Texture.cpp
 Animation.cpp
 Audio.cpp
 Sound.cpp
@@ -44,12 +44,12 @@ Music.cpp
 Effect.cpp
 Server.cpp
 Client.cpp
-QuadBatch.cpp
-Camera.cpp
+graphics/QuadBatch.cpp
+graphics/Camera.cpp
 HUD.cpp
 HUDElement.cpp
 menu/Menu.cpp
-Font.cpp
+graphics/Font.cpp
 menu/GuichanFont.cpp
 menu/Dialog.cpp
 menu/ListModel.cpp

@@ -19,34 +19,41 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _MENUIMAGEBUTTON_HPP_
-#define _MENUIMAGEBUTTON_HPP_
+#include "graphics/Camera.hpp"
+#include "graphics/Graphics.hpp"
+#include "Preferences.hpp"
 
-#include "menu/MenuElement.hpp"
-#include "graphics/Texture.hpp"
+#include <GL/gl.h>
 
 namespace backlot
 {
-	class MenuImageButton : public MenuElement
+	Camera::Camera()
 	{
-		public:
-			MenuImageButton();
-			~MenuImageButton();
+	}
+	Camera::~Camera()
+	{
+	}
 
-			virtual void load(TiXmlElement *xml, InputReceiver *input);
+	void Camera::setPosition(Vector2F position)
+	{
+		this->position = position;
+	}
+	Vector2F Camera::getPosition()
+	{
+		return position;
+	}
 
-			/**
-			 * Sets the texture to be displayed.
-			 */
-			void setTexture(TexturePointer texture);
-			/**
-			 * Returns the texture.
-			 */
-			TexturePointer getTexture();
-		private:
-	};
-
-	typedef SharedPointer<MenuImageButton> MenuImageButtonPointer;
+	void Camera::apply()
+	{
+		// Set orthogonal projection
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		Vector2I windowsize = Preferences::get().getResolution();
+		glOrtho(-(float)windowsize.x / 32 / 2, (float)windowsize.x / 32 / 2,
+			-(float)windowsize.y / 32 / 2, (float)windowsize.y / 32 / 2,
+			256, -256);
+		glScalef(1.0, -1.0, -1.0);
+		glTranslatef(-position.x, -position.y, 0);
+		glMatrixMode(GL_MODELVIEW);
+	}
 }
-
-#endif

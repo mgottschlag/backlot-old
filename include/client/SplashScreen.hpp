@@ -22,7 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _SPLASHSCREEN_HPP_
 #define _SPLASHSCREEN_HPP_
 
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 
 namespace backlot
 {

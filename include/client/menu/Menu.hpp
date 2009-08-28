@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _MENU_HPP_
 
 #include "ReferenceCounted.hpp"
-#include "Font.hpp"
+#include "graphics/Font.hpp"
 #include "Script.hpp"
 #include "menu/MenuStyle.hpp"
 #include "menu/MenuElement.hpp"

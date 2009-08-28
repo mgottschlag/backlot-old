@@ -21,8 +21,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "menu/Dialog.hpp"
 #include "Engine.hpp"
-#include "Graphics.hpp"
-#include "Font.hpp"
+#include "graphics/Graphics.hpp"
+#include "graphics/Font.hpp"
 #include "menu/GuichanFont.hpp"
 #include "Debug.hpp"
 #include "menu/ListModel.hpp"

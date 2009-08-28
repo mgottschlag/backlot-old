@@ -30,7 +30,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "menu/Dialog.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
-#include "Graphics.hpp"
+#include "graphics/Graphics.hpp"
 #include <guichan/widgets/checkbox.hpp>
 #include <guichan/widgets/textfield.hpp>
 #include <guichan/widgets/dropdown.hpp>

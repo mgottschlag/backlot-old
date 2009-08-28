@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _MENUIMAGE_HPP_
 
 #include "menu/MenuElement.hpp"
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 
 namespace backlot
 {

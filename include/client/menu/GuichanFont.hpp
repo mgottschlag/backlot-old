@@ -22,7 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _GUICHANFONT_HPP_
 #define _GUICHANFONT_HPP_
 
-#include "Font.hpp"
+#include "graphics/Font.hpp"
 
 #include <guichan/font.hpp>
 

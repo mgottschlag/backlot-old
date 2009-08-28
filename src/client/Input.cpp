@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "NetworkData.hpp"
 #include "Preferences.hpp"
 #include "menu/Menu.hpp"
-#include "Graphics.hpp"
+#include "graphics/Graphics.hpp"
 #include "Game.hpp"
 
 #include <SDL/SDL.h>
