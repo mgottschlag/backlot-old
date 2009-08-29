@@ -46,6 +46,7 @@ Server.cpp
 Client.cpp
 graphics/QuadBatch.cpp
 graphics/Camera.cpp
+graphics/RenderTarget.cpp
 HUD.cpp
 HUDElement.cpp
 menu/Menu.cpp

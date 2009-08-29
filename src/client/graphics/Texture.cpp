@@ -88,7 +88,15 @@ namespace backlot
 		TexturePointer texture = new Texture();
 		if (!texture->load(path, !singleuse))
 			return 0;
-		return texture;;
+		return texture;
+	}
+	SharedPointer<Texture> Texture::create(int width, int height)
+	{
+		// Create texture
+		TexturePointer texture = new Texture();
+		if (!texture->allocate(width, height))
+			return 0;
+		return texture;
 	}
 	SharedPointer<Texture> Texture::get(int id)
 	{
@@ -139,6 +147,14 @@ namespace backlot
 		}
 		return true;
 	}
+	bool Texture::allocate(int width, int height)
+	{
+		// Set the size of the texture
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA,
+			GL_UNSIGNED_BYTE, 0);
+		return true;
+	}
 
 	void Texture::setFilter(TextureFilter filter)
 	{
@@ -172,6 +188,10 @@ namespace backlot
 	int Texture::getID()
 	{
 		return id;
+	}
+	int Texture::getHandle()
+	{
+		return texture;
 	}
 	void Texture::bind()
 	{

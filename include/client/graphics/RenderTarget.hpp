@@ -23,18 +23,47 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _RENDERTARGET_HPP_
 
 #include "ReferenceCounted.hpp"
+#include "Texture.hpp"
 
 namespace backlot
 {
+	/**
+	 * Render target for rendering into textures, e.g. for postprocessing. This
+	 * class uses framebuffer objects if GL_EXT_framebuffer_object is available
+	 * or glCopyTexImage2D (slower) if they are not. Note that one RenderTarget
+	 * instance can be used with different target textures. Things get quite
+	 * slow though if the textures have different size/pixel format, at least
+	 * when using framebuffer objects.
+	 */
 	class RenderTarget : public ReferenceCounted
 	{
 		public:
+			/**
+			 * Constructor.
+			 * @param width Width of the texture to render into.
+			 * @param height Height of the texture to render into.
+			 */
 			RenderTarget(unsigned int width, unsigned int height);
+			/**
+			 * Destructor.
+			 */
 			~RenderTarget();
 
+			/**
+			 * Begins rendering into a texture.
+			 */
 			void start(TexturePointer texture);
+			/**
+			 * Finishes rendering into a texture and reverts to rendering to
+			 * the screen.
+			 */
 			void end();
 		private:
+			unsigned int width;
+			unsigned int height;
+			unsigned int fbo;
+			unsigned int depthbuffer;
+			TexturePointer texture;
 	};
 }
 

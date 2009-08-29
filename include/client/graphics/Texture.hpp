@@ -77,6 +77,12 @@ namespace backlot
 			 */
 			static SharedPointer<Texture> get(std::string path, bool singleuse = false);
 			/**
+			 * Creates an empty texture for use as a render target.
+			 * @param width Width of the texture.
+			 * @param height Height of the texture.
+			 */
+			static SharedPointer<Texture> create(int width, int height);
+			/**
 			 * Returns an already loaded texture.
 			 * @param id ID of the wanted texture.
 			 */
@@ -88,6 +94,12 @@ namespace backlot
 			 * for later reuse.
 			 */
 			bool load(std::string path, bool registertexture = true);
+			/**
+			 * Allocates memory for the texture to be used as a render buffer.
+			 * @param width Width of the texture.
+			 * @param height Height of the texture.
+			 */
+			bool allocate(int width, int height);
 
 			/**
 			 * Activates a different texture filter method.
@@ -107,6 +119,10 @@ namespace backlot
 			 * Returns the ID of the texture.
 			 */
 			int getID();
+			/**
+			 * Returns the OpenGL handle of the texture.
+			 */
+			int getHandle();
 			/**
 			 * Calls glBindTexture() for this texture.
 			 */
