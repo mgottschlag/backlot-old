@@ -126,6 +126,7 @@ namespace backlot
 			std::string name;
 			Vector2I size;
 			float *heightmap;
+			unsigned char *accessible;
 			#ifdef CLIENT
 			std::vector<MapLayer> layers;
 			static Map *visible;

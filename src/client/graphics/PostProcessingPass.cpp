@@ -216,7 +216,6 @@ namespace backlot
 
 	void PostProcessingPass::draw()
 	{
-		std::cout << "Program: " << ps << std::endl;
 		// Draw fullscreen quad into the next render buffer
 		rtt->start(next);
 		current->bind();
@@ -230,9 +229,6 @@ namespace backlot
 			glEnable(GL_FRAGMENT_PROGRAM_ARB);
 			glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, ps);
 		}
-		unsigned int error = glGetError();
-		if (error != GL_NO_ERROR)
-			std::cout << "Pass (1): " << gluErrorString(error) << std::endl;
 		drawFSQuad();
 		if (psversion == ESV_ARBFP10)
 		{

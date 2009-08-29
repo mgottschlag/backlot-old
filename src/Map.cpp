@@ -55,6 +55,8 @@ namespace backlot
 		// Destroy map
 		if (heightmap)
 			delete[] heightmap;
+		if (accessible)
+			delete[] accessible;
 		// TODO
 	}
 
@@ -125,7 +127,8 @@ namespace backlot
 			read += runlength;
 		}
 		// Read accessibility info
-		// TODO
+		accessible = new unsigned char[(size.x * size.y + 1) / 2];
+		file.read((char*)accessible, (size.x * size.y + 1) / 2);
 		// Read entities
 		unsigned int entitycount = 0;
 		file.read((char*)&entitycount, 4);
