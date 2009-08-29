@@ -65,6 +65,8 @@ namespace backlot
 			unsigned int depthbuffer;
 			TexturePointer texture;
 	};
+
+	typedef SharedPointer<RenderTarget> RenderTargetPointer;
 }
 
 #endif

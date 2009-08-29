@@ -23,6 +23,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _POSTPROCESSINGPASS_HPP_
 
 #include "ReferenceCounted.hpp"
+#include "graphics/Texture.hpp"
+#include "graphics/RenderTarget.hpp"
 
 #include <string>
 #include <vector>
@@ -38,7 +40,15 @@ namespace backlot
 			~PostProcessingPass();
 
 			bool load(TiXmlElement *xml);
+
+			static void init();
+			static void beginFrame();
+			static void endFrame();
+			static void drawResult();
 		private:
+			static TexturePointer current;
+			static TexturePointer next;
+			static RenderTargetPointer rtt;
 	};
 
 	typedef SharedPointer<PostProcessingPass> PostProcessingPassPointer;

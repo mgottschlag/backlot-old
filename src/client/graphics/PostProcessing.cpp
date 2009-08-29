@@ -109,12 +109,20 @@ namespace backlot
 
 	void PostProcessing::init()
 	{
+		PostProcessingPass::init();
 	}
 	void PostProcessing::begin()
 	{
+		PostProcessingPass::beginFrame();
 	}
 	void PostProcessing::end()
 	{
+		// Finish rendering into the texture
+		PostProcessingPass::endFrame();
+		// Apply post processing passes
+		// TODO
+		// Draw result
+		PostProcessingPass::drawResult();
 	}
 
 	std::vector<PostProcessing*> PostProcessing::effects;

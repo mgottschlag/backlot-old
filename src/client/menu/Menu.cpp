@@ -170,10 +170,10 @@ namespace backlot
 	{
 		// Setup camera
 		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
 		glLoadIdentity();
 		const Vector2I &size = Preferences::get().getResolution();
 		glOrtho(0, size.x, size.y, 0, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
 
 		// Render background
 		glDisable(GL_TEXTURE_2D);
@@ -187,9 +187,6 @@ namespace backlot
 		glEnd();
 		glColor3f(1.0, 1.0, 1.0);
 		glEnable(GL_DEPTH_TEST);
-		// Reenable camera
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
 	}
 
 	void Menu::injectAction(const gcn::ActionEvent &event)

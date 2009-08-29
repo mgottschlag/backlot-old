@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "graphics/RenderTarget.hpp"
 
 #include <GL/glew.h>
+#include <iostream>
 
 namespace backlot
 {
@@ -32,6 +33,7 @@ namespace backlot
 		{
 			// Create frame buffer object
 			glGenFramebuffersEXT(1, &fbo);
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
 			// Create and attach depth buffer
 			glGenRenderbuffersEXT(1, &depthbuffer);
 			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthbuffer);
