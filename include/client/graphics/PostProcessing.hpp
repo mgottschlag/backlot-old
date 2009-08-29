@@ -45,11 +45,17 @@ namespace backlot
 			void setName(std::string name);
 			std::string getName();
 
+			void setActive(bool active);
+			bool isActive();
+
 			static void init();
 			static void begin();
 			static void end();
+
+			void apply();
 		private:
 			std::string name;
+			bool active;
 
 			std::vector<PostProcessingPassPointer> passes;
 

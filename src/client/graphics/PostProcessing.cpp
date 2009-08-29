@@ -21,14 +21,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "graphics/PostProcessing.hpp"
 #include "Engine.hpp"
+#include "Preferences.hpp"
 
 #include "support/tinyxml.h"
 
 #include <iostream>
+#include <GL/gl.h>
 
 namespace backlot
 {
-	PostProcessing::PostProcessing() : ReferenceCounted()
+	PostProcessing::PostProcessing() : ReferenceCounted(), active(true)
 	{
 	}
 	PostProcessing::~PostProcessing()
@@ -78,7 +80,7 @@ namespace backlot
 		TiXmlNode *node = xml.FirstChild("effect");
 		if (!node)
 		{
-			std::cerr << "Parser error: <menu> not found." << std::endl;
+			std::cerr << "Parser error: <effect> not found." << std::endl;
 			return false;
 		}
 		TiXmlElement *root = node->ToElement();
@@ -92,6 +94,7 @@ namespace backlot
 				PostProcessingPassPointer pass = new PostProcessingPass();
 				if (!pass->load(passdata))
 					return false;
+				passes.push_back(pass);
 			}
 			passnode = root->IterateChildren("pass", passnode);
 		}
@@ -107,6 +110,15 @@ namespace backlot
 		return name;
 	}
 
+	void PostProcessing::setActive(bool active)
+	{
+		this->active = active;
+	}
+	bool PostProcessing::isActive()
+	{
+		return active;
+	}
+
 	void PostProcessing::init()
 	{
 		PostProcessingPass::init();
@@ -119,10 +131,36 @@ namespace backlot
 	{
 		// Finish rendering into the texture
 		PostProcessingPass::endFrame();
+		// Reset camera (we are only going to render full screen quads)
+		Vector2I screensize = Preferences::get().getResolution();
+		glDisable(GL_BLEND);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glMatrixMode(GL_TEXTURE);
+		glLoadIdentity();
+		glScalef(1.0 / screensize.x, 1.0 / screensize.y, 1.0);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		// Apply post processing passes
-		// TODO
+		for (unsigned int i = 0; i < effects.size(); i++)
+		{
+			if (effects[i]->isActive())
+				effects[i]->apply();
+		}
 		// Draw result
 		PostProcessingPass::drawResult();
+		glMatrixMode(GL_TEXTURE);
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+	}
+
+	void PostProcessing::apply()
+	{
+		// Just loop through all passes
+		for (unsigned int i = 0; i < passes.size(); i++)
+		{
+			passes[i]->draw();
+		}
 	}
 
 	std::vector<PostProcessing*> PostProcessing::effects;

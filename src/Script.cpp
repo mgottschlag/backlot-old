@@ -31,6 +31,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Client.hpp"
 #include "Server.hpp"
 #include "graphics/Graphics.hpp"
+#include "graphics/PostProcessing.hpp"
 #include <guichan/widgets/checkbox.hpp>
 #include <guichan/widgets/textfield.hpp>
 #include <guichan/widgets/dropdown.hpp>
@@ -330,6 +331,16 @@ namespace backlot
 					luabind::def("get", &Graphics::get)
 				]
 				.def("getCamera", &Graphics::getCamera),
+			// PostProcessing
+			luabind::class_<PostProcessing, ReferenceCounted, SharedPointer<PostProcessing> >("PostProcessing")
+				.scope
+				[
+					luabind::def("get", &PostProcessing::get),
+					luabind::def("add", &PostProcessing::add)
+				]
+				.def("setActive", &PostProcessing::setActive)
+				.def("isActive", &PostProcessing::isActive),
+
 			// Menu
 			luabind::class_<Menu, ReferenceCounted, SharedPointer<Menu> >("Menu")
 				.scope

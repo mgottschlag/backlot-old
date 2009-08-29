@@ -33,6 +33,13 @@ class TiXmlElement;
 
 namespace backlot
 {
+	enum ShaderVersion
+	{
+		ESV_None,
+		ESV_ARBFP10,
+		ESV_ARBVP10,
+		ESV_GLSL
+	};
 	class PostProcessingPass : public ReferenceCounted
 	{
 		public:
@@ -45,7 +52,16 @@ namespace backlot
 			static void beginFrame();
 			static void endFrame();
 			static void drawResult();
+
+			void draw();
 		private:
+			static void drawFSQuad();
+
+			ShaderVersion psversion;
+			unsigned int ps;
+			ShaderVersion vsversion;
+			unsigned int vs;
+
 			static TexturePointer current;
 			static TexturePointer next;
 			static RenderTargetPointer rtt;
