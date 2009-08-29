@@ -48,6 +48,9 @@ namespace backlot
 
 			bool load(TiXmlElement *xml);
 
+			void setPixelShader(ShaderVersion version, unsigned int shader);
+			void setVertexShader(ShaderVersion version, unsigned int shader);
+
 			static void init();
 			static void beginFrame();
 			static void endFrame();

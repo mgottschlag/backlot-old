@@ -119,6 +119,11 @@ namespace backlot
 		return active;
 	}
 
+	void PostProcessing::addPass(PostProcessingPassPointer pass)
+	{
+		passes.push_back(pass);
+	}
+
 	void PostProcessing::init()
 	{
 		PostProcessingPass::init();

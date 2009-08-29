@@ -48,6 +48,8 @@ namespace backlot
 			void setActive(bool active);
 			bool isActive();
 
+			void addPass(PostProcessingPassPointer pass);
+
 			static void init();
 			static void begin();
 			static void end();

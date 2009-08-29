@@ -177,6 +177,17 @@ namespace backlot
 		return true;
 	}
 
+	void PostProcessingPass::setPixelShader(ShaderVersion version, unsigned int shader)
+	{
+		psversion = version;
+		ps = shader;
+	}
+	void PostProcessingPass::setVertexShader(ShaderVersion version, unsigned int shader)
+	{
+		vsversion = version;
+		vs = shader;
+	}
+
 	void PostProcessingPass::init()
 	{
 		Vector2I screensize = Preferences::get().getResolution();
