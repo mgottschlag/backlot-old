@@ -47,6 +47,8 @@ Client.cpp
 graphics/QuadBatch.cpp
 graphics/Camera.cpp
 graphics/RenderTarget.cpp
+graphics/PostProcessing.cpp
+graphics/PostProcessingPass.cpp
 HUD.cpp
 HUDElement.cpp
 menu/Menu.cpp

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<effect>
+	<pass index="0">
+		<texture index="0" name="tex0" content="current" />
+		<pixelshader type="arbfp1.0">
+		<![CDATA[
+			!!ARBfp1.0
+			TEMP coords;
+			TEMP texcolor;
+			TEMP color;
+			MOV color, {0, 0, 0, 0};
+
+			ADD coords, fragment.texcoord[0], {3.0, 0.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0044318484, color;
+
+			ADD coords, fragment.texcoord[0], {-3.0, 0.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0044318484, color;
+
+			ADD coords, fragment.texcoord[0], {2.0, 0.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0539909665, color;
+
+			ADD coords, fragment.texcoord[0], {-2.0, 0.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0539909665, color;
+
+			ADD coords, fragment.texcoord[0], {1.0, 0.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.2419707245, color;
+
+			ADD coords, fragment.texcoord[0], {-1.0, 0.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.2419707245, color;
+
+			TEX texcolor, fragment.texcoord[0], texture[0], 2D;
+			MAD color, texcolor, 0.3989422804, color;
+
+			MOV result.color, color;\n"
+			END
+		]]>
+		</pixelshader>
+	</pass>
+	<pass index="1">
+		<texture index="0" name="tex0" content="current" />
+		<pixelshader type="arbfp1.0">
+		<![CDATA[
+			!!ARBfp1.0
+			TEMP coords;
+			TEMP texcolor;
+			TEMP color;
+			MOV color, {0, 0, 0, 0};
+
+			ADD coords, fragment.texcoord[0], {0.0, 3.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0044318484, color;
+
+			ADD coords, fragment.texcoord[0], {0.0, -3.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0044318484, color;
+
+			ADD coords, fragment.texcoord[0], {0.0, 2.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0539909665, color;
+
+			ADD coords, fragment.texcoord[0], {0.0, -2.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.0539909665, color;
+
+			ADD coords, fragment.texcoord[0], {0.0, 1.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.2419707245, color;
+
+			ADD coords, fragment.texcoord[0], {0.0, -1.0};
+			TEX texcolor, coords, texture[0], 2D;
+			MAD color, texcolor, 0.2419707245, color;
+
+			TEX texcolor, fragment.texcoord[0], texture[0], 2D;
+			MAD color, texcolor, 0.3989422804, color;
+
+			MOV result.color, color;\n"
+			END
+		]]>
+		</pixelshader>
+	</pass>
+</effect>

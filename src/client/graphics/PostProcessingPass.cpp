@@ -19,44 +19,23 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _POSTPROCESSING_HPP_
-#define _POSTPROCESSING_HPP_
-
 #include "graphics/PostProcessingPass.hpp"
 
-#include <string>
+#include "support/tinyxml.h"
+
+#include <iostream>
 
 namespace backlot
 {
-	/**
-	 * Full-screen post-processing effect (like blur, colouring etc.).
-	 */
-	class PostProcessing : public ReferenceCounted
+	PostProcessingPass::PostProcessingPass() : ReferenceCounted()
 	{
-		public:
-			PostProcessing();
-			~PostProcessing();
+	}
+	PostProcessingPass::~PostProcessingPass()
+	{
+	}
 
-			static SharedPointer<PostProcessing> get(std::string name);
-			static void add(SharedPointer<PostProcessing> effect,
-				std::string name);
-			bool load(std::string name);
-
-			void setName(std::string name);
-			std::string getName();
-
-			static void init();
-			static void begin();
-			static void end();
-		private:
-			std::string name;
-
-			std::vector<PostProcessingPassPointer> passes;
-
-			static std::vector<PostProcessing*> effects;
-	};
-
-	typedef SharedPointer<PostProcessing> PostProcessingPointer;
+	bool PostProcessingPass::load(TiXmlElement *xml)
+	{
+		return false;
+	}
 }
-
-#endif

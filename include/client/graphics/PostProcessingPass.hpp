@@ -19,12 +19,15 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef _POSTPROCESSING_HPP_
-#define _POSTPROCESSING_HPP_
+#ifndef _POSTPROCESSINGPASS_HPP_
+#define _POSTPROCESSINGPASS_HPP_
 
 #include "ReferenceCounted.hpp"
 
 #include <string>
+#include <vector>
+
+class TiXmlElement;
 
 namespace backlot
 {
@@ -33,8 +36,12 @@ namespace backlot
 		public:
 			PostProcessingPass();
 			~PostProcessingPass();
+
+			bool load(TiXmlElement *xml);
 		private:
 	};
+
+	typedef SharedPointer<PostProcessingPass> PostProcessingPassPointer;
 }
 
 #endif

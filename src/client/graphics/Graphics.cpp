@@ -20,6 +20,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "graphics/Graphics.hpp"
+#include "graphics/PostProcessing.hpp"
 #include "Map.hpp"
 #include "Animation.hpp"
 #include "menu/Menu.hpp"
@@ -119,6 +120,8 @@ namespace backlot
 			std::cerr << "Error while loading HUD." << std::endl;
 			return false;
 		}
+		// Initialize post processing framework
+		PostProcessing::init();
 
 		return true;
 	}
@@ -154,6 +157,7 @@ namespace backlot
 			SDL_WM_SetCaption(caption, caption);
 		}
 		// Render everything
+		PostProcessing::begin();
 		glClearColor(0.3, 0.0, 0.0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera->apply();
@@ -165,6 +169,7 @@ namespace backlot
 		EntityImage::renderAll();
 		Effect::renderAll();
 		HUD::get().render();
+		PostProcessing::end();
 		// Render menu
 		MenuPointer menu = Menu::getActiveMenu();
 		if (!menu.isNull())
