@@ -17,6 +17,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter")
 set(SRC_SHARED
 ../Preferences.cpp
 ../Map.cpp
+../PathFinder.cpp
 ../TileSet.cpp
 ../Buffer.cpp
 ../Script.cpp
