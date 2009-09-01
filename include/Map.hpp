@@ -77,6 +77,19 @@ namespace backlot
 			bool load(std::string name);
 
 			/**
+			 * Returns the map size.
+			 */
+			Vector2I getSize();
+			/**
+			 * Returns the path finding info. There are 4 bits used per square
+			 * in the grid: The first says whether an entity can move from this
+			 * position one unit to the right, the third to the left. The second
+			 * and forth bit are for down/up respectively. Two positions are
+			 * packed into one byte, with 0xF0 selecting the left of the two.
+			 */
+			unsigned char *getPathFindingInfo();
+
+			/**
 			 * Returns the height at the given position.
 			 */
 			float getHeight(Vector2F position);

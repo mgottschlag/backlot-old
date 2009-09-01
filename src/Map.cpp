@@ -212,6 +212,15 @@ namespace backlot
 		return true;
 	}
 
+	Vector2I Map::getSize()
+	{
+		return size;
+	}
+	unsigned char *Map::getPathFindingInfo()
+	{
+		return accessible;
+	}
+
 	float Map::getHeight(Vector2F position)
 	{
 		if (position.x < 0 || position.y < 0)
