@@ -22,6 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Engine.hpp"
 #include "Preferences.hpp"
 #include "Server.hpp"
+#include "PathFinder.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -104,6 +105,7 @@ namespace backlot
 			// Game logic
 			if (!Server::get().update())
 				stopping = true;
+			PathFinder::updateAll();
 			// Input handling
 			// TODO
 			// Fixed time step

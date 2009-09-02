@@ -31,6 +31,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "menu/Menu.hpp"
 #include "menu/Dialog.hpp"
 #include "SplashScreen.hpp"
+#include "PathFinder.hpp"
 #include "support/tinyxml.h"
 
 #include <SDL/SDL.h>
@@ -177,6 +178,7 @@ namespace backlot
 			// Game logic
 			Server::get().update();
 			Client::get().update();
+			PathFinder::updateAll();
 			// Render everything
 			if (!Graphics::get().render())
 				stopping = true;

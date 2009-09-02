@@ -24,8 +24,20 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Map.hpp"
 
+#include <queue>
+
 namespace backlot
 {
+	struct PathFinderCell
+	{
+		PathFinderCell() : state(0)
+		{
+		}
+		float cost;
+		float estimation;
+		unsigned int state;
+	};
+
 	/**
 	 * Status of a path finding request.
 	 */
@@ -102,14 +114,56 @@ namespace backlot
 			 * Updates this path finder. The work of searching for a path is
 			 * usually done over multiple frames depending on the CPU usage and
 			 * the complexity of the request.
+			 * @return true if the work is done.
 			 */
-			void update();
+			bool update();
 
 		private:
+			void startSearch();
+			void resizeGrid();
+
+			void addNode(Vector2I position, float cost);
+			void collectPath();
+			inline Vector2I getPreviousNode(const Vector2I &position);
+
+			inline float getEstimation(float cost, const Vector2I &start,
+				const Vector2I &end);
+
 			MapPointer map;
 
-			static std::vector<PathFinder> pathfinders;
+			unsigned char *accessibility;
+			static PathFinderCell *grid;
+			static Vector2I gridsize;
+			static unsigned int lastgridid;
+			Vector2I start;
+			Vector2I end;
+
+			struct OpenNode
+			{
+				OpenNode() : estimation(0), position(0)
+				{
+				}
+				OpenNode(float estimation, int position)
+					: estimation(estimation), position(position)
+				{
+				}
+				float estimation;
+				int position;
+				bool operator<(const OpenNode &other) const
+				{
+					return estimation > other.estimation;
+				}
+			};
+
+			std::priority_queue<OpenNode> opennodes;
+
+			PathFinderStatus status;
+			std::list<Vector2F> path;
+
+			static std::queue<SharedPointer<PathFinder> > pathjobs;
 	};
+
+	typedef SharedPointer<PathFinder> PathFinderPointer;
 }
 
 #endif

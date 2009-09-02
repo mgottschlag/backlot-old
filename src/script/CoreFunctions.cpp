@@ -28,6 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Vector2.hpp"
 #include "Rectangle.hpp"
 #include "Timer.hpp"
+#include "PathFinder.hpp"
 
 extern "C"
 {
@@ -156,6 +157,26 @@ namespace backlot
 				.def_readwrite("entitycollision", &CollisionInfo::entitycollision)
 				.def_readwrite("entity", &CollisionInfo::entity)
 				.def_readwrite("point", &CollisionInfo::point),
+			// PathFinder
+			luabind::class_<PathFinder, ReferenceCounted, SharedPointer<PathFinder> >("PathFinder")
+				.def(luabind::constructor<MapPointer>())
+				.def("initialize", &PathFinder::initialize)
+				.def("getNextWaypoint", &PathFinder::getNextWaypoint)
+				.def("getStatus", &PathFinder::getStatus)
+				.enum_("Status")
+				[
+					luabind::value("Inactive", EPFS_Inactive),
+					luabind::value("Waiting", EPFS_Waiting),
+					luabind::value("Ready", EPFS_Ready),
+					luabind::value("Done", EPFS_Done),
+					luabind::value("Error", EPFS_Error)
+				],
+			// Map
+			luabind::class_<Map, ReferenceCounted, SharedPointer<Map> >("Map")
+				.def("getSize", &Map::getSize)
+				.def("getHeight", &Map::getHeight)
+				.def("getMaximumHeight", &Map::getMaximumHeight)
+				.def("getMinimumHeight", &Map::getMinimumHeight),
 			// Script
 			luabind::class_<Script, ReferenceCounted, SharedPointer<Script> >("Script")
 				.def("isFunction", &Script::isFunction)
