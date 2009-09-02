@@ -21,6 +21,7 @@ set(SRC_SHARED
 ../TileSet.cpp
 ../Buffer.cpp
 ../Script.cpp
+../script/CoreFunctions.cpp
 ../Timer.cpp
 ../entity/EntityTemplate.cpp
 ../entity/EntityList.cpp
@@ -68,6 +69,7 @@ Game.cpp
 entity/EntityImage.cpp
 SplashScreen.cpp
 ../support/ScreenPosition.cpp
+../script/ClientFunctions.cpp
 )
 
 set(SERVER_SRC
@@ -79,6 +81,7 @@ Client.cpp
 Game.cpp
 entity/Entity.cpp
 entity/EntityState.cpp
+../script/ServerFunctions.cpp
 )
 
 add_subdirectory(src/client)
