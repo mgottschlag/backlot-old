@@ -1,6 +1,11 @@
 
 if Client ~= nil then
 	gibs:setVisible(false)
+	if this:isLocal() then
+		-- Center player on the screen
+		local camera = Graphics.get():getCamera()
+		camera:setPosition(position:getVector2F())
+	end
 end
 
 function on_loaded()
