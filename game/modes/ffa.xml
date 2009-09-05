@@ -27,7 +27,9 @@
 		player:getScript():callFunction("on_set_weapon", weapon:getID())
 	end
 
-	local player = Game.get():addEntity("bot", 0)
+	local weapon = Game.get():addEntity("plasmagun", 0)
+	local bot = Game.get():addEntity("bot", 0)
+	bot:getScript():callFunction("on_set_weapon", weapon:getID())
 	]]>
 	</script>
 </mode>

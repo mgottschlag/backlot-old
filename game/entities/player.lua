@@ -157,6 +157,21 @@ function on_keyboard_input(key, state)
 	end
 end
 
+function on_update()
+	-- Get weapon - this should be done by the engine really!
+	if currentweapon:getInt() ~= 65535 then
+		if weaponentity == nil or not weaponentity.__ok then
+			weaponentity = Game.get():getEntity(currentweapon:getInt())
+			if weaponentity.__ok and Client ~= nil then
+				-- Change weapon texture
+				local textureid = weaponentity:getScript():callFunctionInt("get_player_texture")
+				texture = Texture.get(textureid)
+				weapon:setTexture(texture)
+			end
+		end
+	end
+end
+
 function do_damage(bulletid, damage)
 	print("Damage done: "..damage)
 	-- Change health points

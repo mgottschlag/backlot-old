@@ -35,7 +35,18 @@ targetposition = Vector2F(0, 0)
 pathfinder = nil
 
 function on_update()
-	print("Passed: "..framespassed)
+	-- Get weapon - this should be done by the engine really!
+	if currentweapon:getInt() ~= 65535 then
+		if weaponentity == nil or not weaponentity.__ok then
+			weaponentity = Game.get():getEntity(currentweapon:getInt())
+			if weaponentity.__ok and Client ~= nil then
+				-- Change weapon texture
+				local textureid = weaponentity:getScript():callFunctionInt("get_player_texture")
+				texture = Texture.get(textureid)
+				weapon:setTexture(texture)
+			end
+		end
+	end
 	if Client ~= nil then
 		return
 	end
@@ -54,6 +65,7 @@ function on_update()
 			direction = nextpoint - pos
 			if direction:getLength() > 0.1 then
 				direction = direction / direction:getLength() * 2
+				rotation:setFloat(direction:getRotation() + 90)
 			end
 			this:setSpeed(direction, false);
 		else
@@ -107,6 +119,11 @@ function think()
 		currentaction = 1
 		print("Moving to "..targetposition.x.."/"..targetposition.y)
 	end
+end
+
+function on_set_weapon(weapon)
+	print("on_set_weapon")
+	currentweapon:setInt(weapon)
 end
 
 function do_damage(bulletid, damage)
