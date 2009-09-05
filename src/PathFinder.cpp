@@ -54,7 +54,18 @@ namespace backlot
 	}
 	Vector2F PathFinder::getNextWaypoint(Vector2F currentposition)
 	{
-		// TODO: Erase waypoint if necessary
+		// Erase waypoint if necessary
+		if (path.size() != 0)
+		{
+			Vector2F next = *path.begin();
+			if ((currentposition - next).getLengthSquared() < 0.01)
+				path.erase(path.begin());
+			if (path.size() == 0)
+				status = EPFS_Done;
+		}
+		// Return first waypoint
+		if (path.size() == 0)
+			return Vector2F(0, 0);
 		return *path.begin();
 	}
 
@@ -171,7 +182,7 @@ namespace backlot
 		Vector2I position = end;
 		while (position != start)
 		{
-			path.push_front(position);
+			path.push_front(Vector2F(0.5, 0.5) + position);
 			// Find the node with the shortest path
 			position = getPreviousNode(position);
 		}
