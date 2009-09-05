@@ -40,34 +40,36 @@ function on_changed(property)
 	end
 	-- Movement
 	if property:getName() == "keys" then
-		yspeed = 0;
-		xspeed = 0;
+		local speed = Vector2F(0, 0)
 		-- Get movement speed
 		if keys:bit(0) == true then
-			yspeed = yspeed + 1;
+			speed.y = speed.y + 1;
 		end
 		if keys:bit(1) == true then
-			yspeed = yspeed - 1;
+			speed.y = speed.y - 1;
 		end
 		if keys:bit(2) == true then
-			xspeed = xspeed + 1;
+			speed.x = speed.x + 1;
 		end
 		if keys:bit(3) == true then
-			xspeed = xspeed - 1;
+			speed.x = speed.x - 1;
+		end
+		if speed:getLength() > 0.1 then
+			speed = speed / speed:getLength() * 2
 		end
 		-- Set movement
 		if health:getInt() == 0 then
 			return
 		end
-		this:setSpeed(Vector2F(xspeed, yspeed), false);
+		this:setSpeed(speed, false);
 		if Client ~= nil then
 			feet:setRotation(0);
 			feet:setPosition(-0.5, -0.5);
-			if xspeed ~= 0 or yspeed ~= 0 then
+			if speed.x ~= 0 or speed.y ~= 0 then
 				if not feetanim:isPlaying() then
 					feetanim:start();
 				end
-				feet:rotate(Vector2F(yspeed, -xspeed):getRotation(), 0.5, 0.5);
+				feet:rotate(Vector2F(speed.y, -speed.x):getRotation(), 0.5, 0.5);
 			else
 				if feetanim:isPlaying() then
 					feetanim:stop();

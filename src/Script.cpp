@@ -37,6 +37,7 @@ namespace backlot
 		luaopen_base(state);
 		luaopen_string(state);
 		luaopen_math(state);
+		luaopen_os(state);
 		luabind::open(state);
 	}
 	Script::~Script()
