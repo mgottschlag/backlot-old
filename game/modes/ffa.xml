@@ -5,6 +5,8 @@
 	</playerinfo>
 	<script>
 	<![CDATA[
+	math.randomseed(os.time())
+
 	function on_new_client(client)
 		-- Get spawn point
 		local spawnpoints = Game.get():getEntities("spawnpoint")
@@ -24,6 +26,8 @@
 		local player = Game.get():addEntity("player", client, playerstate:get())
 		player:getScript():callFunction("on_set_weapon", weapon:getID())
 	end
+
+	local player = Game.get():addEntity("bot", 0)
 	]]>
 	</script>
 </mode>
