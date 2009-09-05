@@ -20,6 +20,7 @@
 				ServerControl.get():destroy()
 				return
 			end
+			Menu.getActiveMenu():setActive(false)
 		elseif index == 1 then
 			Dialog.get("join"):setVisible(false)
 		end
