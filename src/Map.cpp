@@ -223,11 +223,12 @@ namespace backlot
 
 	float Map::getHeight(Vector2F position)
 	{
-		if (position.x < 0 || position.y < 0)
+		Vector2I ipos = position;
+		if (ipos.x < 0 || ipos.y < 0)
 			return 1000;
-		if (position.x >= size.x || position.y >= size.y)
+		if (ipos.x >= size.x || ipos.y >= size.y)
 			return 1000;
-		return heightmap[(int)position.x + (int)position.y * size.x];
+		return heightmap[ipos.x + ipos.y * size.x];
 	}
 	float Map::getMaximumHeight(RectangleF area)
 	{
