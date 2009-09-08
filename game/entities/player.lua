@@ -176,6 +176,9 @@ function do_damage(bulletid, damage)
 	print("Damage done: "..damage)
 	-- Change health points
 	local hp = health:getInt()
+	if hp == 0 then
+		return
+	end
 	hp = hp - damage;
 	if hp < 0 then
 		hp = 0

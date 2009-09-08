@@ -1,6 +1,4 @@
 
-math.randomseed(os.time())
-
 if Client ~= nil then
 	gibs:setVisible(false)
 end
@@ -27,12 +25,20 @@ function on_changed(property)
 			weapon:setTexture(texture)
 		end
 	end
+	if property:getName() == "health" then
+		if health:getInt() == 0 then
+			-- Die
+			stopaction()
+			respawn()
+		end
+	end
 end
 
 framespassed = 10
 currentaction = 0
 targetposition = Vector2F(0, 0)
 pathfinder = nil
+targetentity = nil
 
 function on_update()
 	-- Get weapon - this should be done by the engine really!
@@ -71,8 +77,7 @@ function on_update()
 		else
 			this:setSpeed(Vector2F(0, 0), false);
 			if pathfinder:getStatus() ~= PathFinder.Waiting then
-				pathfinder = nil
-				currentaction = 0
+				stopaction()
 			end
 		end
 	else
@@ -80,16 +85,46 @@ function on_update()
 	end
 end
 
+function stopaction()
+	currentaction = 0
+	pathfinder = nil
+	targetentity = nil
+	targetposition = Vector2F(0, 0)
+	local weaponentity = Game.get():getEntity(currentweapon:getInt())
+	if weaponentity.__ok then
+		weaponentity:getScript():callFunction("stop_shooting")
+	end
+	this:setSpeed(Vector2F(0, 0), false);
+end
+
 function attack(entity)
+	-- Set current action
+	currentaction = 2
+	pathfinder = nil
+	targetentity = entity
+	-- Set rotation
+	targetposition = targetentity:getPosition()
+	local pos = position:getVector2F()
+	local direction = targetposition - pos
+	if direction:getLength() > 10 then
+		stopaction()
+		return
+	end
+	rotation:setFloat(direction:getRotation() + 90)
+	-- Start shooting
+	local weaponentity = Game.get():getEntity(currentweapon:getInt())
+	if weaponentity.__ok then
+		weaponentity:getScript():callFunction("start_shooting", this:getID())
+	end
 end
 
 function think()
 	-- Look whether there are any other players around
 	local rect = this:getRectangle()
-	rect.x = rect.x - 15
-	rect.y = rect.y - 15
-	rect.width = rect.width + 30
-	rect.height = rect.height + 30
+	rect.x = rect.x - 7
+	rect.y = rect.y - 7
+	rect.width = rect.width + 14
+	rect.height = rect.height + 14
 	local entitylist = Game.get():getEntities(rect, "player")
 	if entitylist:getSize() > 0 then
 		attack(entitylist:getEntity(0))
@@ -118,6 +153,12 @@ function think()
 		pathfinder:initialize(position:getVector2F(), targetposition)
 		currentaction = 1
 		print("Moving to "..targetposition.x.."/"..targetposition.y)
+	elseif currentaction == 2 then
+		-- Set rotation
+		targetposition = targetentity:getPosition()
+		local pos = position:getVector2F()
+		local direction = targetposition - pos
+		rotation:setFloat(direction:getRotation() + 90)
 	end
 end
 
@@ -130,6 +171,9 @@ function do_damage(bulletid, damage)
 	print("Damage done: "..damage)
 	-- Change health points
 	local hp = health:getInt()
+	if hp == 0 then
+		return
+	end
 	hp = hp - damage;
 	if hp < 0 then
 		hp = 0

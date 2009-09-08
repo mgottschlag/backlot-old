@@ -27,9 +27,15 @@
 		player:getScript():callFunction("on_set_weapon", weapon:getID())
 	end
 
-	local weapon = Game.get():addEntity("plasmagun", 0)
-	local bot = Game.get():addEntity("bot", 0)
-	bot:getScript():callFunction("on_set_weapon", weapon:getID())
+	for i=0,5,1 do
+		local position = Vector2F(math.random(20), math.random(20))
+		local tpl = EntityTemplate.get("bot")
+		local botstate = EntityState.create(tpl)
+		botstate:getProperty("position"):setVector2F(position)
+		local weapon = Game.get():addEntity("plasmagun", 0)
+		local bot = Game.get():addEntity("bot", 0, botstate:get())
+		bot:getScript():callFunction("on_set_weapon", weapon:getID())
+	end
 	]]>
 	</script>
 </mode>
