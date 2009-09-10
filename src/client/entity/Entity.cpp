@@ -36,6 +36,10 @@ namespace backlot
 	}
 	Entity::~Entity()
 	{
+		if (script && script->isFunction("on_destroy"))
+		{
+			script->callFunction("on_destroy");
+		}
 	}
 
 	bool Entity::create(EntityTemplatePointer tpl, BufferPointer state)
@@ -111,6 +115,10 @@ namespace backlot
 	}
 	void Entity::destroyScript()
 	{
+		if (script->isFunction("on_destroy"))
+		{
+			script->callFunction("on_destroy");
+		}
 		script = 0;
 	}
 	EntityTemplatePointer Entity::getTemplate()
