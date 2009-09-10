@@ -48,6 +48,18 @@
 			end
 		end
 
+		function on_destroy()
+			if Client ~= nil then
+				-- Draw explosion
+				-- TODO: This is unreliable
+				local explosion = Effect()
+				explosion:load("sprites/explosion.png", Vector2I(4, 4), "sounds/plasmaexplosion.wav")
+				explosion:setPosition(position)
+				explosion:setPeriod(500)
+				explosion:play(1)
+			end
+		end
+
 		function hit(entitylist)
 			-- Don't hit yourself
 			local playerentity = Game.get():getEntity(player:getInt())
@@ -74,9 +86,6 @@
 					-- TODO: Calculate damage based on the distance
 					otherplayer:getScript():callFunction("do_damage", this:getID(), 20)
 				end
-			end
-			if Client ~= nil then
-				-- TODO: Draw explosion
 			end
 		end
 	]]>
