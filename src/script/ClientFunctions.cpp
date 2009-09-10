@@ -29,6 +29,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Server.hpp"
 #include "entity/Entity.hpp"
 #include "graphics/Graphics.hpp"
+#include "Effect.hpp"
 
 #include <guichan/widgets/checkbox.hpp>
 #include <guichan/widgets/textfield.hpp>
@@ -110,6 +111,15 @@ namespace backlot
 				.def("start", &Animation::start)
 				.def("stop", &Animation::stop)
 				.def("isPlaying", &Animation::isPlaying),
+			// Animation
+			luabind::class_<Effect, ReferenceCounted, SharedPointer<Effect> >("Effect")
+				.def(luabind::constructor<>())
+				.def("load", (bool (Effect::*)(std::string, Vector2I, std::string))&Effect::load)
+				.def("setPeriod", &Effect::setPeriod)
+				.def("getPosition", &Effect::getPosition)
+				.def("setPosition", &Effect::setPosition)
+				.def("play", &Effect::play)
+				.def("stop", &Effect::stop),
 			// Camera
 			luabind::class_<Camera, ReferenceCounted, SharedPointer<Camera> >("Camera")
 				.def("getPosition", &Camera::getPosition)
