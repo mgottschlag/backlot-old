@@ -96,6 +96,8 @@ namespace backlot
 	{
 		if (id >= 65535)
 			return;
+		if (!entities[id])
+			return;
 		// Delete from local list
 		if (entities[id]->isLocal())
 		{
