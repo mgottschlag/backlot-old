@@ -51,6 +51,7 @@ graphics/Camera.cpp
 graphics/RenderTarget.cpp
 graphics/PostProcessing.cpp
 graphics/PostProcessingPass.cpp
+graphics/Decal.cpp
 HUD.cpp
 HUDElement.cpp
 menu/Menu.cpp

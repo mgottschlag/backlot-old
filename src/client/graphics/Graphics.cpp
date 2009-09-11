@@ -28,6 +28,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "HUD.hpp"
 #include "Effect.hpp"
 #include "entity/EntityImage.hpp"
+#include "graphics/Decal.hpp"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -167,6 +168,7 @@ namespace backlot
 			map->render();
 		}
 		EntityImage::renderAll();
+		Decal::renderAll();
 		Effect::renderAll();
 		HUD::get().render();
 		PostProcessing::end();
