@@ -15,11 +15,12 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter")
 set(SRC
 	src/main.cpp
 	src/Server.cpp
-	src/Client.cpp
+	src/Connection.cpp
 )
 
 set(MOC_H
-	include/Client.hpp
+	include/Connection.hpp
+	include/Server.hpp
 )
 
 QT4_WRAP_CPP(MOC_SRC ${MOC_H})

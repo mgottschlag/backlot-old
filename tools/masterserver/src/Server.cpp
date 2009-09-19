@@ -19,90 +19,24 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Server.hpp"
+#include <QtNetwork>
 
+#include "Connection.hpp"
+#include "Server.hpp"
 #include <iostream>
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <stdlib.h>
 
 namespace backlot
 {
-	Server::Server()
+	Server::Server(QObject *parent, int port) : QTcpServer(parent), port(port)
 	{
-		id = 0;
-		ip = "127.0.0.1";
-		port = 27272;
-		players = 0;
-		maxplayers = 8;
-		map = "test";
+		listen(QHostAddress::Any, port);
 	}
 
-	Server::~Server()
+	void Server::incomingConnection(int socketDescriptor)
 	{
-	}
-
-	int Server::print_infos()
-	{
-		std::cout << "Server: " << this->id << " IP:" << this->ip << ":" << this->port << " Players:" << this->players << "/" << this->maxplayers << " Map:" << this->map << std::endl;
-		return 1;
-	}
-	
-	std::string Server::get_path()
-	{
-		std::stringstream buf;
-		buf << port;
-		return ip + ":" + buf.str();
-	}
-
-	int Server::ping()
-	{
-		std::cout << "PING IP/File:" << get_path() << std::endl;
-		std::ifstream pingfile;
-		pingfile.open (get_path().c_str(), std::ifstream::in);
-		
-		if (pingfile.is_open())
-		{
-			while (pingfile.good())
-			{
-				std::string line;
-				pingfile >> line;
-
-				if (((line == "ip")))
-				{
-					pingfile >> line;
-					ip = line;
-				}
-				if (((line == "port")))
-				{
-					pingfile >> line;
-					port = atoi(line.c_str());
-				}
-				if (((line == "players")))
-				{
-					pingfile >> line;
-					players = atoi(line.c_str());
-				}
-				if (((line == "maxplayers")))
-				{
-					pingfile >> line;
-					maxplayers = atoi(line.c_str());
-				}
-				if (((line == "map")))
-				{
-					pingfile >> line;
-					map = line;
-				}
-			}
-			pingfile.close();
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-
-		return 0;
+		Connection *connection = new Connection(this);
+		connection->setSocketDescriptor(socketDescriptor);
+		emit newConnection(connection);
+		std::cout << "NEW CONNECTION" << std::endl;
 	}
 }

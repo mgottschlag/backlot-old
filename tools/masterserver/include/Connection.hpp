@@ -19,33 +19,34 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef BACKLOT_MAPSERVER_SERVER_HPP_INCLUDED
-#define BACKLOT_MAPSERVER_SERVER_HPP_INCLUDED
+#ifndef BACKLOT_MAPSERVER_CONNECTION_HPP_INCLUDED
+#define BACKLOT_MAPSERVER_CONNECTION_HPP_INCLUDED
 
-#include <string>
-#include <QTcpServer>
+#include <QHostAddress>
+#include <QString>
+#include <QTcpSocket>
+#include <QTime>
+#include <QTimer>
 
 namespace backlot
 {
 
-	class Connection;
-	
-	class Server : public QTcpServer
+	class Connection : public QTcpSocket
 	{
 		Q_OBJECT
 
-		public:
-			Server(QObject *parent = 0, int port = 27278);
+	public:
+		Connection(QObject *parent = 0);
+		void setGreetingMessage(const QString &message);
+	
+	signals:
+		void readyForUse();
+		void newMessage(const QString &from, const QString &message);
 
-		signals:
-			void newConnection(backlot::Connection *connection);
-
-		protected:
-			void incomingConnection(int socketDescriptor);
-		
-		private:
-			int port;
+	private slots:
+		void processReadyRead();
+		void sendGreetingMessage();
+	
 	};
 }
-
 #endif

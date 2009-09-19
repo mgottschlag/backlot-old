@@ -19,33 +19,37 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef BACKLOT_MAPSERVER_SERVER_HPP_INCLUDED
-#define BACKLOT_MAPSERVER_SERVER_HPP_INCLUDED
+#include "Connection.hpp"
 
-#include <string>
-#include <QTcpServer>
+#include <QtNetwork>
+#include <iostream>
 
 namespace backlot
 {
 
-	class Connection;
-	
-	class Server : public QTcpServer
+	Connection::Connection(QObject *parent) : QTcpSocket(parent)
 	{
-		Q_OBJECT
+		QObject::connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
+		//QObject::connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
+		//QObject::connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
+		QObject::connect(this, SIGNAL(connected()), this, SLOT(sendGreetingMessage()));
+	}
 
-		public:
-			Server(QObject *parent = 0, int port = 27278);
+	void Connection::processReadyRead()
+	{
+		QByteArray buffer;
+		while (bytesAvailable() > 0) {
+			buffer.append(read(1));
+			if (buffer.endsWith("\n"))
+			{
+				std::cout << buffer.data() << std::endl;
+				buffer.clear();
+			}
+		}
+	}
 
-		signals:
-			void newConnection(backlot::Connection *connection);
-
-		protected:
-			void incomingConnection(int socketDescriptor);
-		
-		private:
-			int port;
-	};
+	void Connection::sendGreetingMessage()
+	{
+		write("ok");
+	}
 }
-
-#endif

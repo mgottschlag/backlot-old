@@ -19,58 +19,51 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "Server.hpp"
-#include "Client.hpp"
-
 #include <iostream>
-#include <vector>
-#include <QtNetwork>
-#include <QTcpSocket>
-	////std::vector<backlot::Server*> servers_array;
-	////servers_array[1] = &test;	
+#include <QCoreApplication>
+#include "Server.cpp"
+	
 
 int main(int argc, char **argv)
 {
-	std::cout << "Backlot MasterServer" << std::endl;
-	backlot::Server test = backlot::Server();
-	test.print_infos();
+	QCoreApplication app(argc, argv);
 
-	if(test.ping())
-	{
-		std::cout << "Server online" << std::endl;
-	}
-	else
-	{
-		std::cout << "Server offline" << std::endl;
-	}
-	
-	test.print_infos();
+	std::cout << "Backlot MasterServer PID:" << app.applicationPid()  << std::endl;
+	backlot::Server server = new backlot::Server();
+//	test.print_infos();
 
-
-	if(test.ping())
-	{
-		std::cout << "Server online" << std::endl;
-	}
-	else
-	{
-		std::cout << "Server offline" << std::endl;
-	}
-
-	test.print_infos();
-
-	if(test.ping())
-	{
-		std::cout << "Server online" << std::endl;
-	}
-	else
-	{
-		std::cout << "Server offline" << std::endl;
-	}
-	test.print_infos();
-
-	Client client;
-	client.start("127.0.0.1", 7799);
-		
-	return 0;
+//	if(test.ping())
+//	{
+//		std::cout << "Server online" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "Server offline" << std::endl;
+//	}
+//	
+//	test.print_infos();
+//
+//
+//	if(test.ping())
+//	{
+//		std::cout << "Server online" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "Server offline" << std::endl;
+//	}
+//
+//	test.print_infos();
+//
+//	if(test.ping())
+//	{
+//		std::cout << "Server online" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "Server offline" << std::endl;
+//	}
+////	test.print_infos();
+			
+	return app.exec();
 }
-
