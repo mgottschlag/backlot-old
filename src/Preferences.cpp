@@ -24,6 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tinyxml.h"
 
 #include <iostream>
+#include <sys/stat.h> 
 
 namespace backlot
 {
@@ -44,7 +45,18 @@ namespace backlot
 	bool Preferences::load()
 	{
 		// Load config file
-		setPath(Engine::get().getGameDirectory() + "/config.xml");
+		struct stat fileinfo;
+		std::string user_path = Engine::get().getGameDirectory() + "/user_config.xml";
+		std::cout << stat(user_path.c_str(), &fileinfo) << std::endl;
+		if (!stat(user_path.c_str(), &fileinfo))
+		{
+			setPath(user_path);
+		}
+		else
+		{
+			setPath(Engine::get().getGameDirectory() + "/config.xml");
+		}
+		
 		std::cout << "Loading preferences from \"" << path << "\"...\n";
 		TiXmlDocument conffile(path.c_str());
 		if (!conffile.LoadFile())
@@ -156,6 +168,7 @@ namespace backlot
 		config->LinkEndChild(graphics);
 		config->LinkEndChild(sound);
 		
+		setPath(Engine::get().getGameDirectory() + "/user_config.xml");
 		doc.SaveFile(path.c_str());
 
 		return true;

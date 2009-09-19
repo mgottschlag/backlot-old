@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _EFFECT_HPP_
 
 #include "Sound.hpp"
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 #include "Animation.hpp"
 #include "Vector2.hpp"
 #include "ReferenceCounted.hpp"

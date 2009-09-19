@@ -55,6 +55,8 @@ namespace backlot
 		// Destroy map
 		if (heightmap)
 			delete[] heightmap;
+		if (accessible)
+			delete[] accessible;
 		// TODO
 	}
 
@@ -125,7 +127,8 @@ namespace backlot
 			read += runlength;
 		}
 		// Read accessibility info
-		// TODO
+		accessible = new unsigned char[(size.x * size.y + 1) / 2];
+		file.read((char*)accessible, (size.x * size.y + 1) / 2);
 		// Read entities
 		unsigned int entitycount = 0;
 		file.read((char*)&entitycount, 4);
@@ -209,13 +212,23 @@ namespace backlot
 		return true;
 	}
 
+	Vector2I Map::getSize()
+	{
+		return size;
+	}
+	unsigned char *Map::getPathFindingInfo()
+	{
+		return accessible;
+	}
+
 	float Map::getHeight(Vector2F position)
 	{
-		if (position.x < 0 || position.y < 0)
+		Vector2I ipos = position;
+		if (ipos.x < 0 || ipos.y < 0)
 			return 1000;
-		if (position.x >= size.x || position.y >= size.y)
+		if (ipos.x >= size.x || ipos.y >= size.y)
 			return 1000;
-		return heightmap[(int)position.x + (int)position.y * size.x];
+		return heightmap[ipos.x + ipos.y * size.x];
 	}
 	float Map::getMaximumHeight(RectangleF area)
 	{

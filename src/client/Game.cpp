@@ -48,12 +48,13 @@ namespace backlot
 			entities[i] = 0;
 		time = 0;
 		lag = 0;
+		maxentityid = 0;
 		return true;
 	}
 	bool Game::destroy()
 	{
 		// Remove entities
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i])
 				entities[i]->destroyScript();
@@ -74,32 +75,44 @@ namespace backlot
 			return 0;
 		}
 		// Create entity
+		if (id > maxentityid)
+			maxentityid = id;
 		EntityPointer entity = new Entity();
 		entity->setID(id);
 		entity->setOwner(owner);
 		entity->create(tpl, state);
 		// Insert entity into list
 		entities[id] = entity;
+		if (owner == getClientID())
+			localentities.push_back(entity);
 		return entity;
 	}
 	void Game::removeEntity(EntityPointer entity)
 	{
-		// Look for entity to delete
-		for (int i = 0; i < 65535; i++)
-		{
-			if (entities[i] == entity)
-			{
-				// Delete entity
-				entities[i]->destroyScript();
-				entities[i] = 0;
-				break;
-			}
-		}
+		int id = entity->getID();
+		removeEntity(id);
 	}
 	void Game::removeEntity(unsigned int id)
 	{
 		if (id >= 65535)
 			return;
+		if (!entities[id])
+			return;
+		// Delete from local list
+		if (entities[id]->isLocal())
+		{
+			// TODO: Maybe even use a std::vector?
+			std::list<EntityPointer>::iterator it = localentities.begin();
+			while (it != localentities.end())
+			{
+				if ((*it)->getID() == (int)id)
+				{
+					localentities.erase(it);
+					break;
+				}
+				it++;
+			}
+		}
 		// Delete entity
 		entities[id]->destroyScript();
 		entities[id] = 0;
@@ -153,7 +166,7 @@ namespace backlot
 	void Game::setAcknowledgedPacket(int time)
 	{
 		// Clean up prediction data
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i])
 				entities[i]->dropPredictionData(time);
@@ -189,7 +202,7 @@ namespace backlot
 	EntityListPointer Game::getEntities(RectangleF area, std::string type)
 	{
 		EntityListPointer list = new EntityList();
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i] && entities[i]->isMovable())
 			{
@@ -211,7 +224,7 @@ namespace backlot
 	EntityListPointer Game::getEntities(std::string type)
 	{
 		EntityListPointer list = new EntityList();
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i] && entities[i]->getTemplate()->getName() == type)
 			{
@@ -224,7 +237,7 @@ namespace backlot
 	void Game::update()
 	{
 		// Update entities
-		for (int i = 0; i < 65535; i++)
+		for (int i = 0; i < maxentityid + 1; i++)
 		{
 			if (entities[i])
 				entities[i]->update();
@@ -240,20 +253,17 @@ namespace backlot
 		buffer->write32(time);
 		unsigned int updatecount = 0;
 		// Check all entities
-		for (int i = 0; i < 65535; i++)
+		std::list<EntityPointer>::iterator it = localentities.begin();
+		while (it != localentities.end())
 		{
-			if (entities[i].isNull())
-				continue;
-			if (entities[i]->isLocal())
+			// Add update to the packet
+			if ((*it)->hasChanged(from))
 			{
-				// Add update to the packet
-				if (entities[i]->hasChanged(from))
-				{
-					updatecount++;
-					buffer->write16(i + 1);
-					entities[i]->getUpdate(from, buffer);
-				}
+				updatecount++;
+				buffer->write16((*it)->getID() + 1);
+				(*it)->getUpdate(from, buffer);
 			}
+			it++;
 		}
 		// Send updates
 		if (updatecount > 0)

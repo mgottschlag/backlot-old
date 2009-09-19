@@ -103,16 +103,25 @@ namespace backlot
 
 			/**
 			 * Sets a global variable to the given value. This can be any core
-			 * type or any registered class.
+			 * type or any registered class. If the name contains dots, tables
+			 * are created accordingly (e.g. "table.table2.variable").
 			 */
 			template <typename T> void setVariable(std::string name, T value)
 			{
-				luabind::globals(state)[name.c_str()] = value;
+				luabind::object table = luabind::globals(state);
+				while (name.find('.') != std::string::npos)
+				{
+					std::string tablename = name.substr(0, name.find('.'));
+					name = name.substr(name.find('.') + 1);
+					table = table[tablename.c_str()];
+					if (luabind::type(table) != LUA_TTABLE)
+						table = luabind::newtable(state);
+				}
+				table[name.c_str()] = value;
 			};
 
 			void addCoreFunctions();
 			#ifdef CLIENT
-			void addMenuFunctions();
 			void addClientFunctions();
 			void addDialogFunctions();
 			#endif

@@ -1,29 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<menu>
-	<item position="0" label="Singleplayer" />
-	<item position="1" label="Host game" />
-	<item position="2" label="Join game" />
-	<item position="3" label="Editor" />
-	<item position="4" label="Settings" />
-	<item position="5" label="Change profile" />
-	<item position="6" label="Exit" />
+<menu background="#FFFFFF" font="menu">
+	<style name="default">
+		<button type="simple" />
+		<color background="#FFFFFF" normal="#000000" active="#707070" pressed="#B0B0B0" />
+	</style>
+
+	<image image="backlotsmall.png">
+		<position relative="0/1" absolute="0/-32" />
+		<size relative="0/0" absolute="128/32" />
+	</image>
+
+	<imagebutton image="logo.png" id="6">
+		<position relative="0/0" absolute="0/0" />
+		<size relative="0/0" absolute="512/256" />
+	</imagebutton>
+
+	<button label="Host" id="0">
+		<position relative="1/1" absolute="-200/-280" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Join" id="1">
+		<position relative="1/1" absolute="-200/-240" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Singleplayer" id="2">
+		<position relative="1/1" absolute="-200/-200" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Settings" id="3">
+		<position relative="1/1" absolute="-200/-155" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Change profile" id="4">
+		<position relative="1/1" absolute="-200/-115" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+	<button label="Exit" id="5">
+		<position relative="1/1" absolute="-200/-70" />
+		<size relative="0/0" absolute="200/30" />
+	</button>
+
 	<script>
 	<![CDATA[
 	function on_menu_item(index)
 		if index == 0 then
-			menu.show_dialog("singleplayer");
+			Dialog.get("server"):setVisible(true);
 		elseif index == 1 then
-			menu.show_dialog("server");
+			Dialog.get("join"):setVisible(true);
 		elseif index == 2 then
-			menu.show_dialog("join");
 		elseif index == 3 then
-			menu.start_editor();
+			Dialog.get("settings"):setVisible(true);
 		elseif index == 4 then
-			menu.show_dialog("settings");
+			Dialog.get("profile"):setVisible(true);
 		elseif index == 5 then
-			menu.show_dialog("profile");
+			Engine.get():stop()
 		elseif index == 6 then
-			core.exit();
 		end
 	end
 	]]>

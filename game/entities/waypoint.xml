@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<entity size="1.0/1.0" origin="0.5/0.5" blocking="no">
+	<properties>
+		<position default="1/1" type="vector2f" predict="yes" />
+	</properties>
+</entity>

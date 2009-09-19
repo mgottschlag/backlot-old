@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<overlay>
+	<group name="health" position="0.0/1.0" size="180/60">
+		<label name="hlabel" offset="65/10" size="50/50" font="menu" font-size="40" />
+		<image name="himage" offset="50/50" size="50/50" image-path="sprites/hud/health.png" texture-size="50/50" />
+	</gropu>
+
+	<script file="overlay.lua" />
+</overlay>

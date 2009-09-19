@@ -25,7 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ReferenceCounted.hpp"
 #include "entity/Property.hpp"
 #ifdef CLIENT
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 #endif
 
 #include <string>

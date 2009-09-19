@@ -31,7 +31,7 @@
 	<![CDATA[
 	function on_button(index)
 		if index == 0 then
-			menu.hide_dialog("settings");
+			Dialog.get("settings"):setVisible(false)
 		elseif index == 1 then
 			apply()
 		elseif index == 2 then

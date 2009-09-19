@@ -23,8 +23,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _HUDELEMENT_HPP_
 
 #include "Vector2.hpp"
-#include "Texture.hpp"
-#include "Font.hpp"
+#include "graphics/Texture.hpp"
+#include "graphics/Font.hpp"
 #include "tinyxml.h"
 
 namespace backlot

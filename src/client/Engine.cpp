@@ -21,16 +21,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "Engine.hpp"
 #include "Preferences.hpp"
-#include "Graphics.hpp"
+#include "graphics/Graphics.hpp"
 #include "Input.hpp"
 #include "Audio.hpp"
 #include "Sound.hpp"
 #include "Music.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
-#include "Menu.hpp"
-#include "Dialog.hpp"
+#include "menu/Menu.hpp"
+#include "menu/Dialog.hpp"
 #include "SplashScreen.hpp"
+#include "PathFinder.hpp"
+#include "support/tinyxml.h"
 
 #include <SDL/SDL.h>
 #include <iostream>
@@ -106,7 +108,25 @@ namespace backlot
 		// Show splash screens
 		SplashScreen::showAll();
 		// Show main menu
-		MenuPointer mainmenu = Menu::get("main");
+		std::string filename = Engine::get().getGameDirectory() + "/game.xml";
+		TiXmlDocument xml(filename.c_str());
+		if (!xml.LoadFile() || xml.Error())
+		{
+			std::cerr << "Could not load XML file game.xml: " << xml.ErrorDesc() << std::endl;
+			return false;
+		}
+		TiXmlNode *node = xml.FirstChild("game");
+		if (!node)
+		{
+			std::cerr << "Parser error: <game> not found." << std::endl;
+			return false;
+		}
+		TiXmlElement *root = node->ToElement();
+		MenuPointer mainmenu;
+		if (!root->Attribute("startmenu"))
+			mainmenu = Menu::get(root->Attribute("startmenu"));
+		else
+			mainmenu = Menu::get("main");
 		if (mainmenu)
 		{
 			mainmenu->setActive(true);
@@ -158,6 +178,7 @@ namespace backlot
 			// Game logic
 			Server::get().update();
 			Client::get().update();
+			PathFinder::updateAll();
 			// Render everything
 			if (!Graphics::get().render())
 				stopping = true;

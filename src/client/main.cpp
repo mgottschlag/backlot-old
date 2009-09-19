@@ -23,6 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include <luabind/luabind.hpp>
+#include <guichan/exception.hpp>
 
 int main(int argc, char **argv)
 {
@@ -56,6 +57,11 @@ int main(int argc, char **argv)
 		{
 			std::cerr << "No valid error message!" << std::endl;
 		}
+		return -1;
+	}
+	catch (gcn::Exception &e)
+	{
+		std::cerr << "Guichan exception: " << e.getMessage() << std::endl;
 		return -1;
 	}
 	return 0;

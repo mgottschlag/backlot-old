@@ -5,10 +5,36 @@
 	</playerinfo>
 	<script>
 	<![CDATA[
+	math.randomseed(os.time())
+
 	function on_new_client(client)
+		-- Get spawn point
+		local spawnpoints = Game.get():getEntities("spawnpoint")
+		local position = Vector2F();
+		if spawnpoints:getSize() == 0 then
+			print("Warning: No spawn point set!")
+			position = Vector2F(2, 2)
+		end
+		local index = math.random(spawnpoints:getSize()) - 1
+		local spawnpoint = spawnpoints:getEntity(index)
+		position = spawnpoint:getPosition()
+		-- Add player
+		local tpl = EntityTemplate.get("player")
+		local playerstate = EntityState.create(tpl)
+		playerstate:getProperty("position"):setVector2F(position)
 		local weapon = Game.get():addEntity("plasmagun", client)
-		local player = Game.get():addEntity("player", client)
+		local player = Game.get():addEntity("player", client, playerstate:get())
 		player:getScript():callFunction("on_set_weapon", weapon:getID())
+	end
+
+	for i=0,5,1 do
+		local position = Vector2F(math.random(20), math.random(20))
+		local tpl = EntityTemplate.get("bot")
+		local botstate = EntityState.create(tpl)
+		botstate:getProperty("position"):setVector2F(position)
+		local weapon = Game.get():addEntity("plasmagun", 0)
+		local bot = Game.get():addEntity("bot", 0, botstate:get())
+		bot:getScript():callFunction("on_set_weapon", weapon:getID())
 	end
 	]]>
 	</script>

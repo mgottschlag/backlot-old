@@ -25,6 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "support/tinyxml.h"
 
 #include <iostream>
+#include <fstream>
 
 namespace backlot
 {
@@ -179,15 +180,41 @@ namespace backlot
 			TiXmlElement *scriptdata = scriptnode->ToElement();
 			if (scriptdata)
 			{
-				TiXmlNode *textnode = scriptdata->FirstChild();
-				while (textnode)
+				if (scriptdata->Attribute("file"))
 				{
-					TiXmlText *text = textnode->ToText();
-					if (text && text->Value())
+					// Load script from file
+					std::string filename = Engine::get().getGameDirectory()
+						+ "/entities/" + scriptdata->Attribute("file");
+					std::ifstream scriptfile(filename.c_str());
+					if (scriptfile)
 					{
-						script += text->Value();
+						std::string line;
+						while (!scriptfile.eof())
+						{
+							getline(scriptfile, line);
+							script += line;
+							script += '\n';
+						}
 					}
-					textnode = scriptdata->IterateChildren(textnode);
+					else
+					{
+						std::cout << "Warning: Script file \"" << filename
+							<< "\" not found." << std::endl;
+					}
+				}
+				else
+				{
+					// Script is embedded in the file
+					TiXmlNode *textnode = scriptdata->FirstChild();
+					while (textnode)
+					{
+						TiXmlText *text = textnode->ToText();
+						if (text && text->Value())
+						{
+							script += text->Value();
+						}
+						textnode = scriptdata->IterateChildren(textnode);
+					}
 				}
 			}
 			scriptnode = node->IterateChildren("script", scriptnode);

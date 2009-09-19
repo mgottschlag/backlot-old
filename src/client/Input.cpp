@@ -22,8 +22,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Input.hpp"
 #include "NetworkData.hpp"
 #include "Preferences.hpp"
-#include "Menu.hpp"
-#include "Graphics.hpp"
+#include "menu/Menu.hpp"
+#include "graphics/Graphics.hpp"
 #include "Game.hpp"
 
 #include <SDL/SDL.h>
@@ -63,7 +63,7 @@ namespace backlot
 						switch(event.key.keysym.sym)
 						{
 							case SDLK_ESCAPE:
-								Menu::getActiveMenu()->setActive(false);
+								//Menu::getActiveMenu()->setActive(false);
 								break;
 							default:
 								Graphics::get().getGuichanInput()->pushInput(event);
@@ -99,10 +99,8 @@ namespace backlot
 							sendKey("right", 1);
 							break;
 						case SDLK_ESCAPE:
-						{
-							MenuPointer menu = Menu::get("main");
-							menu->setActive(true);
-						}
+							sendKey("exit", 1);
+							break;
 						// Other keys
 						default:
 							break;
@@ -187,7 +185,7 @@ namespace backlot
 			{
 				// Call script callback
 				ScriptPointer script = entity->getScript();
-				if (script->isFunction("on_mouse_input"))
+				if (script && script->isFunction("on_mouse_input"))
 					script->callFunction("on_mouse_input", rotation * 180 / 3.1415);
 			}
 		}

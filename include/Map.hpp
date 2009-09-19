@@ -27,7 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "Vector2.hpp"
 #include "Rectangle.hpp"
 #ifdef CLIENT
-#include "QuadBatch.hpp"
+#include "graphics/QuadBatch.hpp"
 #endif
 #ifdef SERVER
 #include "entity/EntityState.hpp"
@@ -75,6 +75,19 @@ namespace backlot
 			 * Loads a map file.
 			 */
 			bool load(std::string name);
+
+			/**
+			 * Returns the map size.
+			 */
+			Vector2I getSize();
+			/**
+			 * Returns the path finding info. There are 4 bits used per square
+			 * in the grid: The first says whether an entity can move from this
+			 * position one unit to the right, the third to the left. The second
+			 * and forth bit are for down/up respectively. Two positions are
+			 * packed into one byte, with 0xF0 selecting the left of the two.
+			 */
+			unsigned char *getPathFindingInfo();
 
 			/**
 			 * Returns the height at the given position.
@@ -126,6 +139,7 @@ namespace backlot
 			std::string name;
 			Vector2I size;
 			float *heightmap;
+			unsigned char *accessible;
 			#ifdef CLIENT
 			std::vector<MapLayer> layers;
 			static Map *visible;

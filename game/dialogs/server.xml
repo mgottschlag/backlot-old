@@ -10,7 +10,7 @@
 	<![CDATA[
 	function on_button(index)
 		if index == 0 then
-			menu.hide_dialog("server");
+			Dialog.get("server"):setVisible(false)
 			-- Close existing game
 			Client.get():destroy()
 			ServerControl.get():destroy()
@@ -24,8 +24,9 @@
 				ServerControl.get():destroy()
 				return
 			end
+			Menu.getActiveMenu():setActive(false)
 		elseif index == 1 then
-			menu.hide_dialog("server");
+			Dialog.get("server"):setVisible(false)
 		end
 	end
 

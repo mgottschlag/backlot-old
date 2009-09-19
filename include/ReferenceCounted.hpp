@@ -317,7 +317,7 @@ namespace backlot
 			}
 			T *operator->() const
 			{
-				return target;
+				return (T*)target;
 			}
 			bool operator==(const WeakPointer &ptr) const
 			{

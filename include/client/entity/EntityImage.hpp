@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _ENTITYIMAGE_HPP_
 
 #include "ReferenceCounted.hpp"
-#include "Texture.hpp"
+#include "graphics/Texture.hpp"
 #include "Vector2.hpp"
 #include "Animation.hpp"
 

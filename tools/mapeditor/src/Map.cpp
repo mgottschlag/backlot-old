@@ -288,7 +288,92 @@ bool Map::compile(std::string name)
 		file.write((const char*)&currentheight, 4);
 	}
 	// Write accessibility info
-	// TODO
+	unsigned char *accessible = new unsigned char[(width * height + 1) / 2];
+	memset(accessible, 0, (width * height + 1) / 2);
+	// Right
+	for (unsigned int y = 0; y < height; y++)
+	{
+		for (unsigned int x = 0; x < width - 1; x++)
+		{
+			unsigned int index = y * width + x;
+			if (tiles[index] && tiles[index + 1])
+			{
+				float diff = fabs(tiles[index]->getHeight()
+					- tiles[index + 1]->getHeight());
+				if (diff < 0.5)
+				{
+					if (index % 2)
+						accessible[index / 2] |= 0x08;
+					else
+						accessible[index / 2] |= 0x80;
+				}
+			}
+		}
+	}
+	// Down
+	for (unsigned int y = 0; y < height - 1; y++)
+	{
+		for (unsigned int x = 0; x < width; x++)
+		{
+			unsigned int index = y * width + x;
+			if (tiles[index] && tiles[index + width])
+			{
+				float diff = fabs(tiles[index]->getHeight()
+					- tiles[index + width]->getHeight());
+				if (diff < 0.5)
+				{
+					if (index % 2)
+						accessible[index / 2] |= 0x04;
+					else
+						accessible[index / 2] |= 0x40;
+				}
+			}
+		}
+	}
+	// Left
+	for (unsigned int y = 0; y < height; y++)
+	{
+		for (unsigned int x = 1; x < width; x++)
+		{
+			unsigned int index = y * width + x;
+			if (tiles[index] && tiles[index - 1])
+			{
+				float diff = fabs(tiles[index]->getHeight()
+					- tiles[index - 1]->getHeight());
+				if (diff < 0.5)
+				{
+					if (index % 2)
+						accessible[index / 2] |= 0x02;
+					else
+						accessible[index / 2] |= 0x20;
+				}
+			}
+		}
+	}
+	// Up
+	for (unsigned int y = 1; y < height; y++)
+	{
+		for (unsigned int x = 0; x < width; x++)
+		{
+			unsigned int index = y * width + x;
+			if (tiles[index] && tiles[index - width])
+			{
+				float diff = fabs(tiles[index]->getHeight()
+					- tiles[index - width]->getHeight());
+				if (diff < 0.5)
+				{
+					if (index % 2)
+						accessible[index / 2] |= 0x01;
+					else
+						accessible[index / 2] |= 0x10;
+				}
+			}
+		}
+	}
+	// TODO: Staircases? Ladders?
+	// Write accessibility data to the file
+	file.write((char*)accessible, (width * height + 1) / 2);
+	delete[] accessible;
 	// Write entities
 	unsigned int entitycount = entities.size();
 	file.write((const char*)&entitycount, 4);

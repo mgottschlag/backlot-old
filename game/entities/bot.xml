@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<entity size="0.6/0.6" origin="0.3/0.3" blocking="yes">
+	<properties>
+		<position default="1/1" type="vector2f" />
+		<rotation type="float" />
+		<team default="0" type="uint" size="4" />
+		<currentweapon default="65535" type="uint" size="16" />
+		<health default="100" type="uint" size="8" />
+	</properties>
+
+	<image name="feet" src="sprites/feet.png" position="-0.5/-0.5" rotate="no" depth="1.5" />
+	<animation name="feetanim" image="feet" size="4/2" stopped="yes" depth="0.5" period="1000" />
+	<image name="body" src="sprites/player.png" position="-0.5/-0.5" rotate="no" depth="1.5" />
+	<image name="weapon" position="-0.5/-0.5" rotate="no" depth="1.6" />
+	<image name="gibs" src="sprites/gibs.png" position="-0.5/-0.5" rotate="no" depth="1.6" />
+
+	<script file="bot.lua" />
+</entity>
