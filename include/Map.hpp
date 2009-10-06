@@ -23,7 +23,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _MAP_HPP_
 
 #include "ReferenceCounted.hpp"
-#include "TileSet.hpp"
 #include "Vector2.hpp"
 #include "Rectangle.hpp"
 

@@ -18,7 +18,6 @@ set(SRC_SHARED
 ../Preferences.cpp
 ../Map.cpp
 ../PathFinder.cpp
-../TileSet.cpp
 ../Buffer.cpp
 ../Script.cpp
 ../script/CoreFunctions.cpp
