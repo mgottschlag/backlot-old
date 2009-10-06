@@ -22,7 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _SERVER_HPP_
 #define _SERVER_HPP_
 
-#include "Map.hpp"
+#include "ServerMap.hpp"
 #include "Client.hpp"
 
 #include <string>
@@ -42,7 +42,7 @@ namespace backlot
 
 			MapPointer getMap()
 			{
-				return map;
+				return map.get();
 			}
 
 			void sendToAll(BufferPointer buffer, bool reliable = false);
@@ -51,7 +51,7 @@ namespace backlot
 		private:
 			Server();
 
-			MapPointer map;
+			ServerMapPointer map;
 			std::string mapname;
 
 			ENetHost *host;

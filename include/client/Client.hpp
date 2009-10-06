@@ -22,7 +22,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _CLIENT_HPP_
 #define _CLIENT_HPP_
 
-#include "Map.hpp"
+#include "ClientMap.hpp"
 #include "Buffer.hpp"
 
 #include <enet/enet.h>
@@ -56,7 +56,7 @@ namespace backlot
 		private:
 			Client();
 
-			MapPointer map;
+			ClientMapPointer map;
 
 			ENetHost *host;
 			ENetPeer *peer;

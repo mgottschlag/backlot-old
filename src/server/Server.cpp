@@ -41,7 +41,7 @@ namespace backlot
 	{
 		this->mapname = mapname;
 		// Load map
-		map = Map::get(mapname);
+		map = ServerMap::get(mapname);
 		if (map.isNull())
 		{
 			std::cerr << "Could not load map." << std::endl;
@@ -61,7 +61,7 @@ namespace backlot
 		// Load game mode
 		Game::get().load(mapname, "ffa");
 		// Load map entities
-		Server::get().getMap()->loadEntities();
+		map->loadEntities();
 		return true;
 	}
 	bool Server::destroy()

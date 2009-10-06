@@ -21,7 +21,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "graphics/Graphics.hpp"
 #include "graphics/PostProcessing.hpp"
-#include "Map.hpp"
+#include "ClientMap.hpp"
 #include "Animation.hpp"
 #include "menu/Menu.hpp"
 #include "menu/GuichanFont.hpp"
@@ -162,7 +162,7 @@ namespace backlot
 		glClearColor(0.3, 0.0, 0.0, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera->apply();
-		MapPointer map = Map::getVisibleMap();
+		ClientMapPointer map = ClientMap::getVisibleMap();
 		if (!map.isNull())
 		{
 			map->render();

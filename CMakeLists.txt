@@ -69,6 +69,7 @@ entity/Entity.cpp
 Game.cpp
 entity/EntityImage.cpp
 SplashScreen.cpp
+ClientMap.cpp
 ../support/ScreenPosition.cpp
 ../script/ClientFunctions.cpp
 )
@@ -80,6 +81,7 @@ Engine.cpp
 Server.cpp
 Client.cpp
 Game.cpp
+ServerMap.cpp
 entity/Entity.cpp
 entity/EntityState.cpp
 ../script/ServerFunctions.cpp

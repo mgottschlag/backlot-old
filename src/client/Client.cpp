@@ -20,7 +20,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "Client.hpp"
-#include "Map.hpp"
 #include "Engine.hpp"
 #include "NetworkData.hpp"
 #include "Buffer.hpp"
@@ -120,7 +119,7 @@ namespace backlot
 			return false;
 		}
 		// Load map
-		map = Map::get(mapname);
+		map = ClientMap::get(mapname);
 		if (map.isNull())
 		{
 			enet_peer_reset(peer);
@@ -273,6 +272,6 @@ namespace backlot
 
 	MapPointer Client::getMap()
 	{
-		return map;
+		return map.get();
 	}
 }
